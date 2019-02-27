@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+    "noImplicitAny": false,
+    "module": "commonjs",
+    "target": "es2017",
+    "types": [
+      "node",
+      "webpack-env",
+      "reflect-metadata"
+    ],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@core/*": ["src/*"],
+      "@config/*": ["config/*"],
+      "@app/*": ["app/*"]
+    },
+    "declaration": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ]
+  },
+  "include": [
+    "./app/**/*.ts",
+    "./src/**/*.ts",
+    "./config/**/*.ts"
+  ]
+}
