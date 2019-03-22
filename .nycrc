@@ -1,0 +1,24 @@
+{
+  "check-coverage": true,
+  "lines": 20,
+  "functions": 20,
+  "branches": 20,
+  "statements": 20,
+  "include": [
+    "src/**/*",
+    "app/**/*"
+  ],
+  "exclude": [
+    "build/",
+    "test/**/*"
+  ],
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "cache": true,
+  "all": true
+}

@@ -65,7 +65,7 @@ export function Param(route: string = '*') {
   };
 }
 
-export function Middleware(middleware: () => void) {
+export function Middleware(middleware) {
   return (target, property?, descriptor?) => {
     if (!property) {
       rootMiddleware(target, middleware);

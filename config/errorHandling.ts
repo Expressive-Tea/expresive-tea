@@ -7,8 +7,8 @@ export default async function errorHandling(server) {
       next();
     }
 
-    const statusCode = _.get(err, 'errorStatus', 500);
-    res.status(statusCode).json({error: _.get(err, 'message', 'Unknown Error Message')});
+    const statusCode = _.get(err, 'statusCode', 500);
+    res.status(statusCode).json({error: _.get(err, 'message', 'Unknown Error Message'), original: err});
   });
 
   // 404

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "sourceMap": true,
     "outDir": "./build/",
     "noImplicitAny": false,
     "module": "commonjs",
@@ -17,7 +18,8 @@
     "paths": {
       "@core/*": ["src/*"],
       "@config/*": ["config/*"],
-      "@app/*": ["app/*"]
+      "@app/*": ["app/*"],
+      "@test/*": ["test/*"]
     },
     "declaration": true,
     "lib": [

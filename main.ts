@@ -14,5 +14,5 @@ import { Plug, ServerSettings } from '@core/decorators/server';
 class BootLoader extends Boot {
 }
 
-new BootLoader().start()
+export default new BootLoader().start()
   .catch(error => console.log(error.message));

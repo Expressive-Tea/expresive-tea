@@ -1,0 +1,43 @@
+version: '3'
+services:
+  steamrole:
+    image: 'node:8-alpine'
+    user: node
+    working_dir: '/home/node/app'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://contxt:C0n7x7P4s5@postgres:5432/contxt
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+    depends_on:
+      - postgres
+    command: './docker-runner.sh'
+    restart: always
+    links:
+      - postgres
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - CONTXT_DB=contxt
+      - CONTXT_USER=contxt
+      - CONTXT_PASSWORD=C0n7x7P4s5
+      - POSTGRES_PASSWORD=C0n7x7P4s5
+    volumes:
+      - ./postgres/scripts:/docker-entrypoint-initdb.d
+      - ./.data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    links:
+      - postgres
