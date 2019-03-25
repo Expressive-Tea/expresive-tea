@@ -22,12 +22,7 @@ export const STAGES_INIT = {
   [BOOT_STAGES.START]: []
 };
 
-export const YESNOUNSURE_ENUM = ['yes', 'no', 'unsure'];
-export const YESNO_ENUM = ['yes', 'no'];
-export const PET_TYPE_ENUM = ['dog', 'cat', 'bird', 'rabbit', 'small-animal', 'farm-animal', 'other'];
-
-export const JWT_SECRET = process.env.JWT_SECRET || 'Cd1MMpk/myZT+V8ohkrIaA==';
-export const JWT_ISSUER = process.env.JWT_ISSUER || 'accounts.test.org.dev';
-export const JWT_AUDIENCE = process.env.JWT_AUDIENCE || 'org.test';
-export const JWT_HEADER = process.env.JWT_HEADER || 'authorization';
+export const BOOT_STAGES_KEY = 'boot:stage-settings';
+export const ROUTER_HANDLERS_KEY = 'app:routes:handlers';
+export const ROUTER_MIDDLEWARES_KEY = 'app:routes:middlewares';
 export const REGISTERED_MODEL_KEY = 'app:models:registered';

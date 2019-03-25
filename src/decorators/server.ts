@@ -1,18 +1,18 @@
 import Settings from '@config/Settings';
 import MetaData from '@core/classes/MetaData';
-import { BOOT_STAGES } from '@core/constants';
+import { BOOT_STAGES, BOOT_STAGES_KEY } from '@core/constants';
 
 export function Plug(stage: BOOT_STAGES, name, method, required = false) {
   if (!name) {
     throw new Error('Unamed Plugin is not allowed.');
   }
   return target => {
-    const stages = MetaData.get('boot:stage-settings', target) || {};
+    const stages = MetaData.get(BOOT_STAGES_KEY, target) || {};
     if (!stages[stage]) {
       stages[stage] = [];
     }
     stages[stage].push({ method, required, name });
-    MetaData.set('boot:stage-settings', stages, target);
+    MetaData.set(BOOT_STAGES_KEY, stages, target);
   };
 }
 

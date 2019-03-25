@@ -1,11 +1,12 @@
 import MetaData from '@core/classes/MetaData';
+import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '@core/constants';
 import { Router } from 'express';
 import { each, map } from 'lodash';
 
 export function Route(mountpoint = '/') {
   return <T extends { new(...args: any[]): {} }>(constructor: T) => {
-    const handlers = MetaData.get('app:routes:handlers', constructor) || [];
-    const rootMiddlewares = MetaData.get('app:routes:middlewares', constructor) || [];
+    const handlers = MetaData.get(ROUTER_HANDLERS_KEY, constructor) || [];
+    const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, constructor) || [];
 
     return class extends constructor {
       readonly router: any;
@@ -77,9 +78,9 @@ export function Middleware(middleware) {
 }
 
 function rootMiddleware(target, middleware) {
-  const existedRoutesHandlers = MetaData.get('app:routes:middlewares', target) || [];
+  const existedRoutesHandlers = MetaData.get(ROUTER_MIDDLEWARES_KEY, target) || [];
   existedRoutesHandlers.push(middleware);
-  MetaData.set('app:routes:middlewares', existedRoutesHandlers, target);
+  MetaData.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
 }
 
 function routeMiddleware(target, descriptor, middleware) {
@@ -88,7 +89,7 @@ function routeMiddleware(target, descriptor, middleware) {
 }
 
 function router(verb, route, target, handler) {
-  const existedRoutesHandlers = MetaData.get('app:routes:handlers', target) || [];
+  const existedRoutesHandlers = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.push({ verb, route, handler, routerKey: target });
-  MetaData.set('app:routes:handlers', existedRoutesHandlers, target);
+  MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }

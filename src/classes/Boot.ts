@@ -1,5 +1,6 @@
 import Settings from '@config/Settings';
 import MetaData from '@core/classes/MetaData';
+import { BOOT_STAGES_KEY } from '@core/constants';
 import * as constants from '@core/constants';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@core/exceptions/BootLoaderExceptions';
 import * as $P from 'bluebird';
@@ -7,7 +8,7 @@ import * as express from 'express';
 
 abstract class Boot {
   settings: any = {};
-  private server: any = express();
+  private readonly server: any = express();
 
   constructor() {
     this.settings = new Settings();
@@ -46,7 +47,7 @@ abstract class Boot {
 }
 
 async function bootloaderResolve(STAGE, server, instance) {
-  const bootLoader = MetaData.get('boot:stage-settings', instance);
+  const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {
       if (!loader) {
@@ -69,5 +70,5 @@ async function bootloaderResolve(STAGE, server, instance) {
 /**
  * Initialize Meta Keys.
  */
-MetaData.set('boot:stage-settings', constants.STAGES_INIT, Boot);
+MetaData.set(BOOT_STAGES_KEY, constants.STAGES_INIT, Boot);
 export default Boot;
