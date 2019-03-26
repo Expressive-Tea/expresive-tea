@@ -1,7 +1,7 @@
 {
-  "name": "expressive-tea",
+  "name": "@zerooneit/expressive-tea",
   "version": "0.0.1",
-  "description": "A REST API Template builded over Express and Typescript",
+  "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.ts",
   "scripts": {
     "test": "bash test-runner.sh"
@@ -76,5 +76,20 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "rql": "^0.3.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zero-OneiT/expresive-tea.git"
+  },
+  "keywords": [
+    "Typescript",
+    "Express",
+    "Decorators",
+    "REST",
+    "API"
+  ],
+  "bugs": {
+    "url": "https://github.com/Zero-OneiT/expresive-tea/issues"
+  },
+  "homepage": "https://github.com/Zero-OneiT/expresive-tea#readme"
 }
