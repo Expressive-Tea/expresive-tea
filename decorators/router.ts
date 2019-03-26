@@ -1,5 +1,5 @@
-import MetaData from '@core/classes/MetaData';
-import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '@core/constants';
+import MetaData from '@expressive-tea/classes/MetaData';
+import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '@expressive-tea/libs/constants';
 import { Router } from 'express';
 import { each, map } from 'lodash';
 

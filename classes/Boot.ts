@@ -1,8 +1,8 @@
-import Settings from '@config/Settings';
-import MetaData from '@core/classes/MetaData';
-import { BOOT_STAGES_KEY } from '@core/constants';
-import * as constants from '@core/constants';
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@core/exceptions/BootLoaderExceptions';
+import MetaData from '@expressive-tea/classes/MetaData';
+import Settings from '@expressive-tea/classes/Settings';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@expressive-tea/exceptions/BootLoaderExceptions';
+import { BOOT_STAGES_KEY } from '@expressive-tea/libs/constants';
+import * as constants from '@expressive-tea/libs/constants';
 import * as $P from 'bluebird';
 import * as express from 'express';
 
@@ -10,7 +10,7 @@ abstract class Boot {
   settings: any = {};
   private readonly server: any = express();
 
-  constructor() {
+  protected constructor() {
     this.settings = new Settings();
     this.settings.set('application', this.server);
   }

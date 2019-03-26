@@ -16,10 +16,7 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@core/*": ["src/*"],
-      "@config/*": ["config/*"],
-      "@app/*": ["app/*"],
-      "@test/*": ["test/*"]
+      "@expressive-tea/*": ["*"]
     },
     "declaration": true,
     "lib": [
@@ -28,8 +25,7 @@
     ]
   },
   "include": [
-    "./app/**/*.ts",
-    "./src/**/*.ts",
-    "./config/**/*.ts"
+    "./**/*.ts",
+    "./node_modules/@types/**/*.ts"
   ]
 }

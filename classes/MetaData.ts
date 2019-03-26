@@ -1,4 +1,4 @@
-import { getClass } from '@core/helpers/object-helper';
+import { getClass } from '@expressive-tea/helpers/object-helper';
 import 'reflect-metadata';
 
 export default class Metadata {

@@ -1,6 +1,6 @@
-import Settings from '@config/Settings';
-import MetaData from '@core/classes/MetaData';
-import { REGISTERED_MODEL_KEY } from '@core/constants';
+import MetaData from '@expressive-tea/classes/MetaData';
+import Settings from '@expressive-tea/classes/Settings';
+import { REGISTERED_MODEL_KEY } from '@expressive-tea/libs/constants';
 import { get } from 'lodash';
 
 export function register(context) {

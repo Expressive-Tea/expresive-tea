@@ -1,4 +1,4 @@
-import Settings from '@config/Settings';
+import Settings from '@expressive-tea/classes/Settings';
 import * as _ from 'lodash';
 
 export function Model(Model: string | object) {

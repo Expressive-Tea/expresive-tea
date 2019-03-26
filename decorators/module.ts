@@ -1,4 +1,4 @@
-import DependencyInjection from '@core/services/DependencyInjection';
+import DependencyInjection from '@expressive-tea/services/DependencyInjection';
 import { Router } from 'express';
 import { each, map } from 'lodash';
 

@@ -1,6 +1,6 @@
-import Settings from '@config/Settings';
-import MetaData from '@core/classes/MetaData';
-import { BOOT_STAGES, BOOT_STAGES_KEY } from '@core/constants';
+import MetaData from '@expressive-tea/classes/MetaData';
+import Settings from '@expressive-tea/classes/Settings';
+import { BOOT_STAGES, BOOT_STAGES_KEY } from '@expressive-tea/libs/constants';
 
 export function Plug(stage: BOOT_STAGES, name, method, required = false) {
   if (!name) {

@@ -1,6 +1,6 @@
-import DEFAULT from '@config/envs/app.default';
-import MetaData from '@core/classes/MetaData';
-import { REGISTERED_MODEL_KEY } from '@core/constants';
+
+import MetaData from '@expressive-tea/classes/MetaData';
+import { REGISTERED_MODEL_KEY } from '@expressive-tea/libs/constants';
 import * as _ from 'lodash';
 
 class Settings {
@@ -21,7 +21,7 @@ class Settings {
       return Settings.instance;
     }
 
-    this.options = Object.assign({}, DEFAULT, options);
+    this.options = Object.assign({}, {}, options);
     Settings.instance = this;
   }
 
