@@ -1,10 +1,9 @@
-import MetaData from '@expressive-tea/classes/MetaData';
-import Settings from '@expressive-tea/classes/Settings';
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@expressive-tea/exceptions/BootLoaderExceptions';
-import { BOOT_STAGES_KEY } from '@expressive-tea/libs/constants';
-import * as constants from '@expressive-tea/libs/constants';
 import * as $P from 'bluebird';
 import * as express from 'express';
+import MetaData from '../classes/MetaData';
+import Settings from '../classes/Settings';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
+import { BOOT_ORDER, BOOT_STAGES_KEY, STAGES_INIT} from '../libs/constants';
 
 abstract class Boot {
   settings: any = {};
@@ -18,7 +17,7 @@ abstract class Boot {
   async start() {
     return new $P(async (resolver, rejector) => {
       try {
-        for (const stage in constants.BOOT_ORDER) {
+        for (const stage in BOOT_ORDER) {
           try {
             await bootloaderResolve(stage, this.server, this);
           } catch (e) {
@@ -70,5 +69,5 @@ async function bootloaderResolve(STAGE, server, instance) {
 /**
  * Initialize Meta Keys.
  */
-MetaData.set(BOOT_STAGES_KEY, constants.STAGES_INIT, Boot);
+MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, Boot);
 export default Boot;

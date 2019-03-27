@@ -1,7 +1,7 @@
 
-import MetaData from '@expressive-tea/classes/MetaData';
-import { REGISTERED_MODEL_KEY } from '@expressive-tea/libs/constants';
 import * as _ from 'lodash';
+import MetaData from '../classes/MetaData';
+import { REGISTERED_MODEL_KEY } from '../libs/constants';
 
 class Settings {
   static getInstance() {

@@ -1,13 +1,13 @@
-import DependencyInjection from '@expressive-tea/services/DependencyInjection';
 import { Router } from 'express';
 import { each, map } from 'lodash';
+import DependencyInjection from '../services/DependencyInjection';
 
 const dependcyInjection = DependencyInjection.getInstance();
 const DomainContainer = dependcyInjection.getContainer();
 
 export function Module(options = {}) {
 
-  return <T extends { new(...args: any[]): {} }>(constructor: T) => {
+  return <T extends new(...args: any[]) => {}>(constructor: T) => {
 
     return class extends constructor {
       readonly settings: any = {};

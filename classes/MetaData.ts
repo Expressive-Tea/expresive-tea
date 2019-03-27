@@ -1,5 +1,5 @@
-import { getClass } from '@expressive-tea/helpers/object-helper';
 import 'reflect-metadata';
+import { getClass } from '../helpers/object-helper';
 
 export default class Metadata {
 
@@ -66,7 +66,6 @@ export default class Metadata {
   static getParamTypes(targetPrototype: any, propertyKey?: string | symbol): any[] {
     return Reflect.getMetadata(DESIGN_PARAM_TYPES, targetPrototype, propertyKey!) || [];
   }
-
 
   static getOwnParamTypes(target: any, propertyKey?: string | symbol): any[] {
     return Reflect.getOwnMetadata(DESIGN_PARAM_TYPES, target, propertyKey!) || [];

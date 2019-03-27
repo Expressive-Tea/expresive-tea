@@ -1,5 +1,5 @@
-import Settings from '@expressive-tea/classes/Settings';
 import * as _ from 'lodash';
+import Settings from '../classes/Settings';
 
 export function Model(Model: string | object) {
   if (_.isString(Model)) {
