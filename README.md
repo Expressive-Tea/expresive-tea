@@ -55,4 +55,86 @@ class BootLoader extends Boot {
 export default new BootLoader().start()
 .catch(error => console.log(error.message));
 ```
+### Generate Modules
+```typescript
+import ControllerA from './controllers/ControllerA';
+import ControllerB from './controllers/ControllerB';
+import Provider from './services/Provider';
+import { Module } from '@zerooneit/expressive-tea/decorators/module';
+
+
+@Module({
+  // Assign Controllers to Module
+  controllers: [ControllerA, ControllerB],
+  // Assign Root Mountpoint Path
+  mountpoint: '/test',
+  // Assign Providers with dependency injection.
+  providers: [Provider]
+})
+export class TestModule {
+}
+```
+
+### Generate Controllers
+```typescript
+import { authenticate } from './middlewares/authentication';
+import { Model } from '@zerooneit/expressive-tea/decorators/model';
+import { Get, Middleware, Param, Patch, Post, Route } from '@zerooneit/expressive-tea/decorators/router';
+import DI from '@zerooneit/expressive-tea/services/DependencyInjection';
+
+const di = DI.getInstance();
+
+// controller root which will mounted over the module mounpooint
+@Route('/')
+class Users {
+  @Model('User')
+  model: any;
+
+  @di.getDecorators().Inject('AProviderService')
+  providerService: any;
+
+  @Param('userId')
+  async getId(req, res, next, userId) {
+    // ...
+  }
+
+  @Get('/me')
+  @Middleware(authenticate)
+  async getMe(req, res) {
+    // ...
+  }
+
+  @Patch('/me')
+  @Middleware(authenticate)
+  async updateMe(req, res) {
+    // ...
+  }
+
+  @Get('/:userId')
+  @Middleware(authenticate)
+  async getUser(req, res) {
+    // ...
+  }
+
+  @Patch('/')
+  async create(req, res, next) {
+    // ...
+  }
+
+  @Post('/:userId/import')
+  async importVcard(req, res, next) {
+    // ...
+  }
+
+
+
+  @Get('/me/connections')
+  @Middleware(authenticate)
+  async getConnections(req, res, next) {
+    //...
+  }
+}
+
+export default Users;
+```
 ### Please don't used yet, is still on development.
