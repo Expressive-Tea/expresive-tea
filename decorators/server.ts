@@ -18,7 +18,7 @@ export function Plug(stage: BOOT_STAGES, name, method, required = false) {
 
 export function ServerSettings(options = {}) {
   return target => {
-    target.settings = new Settings(options);
+    Settings.getInstance().merge(options);
     return target;
   };
 }

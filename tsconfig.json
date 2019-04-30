@@ -26,6 +26,9 @@
       "dom"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "./**/*.ts",
     "./node_modules/@types/**/*.ts"
