@@ -31,24 +31,26 @@ npm i --save @zerooneit/expressive-tea
 ```json
 {
 	"compilerOptions": {
-    "baseUrl": ".",
-    "sourceMap": true,
-    "noEmit": false,
-    "noImplicitAny": false,
-    "target": "es2015",
-    "lib": ["es2015", "dom"],
-    "types": ["reflect-metadata"],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "experimentalDecorators":true,
-    "emitDecoratorMetadata": true,
-    "declaration": true
+      "baseUrl": ".",
+      "sourceMap": true,
+      "noEmit": false,
+      "noImplicitAny": false,
+      "target": "es2015",
+      "lib": ["es2015", "dom"],
+      "types": ["reflect-metadata"],
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "experimentalDecorators":true,
+      "emitDecoratorMetadata": true,
+      "declaration": true
 	},
 	"include": [
 		"node_modules/@zerooneit/expressive-tea"
 	]
 }
 ```
+### Examples
+You can looking into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-example).
 
 ## Quick Start
 ### Declare a Server
