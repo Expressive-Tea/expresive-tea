@@ -26,7 +26,29 @@ npm i --save @zerooneit/expressive-tea
 ```
 
 > **Important!** Expressive Tea requires Node >= 6, Express >= 4, TypeScript >= 2.0 and the `experimentalDecorators`, 
-`lib` compilation options in your `tsconfig.json` file.
+`lib` compilation options in your `tsconfig.json` with the next configuration.
+
+```json
+{
+	"compilerOptions": {
+	  "baseUrl": ".",
+	  "sourceMap": true,
+    "noEmit": false,
+    "noImplicitAny": false,
+    "target": "es2015",
+    "lib": ["es2015", "dom"],
+    "types": ["reflect-metadata"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators":true,
+    "emitDecoratorMetadata": true,
+	  "declaration": true
+	},
+	"include": [
+		"node_modules/@zerooneit/expressive-tea"
+	]
+}
+```
 
 ## Quick Start
 ### Declare a Server

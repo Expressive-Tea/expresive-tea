@@ -3,13 +3,13 @@ import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import { BOOT_ORDER, BOOT_STAGES_KEY, STAGES_INIT} from '../libs/constants';
+import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES_INIT } from '../libs/constants';
 
 abstract class Boot {
   settings: any = {};
   private readonly server: any = express();
 
-  protected constructor() {
+  constructor() {
     this.settings = new Settings();
     this.settings.set('application', this.server);
   }
@@ -17,9 +17,13 @@ abstract class Boot {
   async start() {
     return new $P(async (resolver, rejector) => {
       try {
-        for (const stage in BOOT_ORDER) {
+        for (const stage of BOOT_ORDER) {
           try {
             await bootloaderResolve(stage, this.server, this);
+            if (stage === BOOT_STAGES.APPLICATION) {
+              await resolveModules(this, this.server);
+            }
+
           } catch (e) {
             if (e instanceof BootLoaderSoftExceptions) {
               console.info(e.message);
@@ -43,6 +47,14 @@ abstract class Boot {
       }
     });
   }
+}
+
+async function resolveModules(instance, server) {
+  const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
+  registeredModules.forEach(Module => {
+    const moduleInstance = new Module();
+    moduleInstance.__register(server);
+  });
 }
 
 async function bootloaderResolve(STAGE, server, instance) {
