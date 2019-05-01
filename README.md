@@ -31,8 +31,8 @@ npm i --save @zerooneit/expressive-tea
 ```json
 {
 	"compilerOptions": {
-	  "baseUrl": ".",
-	  "sourceMap": true,
+    "baseUrl": ".",
+    "sourceMap": true,
     "noEmit": false,
     "noImplicitAny": false,
     "target": "es2015",
@@ -42,7 +42,7 @@ npm i --save @zerooneit/expressive-tea
     "moduleResolution": "node",
     "experimentalDecorators":true,
     "emitDecoratorMetadata": true,
-	  "declaration": true
+    "declaration": true
 	},
 	"include": [
 		"node_modules/@zerooneit/expressive-tea"
@@ -159,4 +159,4 @@ class Users {
 
 export default Users;
 ```
-### Please don't used yet, is still on development.
+### Now we are on beta.
