@@ -1,42 +1,25 @@
 import { Container } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
 
+const rootContainer: Container = new Container({
+  autoBindInjectable: true
+});
+
+const lazyDecorators: any = getDecorators(rootContainer);
+
 class DependencyInjection {
+  static readonly Container: Container = rootContainer;
 
-  static getInstance() {
-    return !DependencyInjection.instance ? new DependencyInjection() : DependencyInjection.instance;
-  }
-
-  private static instance: DependencyInjection;
-  private container: Container;
-  private lazyDecorators: any;
-
-  constructor() {
-    if (DependencyInjection.instance) {
-      return DependencyInjection.instance;
+  static setProvider(ProviderFactory): void;
+  static setProvider(ProviderFactory: any, providerName?: string | symbol): void {
+    if (!rootContainer.isBound(providerName || ProviderFactory.name)) {
+      rootContainer.bind(providerName || ProviderFactory.name).to(ProviderFactory);
     }
-
-    this.container = new Container({
-      autoBindInjectable: true
-    });
-
-    this.lazyDecorators = getDecorators(this.container);
-
-    DependencyInjection.instance = this;
-  }
-
-  getContainer() {
-    return this.container;
-  }
-
-  getDecorators() {
-    return {
-      Inject: this.lazyDecorators.lazyInject,
-      InjectNamed: this.lazyDecorators.lazyInjectNamed,
-      InjectTagged: this.lazyDecorators.lazyInjectTagged,
-      MultiInject: this.lazyDecorators.lazyMultiInject
-    };
   }
 }
 
+export const Inject = lazyDecorators.lazyInject;
+export const InjectNamed = lazyDecorators.lazyInjectNamed;
+export const InjectTagged = lazyDecorators.lazyInjectTagged;
+export const MultiInject = lazyDecorators.lazyMultiInject;
 export default DependencyInjection;

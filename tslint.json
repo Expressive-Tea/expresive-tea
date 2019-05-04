@@ -24,5 +24,6 @@
   "rulesDirectory": [],
   "linterOptions": {
     "exclude": []
-  }
+  },
+  "unified-signatures": false
 }
