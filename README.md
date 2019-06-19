@@ -15,7 +15,7 @@ Expressive Tea is a simple library which allow to generate RESTful services with
 * Can declare models depending on your flavor, we recommend Mongoose or Sequelize flavors.
 
 
-## Why
+## Motivation
 The main idea is help developers to generate a RESTful service quick and modulable through descriptive decorators and settings
 on top of ExpressJS. Expressive Tea is a clean, simple and descriptive mini framework which allow create REST services quickly
 saving time with the creation of routers and other express components with a clean, descriptive decorator.
@@ -30,135 +30,172 @@ npm i --save @zerooneit/expressive-tea
 
 ```json
 {
-	"compilerOptions": {
-      "baseUrl": ".",
-      "sourceMap": true,
-      "noEmit": false,
-      "noImplicitAny": false,
-      "target": "es2015",
-      "lib": ["es2015", "dom"],
-      "types": ["reflect-metadata"],
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "experimentalDecorators":true,
-      "emitDecoratorMetadata": true,
-      "declaration": true
-	},
-	"include": [
-		"node_modules/@zerooneit/expressive-tea"
-	]
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": true,
+    "noEmit": false,
+    "noImplicitAny": false,
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "reflect-metadata"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "declaration": true
+  },
+  "include": [
+    "node_modules/@zerooneit/expressive-tea"
+  ]
 }
 ```
 ### Examples
 You can looking into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-example).
 
 ## Quick Start
+### Boot Stages
+The Application internally is ordering the plugs on the next order:
+
+**BOOT_DEPENDENCIES**: This is executing when express server applications is created.
+
+**INITIALIZE_MIDDLEWARES**: Global middleware initialization.
+
+**APPLICATION**: This should contain express configuration or application configurations.
+
+***MODULES***: This is an internal stage that is used only to create the modules.
+
+**AFTER_APPLICATION_MIDDLEWARES**: Middlewares commonly used after setup the modules, commonly for error handler.
+
+**START**: Can be used to add additional configuration as websocket implementation or another service.
+  
 ### Declare a Server
 ```typescript
-/** Main Middlewares configuration for server **/
-import databaseInitialize from './database';
-import expressInitialize from './express';
-import errorHandling from './errorHandling';
-
-/** Get Boot class **/
 import Boot from '@zerooneit/expressive-tea/classes/Boot';
-
-/** Get Boot Stages Enum **/
 import { BOOT_STAGES } from '@zerooneit/expressive-tea/libs/constants';
+import { Plug, ServerSettings, RegisterModule } from '@zerooneit/expressive-tea/decorators/server';
+import RootModule from './app/Root/RootModule';
+import logSetting from './config/TestPlug';
 
-/** Get Main Decorators **/
-import { Plug, ServerSettings } from '@zerooneit/expressive-tea/decorators/server';
+@ServerSettings({
+	port: 3001
+})
 
-@ServerSettings()
-@Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Database Initialization', databaseInitialize, true)
-@Plug(BOOT_STAGES.INITIALIZE_MIDDLEWARES, 'Express Initialization', expressInitialize, true)
-@Plug(BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, 'Error Handlers Initialization', errorHandling, true)
+@Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Log Middleware', logSetting)
 class BootLoader extends Boot {
+	@RegisterModule(RootModule)
+	async start() {
+		super.start();
+	}
 }
 
 export default new BootLoader().start()
-.catch(error => console.log(error.message));
+  .catch(error => console.log(error.message));
 ```
+### Generate A Plug Setting
+The plugin always needs to be a method which is receiving express server application.
+
+```typescript
+export default function testPlug(server) {
+    server.use(function(req, res, next) {
+        console.log('This should be executed everytime in all the endpoints');
+        next();
+    });
+}
+
+```
+
 ### Generate Modules
 ```typescript
-import ControllerA from './controllers/ControllerA';
-import ControllerB from './controllers/ControllerB';
-import Provider from './services/Provider';
 import { Module } from '@zerooneit/expressive-tea/decorators/module';
-
+import RootController from './controllers/RootController';
+import TestService from './services/TestService';
 
 @Module({
-  // Assign Controllers to Module
-  controllers: [ControllerA, ControllerB],
-  // Assign Root Mountpoint Path
-  mountpoint: '/test',
-  // Assign Providers with dependency injection.
-  providers: [Provider]
+	controllers: [RootController], // Controllers Defined
+	providers: [TestService], // Dependency Injection Providers
+	mountpoint: '/' // Mountpoint Route starting from root.
 })
-export class TestModule {
-}
+export default class TestModule {}
+
 ```
 
 ### Generate Controllers
 ```typescript
-import { authenticate } from './middlewares/authentication';
-import { Model } from '@zerooneit/expressive-tea/decorators/model';
-import { Get, Middleware, Param, Patch, Post, Route } from '@zerooneit/expressive-tea/decorators/router';
-import DI from '@zerooneit/expressive-tea/services/DependencyInjection';
+import { Get, Route } from '@zerooneit/expressive-tea/decorators/router';
+import { Inject } from '@zerooneit/expressive-tea/services/DependencyInjection';
 
-const di = DI.getInstance();
-
-// controller root which will mounted over the module mounpooint
 @Route('/')
-class Users {
-  @Model('User')
-  model: any;
+export default class RootController {
+  /**
+  * Injected Provider Instance into controller property 
+  */
+	@Inject('TestService')
+	testService; 
+  
+	// Set and enpoint over module root endpoint
+	@Get('/')
+	async index(req, res) {
+		res.send('is Working!!');
+	}
 
-  @di.getDecorators().Inject('AProviderService')
-  providerService: any;
+	@Get('/test')
+	async test(req, res) {
+		res.json({success: true, message: 'this is working too'});
+	}
 
-  @Param('userId')
-  async getId(req, res, next, userId) {
-    // ...
-  }
-
-  @Get('/me')
-  @Middleware(authenticate)
-  async getMe(req, res) {
-    // ...
-  }
-
-  @Patch('/me')
-  @Middleware(authenticate)
-  async updateMe(req, res) {
-    // ...
-  }
-
-  @Get('/:userId')
-  @Middleware(authenticate)
-  async getUser(req, res) {
-    // ...
-  }
-
-  @Patch('/')
-  async create(req, res, next) {
-    // ...
-  }
-
-  @Post('/:userId/import')
-  async importVcard(req, res, next) {
-    // ...
-  }
-
-
-
-  @Get('/me/connections')
-  @Middleware(authenticate)
-  async getConnections(req, res, next) {
-    //...
-  }
+	@Get('/test/inject')
+	async testInject(req, res) {
+		res.send(this.testService.test());
+	}
 }
 
-export default Users;
 ```
-### Now we are on beta.
+
+### Generate Injectable Service
+```typescript
+import {injectable} from 'inversify';
+
+@injectable()
+export default class TestService {
+    test() {
+        return 'This is a injectable service';
+    }
+}}
+
+```
+## Support
+If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Zero-OneiT/expresive-tea/issues) or the [chat](https://gitter.im/Zero-OneiT/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
+
+If you want to share your thoughts with the development team or join us you will be able to do so using the [official the mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
+[wiki](https://github.com/Zero-OneiT/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals.
+
+## Built With
+
+* [Exoress](https://github.com/expressjs/express) - The web framework used
+* [Typescript](https://www.typescriptlang.org/) - Main Language
+* [Inversify](https://github.com/inversify/InversifyJS/) - Used for dependency Injection
+* [Reflect Metadata](https://github.com/rbuckton/reflect-metadata) - Used to get code metadata.
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+
+## Authors
+
+* **Diego Resendez** - *Initial work* - [zerooneit](https://github.com/zerooneit)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
