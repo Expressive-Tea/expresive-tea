@@ -193,7 +193,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 * **Diego Resendez** - *Initial work* - [zerooneit](https://github.com/zerooneit)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Zero-OneiT/expresive-tea/contributors) who participated in this project.
 
 ## License
 
