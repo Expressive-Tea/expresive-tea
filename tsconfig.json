@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "outDir": "./build/",
     "noImplicitAny": false,
     "module": "commonjs",
     "target": "es2017",
@@ -14,16 +13,22 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
     "baseUrl": ".",
     "paths": {
       "@expressive-tea/*": ["*"]
     },
-    "declaration": true,
+    "declaration": false,
+    "noEmit": true,
     "lib": [
       "es2017",
       "dom"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "./**/*.ts",
     "./node_modules/@types/**/*.ts"

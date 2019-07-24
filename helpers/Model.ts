@@ -1,7 +1,7 @@
-import MetaData from '@expressive-tea/classes/MetaData';
-import Settings from '@expressive-tea/classes/Settings';
-import { REGISTERED_MODEL_KEY } from '@expressive-tea/libs/constants';
 import { get } from 'lodash';
+import MetaData from '../classes/MetaData';
+import Settings from '../classes/Settings';
+import { REGISTERED_MODEL_KEY } from '../libs/constants';
 
 export function register(context) {
   const registeredModels = MetaData.get(REGISTERED_MODEL_KEY, Settings.getInstance()) || {};

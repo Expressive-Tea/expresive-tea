@@ -1,11 +1,11 @@
 
-import MetaData from '@expressive-tea/classes/MetaData';
-import { REGISTERED_MODEL_KEY } from '@expressive-tea/libs/constants';
 import * as _ from 'lodash';
+import MetaData from '../classes/MetaData';
+import { REGISTERED_MODEL_KEY } from '../libs/constants';
 
 class Settings {
   static getInstance() {
-    return Settings.instance;
+    return Settings.instance || new Settings();
   }
 
   static getModel(modelName: any) {
@@ -14,7 +14,7 @@ class Settings {
   }
 
   private static instance: Settings;
-  private readonly options;
+  private options;
 
   constructor(options = {}) {
     if (Settings.instance) {
@@ -35,6 +35,10 @@ class Settings {
 
   set(settingName, value) {
     _.set(this.options, settingName, value);
+  }
+
+  merge(options) {
+    this.options = Object.assign(this.options, options);
   }
 }
 

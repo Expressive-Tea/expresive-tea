@@ -1,10 +1,10 @@
-import MetaData from '@expressive-tea/classes/MetaData';
-import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '@expressive-tea/libs/constants';
 import { Router } from 'express';
 import { each, map } from 'lodash';
+import MetaData from '../classes/MetaData';
+import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
 
 export function Route(mountpoint = '/') {
-  return <T extends { new(...args: any[]): {} }>(constructor: T) => {
+  return <T extends new(...args: any[]) => {}>(constructor: T) => {
     const handlers = MetaData.get(ROUTER_HANDLERS_KEY, constructor) || [];
     const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, constructor) || [];
 

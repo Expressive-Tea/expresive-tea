@@ -1,6 +1,6 @@
-import MetaData from '@expressive-tea/classes/MetaData';
-import Settings from '@expressive-tea/classes/Settings';
-import { BOOT_STAGES, BOOT_STAGES_KEY } from '@expressive-tea/libs/constants';
+import MetaData from '../classes/MetaData';
+import Settings from '../classes/Settings';
+import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
 
 export function Plug(stage: BOOT_STAGES, name, method, required = false) {
   if (!name) {
@@ -18,7 +18,7 @@ export function Plug(stage: BOOT_STAGES, name, method, required = false) {
 
 export function ServerSettings(options = {}) {
   return target => {
-    target.settings = new Settings(options);
+    Settings.getInstance().merge(options);
     return target;
   };
 }
@@ -33,5 +33,13 @@ export function Setting(settingName) {
       configurable: false,
       get: () => target.settings[propertyName]
     });
+  };
+}
+
+export function RegisterModule(Module) {
+  return (target, property) => {
+    const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, property) || [];
+    registeredModules.push(Module);
+    MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
   };
 }
