@@ -1,7 +1,8 @@
-import { Express } from '@expressive-tea/node_modules/@types/express';
+import { Express } from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
+import { ExpressiveTeaServerProps } from '../libs/interfaces';
 
 export function Plug(
   stage: BOOT_STAGES,
@@ -21,7 +22,7 @@ export function Plug(
   };
 }
 
-export function ServerSettings(options: object = {}) {
+export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
     Settings.getInstance().merge(options);
     return target;

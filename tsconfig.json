@@ -16,9 +16,6 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "baseUrl": ".",
-    "paths": {
-      "@expressive-tea/*": ["*"]
-    },
     "declaration": false,
     "noEmit": true,
     "lib": [

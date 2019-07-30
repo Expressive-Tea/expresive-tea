@@ -1,12 +1,13 @@
-import { IServerInstance } from '@expressive-tea/libs/interfaces';
-import { Rejector, Resolvable, Resolver } from '@expressive-tea/libs/types';
-import { Express } from '@expressive-tea/node_modules/@types/express';
 import * as $P from 'bluebird';
+import { Express } from 'express';
+// tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES_INIT } from '../libs/constants';
+import { ExpressiveTeaApplication } from '../libs/interfaces';
+import { Rejector, Resolver } from '../libs/types';
 
 abstract class Boot {
   settings: Settings;
@@ -17,8 +18,8 @@ abstract class Boot {
     this.settings.set('application', this.server);
   }
 
-  async start(): Promise<IServerInstance> {
-    return new $P(async (resolver: Resolver<IServerInstance>, rejector: Rejector) => {
+  async start(): Promise<ExpressiveTeaApplication> {
+    return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
         for (const stage of BOOT_ORDER) {
           try {
@@ -50,7 +51,7 @@ abstract class Boot {
   }
 }
 
-async function resolveModules(instance: typeof Boot | Boot, server: Express) {
+async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {
   const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
   registeredModules.forEach(Module => {
     const moduleInstance = new Module();
