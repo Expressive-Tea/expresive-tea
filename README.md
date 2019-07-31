@@ -176,7 +176,7 @@ If you want to share your thoughts with the development team or join us you will
 
 ## Built With
 
-* [Exoress](https://github.com/expressjs/express) - The web framework used
+* [Express](https://github.com/expressjs/express) - The web framework used
 * [Typescript](https://www.typescriptlang.org/) - Main Language
 * [Inversify](https://github.com/inversify/InversifyJS/) - Used for dependency Injection
 * [Reflect Metadata](https://github.com/rbuckton/reflect-metadata) - Used to get code metadata.
