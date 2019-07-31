@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "build/",
     "sourceMap": true,
     "noImplicitAny": false,
     "module": "commonjs",
@@ -16,10 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "baseUrl": ".",
-    "paths": {
-      "@expressive-tea/*": ["*"]
-    },
-    "declaration": false,
+    "declaration": true,
     "noEmit": true,
     "lib": [
       "es2017",

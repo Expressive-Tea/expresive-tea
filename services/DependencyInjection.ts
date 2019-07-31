@@ -1,11 +1,18 @@
 import { Container } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
 
+interface InversifyDecorators {
+  lazyInject(...args: any[]);
+  lazyInjectNamed(...args: any[]);
+  lazyInjectTagged(...args: any[]);
+  lazyMultiInject(...args: any[]);
+}
+
 const rootContainer: Container = new Container({
   autoBindInjectable: true
 });
 
-const lazyDecorators: any = getDecorators(rootContainer);
+const lazyDecorators: InversifyDecorators = getDecorators(rootContainer);
 
 class DependencyInjection {
   static readonly Container: Container = rootContainer;
