@@ -1,4 +1,4 @@
-import { Express, Router } from 'express';
+import { Express } from 'express';
 import { Server } from 'http';
 
 export interface IDynamicObject {

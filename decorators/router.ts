@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { each, map } from 'lodash';
+import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
 
@@ -30,8 +30,7 @@ export function Route(mountpoint = '/') {
   };
 }
 
-function generateRoute(verb): (route: string) =>
-  (verb: string, route: string, target: any, descriptor: any) => void {
+function generateRoute(verb): (route: string) => (target, propertyKey, descriptor) => void {
   return (route: string = '*') => (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value);
 }
 
