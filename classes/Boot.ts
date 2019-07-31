@@ -1,21 +1,25 @@
 import * as $P from 'bluebird';
+import { Express } from 'express';
+// tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES_INIT } from '../libs/constants';
+import { ExpressiveTeaApplication } from '../libs/interfaces';
+import { Rejector, Resolver } from '../libs/types';
 
 abstract class Boot {
-  settings: any = {};
-  private readonly server: any = express();
+  settings: Settings;
+  private readonly server: Express = express();
 
   constructor() {
     this.settings = new Settings();
     this.settings.set('application', this.server);
   }
 
-  async start() {
-    return new $P(async (resolver, rejector) => {
+  async start(): Promise<ExpressiveTeaApplication> {
+    return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
         for (const stage of BOOT_ORDER) {
           try {
@@ -23,7 +27,6 @@ abstract class Boot {
             if (stage === BOOT_STAGES.APPLICATION) {
               await resolveModules(this, this.server);
             }
-
           } catch (e) {
             if (e instanceof BootLoaderSoftExceptions) {
               console.info(e.message);
@@ -37,11 +40,10 @@ abstract class Boot {
           }
         }
 
-        const server = this.server.listen(this.settings.get('port'),
-          () => {
-            console.log(`Running Server on [${this.settings.get('port')}]`);
-            resolver({ application: this.server, server });
-          });
+        const server = this.server.listen(this.settings.get('port'), () => {
+          console.log(`Running Server on [${this.settings.get('port')}]`);
+          resolver({ application: this.server, server });
+        });
       } catch (e) {
         return rejector(e);
       }
@@ -49,7 +51,7 @@ abstract class Boot {
   }
 }
 
-async function resolveModules(instance, server) {
+async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {
   const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
   registeredModules.forEach(Module => {
     const moduleInstance = new Module();
@@ -57,7 +59,7 @@ async function resolveModules(instance, server) {
   });
 }
 
-async function bootloaderResolve(STAGE, server, instance) {
+async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: typeof Boot | Boot): Promise<void> {
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {

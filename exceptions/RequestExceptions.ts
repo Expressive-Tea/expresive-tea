@@ -1,18 +1,3 @@
-export class BadRequestException extends Error {
-  statusCode: number = 400;
-  message: string = 'Bad Request';
-}
-
-export class UnauthorizedException extends Error {
-  statusCode: number = 401;
-  message: string = 'Unauthorized Request';
-
-  constructor(message) {
-    super();
-    this.message = message;
-  }
-}
-
 export class GenericRequestException extends Error {
   statusCode: number = 500;
   message: string = 'Server Error';
@@ -21,5 +6,18 @@ export class GenericRequestException extends Error {
     super(message);
     this.statusCode = statusCode;
     this.message = message;
+  }
+}
+
+export class BadRequestException extends GenericRequestException {
+  constructor(message: string | never = 'Bad Request') {
+    super(message, 400);
+  }
+
+}
+
+export class UnauthorizedException extends GenericRequestException {
+  constructor(message: string | never = 'Unauthorized Request') {
+    super(message, 401);
   }
 }

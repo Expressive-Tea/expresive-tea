@@ -1,6 +1,6 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "0.0.6-RC1",
+  "version": "0.0.7-RC",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.ts",
   "scripts": {
@@ -9,6 +9,8 @@
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/bluebird": "^3.5.27",
+    "@types/express": "^4.17.0",
     "reflect-metadata": "^0.1.12",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
