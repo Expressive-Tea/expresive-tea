@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>classes/Settings.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Boot.html">Boot</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Boot.html#start">start</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="GenericRequestException.html">GenericRequestException</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Settings.html">Settings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.getInstance">getInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#getOptions">getOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#merge">merge</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#set">set</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Module.html">Decorators/Module</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Module.html#~Module">Module</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Route.html">Decorators/Route</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Delete">Delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Get">Get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Middleware">Middleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Param">Param</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Patch">Patch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Post">Post</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Put">Put</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Route">Route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Server.html">Decorators/Server</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Plug">Plug</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Setting">Setting</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">classes/Settings.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
+const MetaData_1 = require("../classes/MetaData");
+const constants_1 = require("../libs/constants");
+/**
+ * Singleton Class to store and get settings and configurations
+ *
+ * @class Settings
+ * @param {ExpressiveTeaServerProps} [options={ port: 3000 }]
+ */
+class Settings {
+    /**
+     * Get Current Singleton Instance or Created if not exists.
+     *
+     * @static
+     * @returns {Settings}
+     * @memberof Settings
+     */
+    static getInstance() {
+        return Settings.instance || new Settings();
+    }
+    static getModel(modelName) {
+        const registeredModels = MetaData_1.default.get(constants_1.REGISTERED_MODEL_KEY, Settings.getInstance()) || {};
+        return _.get(registeredModels, modelName);
+    }
+    constructor(options = { port: 3000 }) {
+        if (Settings.instance) {
+            return Settings.instance;
+        }
+        this.options = Object.assign({}, options);
+        Settings.instance = this;
+    }
+    /**
+     * Get the Server Options.
+     *
+     * @returns {ExpressiveTeaServerProps}
+     * @memberof Settings
+     */
+    getOptions() {
+        return this.options;
+    }
+    /**
+     * Get the setting on &lt;setting Name> or return undefined.
+     *
+     * @param {string} settingName
+     * @returns {*}
+     * @memberof Settings
+     */
+    get(settingName) {
+        return _.get(this.options, settingName, null);
+    }
+    /**
+     * Set or edit a setting.
+     *
+     * @param {string} settingName
+     * @param {*} value
+     * @memberof Settings
+     */
+    set(settingName, value) {
+        _.set(this.options, settingName, value);
+    }
+    /**
+     * Merge Server Settings.
+     *
+     * @param {ExpressiveTeaServerProps} [options={ port: 3000 }]
+     * @memberof Settings
+     */
+    merge(options = { port: 3000 }) {
+        this.options = Object.assign(this.options, options);
+    }
+}
+exports.default = Settings;
+//# sourceMappingURL=Settings.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 01 2019 12:05:46 GMT-0500 (CDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

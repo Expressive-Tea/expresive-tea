@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>decorators/server.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Boot.html">Boot</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Boot.html#start">start</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="GenericRequestException.html">GenericRequestException</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Settings.html">Settings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.getInstance">getInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#getOptions">getOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#merge">merge</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#set">set</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Module.html">Decorators/Module</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Module.html#~Module">Module</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Route.html">Decorators/Route</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Delete">Delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Get">Get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Middleware">Middleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Param">Param</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Patch">Patch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Post">Post</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Put">Put</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Route">Route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Server.html">Decorators/Server</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Plug">Plug</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Setting">Setting</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">decorators/server.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const MetaData_1 = require("../classes/MetaData");
+const Settings_1 = require("../classes/Settings");
+const constants_1 = require("../libs/constants");
+/**
+ * @module Decorators/Server
+ */
+/**
+ * Plug Class Decorator
+ *
+ * This Decorators is add plugin initialization to one of the selected stages.
+ * @example @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'test', s => console.log, true) class Example {}
+ * @param {ExpressiveTeaModuleProps} options
+ * @param {BOOT_STAGES} options.stage   Boot Stage where the plugin should run or initialize.
+ * @param {string} options.name         Plugin Name (recommended short names)
+ * @param {Function} options.method     A Function to  initialize the plugin, it will get a express application as argument.
+ * @param {boolean} options.required    A Flag to let know if this is a hard requirement.
+ */
+function Plug(stage, name, method, required = false) {
+    if (!name) {
+        throw new Error('Unamed Plugin is not allowed.');
+    }
+    return (target) => {
+        const stages = MetaData_1.default.get(constants_1.BOOT_STAGES_KEY, target) || {};
+        if (!stages[stage]) {
+            stages[stage] = [];
+        }
+        stages[stage].unshift({ method, required, name });
+        MetaData_1.default.set(constants_1.BOOT_STAGES_KEY, stages, target);
+    };
+}
+exports.Plug = Plug;
+/**
+ * Server Settings Class Decorator
+ *
+ * This Provide the Configuration to the server or another component on the projects, is working as a container
+ * to store user and library settings.
+ * @param {ExpressiveTeaModuleProps} options
+ * @param {number} [port=3000] Select Port Number where the server should be listening.
+ */
+function ServerSettings(options = {}) {
+    return target => {
+        Settings_1.default.getInstance().merge(options);
+        return target;
+    };
+}
+exports.ServerSettings = ServerSettings;
+/**
+ * Setting Property Decorator
+ *
+ * Automatically assign a settings declared on Settings Service into the decorated property.
+ * @param {string | undefined} settingName The Setting name tha
+ */
+function Setting(settingName) {
+    if (!settingName) {
+        throw new Error('Setting Name must be defined');
+    }
+    return (target, propertyName) => {
+        Object.defineProperty(target, propertyName, {
+            configurable: false,
+            get: () => target.settings[propertyName]
+        });
+    };
+}
+exports.Setting = Setting;
+/**
+ * Register Module Method Decorator.
+ *
+ * This Method Decorator is used at bootstrap level and should decorate the start method
+ * with a Module Class.
+ * @param {class} Module
+ */
+function RegisterModule(Module) {
+    return (target, property) => {
+        const registeredModules = MetaData_1.default.get(constants_1.REGISTERED_MODULE_KEY, target, property) || [];
+        registeredModules.push(Module);
+        MetaData_1.default.set(constants_1.REGISTERED_MODULE_KEY, registeredModules, target, property);
+    };
+}
+exports.RegisterModule = RegisterModule;
+//# sourceMappingURL=server.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Aug 01 2019 12:05:46 GMT-0500 (CDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
