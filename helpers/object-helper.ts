@@ -1,13 +1,16 @@
 /**
  * Get the provide constructor.
  * @param targetClass
+ * @ignore
  */
-export const getConstructor = (targetClass: any): Function => (typeof targetClass === 'function' ? targetClass : targetClass.constructor);
+export const getConstructor = (targetClass: any): Function =>
+  typeof targetClass === 'function' ? targetClass : targetClass.constructor;
 
 /**
  * Get the provide constructor if target is an instance.
  * @param target
  * @returns {*}
+ * @ignore
  */
 export function getClass(target: any): any {
   return target.prototype ? target : target.constructor;
@@ -18,6 +21,7 @@ export function getClass(target: any): any {
  * @param target
  * @returns {*}
  * @alias getClass
+ * @ignore
  */
 export function classOf(target: any) {
   return getClass(target);
@@ -27,6 +31,7 @@ export function classOf(target: any) {
  *
  * @param target
  * @returns {symbol}
+ * @ignore
  */
 export function getClassOrSymbol(target: any): any {
   return typeof target === 'symbol' ? target : getClass(target);
@@ -36,6 +41,7 @@ export function getClassOrSymbol(target: any): any {
  * Return true if the given obj is a primitive.
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isPrimitiveOrPrimitiveClass(target: any): boolean {
   return isString(target) || isNumber(target) || isBoolean(target);
@@ -45,6 +51,7 @@ export function isPrimitiveOrPrimitiveClass(target: any): boolean {
  *
  * @param target
  * @returns {"string" | "number" | "boolean" | "any"}
+ * @ignore
  */
 export function primitiveOf(target: any): 'string' | 'number' | 'boolean' | 'any' {
   if (isString(target)) {
@@ -64,6 +71,7 @@ export function primitiveOf(target: any): 'string' | 'number' | 'boolean' | 'any
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isString(target: any): boolean {
   return typeof target === 'string' || target instanceof String || target === String;
@@ -73,6 +81,7 @@ export function isString(target: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isNumber(target: any): boolean {
   return typeof target === 'number' || target instanceof Number || target === Number;
@@ -82,6 +91,7 @@ export function isNumber(target: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isBoolean(target: any): boolean {
   return typeof target === 'boolean' || target instanceof Boolean || target === Boolean;
@@ -91,6 +101,7 @@ export function isBoolean(target: any): boolean {
  *
  * @param target
  * @returns {Boolean}
+ * @ignore
  */
 export function isArray(target: any): boolean {
   return Array.isArray(target);
@@ -100,6 +111,7 @@ export function isArray(target: any): boolean {
  * Return true if the clazz is an array.
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isArrayOrArrayClass(target: any): boolean {
   if (target === Array) {
@@ -113,6 +125,7 @@ export function isArrayOrArrayClass(target: any): boolean {
  * Return true if the target.
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isCollection(target: any): boolean {
   return (
@@ -132,6 +145,7 @@ export function isCollection(target: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isDate(target: any): boolean {
   return target === Date || target instanceof Date;
@@ -141,6 +155,7 @@ export function isDate(target: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isObject(target: any): boolean {
   return target === Object;
@@ -150,15 +165,23 @@ export function isObject(target: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isClass(target: any) {
-  return !isPrimitiveOrPrimitiveClass(target) && !isObject(target) && !isDate(target) && target !== undefined && !isPromise(target);
+  return (
+    !isPrimitiveOrPrimitiveClass(target) &&
+    !isObject(target) &&
+    !isDate(target) &&
+    target !== undefined &&
+    !isPromise(target)
+  );
 }
 
 /**
  * Return true if the value is an empty string, null or undefined.
  * @param value
  * @returns {boolean}
+ * @ignore
  */
 export function isEmpty(value: any): boolean {
   return value === '' || value === null || value === undefined;
@@ -168,6 +191,7 @@ export function isEmpty(value: any): boolean {
  *
  * @param target
  * @returns {boolean}
+ * @ignore
  */
 export function isPromise(target: any): boolean {
   return target === Promise || target instanceof Promise;
@@ -177,6 +201,7 @@ export function isPromise(target: any): boolean {
  *
  * @param target
  * @returns {any}
+ * @ignore
  */
 export function getInheritedClass(target: any): any {
   return Object.getPrototypeOf(target);
@@ -186,6 +211,7 @@ export function getInheritedClass(target: any): any {
  *
  * @param target
  * @returns {Array}
+ * @ignore
  */
 export function ancestorsOf(target: any) {
   const classes: any[] = [];
@@ -202,6 +228,7 @@ export function ancestorsOf(target: any) {
 
 /**
  * Get object name
+ * @ignore
  */
 export function nameOf(obj: any): string {
   switch (typeof obj) {
@@ -217,6 +244,7 @@ export function nameOf(obj: any): string {
 /**
  * Get the provide name.
  * @param targetClass
+ * @ignore
  */
 export function nameOfClass(targetClass: any): string {
   return typeof targetClass === 'function' ? targetClass.name : targetClass.constructor.name;
@@ -225,6 +253,7 @@ export function nameOfClass(targetClass: any): string {
 /**
  * Get symbol name.
  * @param sym
+ * @ignore
  */
 export const nameOfSymbol = (sym: symbol): string =>
   sym
@@ -237,6 +266,7 @@ export const nameOfSymbol = (sym: symbol): string =>
  * @param target
  * @param {string} propertyKey
  * @returns {PropertyDescriptor}
+ * @ignore
  */
 export function descriptorOf(target: any, propertyKey: string): PropertyDescriptor {
   return Object.getOwnPropertyDescriptor((target && target.prototype) || target, propertyKey)!;
@@ -246,6 +276,7 @@ export function descriptorOf(target: any, propertyKey: string): PropertyDescript
  *
  * @param target
  * @returns {any}
+ * @ignore
  */
 export function prototypeOf(target: any) {
   return classOf(target) === target ? target.prototype : target;

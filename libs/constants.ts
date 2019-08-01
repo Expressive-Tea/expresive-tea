@@ -1,3 +1,12 @@
+/**
+ * Boot Stages
+ *
+ * Available Boot Stages Enum.
+ *
+ * @inner
+ * @export
+ * @enum {number}
+ */
 export enum BOOT_STAGES {
   BOOT_DEPENDENCIES,
   INITIALIZE_MIDDLEWARES,
@@ -6,6 +15,11 @@ export enum BOOT_STAGES {
   START
 }
 
+/**
+ * Boot Order Constant
+ * @type Array<BOOT_STAGES>
+ * @constant
+ */
 export const BOOT_ORDER = [
   BOOT_STAGES.BOOT_DEPENDENCIES,
   BOOT_STAGES.INITIALIZE_MIDDLEWARES,

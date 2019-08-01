@@ -5,11 +5,6 @@
     "noImplicitAny": false,
     "module": "commonjs",
     "target": "es2017",
-    "types": [
-      "node",
-      "webpack-env",
-      "reflect-metadata"
-    ],
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
@@ -17,8 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "baseUrl": ".",
-    "declaration": true,
-    "noEmit": true,
+    "declaration": false,
     "lib": [
       "es2017",
       "dom"
@@ -26,9 +20,5 @@
   },
   "exclude": [
     "node_modules"
-  ],
-  "include": [
-    "./**/*.ts",
-    "./node_modules/@types/**/*.ts"
   ]
 }

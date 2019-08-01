@@ -2,9 +2,18 @@ import { Router } from 'express';
 import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
+/**
+ * @module Decorators/Route
+ */
 
+/**
+ * Route Controller Decorator
+ * @example @Route('/) class Example {}
+ * @param {string} mountpoint Register the url part to mount the Controller.
+ * @returns {Decorator}
+ */
 export function Route(mountpoint = '/') {
-  return <T extends new(...args: any[]) => {}>(Route: T) => {
+  return <T extends new (...args: any[]) => {}>(Route: T) => {
     const handlers = MetaData.get(ROUTER_HANDLERS_KEY, Route) || [];
     const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, Route) || [];
 
@@ -30,17 +39,66 @@ export function Route(mountpoint = '/') {
   };
 }
 
-function generateRoute(verb): (route: string) => (target, propertyKey, descriptor) => void {
-  return (route: string = '*') => (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value);
+function generateRoute(route, verb): (target, propertyKey, descriptor) => void {
+  return (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value);
 }
 
-export const Get = generateRoute('get');
-export const Post = generateRoute('post');
-export const Put = generateRoute('put');
-export const Patch = generateRoute('patch');
-export const Delete = generateRoute('delete');
-export const Param = generateRoute('param');
+/**
+ * Get HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ * @returns {Decorator}
+ */
+export function Get(route = '*') {
+  return generateRoute(route, 'get');
+}
+/**
+ * Post HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ */
+export function Post(route = '*') {
+  return generateRoute(route, 'post');
+}
+/**
+ * Put HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ * @returns {Decorator}
+ */
+export function Put(route = '*') {
+  return generateRoute(route, 'put');
+}
+/**
+ * Patch HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ * @returns {Decorator}
+ */
+export function Patch(route = '*') {
+  return generateRoute(route, 'patch');
+}
+/**
+ * Delete HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ * @returns {Decorator}
+ */
+export function Delete(route = '*') {
+  return generateRoute(route, 'delete');
+}
+/**
+ * Param HTTP Verb Decorator
+ * @param {string} route URL Part to mount create a handler.
+ * @returns {Decorator}
+ */
+export function Param(route = '*') {
+  return generateRoute(route, 'param');
+}
 
+/**
+ * Route Controller Decorator
+ * @example @Middleware((req, res) => ...) class Example {}
+ *    class Example { @Get('/') @Middleware((req, res) => ...) print()  {}}
+ *
+ * @param {Function} middleware Register a middleware over routerr.
+ * @returns {Decorator}
+ */
 export function Middleware(middleware) {
   return (target, property?, descriptor?) => {
     if (!property) {
@@ -48,7 +106,6 @@ export function Middleware(middleware) {
     } else {
       routeMiddleware(target, descriptor, middleware);
     }
-
   };
 }
 

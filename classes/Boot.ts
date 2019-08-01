@@ -9,8 +9,34 @@ import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES
 import { ExpressiveTeaApplication } from '../libs/interfaces';
 import { Rejector, Resolver } from '../libs/types';
 
+/**
+ * @typedef {Object} ExpressiveTeaApplication
+ * @property {Express} application Express Application Instance
+ * @property {HTTPServer} server HTTP Server Object
+ */
+
+/**
+ * Bootstrap Server Configuration Class
+ *
+ * @abstract
+ * @class Boot
+ */
 abstract class Boot {
+  /**
+   * Contains a instance of Settings
+   *
+   * @type {Settings}
+   * @memberof Boot
+   */
   settings: Settings;
+
+  /**
+   * Express Application instance internal property.
+   *
+   * @private
+   * @type {Express}
+   * @memberof Boot
+   */
   private readonly server: Express = express();
 
   constructor() {
@@ -18,6 +44,12 @@ abstract class Boot {
     this.settings.set('application', this.server);
   }
 
+  /**
+   * Initialize and Bootstrap Server.
+   *
+   * @returns {Promise<ExpressiveTeaApplication>}
+   * @memberof Boot
+   */
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
