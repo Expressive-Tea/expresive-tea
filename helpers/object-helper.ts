@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 /**
  * Get the provide constructor.
  * @param targetClass

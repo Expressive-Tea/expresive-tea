@@ -1,19 +1,23 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "0.0.7-RC",
+  "version": "0.1.0",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.ts",
   "scripts": {
-    "doc": "rimraf build && rimraf docs && tsc -p tsconfig.json && jsdoc -c jsdocs.json"
+    "doc": "rimraf build && rimraf docs && tsc -p tsconfig.json && jsdoc -c jsdocs.json",
+    "test": "jest --coverage"
   },
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/bluebird": "^3.5.27",
     "@types/express": "^4.17.0",
+    "@types/jest": "^24.0.16",
+    "jest": "^24.8.0",
     "minami": "^1.2.3",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.2",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6"
