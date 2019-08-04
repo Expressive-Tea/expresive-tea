@@ -66,7 +66,7 @@ export function Setting(settingName) {
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,
-      get: () => target.settings[propertyName]
+      get: () => Settings.getInstance().get(propertyName)
     });
   };
 }

@@ -1,13 +1,14 @@
-import { ServerSettings, Plug, Setting, RegisterModule } from '../../../decorators/server';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
-import { BOOT_STAGES, BOOT_STAGES_KEY } from '../../../libs/constants';
+import { Plug, RegisterModule, ServerSettings, Setting } from '../../../decorators/server';
+import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../../../libs/constants';
 
 describe('ServerSettings Decorator', () => {
   @ServerSettings({
     port: 8080
   })
-  class Test {}
+  class Test {
+  }
 
   test('should modify server settings', () => {
     const test = new Test();
@@ -19,8 +20,10 @@ describe('Plug Decorator', () => {
   beforeAll(() => {
     this.spyMetadataSet = jest.spyOn(Metadata, 'set');
 
-    @Plug(BOOT_STAGES.APPLICATION, 'test', () => {})
-    class Test {}
+    @Plug(BOOT_STAGES.APPLICATION, 'test', () => {
+    })
+    class Test {
+    }
 
     this.TestClass = Test;
   });
@@ -44,34 +47,53 @@ describe('Plug Decorator', () => {
   });
 });
 
-/*
 describe('Setting Decorator', () => {
-  @ServerSettings({
-    port: 8080
-  })
-  class Test {}
+  beforeEach(() => {
+    @ServerSettings({
+      test: 'this is a test string'
+    })
+    class Test {
+      @Setting('test')
+      test: string;
+    }
 
-  beforeAll(() => {
-    this.spyMetadataSet = spyOn(Metadata, 'set');
+    this.TestClass = Test;
   });
 
-  afterAll(() => {
-    this.spyMetadataSet.mockRestore();
+  afterEach(() => Settings.reset());
+
+  test('should get setting test on instances', () => {
+    const instance = new this.TestClass();
+    expect(instance.test).toEqual('this is a test string');
   });
 });
 
 describe('RegisterModule Decorator', () => {
-  @ServerSettings({
-    port: 8080
-  })
-  class Test {}
-
   beforeAll(() => {
-    this.spyMetadataSet = spyOn(Metadata, 'set');
+    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+
+    class Module {
+    }
+
+    class Test {
+      @RegisterModule(Module)
+      async start() {
+      }
+    }
+
+    this.ModuleClass = Module;
+    this.TestClass = Test;
   });
 
   afterAll(() => {
     this.spyMetadataSet.mockRestore();
   });
+
+  test('should register a module', () => {
+    this.testInstance = new this.TestClass();
+    const args = this.spyMetadataSet.mock.calls[0];
+
+    expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
+    expect(args[1]).toEqual([this.ModuleClass]);
+  });
 });
-*/
