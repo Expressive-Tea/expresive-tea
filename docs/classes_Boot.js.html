@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>classes/Boot.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Boot.html">Boot</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Boot.html#start">start</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="GenericRequestException.html">GenericRequestException</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Settings.html">Settings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.getInstance">getInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.reset">reset</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#getOptions">getOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#merge">merge</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#set">set</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Module.html">Decorators/Module</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Module.html#~Module">Module</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Route.html">Decorators/Route</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Delete">Delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Get">Get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Middleware">Middleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Param">Param</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Patch">Patch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Post">Post</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Put">Put</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Route">Route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Server.html">Decorators/Server</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Plug">Plug</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Setting">Setting</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">classes/Boot.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const $P = require("bluebird");
+// tslint:disable-next-line:no-duplicate-imports
+const express = require("express");
+const MetaData_1 = require("../classes/MetaData");
+const Settings_1 = require("../classes/Settings");
+const BootLoaderExceptions_1 = require("../exceptions/BootLoaderExceptions");
+const constants_1 = require("../libs/constants");
+/**
+ * @typedef {Object} ExpressiveTeaApplication
+ * @property {Express} application Express Application Instance
+ * @property {HTTPServer} server HTTP Server Object
+ */
+/**
+ * Bootstrap Server Configuration Class
+ *
+ * @abstract
+ * @class Boot
+ */
+class Boot {
+    constructor() {
+        /**
+         * Express Application instance internal property.
+         *
+         * @private
+         * @type {Express}
+         * @memberof Boot
+         */
+        this.server = express();
+        this.settings = new Settings_1.default();
+        this.settings.set('application', this.server);
+    }
+    /**
+     * Initialize and Bootstrap Server.
+     *
+     * @returns {Promise&lt;ExpressiveTeaApplication>}
+     * @memberof Boot
+     */
+    async start() {
+        return new $P(async (resolver, rejector) => {
+            try {
+                for (const stage of constants_1.BOOT_ORDER) {
+                    try {
+                        await bootloaderResolve(stage, this.server, this);
+                        if (stage === constants_1.BOOT_STAGES.APPLICATION) {
+                            await resolveModules(this, this.server);
+                        }
+                    }
+                    catch (e) {
+                        if (e instanceof BootLoaderExceptions_1.BootLoaderSoftExceptions) {
+                            console.info(e.message);
+                        }
+                        else if (e instanceof BootLoaderExceptions_1.BootLoaderRequiredExceptions) {
+                            // Missing Plugin on Stage should stop application.
+                            throw e;
+                        }
+                        else {
+                            // Re Throwing Error to Get it a top level.
+                            throw e;
+                        }
+                    }
+                }
+                const server = this.server.listen(this.settings.get('port'), () => {
+                    console.log(`Running Server on [${this.settings.get('port')}]`);
+                    resolver({ application: this.server, server });
+                });
+            }
+            catch (e) {
+                return rejector(e);
+            }
+        });
+    }
+}
+async function resolveModules(instance, server) {
+    const registeredModules = MetaData_1.default.get(constants_1.REGISTERED_MODULE_KEY, instance, 'start') || [];
+    registeredModules.forEach(Module => {
+        const moduleInstance = new Module();
+        moduleInstance.__register(server);
+    });
+}
+async function bootloaderResolve(STAGE, server, instance) {
+    const bootLoader = MetaData_1.default.get(constants_1.BOOT_STAGES_KEY, instance);
+    for (const loader of bootLoader[STAGE]) {
+        try {
+            if (!loader) {
+                continue;
+            }
+            console.info(`Loading [${loader.name}]`);
+            await loader.method(server);
+            console.info(`Loaded [${loader.name}]`);
+        }
+        catch (e) {
+            const failMessage = `Failed [${loader.name}]: ${e.message}`;
+            if (loader.required) {
+                throw new BootLoaderExceptions_1.BootLoaderRequiredExceptions(failMessage);
+            }
+            throw new BootLoaderExceptions_1.BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
+        }
+    }
+}
+/**
+ * Initialize Meta Keys.
+ */
+MetaData_1.default.set(constants_1.BOOT_STAGES_KEY, constants_1.STAGES_INIT, Boot);
+exports.default = Boot;
+//# sourceMappingURL=Boot.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Aug 04 2019 00:28:38 GMT-0500 (Central Daylight Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
