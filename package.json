@@ -42,5 +42,9 @@
   "bugs": {
     "url": "https://github.com/Zero-OneiT/expresive-tea/issues"
   },
-  "homepage": "https://github.com/Zero-OneiT/expresive-tea#readme"
+  "homepage": "https://github.com/Zero-OneiT/expresive-tea#readme",
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  }
 }
