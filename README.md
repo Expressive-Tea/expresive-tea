@@ -1,4 +1,11 @@
 # Expressive Tea
+![npm (scoped)](https://img.shields.io/npm/v/@zerooneit/expressive-tea)
+[![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
+[![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
+![Gitter](https://img.shields.io/gitter/room/Zero-OneiT/expresive-tea?style=plastic)
+![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
+![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
+![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
 > A Typescript library to create RESTful Services.
 
 ## Description
@@ -172,7 +179,7 @@ export default class TestService {
 If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Zero-OneiT/expresive-tea/issues) or the [chat](https://gitter.im/Zero-OneiT/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
 
 If you want to share your thoughts with the development team or join us you will be able to do so using the [official the mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
-[wiki](https://github.com/Zero-OneiT/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals.
+[wiki](https://github.com/Zero-OneiT/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals or check our [documentation](https://zero-oneit.github.io/expresive-tea/).
 
 ## Built With
 

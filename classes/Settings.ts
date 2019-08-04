@@ -11,6 +11,16 @@ import { ExpressiveTeaServerProps } from '../libs/interfaces';
  */
 class Settings {
   /**
+   * Reset Singleton
+   *
+   * @static
+   * @memberof Settings
+   */
+  static reset() {
+    delete Settings.instance;
+  }
+
+  /**
    * Get Current Singleton Instance or Created if not exists.
    *
    * @static
@@ -50,7 +60,7 @@ class Settings {
       return Settings.instance;
     }
 
-    this.options = Object.assign({}, options);
+    this.options = Object.assign({}, { port: 3000 }, options);
     Settings.instance = this;
   }
 
