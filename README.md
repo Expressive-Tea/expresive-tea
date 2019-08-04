@@ -1,4 +1,5 @@
 # Expressive Tea
+[![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
 > A Typescript library to create RESTful Services.
 
 ## Description

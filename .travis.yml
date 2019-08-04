@@ -2,3 +2,7 @@ language: node_js
 node_js:
   - "10"
 script: npm test
+env:
+  - CODECOV_TOKEN="3dab63ec-b748-4e67-8d23-9f3a998281f3"
+after_success:
+  - codecov
