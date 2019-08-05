@@ -5,7 +5,7 @@
   "main": "classes/Boot.ts",
   "scripts": {
     "doc": "rimraf build && rimraf docs && tsc -p tsconfig.json && jsdoc -c jsdocs.json",
-    "test": "npm linter && jest --coverage",
+    "test": "npm run linter && jest --coverage",
     "linter": "tslint -c tslint.json -p tsconfig.json"
   },
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
