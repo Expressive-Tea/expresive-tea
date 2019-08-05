@@ -10,7 +10,7 @@ describe('ServerSettings Decorator', () => {
     })
     class Test {
     }
-    this.test = new Test();
+    this.testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 8080 });
   });
 
@@ -19,7 +19,7 @@ describe('ServerSettings Decorator', () => {
     @ServerSettings()
     class Test {
     }
-    this.test = new Test();
+    this.testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 3000 });
   });
 });
