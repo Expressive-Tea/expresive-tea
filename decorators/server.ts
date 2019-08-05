@@ -13,10 +13,10 @@ import { ExpressiveTeaServerProps } from '../libs/interfaces';
  * This Decorators is add plugin initialization to one of the selected stages.
  * @example @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'test', s => console.log, true) class Example {}
  * @param {ExpressiveTeaModuleProps} options
- * @param {BOOT_STAGES} options.stage   Boot Stage where the plugin should run or initialize.
- * @param {string} options.name         Plugin Name (recommended short names)
- * @param {Function} options.method     A Function to  initialize the plugin, it will get a express application as argument.
- * @param {boolean} options.required    A Flag to let know if this is a hard requirement.
+ * @param {BOOT_STAGES} stage   Boot Stage where the plugin should run or initialize.
+ * @param {string} name         Plugin Name (recommended short names)
+ * @param {Function} method     A Function to  initialize the plugin, it will get a express application as argument.
+ * @param {boolean} required    A Flag to let know if this is a hard requirement.
  */
 export function Plug(
   stage: BOOT_STAGES,
@@ -24,9 +24,6 @@ export function Plug(
   method: (server: Express | never) => Promise<any> | any,
   required: boolean = false
 ) {
-  if (!name) {
-    throw new Error('Unamed Plugin is not allowed.');
-  }
   return (target: any): void => {
     const stages = MetaData.get(BOOT_STAGES_KEY, target) || {};
     if (!stages[stage]) {
@@ -58,11 +55,7 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
  * Automatically assign a settings declared on Settings Service into the decorated property.
  * @param {string | undefined} settingName The Setting name tha
  */
-export function Setting(settingName) {
-  if (!settingName) {
-    throw new Error('Setting Name must be defined');
-  }
-
+export function Setting(settingName: string): (target: any, propertyName: string) => any {
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,

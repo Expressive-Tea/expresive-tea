@@ -5,7 +5,8 @@
   "main": "classes/Boot.ts",
   "scripts": {
     "doc": "rimraf build && rimraf docs && tsc -p tsconfig.json && jsdoc -c jsdocs.json",
-    "test": "jest --coverage"
+    "test": "npm linter && jest --coverage",
+    "linter": "tslint -c tslint.json -p tsconfig.json"
   },
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
   "license": "Apache-2.0",
@@ -23,6 +24,7 @@
     "typescript": "^3.1.6"
   },
   "dependencies": {
+    "bluebird": "^3.5.5",
     "express": "^4.16.4",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",

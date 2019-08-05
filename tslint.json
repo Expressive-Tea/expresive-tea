@@ -15,7 +15,6 @@
     "no-shadowed-variable": false,
     "trailing-comma": false,
     "no-empty-interface": false,
-    "no-unused-variable": true,
     "no-duplicate-imports": true,
     "no-conditional-assignment": false,
     "member-access": [true, "no-public"],

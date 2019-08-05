@@ -30,7 +30,8 @@ export default class Metadata {
   static has(key: string, target: any, propertyKey?: string | symbol): boolean {
     try {
       return Reflect.hasMetadata(key, getClass(target), propertyKey!);
-    } catch (er) {}
+    } catch (er) {
+    }
 
     return false;
   }
@@ -48,7 +49,7 @@ export default class Metadata {
   }
 
   static getTargetsFromPropertyKey = (metadataKey: string | symbol): any[] =>
-    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : [];
+    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : []
 
   static set(key: string, value: any, target: any, propertyKey?: string | symbol): void {
     const targets: any[] = PROPERTIES.has(key) ? PROPERTIES.get(key) || [] : [];

@@ -1,6 +1,4 @@
 import * as _ from 'lodash';
-import MetaData from '../classes/MetaData';
-import { REGISTERED_MODEL_KEY } from '../libs/constants';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
 
 /**
@@ -29,11 +27,6 @@ class Settings {
    */
   static getInstance(): Settings {
     return Settings.instance || new Settings();
-  }
-
-  static getModel(modelName: object | string): any {
-    const registeredModels = MetaData.get(REGISTERED_MODEL_KEY, Settings.getInstance()) || {};
-    return _.get(registeredModels, modelName);
   }
 
   /**

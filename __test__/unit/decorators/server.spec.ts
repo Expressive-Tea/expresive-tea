@@ -4,15 +4,23 @@ import { Plug, RegisterModule, ServerSettings, Setting } from '../../../decorato
 import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../../../libs/constants';
 
 describe('ServerSettings Decorator', () => {
-  @ServerSettings({
-    port: 8080
-  })
-  class Test {
-  }
-
   test('should modify server settings', () => {
-    const test = new Test();
+    @ServerSettings({
+      port: 8080
+    })
+    class Test {
+    }
+    this.test = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 8080 });
+  });
+
+  test('should modify server settings as default options', () => {
+    Settings.reset();
+    @ServerSettings()
+    class Test {
+    }
+    this.test = new Test();
+    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000 });
   });
 });
 
@@ -21,6 +29,8 @@ describe('Plug Decorator', () => {
     this.spyMetadataSet = jest.spyOn(Metadata, 'set');
 
     @Plug(BOOT_STAGES.APPLICATION, 'test', () => {
+    })
+    @Plug(BOOT_STAGES.APPLICATION, '', () => {
     })
     class Test {
     }
