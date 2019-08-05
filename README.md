@@ -1,8 +1,9 @@
 # Expressive Tea
 ![npm (scoped)](https://img.shields.io/npm/v/@zerooneit/expressive-tea)
+[![Known Vulnerabilities](https://snyk.io//test/github/Zero-OneiT/expresive-tea/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json)
 [![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
 [![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
-![Gitter](https://img.shields.io/gitter/room/Zero-OneiT/expresive-tea?style=plastic)
+[![Package Quality](https://npm.packagequality.com/shield/@zerooneit/expressive-tea.svg)](https://packagequality.com/#?package=@zerooneit/expressive-tea)
 ![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
 ![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
 ![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)

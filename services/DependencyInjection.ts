@@ -3,8 +3,11 @@ import getDecorators from 'inversify-inject-decorators';
 
 interface InversifyDecorators {
   lazyInject(...args: any[]);
+
   lazyInjectNamed(...args: any[]);
+
   lazyInjectTagged(...args: any[]);
+
   lazyMultiInject(...args: any[]);
 }
 
@@ -17,7 +20,6 @@ const lazyDecorators: InversifyDecorators = getDecorators(rootContainer);
 class DependencyInjection {
   static readonly Container: Container = rootContainer;
 
-  static setProvider(ProviderFactory): void;
   static setProvider(ProviderFactory: any, providerName?: string | symbol): void {
     if (!rootContainer.isBound(providerName || ProviderFactory.name)) {
       rootContainer.bind(providerName || ProviderFactory.name).to(ProviderFactory);

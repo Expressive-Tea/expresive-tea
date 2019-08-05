@@ -4,7 +4,7 @@
  * @param targetClass
  * @ignore
  */
-export const getConstructor = (targetClass: any): Function =>
+export const getConstructor = (targetClass: any): any =>
   typeof targetClass === 'function' ? targetClass : targetClass.constructor;
 
 /**

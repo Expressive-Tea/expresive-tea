@@ -1,15 +1,31 @@
-import { Route, Get, Post, Put, Param, Patch, Delete, Middleware } from '../../../decorators/router';
+import * as express from 'express';
 import Metadata from '../../../classes/MetaData';
+import { Delete, Get, Middleware, Param, Patch, Post, Put, Route } from '../../../decorators/router';
 import { ROUTER_HANDLERS_KEY } from '../../../libs/constants';
 
 const metadataMock = jest.spyOn(Metadata, 'set');
+jest.mock('express', () => ({
+  Router: () => ({
+    get: jest.fn(),
+    use: jest.fn()
+  })
+}));
 
 describe('Route Decorator', () => {
   beforeEach(() => {
     @Route('/test')
-    class TestController {}
+    class TestController {
+      @Get('/start')
+      start() {
+      }
+    }
+
+    @Route()
+    class TestDefaultController {
+    }
 
     this.TestClass = TestController;
+    this.TestDefault = TestDefaultController;
   });
 
   test('should instanciate correctly', () => {
@@ -30,6 +46,26 @@ describe('Route Decorator', () => {
 
     expect(router.use.mock.calls[0][0]).toEqual('/test');
   });
+
+  test('should assign handlers', () => {
+
+    const test = new this.TestClass();
+    const router = express.Router();
+
+    test.__mount(router);
+
+    expect(test.router.get).toHaveBeenCalledWith('/start', expect.anything());
+    expect(router.use).toHaveBeenCalledWith('/test', expect.anything());
+
+  });
+
+  test('should default route', () => {
+    const test = new this.TestDefault();
+    const router = express.Router();
+
+    test.__mount(router);
+    expect(router.use).toHaveBeenCalledWith('/', expect.anything());
+  });
 });
 
 describe('Middleware Decorator', () => {
@@ -37,7 +73,8 @@ describe('Middleware Decorator', () => {
     @Middleware(() => null)
     class TestController {
       @Middleware(() => null)
-      test() {}
+      test() {
+      }
     }
 
     this.TestClass = TestController;
@@ -58,10 +95,15 @@ describe('Middleware Decorator', () => {
 describe('Get Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Get('/getTest')
-      test() {}
+      test() {
+      }
+      @Get()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -72,16 +114,23 @@ describe('Get Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '*' }));
   });
 });
 
 describe('Post Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Post('/post')
-      test() {}
+      test() {
+      }
+      @Post()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -92,16 +141,23 @@ describe('Post Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '/post' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '*' }));
   });
 });
 
 describe('Put Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Put('/put')
-      test() {}
+      test() {
+      }
+      @Put()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -112,16 +168,23 @@ describe('Put Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '/put' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '*' }));
   });
 });
 
 describe('Patch Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Patch('/patch')
-      test() {}
+      test() {
+      }
+      @Patch()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -132,16 +195,23 @@ describe('Patch Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '/patch' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '*' }));
   });
 });
 
 describe('Param Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Param('/param')
-      test() {}
+      test() {
+      }
+      @Param()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -152,16 +222,23 @@ describe('Param Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '/param' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '*' }));
   });
 });
 
 describe('Delete Decorator', () => {
   beforeEach(() => {
     metadataMock.mockReset();
+
     @Route('/')
     class TestController {
       @Delete('/delete')
-      test() {}
+      test() {
+      }
+      @Delete()
+      default() {
+      }
     }
 
     this.Controller = TestController;
@@ -172,5 +249,7 @@ describe('Delete Decorator', () => {
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '*' }));
   });
 });
