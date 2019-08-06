@@ -1,8 +1,15 @@
 language: node_js
 node_js:
   - "10"
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build  
 script: npm test
 env:
   - CODECOV_TOKEN="3dab63ec-b748-4e67-8d23-9f3a998281f3"
+  - CC_TEST_REPORTER_ID="bd26cc6c907283d1564f5f881621984f3414461bb36c5005aa0bf3b47e2dac9b"
+  
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
