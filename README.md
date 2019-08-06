@@ -3,7 +3,7 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/Zero-OneiT/expresive-tea/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json)
 [![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
 [![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
-[![Package Quality](https://npm.packagequality.com/shield/@zerooneit/expressive-tea.svg)](https://packagequality.com/#?package=@zerooneit/expressive-tea)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6bd5ef9d884a295c7f2b/maintainability)](https://codeclimate.com/github/Zero-OneiT/expresive-tea/maintainability)
 ![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
 ![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
 ![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
