@@ -72,6 +72,9 @@ async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Pro
   for (const stage of BOOT_ORDER) {
     try {
       await bootloaderResolve(stage, server, ctx);
+      if (stage === BOOT_STAGES.APPLICATION) {
+        await resolveModules(ctx, server);
+      }
     } catch (e) {
       if (e instanceof BootLoaderSoftExceptions) {
         console.info(e.message);
@@ -95,9 +98,7 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {
-      console.info(`Loading [${loader.name}]`);
       await loader.method(server);
-      console.info(`Loaded [${loader.name}]`);
     } catch (e) {
       const failMessage = `Failed [${loader.name}]: ${e.message}`;
       if (!loader || loader.required) {
@@ -106,9 +107,6 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
 
       throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
     }
-  }
-  if (STAGE === BOOT_STAGES.APPLICATION) {
-    await resolveModules(this, this.server);
   }
 }
 
