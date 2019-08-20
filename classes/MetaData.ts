@@ -2,13 +2,19 @@
 import 'reflect-metadata';
 import { getClass } from '../helpers/object-helper';
 
+function get(key: string, target: any, propertyKey?: string | symbol, own: boolean = false) {
+  return own ?
+    Reflect.getOwnMetadata(key, getClass(target), propertyKey!) :
+    Reflect.getMetadata(key, getClass(target), propertyKey!);
+}
+
 export default class Metadata {
   static get(key: string, target: any, propertyKey?: string | symbol): any {
-    return Reflect.getMetadata(key, getClass(target), propertyKey!);
+    return get(key, getClass(target), propertyKey!);
   }
 
   static getOwn(key: string, target: any, propertyKey?: string | symbol): any {
-    return Reflect.getOwnMetadata(key, getClass(target), propertyKey!);
+    return get(key, getClass(target), propertyKey!, true);
   }
 
   static getType(target: any, propertyKey?: string | symbol): any {
@@ -40,16 +46,16 @@ export default class Metadata {
     return Reflect.hasOwnMetadata(key, getClass(target), propertyKey!);
   }
 
-  static delete(key: string, target: any, propertyKey?: string | symbol): boolean {
-    return Reflect.deleteMetadata(key, getClass(target), propertyKey!);
-  }
-
   static setParamTypes(target: any, propertyKey: string | symbol, value: any): void {
     return this.set(DESIGN_PARAM_TYPES, value, target.prototype, propertyKey);
   }
 
+  static delete(key: string, target: any, propertyKey?: string | symbol): boolean {
+    return Reflect.deleteMetadata(key, getClass(target), propertyKey!);
+  }
+
   static getTargetsFromPropertyKey = (metadataKey: string | symbol): any[] =>
-    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : []
+    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : [];
 
   static set(key: string, value: any, target: any, propertyKey?: string | symbol): void {
     const targets: any[] = PROPERTIES.has(key) ? PROPERTIES.get(key) || [] : [];
@@ -64,11 +70,11 @@ export default class Metadata {
   }
 
   static getParamTypes(targetPrototype: any, propertyKey?: string | symbol): any[] {
-    return Reflect.getMetadata(DESIGN_PARAM_TYPES, targetPrototype, propertyKey!) || [];
+    return get(DESIGN_PARAM_TYPES, targetPrototype, propertyKey!) || [];
   }
 
   static getOwnParamTypes(target: any, propertyKey?: string | symbol): any[] {
-    return Reflect.getOwnMetadata(DESIGN_PARAM_TYPES, target, propertyKey!) || [];
+    return get(DESIGN_PARAM_TYPES, target, propertyKey!, true) || [];
   }
 }
 

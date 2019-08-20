@@ -75,7 +75,7 @@ export function primitiveOf(target: any): 'string' | 'number' | 'boolean' | 'any
  * @ignore
  */
 export function isString(target: any): boolean {
-  return typeof target === 'string' || target instanceof String || target === String;
+  return checkType(target, 'string', String);
 }
 
 /**
@@ -85,7 +85,7 @@ export function isString(target: any): boolean {
  * @ignore
  */
 export function isNumber(target: any): boolean {
-  return typeof target === 'number' || target instanceof Number || target === Number;
+  return checkType(target, 'number', Number);
 }
 
 /**
@@ -95,9 +95,12 @@ export function isNumber(target: any): boolean {
  * @ignore
  */
 export function isBoolean(target: any): boolean {
-  return typeof target === 'boolean' || target instanceof Boolean || target === Boolean;
+  return checkType(target, 'boolean', Boolean);
 }
 
+function checkType(target, type, TypeClass) {
+  return typeof target === type || target instanceof TypeClass || target === TypeClass;
+}
 /**
  *
  * @param target
