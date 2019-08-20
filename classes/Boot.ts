@@ -76,12 +76,7 @@ async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Pro
         await resolveModules(ctx, server);
       }
     } catch (e) {
-      if (e instanceof BootLoaderSoftExceptions) {
-        console.info(e.message);
-      } else {
-        // Re Throwing Error to Get it a top level.
-        throw e;
-      }
+      checkIfStageFails(e);
     }
   }
 }
@@ -100,14 +95,27 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
     try {
       await loader.method(server);
     } catch (e) {
-      const failMessage = `Failed [${loader.name}]: ${e.message}`;
-      if (!loader || loader.required) {
-        throw new BootLoaderRequiredExceptions(failMessage);
-      }
-
-      throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
+      shouldFailIfRequire(e, loader);
     }
   }
+}
+
+function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
+  if (e instanceof BootLoaderSoftExceptions) {
+    console.info(e.message);
+  } else {
+    // Re Throwing Error to Get it a top level.
+    throw e;
+  }
+}
+
+function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {
+  const failMessage = `Failed [${loader.name}]: ${e.message}`;
+  if (!loader || loader.required) {
+    throw new BootLoaderRequiredExceptions(failMessage);
+  }
+
+  throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
 }
 
 /**
