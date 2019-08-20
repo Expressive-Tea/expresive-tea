@@ -55,7 +55,7 @@ export default class Metadata {
   }
 
   static getTargetsFromPropertyKey = (metadataKey: string | symbol): any[] =>
-    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : [];
+    PROPERTIES.has(metadataKey) ? PROPERTIES.get(metadataKey) || [] : []
 
   static set(key: string, value: any, target: any, propertyKey?: string | symbol): void {
     const targets: any[] = PROPERTIES.has(key) ? PROPERTIES.get(key) || [] : [];
