@@ -1,12 +1,34 @@
 import { Express } from 'express';
 import MetaData from '../classes/MetaData';
+import ExpressiveTeaPlugin from '../classes/Plugin';
 import Settings from '../classes/Settings';
 import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
+import { Constructor, PluginConstructor } from '../libs/types';
 
 /**
  * @module Decorators/Server
  */
+
+function getStages(target) {
+  return MetaData.get(BOOT_STAGES_KEY, target) || {};
+}
+
+function getStage(stage, target) {
+  const stages = getStages(target);
+  if (!stages[stage]) {
+    stages[stage] = [];
+  }
+
+  return stages[stage];
+}
+
+function setStage(stage, value, target) {
+  const stages = getStages(target);
+  stages[stage] = value;
+  MetaData.set(BOOT_STAGES_KEY, stages, target);
+}
+
 /**
  * Plug Class Decorator
  *
@@ -25,12 +47,23 @@ export function Plug(
   required: boolean = false
 ) {
   return (target: any): void => {
-    const stages = MetaData.get(BOOT_STAGES_KEY, target) || {};
-    if (!stages[stage]) {
-      stages[stage] = [];
-    }
-    stages[stage].unshift({ method, required, name });
-    MetaData.set(BOOT_STAGES_KEY, stages, target);
+    const selectedStage = getStage(stage, target);
+    selectedStage.unshift({ method, required, name });
+    setStage(stage, selectedStage, target);
+  };
+}
+
+export function Pour(Plugin: Constructor<ExpressiveTeaPlugin>) {
+  return (target: any): void => {
+    const plugin = new Plugin();
+    const selectedStage = getStage(plugin.stage, target);
+    selectedStage.unshift({
+      isPlugin: true,
+      method: plugin.register.bind(plugin),
+      name: plugin.name,
+      required: plugin.required
+    });
+    setStage(plugin.stage, selectedStage, target);
   };
 }
 

@@ -93,7 +93,11 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {
-      await loader.method(server);
+      if (loader.isPlugin) {
+        await loader.method(server, Settings.getInstance());
+      } else {
+        await loader.method(server);
+      }
     } catch (e) {
       shouldFailIfRequire(e, loader);
     }

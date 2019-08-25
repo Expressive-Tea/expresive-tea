@@ -26,6 +26,19 @@ describe('Boot Class', () => {
     }
   }
 
+  class DefaultBootstrap extends Boot {}
+
+  test('should start server as default', async () => {
+    const boot = new DefaultBootstrap();
+    await boot.start();
+
+    expect(express).toHaveBeenCalled();
+    expect(boot.settings).toBeInstanceOf(Settings);
+    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(serverMock.listen).toHaveBeenCalled();
+    expect(registerMock).not.toHaveBeenCalled();
+  });
+
   test('should create instance correctly', () => {
     const boot = new Bootstrap();
 
@@ -47,11 +60,12 @@ describe('Boot Class', () => {
   });
 
   test('should not fail if soft plugin fails', async () => {
-    softPluginMock.mockRejectedValue(false);
+    softPluginMock.mockImplementationOnce(() => {
+      throw new Error('Test');
+    });
     const boot = new Bootstrap();
 
     expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
-    softPluginMock.mockReset();
   });
 
   test('should not fail if soft plugin fails', async () => {
