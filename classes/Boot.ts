@@ -93,15 +93,16 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {
-      if (loader.isPlugin) {
-        await loader.method(server, Settings.getInstance());
-      } else {
-        await loader.method(server);
-      }
+      await selectLoaderType(loader, server);
     } catch (e) {
       shouldFailIfRequire(e, loader);
     }
   }
+}
+
+async function selectLoaderType(loader, server: Express) {
+  return loader.isPlugin ? loader.method(server, Settings.getInstance()) :
+    loader.method(server);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
