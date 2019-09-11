@@ -3,10 +3,11 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/Zero-OneiT/expresive-tea/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json)
 [![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
 [![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
-[![Package Quality](https://npm.packagequality.com/shield/@zerooneit/expressive-tea.svg)](https://packagequality.com/#?package=@zerooneit/expressive-tea)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6bd5ef9d884a295c7f2b/maintainability)](https://codeclimate.com/github/Zero-OneiT/expresive-tea/maintainability)
 ![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
 ![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
 ![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_shield)
 > A Typescript library to create RESTful Services.
 
 ## Description
@@ -205,5 +206,8 @@ See also the list of [contributors](https://github.com/Zero-OneiT/expresive-tea/
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details
 
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large)

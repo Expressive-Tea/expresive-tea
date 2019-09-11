@@ -54,22 +54,7 @@ abstract class Boot {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
         for (const stage of BOOT_ORDER) {
-          try {
-            await bootloaderResolve(stage, this.server, this);
-            if (stage === BOOT_STAGES.APPLICATION) {
-              await resolveModules(this, this.server);
-            }
-          } catch (e) {
-            if (e instanceof BootLoaderSoftExceptions) {
-              console.info(e.message);
-            } else if (e instanceof BootLoaderRequiredExceptions) {
-              // Missing Plugin on Stage should stop application.
-              throw e;
-            } else {
-              // Re Throwing Error to Get it a top level.
-              throw e;
-            }
-          }
+          await resolveStage(stage, this, this.server);
         }
 
         const server = this.server.listen(this.settings.get('port'), () => {
@@ -80,6 +65,19 @@ abstract class Boot {
         return rejector(e);
       }
     });
+  }
+}
+
+async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Promise<void> {
+  for (const stage of BOOT_ORDER) {
+    try {
+      await bootloaderResolve(stage, server, ctx);
+      if (stage === BOOT_STAGES.APPLICATION) {
+        await resolveModules(ctx, server);
+      }
+    } catch (e) {
+      checkIfStageFails(e);
+    }
   }
 }
 
@@ -95,21 +93,34 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
   for (const loader of bootLoader[STAGE]) {
     try {
-      if (!loader) {
-        continue;
-      }
-      console.info(`Loading [${loader.name}]`);
-      await loader.method(server);
-      console.info(`Loaded [${loader.name}]`);
+      await selectLoaderType(loader, server);
     } catch (e) {
-      const failMessage = `Failed [${loader.name}]: ${e.message}`;
-      if (loader.required) {
-        throw new BootLoaderRequiredExceptions(failMessage);
-      }
-
-      throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
+      shouldFailIfRequire(e, loader);
     }
   }
+}
+
+async function selectLoaderType(loader, server: Express) {
+  return loader.isPlugin ? loader.method(server, Settings.getInstance()) :
+    loader.method(server);
+}
+
+function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
+  if (e instanceof BootLoaderSoftExceptions) {
+    console.info(e.message);
+  } else {
+    // Re Throwing Error to Get it a top level.
+    throw e;
+  }
+}
+
+function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {
+  const failMessage = `Failed [${loader.name}]: ${e.message}`;
+  if (!loader || loader.required) {
+    throw new BootLoaderRequiredExceptions(failMessage);
+  }
+
+  throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
 }
 
 /**

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+echo
+MW=$1 ts-node --project tsconfig.json $2 &
+pid=$!
+
+sleep 2
+
+wrk 'http://localhost:8888/?foo[bar]=baz' \
+  -d 3 \
+  -c 50 \
+  -t 8 \
+  | grep 'Requests/sec' \
+  | awk '{ print "-  " $2 " Request/Sec"}'
+
+kill $pid
