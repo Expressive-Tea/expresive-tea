@@ -1,6 +1,6 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.ts",
   "scripts": {
@@ -36,10 +36,35 @@
   },
   "keywords": [
     "Typescript",
+    "typescript",
     "Express",
     "Decorators",
+    "decorators",
+    "decorator",
+    "controller",
+    "inject",
+    "ioc",
+    "di",
+    "mvc",
+    "es6",
+    "es2015",
     "REST",
-    "API"
+    "API",
+    "express",
+    "webserver",
+    "route",
+    "router",
+    "express-ts",
+    "restful",
+    "server",
+    "middleware",
+    "controllers",
+    "web",
+    "service",
+    "backend",
+    "services",
+    "node",
+    "nodejs"
   ],
   "bugs": {
     "url": "https://github.com/Zero-OneiT/expresive-tea/issues"
