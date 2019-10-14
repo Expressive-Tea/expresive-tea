@@ -20,6 +20,11 @@ export interface ExpressiveTeaServerProps {
   [key: string]: any;
 }
 
+export interface ExpressiveTeaPluginProps {
+  name: string;
+  priority: number;
+}
+
 /**
  * @typedef {Object} ExpressiveTeaServerProps
  * @property {Object[]} controllers Controllers Assigned to Module

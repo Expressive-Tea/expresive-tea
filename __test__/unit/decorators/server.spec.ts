@@ -1,9 +1,10 @@
+import { last } from 'lodash';
 import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
-import ExpressiveTeaPlugin from '../../../classes/Plugin';
 import Settings from '../../../classes/Settings';
 import { Plug, Pour, RegisterModule, ServerSettings, Setting } from '../../../decorators/server';
-import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../../../libs/constants';
+import { BOOT_STAGES, BOOT_STAGES_KEY, PLUGINS_KEY, REGISTERED_MODULE_KEY } from '../../../libs/constants';
+import Plugin, { mockRegister } from '../../__mocks__/plugin';
 
 describe('ServerSettings Decorator', () => {
   test('should modify server settings', () => {
@@ -63,57 +64,51 @@ describe('Plug Decorator', () => {
 });
 
 describe('Pour Decorator', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     this.spyMetadataSet = jest.spyOn(Metadata, 'set');
-
-    class TestPlugin extends ExpressiveTeaPlugin {
-      readonly name = 'Test';
-      readonly stage = BOOT_STAGES.INITIALIZE_MIDDLEWARES;
-
-      async register(server, settings) {
-      }
-    }
-
-    class TestFailPlugin extends ExpressiveTeaPlugin {
-      readonly name = 'Test';
-      readonly stage = BOOT_STAGES.INITIALIZE_MIDDLEWARES;
-      readonly required = true;
-    }
-
-    @Pour(TestPlugin)
-    class Test {
-    }
-
-    @Pour(TestFailPlugin)
-    class TestFail extends Boot {
-    }
-
-    this.TestClass = Test;
-    this.TestFailClass = TestFail;
   });
 
-  afterAll(() => {
+  afterEach(() => {
     this.spyMetadataSet.mockRestore();
   });
 
   test('should attach plug to respective level', () => {
-    this.testInstance = new this.TestClass();
-    const args = this.spyMetadataSet.mock.calls[0];
+    class TestPlugin extends Plugin {
+    }
 
-    expect(args[0]).toEqual(BOOT_STAGES_KEY);
-    expect(args[1]['1'][0]).toEqual(
+    @Pour(new TestPlugin())
+    class Test {
+    }
+
+    this.testInstance = new Test();
+    const args = last(this.spyMetadataSet.mock.calls) || [];
+
+    expect(args).toBeDefined();
+    expect(args[0]).toEqual(PLUGINS_KEY);
+    expect(args[1][0]).toEqual(
       expect.objectContaining({
-        isPlugin: true,
-        name: 'Test',
-        required: false
+        name: 'Mocked',
+        priority: 999
       })
     );
-    expect(args[2]).toEqual(this.TestClass);
+    expect(args[2]).toEqual(Test);
   });
 
-  test('should attach plug to respective level', () => {
-    this.testInstance = new this.TestFailClass();
-    expect(this.testInstance.start()).rejects.toEqual(expect.anything());
+  test.skip('should attach plug to respective level', () => {
+    mockRegister.mockImplementation(() => {
+      throw new Error();
+      return;
+    });
+
+    class TestFailPlugin extends Plugin {
+    }
+
+    @Pour(new TestFailPlugin())
+    class TestFail extends Boot {
+    }
+
+    this.testInstance = new TestFail();
+    expect(this.testInstance.start()).toThrow();
   });
 });
 
