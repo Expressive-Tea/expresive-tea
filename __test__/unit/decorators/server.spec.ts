@@ -81,7 +81,7 @@ describe('Pour Decorator', () => {
     }
 
     this.testInstance = new Test();
-    const args = last(this.spyMetadataSet.mock.calls) || [];
+    const args: any[] = last(this.spyMetadataSet.mock.calls) || [];
 
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
