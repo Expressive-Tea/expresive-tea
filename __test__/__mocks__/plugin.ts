@@ -5,7 +5,7 @@ export const mockRegister = jest.fn((appSettings, registeredPlugins) => {
   });
   return registeredPlugins;
 });
-export const mockGetRegisteredStage = jest.fn(stage => []);
+export const mockGetRegisteredStage = jest.fn(() => []);
 
 const Plugin = jest.fn().mockImplementation(() => {
   return {
@@ -14,4 +14,4 @@ const Plugin = jest.fn().mockImplementation(() => {
   };
 });
 
-export default Plugin;
+export default Plugin as any;
