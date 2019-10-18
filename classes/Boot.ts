@@ -69,15 +69,13 @@ abstract class Boot {
 }
 
 async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Promise<void> {
-  for (const stage of BOOT_ORDER) {
-    try {
-      await bootloaderResolve(stage, server, ctx);
-      if (stage === BOOT_STAGES.APPLICATION) {
-        await resolveModules(ctx, server);
-      }
-    } catch (e) {
-      checkIfStageFails(e);
+  try {
+    await bootloaderResolve(stage, server, ctx);
+    if (stage === BOOT_STAGES.APPLICATION) {
+      await resolveModules(ctx, server);
     }
+  } catch (e) {
+    checkIfStageFails(e);
   }
 }
 
@@ -101,8 +99,7 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
 }
 
 async function selectLoaderType(loader, server: Express) {
-  return loader.isPlugin ? loader.method(server, Settings.getInstance()) :
-    loader.method(server);
+  return loader.isPlugin ? loader.method(server, Settings.getInstance()) : loader.method(server);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {

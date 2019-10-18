@@ -4,7 +4,7 @@ import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
-import Module, { registerMock } from '../../test-clases/module';
+import Module, { registerMock } from '../../test-classes/module';
 
 const serverMock = {
   listen: jest.fn().mockImplementation((port, cb) => {

@@ -41,3 +41,4 @@ export const ROUTER_HANDLERS_KEY = 'app:routes:handlers';
 export const ROUTER_MIDDLEWARES_KEY = 'app:routes:middlewares';
 export const REGISTERED_MODEL_KEY = 'app:models:registered';
 export const REGISTERED_MODULE_KEY = 'app:modules:registered';
+export const PLUGINS_KEY = 'boot:app-plugins';
