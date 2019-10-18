@@ -76,5 +76,4 @@ examples/
 .data
 
 *.d.ts
-*.js
 *.js.map
