@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import { orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, PLUGINS_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
@@ -70,7 +71,7 @@ export function Pour(plugin) {
       setStage(STAGE, (stages[STAGE] || []).concat(plugin.getRegisteredStage(STAGE)), target);
     });
 
-    setPlugins(plugins, target);
+    setPlugins(orderBy(plugins, ['priority'], ['asc']), target);
   };
 }
 
