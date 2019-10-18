@@ -1,6 +1,6 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.ts",
   "scripts": {
