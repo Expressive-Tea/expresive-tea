@@ -74,3 +74,6 @@ build/*
 examples/
 
 .data
+
+*.d.ts
+*.js.map
