@@ -1,10 +1,9 @@
 import { Express } from 'express';
+import { orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
-import ExpressiveTeaPlugin from '../classes/Plugin';
 import Settings from '../classes/Settings';
-import { BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
-import { ExpressiveTeaServerProps } from '../libs/interfaces';
-import { Constructor, PluginConstructor } from '../libs/types';
+import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, PLUGINS_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
+import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps } from '../libs/interfaces';
 
 /**
  * @module Decorators/Server
@@ -12,6 +11,10 @@ import { Constructor, PluginConstructor } from '../libs/types';
 
 function getStages(target) {
   return MetaData.get(BOOT_STAGES_KEY, target) || {};
+}
+
+function getRegisteredPlugins(target) {
+  return MetaData.get(PLUGINS_KEY, target) || [];
 }
 
 function getStage(stage, target) {
@@ -29,6 +32,9 @@ function setStage(stage, value, target) {
   MetaData.set(BOOT_STAGES_KEY, stages, target);
 }
 
+function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
+  MetaData.set(PLUGINS_KEY, plugins, target);
+}
 /**
  * Plug Class Decorator
  *
@@ -53,17 +59,19 @@ export function Plug(
   };
 }
 
-export function Pour(Plugin: Constructor<ExpressiveTeaPlugin>) {
+export function Pour(plugin) {
   return (target: any): void => {
-    const plugin = new Plugin();
-    const selectedStage = getStage(plugin.stage, target);
-    selectedStage.unshift({
-      isPlugin: true,
-      method: plugin.register.bind(plugin),
-      name: plugin.name,
-      required: plugin.required
+    const stages = getStages(target);
+    const plugins: ExpressiveTeaPluginProps[] = plugin.register(
+      Settings.getInstance().getOptions(),
+      getRegisteredPlugins(target)
+    );
+
+    BOOT_ORDER.forEach(STAGE => {
+      setStage(STAGE, (stages[STAGE] || []).concat(plugin.getRegisteredStage(STAGE)), target);
     });
-    setStage(plugin.stage, selectedStage, target);
+
+    setPlugins(orderBy(plugins, ['priority'], ['asc']), target);
   };
 }
 

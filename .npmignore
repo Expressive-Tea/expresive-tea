@@ -1,0 +1,27 @@
+# source
+**/*.ts
+*.ts
+
+# definitions
+!**/*.d.ts
+!*.d.ts
+
+# configuration
+package-lock.json
+tslint.json
+tsconfig.json
+.prettierrc
+.nycrc
+__test__
+benchmark
+docs
+jest.config.js
+node_modules
+.github
+coverage
+.nyc_output
+.idea
+tasks
+gulpfile.js
+jest.config.js
+jsdocs.json

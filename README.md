@@ -8,6 +8,8 @@
 ![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
 ![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_shield)
+
+![Expressive Tea](./banner.png "Expressive Tea")
 > A Typescript library to create RESTful Services.
 
 ## Description
@@ -211,3 +213,6 @@ This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENS
 
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large)
+
+## Disclaimers
+The banner and the logo is a derivate work [Designed by Freepik](http://www.freepik.com)
