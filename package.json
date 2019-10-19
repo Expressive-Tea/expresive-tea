@@ -2,13 +2,15 @@
   "name": "@zerooneit/expressive-tea",
   "version": "1.1.0",
   "description": "A REST API  over Express and Typescript",
-  "main": "classes/Boot.ts",
+  "main": "classes/Boot.js",
   "scripts": {
     "doc": "rimraf build && rimraf docs && tsc -p tsconfig.json && jsdoc -c jsdocs.json",
     "test": "npm run linter && jest --coverage",
     "linter": "tslint -c tslint.json -p tsconfig.json",
     "clean:build": "gulp clean",
-    "publish:prepare": "gulp clean build"
+    "publish:prepare": "gulp clean build",
+    "postpublish": "gulp clean",
+    "prepublishOnly": "npm test && npm run publish:prepare"
   },
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
   "license": "Apache-2.0",

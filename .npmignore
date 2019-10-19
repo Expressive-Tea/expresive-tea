@@ -17,3 +17,11 @@ benchmark
 docs
 jest.config.js
 node_modules
+.github
+coverage
+.nyc_output
+.idea
+tasks
+gulpfile.js
+jest.config.js
+jsdocs.json
