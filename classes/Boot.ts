@@ -27,8 +27,9 @@ abstract class Boot {
   /**
    * Contains a instance of Settings
    *
-   * @type {Settings}
+   * @member {Settings}
    * @public
+   * @memberOf Boot
    */
   settings: Settings;
 
@@ -37,6 +38,8 @@ abstract class Boot {
    *
    * @private
    * @type {Express}
+   * @memberOf Boot
+   * @readonly
    */
   private readonly server: Express = express();
 

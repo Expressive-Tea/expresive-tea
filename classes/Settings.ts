@@ -2,10 +2,14 @@ import * as _ from 'lodash';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
 
 /**
- * Singleton Class to store and get settings and configurations
+ * Settings Singleton Class to allow store server, application and plugins settings during design mode. Can be used on
+ * run stage except by the port setting or any other in-design properties everything can be changed and reflected
+ * immediatly, the fact that some of the properties will be ignored after design stage is because is used only one time
+ * to provide initial settings or some initialization parameters.
  *
  * @class Settings
  * @param {ExpressiveTeaServerProps} [options={ port: 3000 }]
+ * @summary Singleton Class to Store Server Settings
  */
 class Settings {
   /**
@@ -30,7 +34,7 @@ class Settings {
   }
 
   /**
-   * Singleton Instance only for internal porpouses.
+   * Singleton Instance only for internal.
    *
    * @private
    * @static
@@ -58,7 +62,7 @@ class Settings {
   }
 
   /**
-   * Get the Server Options.
+   * Get all registered options by design and run.
    *
    * @returns {ExpressiveTeaServerProps}
    * @memberof Settings

@@ -24,6 +24,6 @@
     "destination": "./docs/",
     "encoding": "utf8",
     "recurse": true,
-    "template": "./node_modules/minami"
+    "template": "./node_modules/braintree-jsdoc-template"
   }
 }

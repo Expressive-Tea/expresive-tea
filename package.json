@@ -6,7 +6,7 @@
   "scripts": {
     "doc": "rimraf docs && npm run publish:prepare && jsdoc -c jsdocs.json",
     "doc:json": "jsdoc -c jsdocs-json.json",
-    "test": "npm run linter && jest --coverage --silent",
+    "test": "npm run linter && jest --clearCache && jest --coverage --silent",
     "linter": "tslint -c tslint.json -p tsconfig.json",
     "clean:build": "gulp clean",
     "publish:prepare": "gulp clean build",
@@ -37,10 +37,12 @@
   },
   "dependencies": {
     "bluebird": "^3.5.5",
+    "braintree-jsdoc-template": "^3.3.0",
     "express": "^4.16.4",
     "inversify": "^5.0.1",
     "inversify-inject-decorators": "^3.1.0",
-    "lodash": "^4.17.11"
+    "jsdoc-template": "^1.2.0",
+    "lodash": "^4.17.15"
   },
   "repository": {
     "type": "git",

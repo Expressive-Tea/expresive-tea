@@ -1,99 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Global - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      Global - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
 </head>
+
 <body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
 
-<label for="nav-trigger" class="overlay"></label>
+  <label for="nav-trigger" class="overlay"></label>
 
-<nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Boot.html">Boot</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Boot.html#start">start</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="GenericRequestException.html">GenericRequestException</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Settings.html">Settings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.getInstance">getInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.reset">reset</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#getOptions">getOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#merge">merge</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#set">set</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Module.html">Decorators/Module</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Module.html#~Module">Module</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Router.html">Decorators/Router</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Delete">Delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Get">Get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Middleware">Middleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Param">Param</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Patch">Patch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Post">Post</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Put">Put</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Router.html#~Route">Route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Server.html">Decorators/Server</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Plug">Plug</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Pour">Pour</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Setting">Setting</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></span></li>
-</nav>
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
 
-<div id="main">
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      Braintree SDK Client Reference
+    </h3>
+
     
-    <h1 class="page-title">Global</h1>
+
+    <h3>Classes</h3><ul><li id="Boot-nav"><a href="Boot.html">Boot</a><ul class='methods'><li data-type="method" id="Boot-start-nav"><a href="Boot.html#start">start</a></li></ul></li><li id="BootLoaderRequiredExceptions-nav"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></li><li id="BootLoaderSoftExceptions-nav"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></li><li id="GenericRequestException-nav"><a href="GenericRequestException.html">GenericRequestException</a></li><li id="Settings-nav"><a href="Settings.html">Settings</a><ul class='methods'><li data-type="method" id="Settings-getInstance-nav"><a href="Settings.html#.getInstance">getInstance</a></li><li data-type="method" id="Settings-reset-nav"><a href="Settings.html#.reset">reset</a></li><li data-type="method" id="Settings-get-nav"><a href="Settings.html#get">get</a></li><li data-type="method" id="Settings-getOptions-nav"><a href="Settings.html#getOptions">getOptions</a></li><li data-type="method" id="Settings-merge-nav"><a href="Settings.html#merge">merge</a></li><li data-type="method" id="Settings-set-nav"><a href="Settings.html#set">set</a></li></ul></li></ul><h3>Modules</h3><ul><li id="Decorators_Module-nav"><a href="module-Decorators_Module.html">Decorators/Module</a><ul class='methods'><li data-type="method" id="Decorators_Module-Module-nav"><a href="module-Decorators_Module.html#~Module">Module</a></li></ul></li><li id="Decorators_Router-nav"><a href="module-Decorators_Router.html">Decorators/Router</a><ul class='methods'><li data-type="method" id="Decorators_Router-Delete-nav"><a href="module-Decorators_Router.html#~Delete">Delete</a></li><li data-type="method" id="Decorators_Router-Get-nav"><a href="module-Decorators_Router.html#~Get">Get</a></li><li data-type="method" id="Decorators_Router-Middleware-nav"><a href="module-Decorators_Router.html#~Middleware">Middleware</a></li><li data-type="method" id="Decorators_Router-Param-nav"><a href="module-Decorators_Router.html#~Param">Param</a></li><li data-type="method" id="Decorators_Router-Patch-nav"><a href="module-Decorators_Router.html#~Patch">Patch</a></li><li data-type="method" id="Decorators_Router-Post-nav"><a href="module-Decorators_Router.html#~Post">Post</a></li><li data-type="method" id="Decorators_Router-Put-nav"><a href="module-Decorators_Router.html#~Put">Put</a></li><li data-type="method" id="Decorators_Router-Route-nav"><a href="module-Decorators_Router.html#~Route">Route</a></li></ul></li><li id="Decorators_Server-nav"><a href="module-Decorators_Server.html">Decorators/Server</a><ul class='methods'><li data-type="method" id="Decorators_Server-Plug-nav"><a href="module-Decorators_Server.html#~Plug">Plug</a></li><li data-type="method" id="Decorators_Server-Pour-nav"><a href="module-Decorators_Server.html#~Pour">Pour</a></li><li data-type="method" id="Decorators_Server-RegisterModule-nav"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></li><li data-type="method" id="Decorators_Server-ServerSettings-nav"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></li><li data-type="method" id="Decorators_Server-Setting-nav"><a href="module-Decorators_Server.html#~Setting">Setting</a></li></ul></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></li><li><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        Global
+      </h1>
     
 
     
-
-
-
 
 <section>
-
-<header>
+  <header>
     
-        <h2>
+      <h2>
         
-        </h2>
         
-    
-</header>
+        
+      </h2>
 
-<article>
+      
+    
+  </header>
+
+  <article>
     <div class="container-overview">
-    
+      
         
 
         
-
 
 <dl class="details">
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 </dl>
 
 
         
-    
+      
     </div>
 
     
@@ -111,252 +160,268 @@
 
         
             
-<div class="section-members">
-<h4 class="name" id="BOOT_ORDER"><span class="type-signature">(constant) </span>BOOT_ORDER<span class="type-signature"> :Array.&lt;<a href="global.html#BOOT_STAGES">BOOT_STAGES</a>></span></h4>
+
+<h4 class="name" id="BOOT_ORDER">
+  <span class="type-signature">(constant) </span>BOOT_ORDER<span class="type-signature"> :Array.&lt;<a href="global.html#BOOT_STAGES">BOOT_STAGES</a>></span>
+</h4>
 
 
-<p class="summary"><p>Boot Order Constant</p>.</p>
+  <p class="summary">
+    <p>Boot Order Constant</p>.
+  </p>
 
 
 
-<div class="description">
+  <div class="description">
     <p>Boot Order Constant</p>
-</div>
-
+  </div>
 
 
 
 
 <dl class="details">
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="libs_constants.js.html">libs/constants.js</a>, <a href="libs_constants.js.html#line25">line 25</a>
-    </li></ul></dd>
-    
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="libs_constants.js.html">libs/constants.js</a>, <a href="libs_constants.js.html#line25">line 25</a>
+        </li>
+      </ul>
+    </dd>
+  
 
-    
+  
 
-    
+  
 
-    
+  
 </dl>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Array.&lt;<a href="global.html#BOOT_STAGES">BOOT_STAGES</a>></code></span>
-
-
-        </li>
-    </ul>
 
 
 
-
-
-</div>
-
+          
         
             
-<div class="section-members">
-<h4 class="name" id="BOOT_STAGES"><span class="type-signature"></span>BOOT_STAGES<span class="type-signature"> :number</span></h4>
+
+<h4 class="name" id="BOOT_STAGES">
+  <span class="type-signature"></span>BOOT_STAGES<span class="type-signature"> :number</span>
+</h4>
 
 
-<p class="summary"><p>Boot Stages</p>
-<p>Available Boot Stages Enum.</p></p>
-
-
-
-<div class="description">
+  <p class="summary">
     <p>Boot Stages</p>
 <p>Available Boot Stages Enum.</p>
-</div>
+  </p>
 
+
+
+  <div class="description">
+    <p>Boot Stages</p>
+<p>Available Boot Stages Enum.</p>
+  </div>
 
 
 
 
 <dl class="details">
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="libs_constants.js.html">libs/constants.js</a>, <a href="libs_constants.js.html#line12">line 12</a>
-    </li></ul></dd>
-    
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="libs_constants.js.html">libs/constants.js</a>, <a href="libs_constants.js.html#line12">line 12</a>
+        </li>
+      </ul>
+    </dd>
+  
 
-    
+  
 
-    
+  
 
-    
+  
 </dl>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>number</code></span>
-
-
-        </li>
-    </ul>
 
 
 
-
-
-</div>
-
+          
         
     
 
     
 
     
-        <h3 class="subsection-title">Type Definitions</h3>
+      <h3 class="subsection-title">Type Definitions</h3>
 
-        
-                
-<div class="section-members">
-<h4 class="name" id="ExpressiveTeaApplication">ExpressiveTeaApplication</h4>
+      
+          
 
 
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#ExpressiveTeaApplication">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="ExpressiveTeaApplication">
+      <span class="type-signature"></span>ExpressiveTeaApplication<span class="type-signature"> :Object</span>
+    </h4>
+  </span>
+
+  
 
 
 
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
-    
+
+
+
+
+
+  <h5 class="subsection-title">Properties:</h5>
+
+  
 
 <table class="props">
-    <thead>
+  <thead>
     <tr>
-        
+      
         <th>Name</th>
-        
+      
 
-        <th>Type</th>
+      <th>Type</th>
 
-        
+      
 
-        
+      
 
-        <th class="last">Description</th>
+      <th class="last">Description</th>
     </tr>
-    </thead>
+  </thead>
 
-    <tbody>
+  <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>application</code></td>
-            
+    <tr>
+      
+        <td class="name"><code>application</code></td>
+      
 
-            <td class="type">
-            
-                
-<span class="param-type"><code>Express</code></span>
+      <td class="type">
+        
+          
+    <span class="param-type">
+      Express
+    </span>
+
+    
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Express Application Instance</p></td>
-        </tr>
+        
+      </td>
 
         
 
+        
+
+        <td class="description last">
+          <p>Express Application Instance</p>
+          </td>
+    </tr>
+
+  
+
+    <tr>
+      
+        <td class="name"><code>server</code></td>
+      
+
+      <td class="type">
+        
+          
+    <span class="param-type">
+      HTTPServer
+    </span>
+
     
 
-        <tr>
-            
-                <td class="name"><code>server</code></td>
-            
 
-            <td class="type">
-            
-                
-<span class="param-type"><code>HTTPServer</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>HTTP Server Object</p></td>
-        </tr>
+        
+      </td>
 
         
 
-    
-    </tbody>
+        
+
+        <td class="description last">
+          <p>HTTP Server Object</p>
+          </td>
+    </tr>
+
+  
+  </tbody>
 </table>
 
 
@@ -364,66 +429,50 @@
 
 <dl class="details">
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="classes_Boot.js.html">classes/Boot.js</a>, <a href="classes_Boot.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="classes_Boot.js.html">classes/Boot.js</a>, <a href="classes_Boot.js.html#line10">line 10</a>
+        </li>
+      </ul>
+    </dd>
+  
 
-    
+  
 
-    
+  
 
-    
+  
 </dl>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Object</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-            
-                
-<div class="section-members">
-<h4 class="name" id="ExpressiveTeaModuleProps">ExpressiveTeaModuleProps</h4>
 
 
 
@@ -432,105 +481,150 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
-    
+
+
+        
+          
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#ExpressiveTeaModuleProps">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="ExpressiveTeaModuleProps">
+      <span class="type-signature"></span>ExpressiveTeaModuleProps<span class="type-signature"> :Object</span>
+    </h4>
+  </span>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h5 class="subsection-title">Properties:</h5>
+
+  
 
 <table class="props">
-    <thead>
+  <thead>
     <tr>
-        
+      
         <th>Name</th>
-        
+      
 
-        <th>Type</th>
+      <th>Type</th>
 
-        
+      
 
-        
+      
 
-        <th class="last">Description</th>
+      <th class="last">Description</th>
     </tr>
-    </thead>
+  </thead>
 
-    <tbody>
+  <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>controllers</code></td>
-            
+    <tr>
+      
+        <td class="name"><code>controllers</code></td>
+      
 
-            <td class="type">
-            
-                
-<span class="param-type"><code>Array.&lt;Object></code></span>
+      <td class="type">
+        
+          
+    <span class="param-type">
+      Array.&lt;Object>
+    </span>
+
+    
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Controllers Assigned to Module</p></td>
-        </tr>
+        
+      </td>
 
         
 
+        
+
+        <td class="description last">
+          <p>Controllers Assigned to Module</p>
+          </td>
+    </tr>
+
+  
+
+    <tr>
+      
+        <td class="name"><code>providers</code></td>
+      
+
+      <td class="type">
+        
+          
+    <span class="param-type">
+      Array.&lt;Object>
+    </span>
+
     
 
-        <tr>
-            
-                <td class="name"><code>providers</code></td>
-            
 
-            <td class="type">
-            
-                
-<span class="param-type"><code>Array.&lt;Object></code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Dependency Injection Providers</p></td>
-        </tr>
+        
+      </td>
 
         
 
+        
+
+        <td class="description last">
+          <p>Dependency Injection Providers</p>
+          </td>
+    </tr>
+
+  
+
+    <tr>
+      
+        <td class="name"><code>mountpoint</code></td>
+      
+
+      <td class="type">
+        
+          
+    <span class="param-type">
+      string
+    </span>
+
     
 
-        <tr>
-            
-                <td class="name"><code>mountpoint</code></td>
-            
 
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Endpoint part which Module it will use as root.</p></td>
-        </tr>
+        
+      </td>
 
         
 
-    
-    </tbody>
+        
+
+        <td class="description last">
+          <p>Endpoint part which Module it will use as root.</p>
+          </td>
+    </tr>
+
+  
+  </tbody>
 </table>
 
 
@@ -538,82 +632,82 @@
 
 <dl class="details">
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
+  
     <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="decorators_module.js.html">decorators/module.js</a>, <a href="decorators_module.js.html#line6">line 6</a>
-    </li></ul></dd>
-    
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="decorators_module.js.html">decorators/module.js</a>, <a href="decorators_module.js.html#line6">line 6</a>
+        </li>
+      </ul>
+    </dd>
+  
 
-    
+  
 
-    
+  
 
-    
+  
 </dl>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Object</code></span>
-
-
-        </li>
-    </ul>
 
 
 
 
 
-</div>
 
-            
-    
+
+
+
+
+
+        
 
     
-</article>
-
+  </article>
 </section>
 
 
 
 
-</div>
+  </div>
 
-<br class="clear">
+  <br class="clear">
 
-<footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Feb 17 2020 16:56:24 GMT-0600 (Central Standard Time) using the Minami theme.
-</footer>
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
+  </footer>
 
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
 </body>
 </html>
