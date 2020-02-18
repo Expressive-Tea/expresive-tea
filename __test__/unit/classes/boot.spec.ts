@@ -18,7 +18,7 @@ jest.mock('express', () => jest.fn().mockImplementation(() => serverMock));
 
 describe('Boot Class', () => {
   @Plug(BOOT_STAGES.APPLICATION, 'Soft Plugin', softPluginMock)
-  @Plug(BOOT_STAGES.APPLICATION, 'Hard Plugin', hardPluginMock, true)
+  @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Hard Plugin', hardPluginMock, true)
   class Bootstrap extends Boot {
     @RegisterModule(Module)
     async start() {
@@ -68,13 +68,13 @@ describe('Boot Class', () => {
     expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
   });
 
-  test('should not fail if soft plugin fails', async () => {
+  test('should fail if hard plugin fails', async () => {
+    const errorMessage = new Error('test');
     hardPluginMock.mockImplementationOnce(() => {
-      throw new Error('Test');
+      throw errorMessage;
     });
     const boot = new Bootstrap();
-
-    expect(boot.start()).rejects.toEqual(expect.anything());
+    expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
 
 });

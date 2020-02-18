@@ -16,17 +16,19 @@ import { Rejector, Resolver } from '../libs/types';
  */
 
 /**
- * Bootstrap Server Configuration Class
+ * Bootstrap Server Engine Class is an abstract class to provide the Expressive Tea engine and bootstraps tools. This
+ * is containing the logic and full functionality of Expressive Tea and only can be extended.
  *
  * @abstract
  * @class Boot
+ * @summary Bootstrap Engine Class
  */
 abstract class Boot {
   /**
    * Contains a instance of Settings
    *
    * @type {Settings}
-   * @memberof Boot
+   * @public
    */
   settings: Settings;
 
@@ -35,7 +37,6 @@ abstract class Boot {
    *
    * @private
    * @type {Express}
-   * @memberof Boot
    */
   private readonly server: Express = express();
 
@@ -48,7 +49,6 @@ abstract class Boot {
    * Initialize and Bootstrap Server.
    *
    * @returns {Promise<ExpressiveTeaApplication>}
-   * @memberof Boot
    */
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
@@ -99,13 +99,14 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
 }
 
 async function selectLoaderType(loader, server: Express) {
-  return loader.isPlugin ? loader.method(server, Settings.getInstance()) : loader.method(server);
+  return loader.method(server);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
   if (e instanceof BootLoaderSoftExceptions) {
     console.info(e.message);
   } else {
+    console.error(e.message);
     // Re Throwing Error to Get it a top level.
     throw e;
   }

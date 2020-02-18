@@ -1,4 +1,4 @@
-import { Express } from 'express';
+import { Express, Router } from 'express';
 import { Server } from 'http';
 
 export interface IDynamicObject {
@@ -35,4 +35,18 @@ export interface ExpressiveTeaModuleProps {
   controllers: any[];
   providers: any[];
   mountpoint: string;
+}
+
+export interface IExpressiveTeaModule {
+  readonly settings: ExpressiveTeaModuleProps;
+  readonly router: Router;
+  readonly controllers: any[];
+  __register(server: Express): void;
+}
+
+export interface IExpressiveTeaRoute {
+  readonly router: Router;
+  readonly mountpoint: string;
+  __mount(parent: Router): any;
+  [key: string]: any;
 }

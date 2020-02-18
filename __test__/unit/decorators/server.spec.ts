@@ -94,21 +94,16 @@ describe('Pour Decorator', () => {
     expect(args[2]).toEqual(Test);
   });
 
-  test.skip('should attach plug to respective level', () => {
-    mockRegister.mockImplementation(() => {
-      throw new Error();
-      return;
-    });
-
-    class TestFailPlugin extends Plugin {
+  test('should attach plug to respective level', () => {
+    class TestPlugin extends Plugin {
     }
 
-    @Pour(new TestFailPlugin())
+    @Pour(new TestPlugin())
     class TestFail extends Boot {
     }
 
     this.testInstance = new TestFail();
-    expect(this.testInstance.start()).toThrow();
+    expect(this.testInstance.start()).resolves.toEqual(expect.anything());
   });
 });
 
