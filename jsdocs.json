@@ -18,7 +18,14 @@
     "cleverLinks": true,
     "monospaceLinks": true,
     "useLongnameInNav": false,
-    "showInheritedInNav": true
+    "showInheritedInNav": true,
+    "referenceTitle": "Expressive Tea",
+    "disableSort": false,
+    "resources": {
+      "Expressive Tea Core": "https://www.npmjs.com/package/@zerooneit/expressive-tea",
+      "Expressive Tea Plugin": "https://www.npmjs.com/package/@expressive-tea/plugin",
+      "Expressive Tea Tutorial": "https://medium.com/@diego.resendez/a-simple-rest-api-with-expressive-tea-part-one-97ef6c08f9c4"
+    }
   },
   "opts": {
     "destination": "./docs/",

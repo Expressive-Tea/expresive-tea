@@ -1,6 +1,5 @@
 import * as express from 'express';
 import Boot from '../../../classes/Boot';
-import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
@@ -59,7 +58,7 @@ describe('Boot Class', () => {
     expect(registerMock).toHaveBeenCalled();
   });
 
-  test('should not fail if soft plugin fails', async () => {
+  test('should not fail if soft plugin fails',  () => {
     softPluginMock.mockImplementationOnce(() => {
       throw new Error('Test');
     });
@@ -68,7 +67,7 @@ describe('Boot Class', () => {
     expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
   });
 
-  test('should fail if hard plugin fails', async () => {
+  test('should fail if hard plugin fails',  () => {
     const errorMessage = new Error('test');
     hardPluginMock.mockImplementationOnce(() => {
       throw errorMessage;

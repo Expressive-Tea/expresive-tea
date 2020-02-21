@@ -72,7 +72,7 @@ export function Plug(
  * @summary Attach an Expressive Tea Definition Instance.
  * @param plugin Plugin - A Plugin instance which extends @expressive-tea/plugin/Plugin Class.
  * @version 1.1
- * @see https://www.npmjs.com/package/@expressive-tea/plugin
+ * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
 export function Pour(plugin) {
   return (target: any): void => {

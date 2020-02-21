@@ -25,32 +25,33 @@ import { Rejector, Resolver } from '../libs/types';
  */
 abstract class Boot {
   /**
-   * Contains a instance of Settings
+   * Maintain a reference to Singleton instance of Settings, if settings still does not initialized it will created
+   * automatically when extended class create a new instance.
    *
-   * @member {Settings}
+   * @type {Settings}
    * @public
-   * @memberOf Boot
+   * @summary Server Settings instance reference
    */
-  settings: Settings;
+  settings: Settings = new Settings();
 
   /**
-   * Express Application instance internal property.
-   *
-   * @private
+   * Automatically create an Express application instance which will be user to configurate over all the boot stages.
    * @type {Express}
-   * @memberOf Boot
+   * @private
    * @readonly
+   * @summary Express Application instance internal property.
    */
   private readonly server: Express = express();
 
   constructor() {
-    this.settings = new Settings();
     this.settings.set('application', this.server);
   }
 
   /**
-   * Initialize and Bootstrap Server.
-   *
+   * Bootstrap and verify that all the required plugins are correctly configurated and proceed to attach all the
+   * registered modules. <b>Remember</b> this is the unique method that must be decorated for the Register Module
+   * decorator.
+   * @summary Initialize and Bootstrap Server.
    * @returns {Promise<ExpressiveTeaApplication>}
    */
   async start(): Promise<ExpressiveTeaApplication> {

@@ -164,8 +164,8 @@ export function Delete(route = '*') {
  *
  * The method to response this must follow the Express callback notation (Request, Response, Next, paramValue) which
  * also must be use Next method to allow continue the process flow from Express.
- * @decorator {MethodDecorator} Get - Create an GET Response over the designed route.
- * @summary Define a GET Controller Endpoint on Controller.
+ * @decorator {MethodDecorator} Param - Create a transformation middleware for router parameters.
+ * @summary Define a Parameter transformation on router path..
  * @param {string} route URL Part to mount create a handler.
  * @example
  * {REPLACE-AT}Route('/')

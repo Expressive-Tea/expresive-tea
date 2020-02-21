@@ -13,9 +13,13 @@ import { ExpressiveTeaServerProps } from '../libs/interfaces';
  */
 class Settings {
   /**
-   * Reset Singleton
+   * Reset Singleton instance to the default values, all changes will be erased is not recommendable to use it
+   * multiple times since all your options will be lost. Unless you have an option how to recover this is not
+   * recommended to use often. Consider this is not DELETE initialization options, even if you deleted this is used
+   * one time at the application starts.
    *
    * @static
+   * @summary Reset Singleton instance
    * @memberof Settings
    */
   static reset() {
@@ -23,11 +27,13 @@ class Settings {
   }
 
   /**
-   * Get Current Singleton Instance or Created if not exists.
+   * Get Current Singleton Instance or Created if not exists. If a new instance is created it will created with default
+   * options.
    *
    * @static
    * @returns {Settings}
    * @memberof Settings
+   * @summary Get Singleton Instance.
    */
   static getInstance(): Settings {
     return Settings.instance || new Settings();
@@ -62,42 +68,49 @@ class Settings {
   }
 
   /**
-   * Get all registered options by design and run.
+   * It will return the latest snapshot options registered at the time that this method is called, as Expressive Tea
+   * is designed as async methods some time options should not be available.
    *
    * @returns {ExpressiveTeaServerProps}
    * @memberof Settings
+   * @summary Retrieve all registered options.
    */
   getOptions(): ExpressiveTeaServerProps {
     return this.options;
   }
 
   /**
-   * Get the setting on <setting Name> or return undefined.
+   * Retrieve the option as is designated on <settingName> parameter, if does not exist it will return null instead of
+   * undefined to give them a value and data consistency.
    *
    * @param {string} settingName
    * @returns {*}
    * @memberof Settings
+   * @summary Retrieve an option
    */
   get(settingName: string): any {
     return _.get(this.options, settingName, null);
   }
 
   /**
-   * Set or edit a setting.
+   * Initialize or Edit a application options, this is only for in run options, as explained above initialization
+   * options it won't affect any functionality as the application already started.
    *
    * @param {string} settingName
    * @param {*} value
    * @memberof Settings
+   * @summary Initialize an option.
    */
   set(settingName: string, value: any): void {
     _.set(this.options, settingName, value);
   }
 
   /**
-   * Merge Server Settings.
+   * This Merge multiple options at the same time, this can edit or create the options.
    *
    * @param {ExpressiveTeaServerProps} [options={ port: 3000 }]
    * @memberof Settings
+   * @summary Merge Options
    */
   merge(options: ExpressiveTeaServerProps = { port: 3000 }) {
     this.options = Object.assign(this.options, options);
