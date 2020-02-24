@@ -1,9 +1,16 @@
 import { Express } from 'express';
-import { orderBy } from 'lodash';
+import { orderBy, isNil } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, PLUGINS_KEY, REGISTERED_MODULE_KEY } from '../libs/constants';
-import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps } from '../libs/interfaces';
+import {
+  BOOT_ORDER,
+  BOOT_STAGES,
+  BOOT_STAGES_KEY,
+  PLUGINS_KEY,
+  REGISTERED_MODULE_KEY,
+  REGISTERED_STATIC_KEY
+} from '../libs/constants';
+import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
 
 /**
  * @module Decorators/Server
@@ -35,6 +42,7 @@ function setStage(stage, value, target) {
 function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
   MetaData.set(PLUGINS_KEY, plugins, target);
 }
+
 /**
  * Plug Class Decorator create a simple plugin to execute in one of the public stages defined on BOOT_STAGES, might
  * be useful to attach a simple Express Server configuration.
@@ -106,6 +114,30 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
 }
 
 /**
+ * Create a new middleware function to serve files from within a given root directory. The file to serve will be
+ * determined by combining req.url with the provided root directory. When a file is not found, instead of sending a 404
+ * response, this module will instead call next() to move on to the next middleware, allowing for stacking
+ * and fall-backs. Check it out {@link https://expressjs.com/en/4x/api.html#express.static Express Static} to more
+ * information.
+ * @summary Static File Server
+ * @param {string} root - Root directory
+ * @param {string} virtual = Viartual Path
+ * @param {object} options - Static Server Options
+ * @decorator {ClassDecorator} Static - Create an Static mount static file server  on root directory
+ * with virtual path if defined.
+ */
+export function Static(root: string, virtual: string | null = null, options: ExpressiveTeaStaticFileServer = {}) {
+  return target => {
+    if (isNil(root)) {
+      throw new Error('Root must be defined');
+    }
+    const registeredStatics = MetaData.get(REGISTERED_STATIC_KEY, target) || [];
+    registeredStatics.unshift({ root, options, virtual });
+    MetaData.set(REGISTERED_STATIC_KEY, registeredStatics, target);
+  };
+}
+
+/**
  * Setting Property Decorator Automatically assign a settings declared on Settings Service into the decorated property.
  * All properties will contains the settings value or undefined if current settings is not founded.
  * @decorator {PropertyDecorator} Setting - Assign Server Settings to Property as default value.
@@ -130,7 +162,9 @@ export function Setting(settingName: string): (target: any, propertyName: string
  */
 export function RegisterModule(Module) {
   return (target, property) => {
-    if (property !== 'start') { throw new Error('Register Module needs to decorate ONLY start method'); }
+    if (property !== 'start') {
+      throw new Error('Register Module needs to decorate ONLY start method');
+    }
 
     const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, property) || [];
     registeredModules.push(Module);

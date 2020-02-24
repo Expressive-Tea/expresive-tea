@@ -5,8 +5,15 @@ import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES_INIT } from '../libs/constants';
-import { ExpressiveTeaApplication } from '../libs/interfaces';
+import {
+  BOOT_ORDER,
+  BOOT_STAGES,
+  BOOT_STAGES_KEY,
+  REGISTERED_MODULE_KEY,
+  REGISTERED_STATIC_KEY,
+  STAGES_INIT
+} from '../libs/constants';
+import { ExpressiveTeaApplication, ExpressiveTeaStatic } from '../libs/interfaces';
 import { Rejector, Resolver } from '../libs/types';
 
 /**
@@ -57,6 +64,7 @@ abstract class Boot {
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
+        await  resolveStatic(this, this.server);
         for (const stage of BOOT_ORDER) {
           await resolveStage(stage, this, this.server);
         }
@@ -81,6 +89,19 @@ async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Pro
   } catch (e) {
     checkIfStageFails(e);
   }
+}
+
+async function resolveStatic(instance: typeof Boot | Boot, server: Express): Promise<void> {
+  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, instance) || [];
+  console.log(registeredStatic);
+  registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
+    if (staticOptions.virtual) {
+      server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
+    } else {
+      server.use(express.static(staticOptions.root, staticOptions.options));
+    }
+
+  });
 }
 
 async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {

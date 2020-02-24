@@ -157,3 +157,5 @@ describe('RegisterModule Decorator', () => {
     expect(args[1]).toEqual([this.ModuleClass]);
   });
 });
+
+describe('Static Decorator', () => {});

@@ -50,3 +50,19 @@ export interface IExpressiveTeaRoute {
   __mount(parent: Router): any;
   [key: string]: any;
 }
+
+export interface ExpressiveTeaStaticFileServer {
+  dotfiles?: 'allow' | 'deny' | 'ignore';
+  etag?: boolean;
+  extensions?: string[];
+  index?: boolean;
+  maxAge?: string;
+  redirect?: boolean;
+  setHeaders?(res, path, stat);
+}
+
+export interface ExpressiveTeaStatic {
+  root: string;
+  virtual: string | never;
+  options: ExpressiveTeaStaticFileServer | never;
+}
