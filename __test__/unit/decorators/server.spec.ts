@@ -2,15 +2,23 @@ import { last } from 'lodash';
 import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
-import { Plug, Pour, RegisterModule, ServerSettings, Setting, Static } from '../../../decorators/server';
+import {
+  ExpressDirecive,
+  Plug,
+  Pour,
+  RegisterModule,
+  ServerSettings,
+  Setting,
+  Static
+} from '../../../decorators/server';
 import {
   BOOT_STAGES,
   BOOT_STAGES_KEY,
-  PLUGINS_KEY,
+  PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../../../libs/constants';
-import Plugin, { mockRegister } from '../../__mocks__/plugin';
+import Plugin from '../../__mocks__/plugin';
 
 describe('ServerSettings Decorator', () => {
   test('should modify server settings', () => {
@@ -221,6 +229,50 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-ignore
       @Static()
+      class Test {
+      }
+    }).toThrow();
+  });
+});
+
+describe('Express Directive Decorator', () => {
+  beforeEach(() => {
+    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+  });
+
+  afterEach(() => {
+    this.spyMetadataSet.mockRestore();
+  });
+
+  test('should allow to modify etag', () => {
+    @ExpressDirecive('etag', true)
+    class Test {
+    }
+
+    this.instance = new Test();
+
+    const args = this.spyMetadataSet.mock.calls[0];
+
+    expect(args[0]).toEqual(REGISTERED_DIRECTIVES_KEY);
+    expect(args[1]).toEqual([{
+      name: 'etag',
+      settings: [true]
+    }]);
+  });
+
+  test('should fail if directive is named as invalid ', () => {
+    expect(() => {
+      // @ts-ignore
+      @ExpressDirecive('invalid', false)
+      class Test {
+      }
+    }).toThrow();
+  });
+
+  test('should fail if directive is not named ', () => {
+    expect(() => {
+      // @ts-ignore
+      @ExpressDirecive()
       class Test {
       }
     }).toThrow();

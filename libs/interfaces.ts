@@ -66,3 +66,8 @@ export interface ExpressiveTeaStatic {
   virtual: string | null;
   options: ExpressiveTeaStaticFileServer | never;
 }
+
+export  interface ExprresiveTeaDirective {
+  name: string;
+  settings: any[];
+}

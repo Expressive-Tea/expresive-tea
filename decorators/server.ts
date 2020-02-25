@@ -5,8 +5,8 @@ import Settings from '../classes/Settings';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
-  BOOT_STAGES_KEY,
-  PLUGINS_KEY,
+  BOOT_STAGES_KEY, EXPRESS_DIRECTIVES,
+  PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../libs/constants';
@@ -138,6 +138,26 @@ export function Static(root: string, virtual: string | null = null, options: Exp
 }
 
 /**
+ * Set or Update Express application settings, and allow to change the behavior of the server where is listed on the
+ * next link {@link http://expressjs.com/en/4x/api.html#app.settings.table Express Settings} as this is using the same
+ * principle of app.set you should understand that is only apply the special settings mentioned above.
+ * @summary Express Setting Directive
+ * @param {string} name - Express Directive Setting Name
+ * @param {*} settings - Setting Arguments
+ * @decorator {ClassDecorator} ExpressDirecive - Set a Express App Setting.
+ */
+export function ExpressDirecive(name: string, ...settings: any) {
+  return target => {
+    if (!EXPRESS_DIRECTIVES.includes(name)) {
+      throw new Error(`Directive Name ${name} is not valid express behavior setting`);
+    }
+    const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, target) || [];
+    registeredDirectives.unshift({ name, settings });
+    MetaData.set(REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
+  };
+}
+
+/**
  * Setting Property Decorator Automatically assign a settings declared on Settings Service into the decorated property.
  * All properties will contains the settings value or undefined if current settings is not founded.
  * @decorator {PropertyDecorator} Setting - Assign Server Settings to Property as default value.
@@ -158,7 +178,7 @@ export function Setting(settingName: string): (target: any, propertyName: string
  * method with a Module Class.
  * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
  * @summary ONLY Decorate Start Method, this register the Module Classes created by the user.
- * @param {class} Module
+ * @param {Class} Module
  */
 export function RegisterModule(Module) {
   return (target, property) => {

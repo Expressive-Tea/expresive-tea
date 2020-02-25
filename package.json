@@ -7,7 +7,7 @@
     "doc": "rimraf docs && npm run publish:prepare && jsdoc -c jsdocs.json",
     "doc:json": "jsdoc -c jsdocs-json.json",
     "test": "npm run linter && jest --clearCache && jest --coverage --silent --ci --detectOpenHandles --forceExit",
-    "test:dev": "npm run linter && jest --clearCache && jest --coverage --ci --detectOpenHandles --forceExit",
+    "test:dev": "npm run linter && jest --detectOpenHandles --forceExit",
     "linter": "tslint -c tslint.json -p tsconfig.json",
     "clean:build": "gulp clean",
     "publish:prepare": "gulp clean build",

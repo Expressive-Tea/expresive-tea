@@ -52,6 +52,24 @@ export const STAGES_INIT = {
   [BOOT_STAGES.START]: []
 };
 
+export const EXPRESS_DIRECTIVES = [
+  'case sensitive routing',
+  'env',
+  'etag',
+  'jsonp callback name',
+  'json escape',
+  'json replacer',
+  'json spaces',
+  'query parser',
+  'strict routing',
+  'subdomain offset',
+  'trust proxy',
+  'views',
+  'view cache',
+  'view engine',
+  'x-powered-by'
+];
+
 export const BOOT_STAGES_KEY = 'boot:stage-settings';
 export const ROUTER_HANDLERS_KEY = 'app:routes:handlers';
 export const ROUTER_MIDDLEWARES_KEY = 'app:routes:middlewares';
@@ -59,3 +77,4 @@ export const REGISTERED_MODEL_KEY = 'app:models:registered';
 export const REGISTERED_MODULE_KEY = 'app:modules:registered';
 export const PLUGINS_KEY = 'boot:app-plugins';
 export const REGISTERED_STATIC_KEY = 'app:statics';
+export const REGISTERED_DIRECTIVES_KEY = 'app:directives';
