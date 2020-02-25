@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { orderBy, isNil } from 'lodash';
+import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import {

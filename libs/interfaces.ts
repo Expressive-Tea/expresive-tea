@@ -63,6 +63,6 @@ export interface ExpressiveTeaStaticFileServer {
 
 export interface ExpressiveTeaStatic {
   root: string;
-  virtual: string | never;
+  virtual: string | null;
   options: ExpressiveTeaStaticFileServer | never;
 }

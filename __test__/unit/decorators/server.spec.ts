@@ -2,8 +2,14 @@ import { last } from 'lodash';
 import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
-import { Plug, Pour, RegisterModule, ServerSettings, Setting } from '../../../decorators/server';
-import { BOOT_STAGES, BOOT_STAGES_KEY, PLUGINS_KEY, REGISTERED_MODULE_KEY } from '../../../libs/constants';
+import { Plug, Pour, RegisterModule, ServerSettings, Setting, Static } from '../../../decorators/server';
+import {
+  BOOT_STAGES,
+  BOOT_STAGES_KEY,
+  PLUGINS_KEY,
+  REGISTERED_MODULE_KEY,
+  REGISTERED_STATIC_KEY
+} from '../../../libs/constants';
 import Plugin, { mockRegister } from '../../__mocks__/plugin';
 
 describe('ServerSettings Decorator', () => {
@@ -129,9 +135,15 @@ describe('Setting Decorator', () => {
 });
 
 describe('RegisterModule Decorator', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+  });
 
+  afterEach(() => {
+    this.spyMetadataSet.mockRestore();
+  });
+
+  test('should register a module', () => {
     class Module {
     }
 
@@ -141,21 +153,76 @@ describe('RegisterModule Decorator', () => {
       }
     }
 
-    this.ModuleClass = Module;
-    this.TestClass = Test;
-  });
-
-  afterAll(() => {
-    this.spyMetadataSet.mockRestore();
-  });
-
-  test('should register a module', () => {
-    this.testInstance = new this.TestClass();
+    this.testInstance = new Test();
     const args = this.spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
-    expect(args[1]).toEqual([this.ModuleClass]);
+    expect(args[1]).toEqual([Module]);
+  });
+
+  test('should fail if use different method to register a module', () => {
+    expect(() => {
+      class Module {
+      }
+
+      class Test {
+        @RegisterModule(Module)
+        async init() {
+        }
+      }
+    }).toThrow();
   });
 });
 
-describe('Static Decorator', () => {});
+describe('Static Decorator', () => {
+  beforeEach(() => {
+    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+  });
+
+  afterEach(() => {
+    this.spyMetadataSet.mockRestore();
+  });
+
+  test('should register a static server', () => {
+    @Static('/public')
+    class Test {
+    }
+
+    this.instance = new Test();
+
+    const args = this.spyMetadataSet.mock.calls[0];
+
+    expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
+    expect(args[1]).toEqual([{
+      options: {},
+      root: '/public',
+      virtual: null
+    }]);
+  });
+
+  test('should register a static server with virtual', () => {
+    @Static('/public', '/virtual')
+    class Test {
+    }
+
+    this.instance = new Test();
+
+    const args = this.spyMetadataSet.mock.calls[0];
+
+    expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
+    expect(args[1]).toEqual([{
+      options: {},
+      root: '/public',
+      virtual: '/virtual'
+    }]);
+  });
+
+  test('should fail if not root folder is present', () => {
+    expect(() => {
+      // @ts-ignore
+      @Static()
+      class Test {
+      }
+    }).toThrow();
+  });
+});

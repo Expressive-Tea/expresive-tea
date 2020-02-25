@@ -1,7 +1,7 @@
 import * as express from 'express';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { Plug, RegisterModule } from '../../../decorators/server';
+import { Plug, RegisterModule, Static } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
 
@@ -9,8 +9,10 @@ const serverMock = {
   listen: jest.fn().mockImplementation((port, cb) => {
     setTimeout(() => cb(), 200);
     return { port };
-  })
+  }),
+  use: jest.fn()
 };
+
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();
 jest.mock('express', () => jest.fn().mockImplementation(() => serverMock));
@@ -76,4 +78,18 @@ describe('Boot Class', () => {
     expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
 
+});
+
+describe('Boot Class Extends', () => {
+  test('should register a new static', async () => {
+    @Static('/public')
+    class Bootstrap extends Boot {}
+
+    this.instance = new Bootstrap();
+
+    await this.instance.start();
+
+    expect(serverMock.use).toHaveBeenCalledWith();
+    expect(expressMock.static).toHaveBeenCalledWith();
+  });
 });
