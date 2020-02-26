@@ -2,8 +2,6 @@ import { Router } from 'express';
 import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
-import { IExpressiveTeaRoute } from '../libs/interfaces';
-import { ExpressiveTeaRouteClass } from '../libs/types';
 
 /**
  * @module Decorators/Router

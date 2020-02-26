@@ -15,9 +15,12 @@ import DependencyInjection from '../services/DependencyInjection';
  */
 
 /**
- * Module Decorator
+ * Module Decorator is a Class Decorator which is help to register a Module into Expressive Tea. A module is a
+ * placeholder over a mountpoint. We can considerate a module like a container which provide isolation and modularity
+ * for our project. This module can be mounted in different applications and will move all the controller routes too.
  * @decorator {ClassDecorator} Module - Module Class Register Decorator
  * @param {ExpressiveTeaModuleProps} options
+ * @summary Module Decorator
  * @example
  * {REPLACE-AT}Module({
  *   controllers: [],

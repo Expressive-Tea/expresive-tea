@@ -17,14 +17,17 @@ import { ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective }
 import { Rejector, Resolver } from '../libs/types';
 
 /**
+ * Expressive Tea Application interface is the response from an started application, contains the express application
+ * and a node http server instance.
  * @typedef {Object} ExpressiveTeaApplication
- * @property {Express} application Express Application Instance
- * @property {HTTPServer} server HTTP Server Object
+ * @property {Express} application - Express Application Instance
+ * @property {HTTPServer} server - HTTP Server Object
+ * @summary Application Interface
  */
 
 /**
- * Bootstrap Server Engine Class is an abstract class to provide the Expressive Tea engine and bootstraps tools. This
- * is containing the logic and full functionality of Expressive Tea and only can be extended.
+ * <b>Bootstrap Server Engine Class</b> is an abstract class to provide the Expressive Tea engine and bootstraps tools.
+ * This is containing the logic and full functionality of Expressive Tea and only can be extended.
  *
  * @abstract
  * @class Boot
@@ -42,7 +45,7 @@ abstract class Boot {
   settings: Settings = new Settings();
 
   /**
-   * Automatically create an Express application instance which will be user to configurate over all the boot stages.
+   * Automatically create an Express application instance which will be user to configure over all the boot stages.
    * @type {Express}
    * @private
    * @readonly
@@ -55,7 +58,7 @@ abstract class Boot {
   }
 
   /**
-   * Bootstrap and verify that all the required plugins are correctly configurated and proceed to attach all the
+   * Bootstrap and verify that all the required plugins are correctly configured and proceed to attach all the
    * registered modules. <b>Remember</b> this is the unique method that must be decorated for the Register Module
    * decorator.
    * @summary Initialize and Bootstrap Server.
