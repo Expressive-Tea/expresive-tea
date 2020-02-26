@@ -15,6 +15,8 @@
 ## Description
 Expressive Tea is a simple library which allow to generate RESTful services with Typescript over Expressjs.
 
+[![Edit expressive-tea](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark)
+   
 ## Features
 * Server Initialization and Configurations with ability to setup server through server stages.
 * Declare Server Middlewares configuration as hard or soft dependency at server level.
