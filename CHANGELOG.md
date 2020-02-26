@@ -2,6 +2,10 @@ CHANGELOG
 ----------------------
 
 [Current]
+
+
+[v1.1.1]
+ * [93ec93f](https://github.com/Zero-OneiT/expresive-tea/commit/93ec93fb875022fc502023b969f1b5aaed3a77ca) [MAINTENANCE] Fixes Small Issues and Documentation
  * [45c6f7e](https://github.com/Zero-OneiT/expresive-tea/commit/45c6f7eaaf392daffecaf3fa1443ae5bc1d9ea3c) [MAINTENANCE] Fixes Small Issues and Documentation
  * [cc44044](https://github.com/Zero-OneiT/expresive-tea/commit/cc44044b85dd5f9b2bf9b6e5f3bb1ecba498aedd) [MAINTENANCE] Fixes Small Issues and Documentation
  * [5662633](https://github.com/Zero-OneiT/expresive-tea/commit/56626336b84b3030897c5ece4b9debe1b8f13cbb) [MAINTENANCE] Fixes Small Issues and Documentation
