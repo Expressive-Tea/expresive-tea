@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      exceptions/RequestExceptions.js - Documentation
+      services/DependencyInjection.js - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -92,7 +92,7 @@
   <div id="main">
     
       <h1 class="page-title">
-        exceptions/RequestExceptions.js
+        services/DependencyInjection.js
       </h1>
     
 
@@ -103,92 +103,86 @@
   <article>
     <pre class="prettyprint source linenums"><code>"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const inversify_1 = require("inversify");
+const inversify_inject_decorators_1 = require("inversify-inject-decorators");
+const rootContainer = new inversify_1.Container({
+    autoBindInjectable: true
+});
+const lazyDecorators = inversify_inject_decorators_1.default(rootContainer);
 /**
- * @namespace Exceptions
+ * @module Services
  */
 /**
- * HTTP Generic Exception Use this Exception to easily return a HTTP Error on the endpoints handlers.
- * @export
- * @class GenericRequestException
- * @extends {Error}
- * @param {string} message='Server Error' Provide the Error message.
- * @param {number} [statusCode=500] HTTP Response Code
- * @summary HTTP Exception Helper
- * @example
- * {REPLACE-AT}Router('/')
- * class ExceptionExampleController {
- *   {REPLACE-AT}Get('/exception')
- *   exceptionMethod(req, res, next) {
- *     try {
- *       throw new GenericRequestException('Page not found', 404);
- *     } catch (e) {
- *       res.status(e.code).send(e.message);
- *     }
- *   }
- * }
+ * This Class contain the helpers to add on the dynamically Dependency Injection Providers which will be used globally
+ * by all the components.
+ * @class DependencyInjection
+ * @summary Define a Dependency Injection Provider
  */
-class GenericRequestException extends Error {
-    constructor(message, statusCode = 500) {
-        super(message);
-        this.statusCode = 500;
-        this.message = 'Server Error';
-        this.statusCode = statusCode;
-        this.message = message;
+class DependencyInjection {
+    /**
+     * This assign to the global inversify container Express Tea can set provider as user required to the global container
+     * and shareable to all registered modules. This method is used if required to assign a provider depending on params
+     * or data flow.
+     *
+     * @param {Class} ProviderFactory - Assign the Class to serve as factory.
+     * @param {string | symbol |never } [providerName="ClassName"] - Provide the provider identification.
+     * @summary Add Provider to Dependency Injection Providers
+     */
+    static setProvider(ProviderFactory, providerName) {
+        if (!rootContainer.isBound(providerName || ProviderFactory.name)) {
+            rootContainer.bind(providerName || ProviderFactory.name).to(ProviderFactory);
+        }
     }
 }
-exports.GenericRequestException = GenericRequestException;
 /**
- * Shortcut Exception for 400 HTTP Errors (Bad Request).
- * @export
- * @class BadRequestException
- * @extends {GenericRequestException}
- * @param {string} [message='Bad Request'] Provide the Error message.
- * @summary 400 Exception
- * @example
- * {REPLACE-AT}Router('/')
- * class ExceptionExampleController {
- *   {REPLACE-AT}Get('/exception')
- *   exceptionMethod(req, res, next) {
- *     try {
- *       throw new BadRequestException();
- *     } catch (e) {
- *       res.status(e.code).send(e.message);
- *     }
- *   }
- * }
+ * This is the implementation of a global inversify container that helps to contains every Dependency Injection.
+ * @type {InversifyContainers}
+ * @static
+ * @readonly
+ * @summary Inversify Container
  */
-class BadRequestException extends GenericRequestException {
-    constructor(message = 'Bad Request') {
-        super(message, 400);
-    }
-}
-exports.BadRequestException = BadRequestException;
+DependencyInjection.Container = rootContainer;
 /**
- * Shortcut Exception for 401 HTTP Errors (Unauthorized Request).
- * @export
- * @class UnauthorizedException
- * @extends {GenericRequestException}
- * @param {string} [message='Unauthorized Request'] Provide the Error message.
- * @summary 401 Exception
- * @example
- * {REPLACE-AT}Router('/')
- * class ExceptionExampleController {
- *   {REPLACE-AT}Get('/exception')
- *   exceptionMethod(req, res, next) {
- *     try {
- *       throw new UnauthorizedException();
- *     } catch (e) {
- *       res.status(e.code).send(e.message);
- *     }
- *   }
- * }
+ * @module Decorators/DependencyInjection
  */
-class UnauthorizedException extends GenericRequestException {
-    constructor(message = 'Unauthorized Request') {
-        super(message, 401);
-    }
-}
-exports.UnauthorizedException = UnauthorizedException;
+/**
+ * This annotation allow inject directly into a class property an instance of the provider as is passed on the
+ * provider declaration, checkout
+ * {@link https://github.com/inversify/InversifyJS/blob/master/wiki/classes_as_id.md Classes as ID}
+ * from Inversify Project.
+ * @decorator {PropertyDecorator} Inject - Inject a dependency constructor defined as provider.
+ * @summary Inject a instance of provider defined as Dependency Injection.
+ * @function
+ */
+exports.Inject = lazyDecorators.lazyInject;
+/**
+ * This implement the Tagged Bindings from Inversify to used on the contructors arguments of the injectable classes and
+ * allow not create ambiguous match as named annotation, also check out
+ * {@link https://github.com/inversify/InversifyJS/blob/master/wiki/named_bindings.md Named Bindings}
+ * from Inversify Project.
+ * @decorator {ConstructorParameter} InjectNamed - Inject a provider instance on costructor arguments.
+ * @summary Bind provider as named annotation.
+ * @function
+ */
+exports.InjectNamed = lazyDecorators.lazyInjectNamed;
+/**
+ * This implement the Named Bindings from Inversify to used on the contructors arguments of the injectable classes and
+ * allow not create ambiguous match as tagged annotation.
+ * {@link https://github.com/inversify/InversifyJS/blob/master/wiki/tagged_bindings.md Tagged Bindings}
+ * @decorator {ConstructorParameter} InjectTagged - Inject a provider instance on costructor arguments.
+ * @summary Bind provider as tagged annotation.
+ * @function
+ */
+exports.InjectTagged = lazyDecorators.lazyInjectTagged;
+/**
+ * Bind an array of bind providers  with the same name over the constructor parameter.
+ * {@link https://github.com/inversify/InversifyJS/blob/master/wiki/multi_injection.md Multiple Injection}
+ * @decorator {ConstructorParameter} MultiInject - Inject an array of providers under same name.
+ * @summary Define multiple concretions for defined inject.
+ * @function
+ */
+exports.MultiInject = lazyDecorators.lazyMultiInject;
+exports.default = DependencyInjection;
 </code></pre>
   </article>
 </section>

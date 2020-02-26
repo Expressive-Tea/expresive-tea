@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>
-      Decorators/Server - Documentation
+      Decorators/Router - Documentation
   </title>
 
   <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
@@ -90,7 +90,7 @@
   <div id="main">
     
       <h1 class="page-title">
-        Decorators/Server
+        Decorators/Router
       </h1>
     
 
@@ -100,89 +100,12 @@
   <header>
     
       
-        
   </header>
 
   <article>
     <div class="container-overview">
       
         
-          <div class="description">
-            <p>Declare an annotation only usable at Property Class Level Declaration</p>
-          </div>
-        
-
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source">
-      <ul class="dummy">
-        <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line43">line 43</a>
-        </li>
-      </ul>
-    </dd>
-  
-
-  
-
-  
-
-  
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         
       
@@ -210,28 +133,27 @@
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#~ExpressDirecive">
+    <a class="link-icon" href="#~Delete">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="~ExpressDirecive">
-      <span class="type-signature">(inner) </span>ExpressDirecive<span class="signature">(name, &hellip;settings)</span><span class="type-signature"></span>
+    <h4 class="name" id="~Delete">
+      <span class="type-signature">(inner) </span>Delete<span class="signature">(route)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
     <p class="summary">
-      <p>Express Setting Directive</p>
+      <p>Define a DELETE Controller Endpoint on Controller.</p>
     </p>
   
 
 
 
   <div class="description">
-    <p>Set or Update Express application settings, and allow to change the behavior of the server where is listed on the
-next link <a href="http://expressjs.com/en/4x/api.html#app.settings.table">Express Settings</a> as this is using the same
-principle of app.set you should understand that is only apply the special settings mentioned above.</p>
+    <p>Define a DELETE Endpoint response over the controller router and can define in which route should be responds and
+by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
           <table class="params">
             <thead>
@@ -244,11 +166,11 @@ principle of app.set you should understand that is only apply the special settin
               </tr>
             </thead>
             <tr>
-            <td class="name">ExpressDirecive</td>
-            <td class="type">ClassDecorator</td>
+            <td class="name">Delete</td>
+            <td class="type">MethodDecorator</td>
             
             
-            <td class="description last">Set a Express App Setting.</td>
+            <td class="description last">Create an DELETE Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -272,9 +194,9 @@ principle of app.set you should understand that is only apply the special settin
       <th>Type</th>
 
       
-        <th>Attributes</th>
-      
 
+      
+        <th>Default</th>
       
 
       <th class="last">Description</th>
@@ -285,7 +207,7 @@ principle of app.set you should understand that is only apply the special settin
     
       <tr>
         
-          <td class="name"><code>name</code></td>
+          <td class="name"><code>route</code></td>
         
 
         <td class="type">
@@ -302,58 +224,17 @@ principle of app.set you should understand that is only apply the special settin
         </td>
 
         
-          <td class="attributes">
-            
 
+        
+          <td class="default">
             
-
+              *
             
           </td>
         
 
-        
-
         <td class="description last">
-          <p>Express Directive Setting Name</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>settings</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      *
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-          <td class="attributes">
-            
-
-            
-
-            
-              &lt;repeatable><br>
-            
-          </td>
-        
-
-        
-
-        <td class="description last">
-          <p>Setting Arguments</p>
+          <p>URL Part to mount create a handler.</p>
           
         </td>
       </tr>
@@ -397,293 +278,7 @@ principle of app.set you should understand that is only apply the special settin
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line161">line 161</a>
-        </li>
-      </ul>
-    </dd>
-  
-
-  
-
-  
-
-  
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-        
-
-
-  
-
-  <span class='name-container'>
-    <a class="link-icon" href="#~Plug">
-      <svg height="20" width="20" style="fill: black;">
-        <use xlink:href="#linkIcon"></use>
-      </svg>
-    </a>
-    <h4 class="name" id="~Plug">
-      <span class="type-signature">(inner) </span>Plug<span class="signature">(options, stage, name, method, required)</span><span class="type-signature"></span>
-    </h4>
-  </span>
-
-  
-    <p class="summary">
-      <p>This Decorators is add plugin initialization to one of the selected stages.</p>
-    </p>
-  
-
-
-
-  <div class="description">
-    <p>Plug Class Decorator create a simple plugin to execute in one of the public stages defined on BOOT_STAGES, might
-be useful to attach a simple Express Server configuration.</p>
-                              <h5>Decorator:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">Plug</td>
-            <td class="type">ClassDecorator</td>
-            
-            
-            <td class="description last">Simple Plugin Decorator.</td>
-          </tr>
-          </table>
-  </div>
-
-
-
-
-
-
-
-  <h5>Parameters:</h5>
-  
-
-<table class="params">
-  <thead>
-    <tr>
-      
-        <th>Name</th>
-      
-
-      <th>Type</th>
-
-      
-
-      
-
-      <th class="last">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    
-      <tr>
-        
-          <td class="name"><code>options</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      <a href="global.html#ExpressiveTeaModuleProps">ExpressiveTeaModuleProps</a>
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>stage</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      <a href="global.html#BOOT_STAGES">BOOT_STAGES</a>
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          <p>Boot Stage where the plugin should run or initialize.</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>name</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      string
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          <p>Plugin Name (recommended short names)</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>method</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      function
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          <p>A Function to  initialize the plugin, it will get a express application as argument.</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>required</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      boolean
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          <p>A Flag to let know if this is a hard requirement.</p>
-          
-        </td>
-      </tr>
-
-    
-  </tbody>
-</table>
-
-
-
-
-
-<dl class="details">
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source">
-      <ul class="dummy">
-        <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line83">line 83</a>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line149">line 149</a>
         </li>
       </ul>
     </dd>
@@ -709,16 +304,22 @@ be useful to attach a simple Express Server configuration.</p>
 
 
   <div class="example-container">
-    <a class="link-icon" href="#Plug-examples">
+    <a class="link-icon" href="#Delete-examples">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h5 id="Plug-examples">Example</h5>
+    <h5 id="Delete-examples">Example</h5>
     
 
-  <pre class="prettyprint"><code>@Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'test', s => console.log, true)
-class Example extends Boot {}</code></pre>
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Delete() // This Response to all DELETE Requests for controller route.
+  methodError() {}
+
+  @Delete('/data') // This Response to "/data" DELETE Requests for controller route.
+  methodData() {}
+}</code></pre>
 
 
   </div>
@@ -731,28 +332,27 @@ class Example extends Boot {}</code></pre>
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#~Pour">
+    <a class="link-icon" href="#~Get">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="~Pour">
-      <span class="type-signature">(inner) </span>Pour<span class="signature">(plugin)</span><span class="type-signature"></span>
+    <h4 class="name" id="~Get">
+      <span class="type-signature">(inner) </span>Get<span class="signature">(route)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
     <p class="summary">
-      <p>Attach an Expressive Tea Definition Instance.</p>
+      <p>Define a GET Controller Endpoint on Controller.</p>
     </p>
   
 
 
 
   <div class="description">
-    <p>Since version 1.1.0 Expressive Tea allow to use external plugins using the node
-package @expressive-tea/plugin. This plugin engine allows to create more complex plugin configuration and provision
-since is allowing multi Boot Stage configuration and check other plugin dependencies.</p>
+    <p>Define a GET Endpoint response over the controller router and can define in which route should be responds and
+by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
           <table class="params">
             <thead>
@@ -765,181 +365,11 @@ since is allowing multi Boot Stage configuration and check other plugin dependen
               </tr>
             </thead>
             <tr>
-            <td class="name">Pour</td>
-            <td class="type">ClassDecorator</td>
-            
-            
-            <td class="description last">Use Expressive Tea plugin definition instance.</td>
-          </tr>
-          </table>
-  </div>
-
-
-
-
-
-
-
-  <h5>Parameters:</h5>
-  
-
-<table class="params">
-  <thead>
-    <tr>
-      
-        <th>Name</th>
-      
-
-      <th>Type</th>
-
-      
-
-      
-
-      <th class="last">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    
-      <tr>
-        
-          <td class="name"><code>plugin</code></td>
-        
-
-        <td class="type">
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          <p>Plugin - A Plugin instance which extends @expressive-tea/plugin/Plugin Class.</p>
-          
-        </td>
-      </tr>
-
-    
-  </tbody>
-</table>
-
-
-
-
-
-<dl class="details">
-
-  
-    <dt class="tag-version">Version:</dt>
-    <dd class="tag-version">
-      <ul class="dummy">
-        <li>
-          1.1
-        </li>
-      </ul>
-    </dd>
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source">
-      <ul class="dummy">
-        <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line102">line 102</a>
-        </li>
-      </ul>
-    </dd>
-  
-
-  
-
-  
-
-  
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-        
-
-
-  
-
-  <span class='name-container'>
-    <a class="link-icon" href="#~RegisterModule">
-      <svg height="20" width="20" style="fill: black;">
-        <use xlink:href="#linkIcon"></use>
-      </svg>
-    </a>
-    <h4 class="name" id="~RegisterModule">
-      <span class="type-signature">(inner) </span>RegisterModule<span class="signature">(Module)</span><span class="type-signature"></span>
-    </h4>
-  </span>
-
-  
-    <p class="summary">
-      <p><b>ONLY</b> Decorate Start Method, this register the Module Classes created by the user.</p>
-    </p>
-  
-
-
-
-  <div class="description">
-    <p>Register Module Method Decorator this Method Decorator is used at bootstrap level and should decorate the start
-method with a Module Class.</p>
-                              <h5>Decorator:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">RegisterModule</td>
+            <td class="name">Get</td>
             <td class="type">MethodDecorator</td>
             
             
-            <td class="description last">Register a Expressive Tea module to application.</td>
+            <td class="description last">Create an GET Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -962,178 +392,6 @@ method with a Module Class.</p>
 
       <th>Type</th>
 
-      
-
-      
-
-      <th class="last">Description</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    
-      <tr>
-        
-          <td class="name"><code>Module</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      Class
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-
-        
-
-        <td class="description last">
-          
-          
-        </td>
-      </tr>
-
-    
-  </tbody>
-</table>
-
-
-
-
-
-<dl class="details">
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source">
-      <ul class="dummy">
-        <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line195">line 195</a>
-        </li>
-      </ul>
-    </dd>
-  
-
-  
-
-  
-
-  
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      
-        
-
-
-  
-
-  <span class='name-container'>
-    <a class="link-icon" href="#~ServerSettings">
-      <svg height="20" width="20" style="fill: black;">
-        <use xlink:href="#linkIcon"></use>
-      </svg>
-    </a>
-    <h4 class="name" id="~ServerSettings">
-      <span class="type-signature">(inner) </span>ServerSettings<span class="signature">(options, port<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
-    </h4>
-  </span>
-
-  
-    <p class="summary">
-      <p>Declare Server Properties.</p>
-    </p>
-  
-
-
-
-  <div class="description">
-    <p>Server Settings Singleton Class Decorator this Provide the Configuration to the server or another component on
-the projects,is working as a container to store user and library settings.</p>
-                              <h5>Decorator:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">ServerSettings</td>
-            <td class="type">ClassDecorator</td>
-            
-            
-            <td class="description last">Declares Server Settings.</td>
-          </tr>
-          </table>
-  </div>
-
-
-
-
-
-
-
-  <h5>Parameters:</h5>
-  
-
-<table class="params">
-  <thead>
-    <tr>
-      
-        <th>Name</th>
-      
-
-      <th>Type</th>
-
-      
-        <th>Attributes</th>
       
 
       
@@ -1148,14 +406,14 @@ the projects,is working as a container to store user and library settings.</p>
     
       <tr>
         
-          <td class="name"><code>options</code></td>
+          <td class="name"><code>route</code></td>
         
 
         <td class="type">
           
             
     <span class="param-type">
-      <a href="global.html#ExpressiveTeaModuleProps">ExpressiveTeaModuleProps</a>
+      string
     </span>
 
     
@@ -1165,68 +423,17 @@ the projects,is working as a container to store user and library settings.</p>
         </td>
 
         
-          <td class="attributes">
-            
-
-            
-
-            
-          </td>
-        
 
         
           <td class="default">
+            
+              *
             
           </td>
         
 
         <td class="description last">
-          
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>port</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      number
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-          <td class="attributes">
-            
-              &lt;optional><br>
-            
-
-            
-
-            
-          </td>
-        
-
-        
-          <td class="default">
-            
-              3000
-            
-          </td>
-        
-
-        <td class="description last">
-          <p>Select Port Number where the server should be listening.</p>
+          <p>URL Part to mount create a handler.</p>
           
         </td>
       </tr>
@@ -1270,7 +477,7 @@ the projects,is working as a container to store user and library settings.</p>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line121">line 121</a>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line65">line 65</a>
         </li>
       </ul>
     </dd>
@@ -1295,6 +502,27 @@ the projects,is working as a container to store user and library settings.</p>
 
 
 
+  <div class="example-container">
+    <a class="link-icon" href="#Get-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Get-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Get() // This Response to all GET Requests for controller route.
+  methodError() {}
+
+  @Get('/data') // This Response to "/data" GET Requests for controller route.
+  methodData() {}
+}</code></pre>
+
+
+  </div>
+
 
       
         
@@ -1303,27 +531,30 @@ the projects,is working as a container to store user and library settings.</p>
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#~Setting">
+    <a class="link-icon" href="#~Middleware">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="~Setting">
-      <span class="type-signature">(inner) </span>Setting<span class="signature">(settingName)</span><span class="type-signature"></span>
+    <h4 class="name" id="~Middleware">
+      <span class="type-signature">(inner) </span>Middleware<span class="signature">(middleware)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
     <p class="summary">
-      <p>Automatically assign a settings declared on the Server Settings decorator to a class property.</p>
+      <p>Assign a middleware to the Controller or Method route path flow.</p>
     </p>
   
 
 
 
   <div class="description">
-    <p>Setting Property Decorator Automatically assign a settings declared on Settings Service into the decorated property.
-All properties will contains the settings value or undefined if current settings is not founded.</p>
+    <p>Middleware Decorator is following the middleware functionality inheritance from Express framework itself and follow
+the same rules, that execute any code before response the request and can change the current request or response
+object, and requires use next callback to pass control to next middleware.</p>
+<p>This define the middlewares at Controller and Controller methods level, for application levels please see the
+Plug Decorator which can be useful to declare at that level..</p>
                               <h5>Decorator:</h5>
           <table class="params">
             <thead>
@@ -1336,11 +567,12 @@ All properties will contains the settings value or undefined if current settings
               </tr>
             </thead>
             <tr>
-            <td class="name">Setting</td>
-            <td class="type">PropertyDecorator</td>
+            <td class="name">Middleware</td>
+            <td class="type">MethodDecorator,ClassDecorator</td>
             
             
-            <td class="description last">Assign Server Settings to Property as default value.</td>
+            <td class="description last">Attach a middleware definition on the root route or endpoint
+routes.</td>
           </tr>
           </table>
   </div>
@@ -1375,14 +607,14 @@ All properties will contains the settings value or undefined if current settings
     
       <tr>
         
-          <td class="name"><code>settingName</code></td>
+          <td class="name"><code>middleware</code></td>
         
 
         <td class="type">
           
             
     <span class="param-type">
-      string
+      function
     </span>
 
     
@@ -1396,7 +628,7 @@ All properties will contains the settings value or undefined if current settings
         
 
         <td class="description last">
-          <p>The Setting name tha</p>
+          <p>Register a middleware over routerr.</p>
           
         </td>
       </tr>
@@ -1440,7 +672,7 @@ All properties will contains the settings value or undefined if current settings
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line179">line 179</a>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line218">line 218</a>
         </li>
       </ul>
     </dd>
@@ -1465,6 +697,33 @@ All properties will contains the settings value or undefined if current settings
 
 
 
+  <div class="example-container">
+    <a class="link-icon" href="#Middleware-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Middleware-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Middleware((req, res, next) {
+    req.controllerName = 'Example';
+    next();
+ })
+class ExampleController {
+  @Get('/someResponse')
+  @Middleware((req, res, next) {
+    req.methodName = 'someResponse';
+    next();
+  })
+  someRespone(req, res) {
+    res.send(`${req.controllerName}:${req.methodName}`);
+  }
+}</code></pre>
+
+
+  </div>
+
 
       
         
@@ -1473,30 +732,30 @@ All properties will contains the settings value or undefined if current settings
   
 
   <span class='name-container'>
-    <a class="link-icon" href="#~Static">
+    <a class="link-icon" href="#~Param">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
       </svg>
     </a>
-    <h4 class="name" id="~Static">
-      <span class="type-signature">(inner) </span>Static<span class="signature">(root, virtual<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+    <h4 class="name" id="~Param">
+      <span class="type-signature">(inner) </span>Param<span class="signature">(route)</span><span class="type-signature"></span>
     </h4>
   </span>
 
   
     <p class="summary">
-      <p>Static File Server</p>
+      <p>Define a Parameter transformation on router path..</p>
     </p>
   
 
 
 
   <div class="description">
-    <p>Create a new middleware function to serve files from within a given root directory. The file to serve will be
-determined by combining req.url with the provided root directory. When a file is not found, instead of sending a 404
-response, this module will instead call next() to move on to the next middleware, allowing for stacking
-and fall-backs. Check it out <a href="https://expressjs.com/en/4x/api.html#express.static">Express Static</a> to more
-information.</p>
+    <p>Define a Route path parameter transformation method as mentioned on Express this is just call by controller endpoints
+route paths and it helps to define logic on each route path parameters. Example, you can require transform userId
+parameter and added to request object.</p>
+<p>The method to response this must follow the Express callback notation (Request, Response, Next, paramValue) which
+also must be use Next method to allow continue the process flow from Express.</p>
                               <h5>Decorator:</h5>
           <table class="params">
             <thead>
@@ -1509,12 +768,11 @@ information.</p>
               </tr>
             </thead>
             <tr>
-            <td class="name">Static</td>
-            <td class="type">ClassDecorator</td>
+            <td class="name">Param</td>
+            <td class="type">MethodDecorator</td>
             
             
-            <td class="description last">Create an Static mount static file server  on root directory
-with virtual path if defined.</td>
+            <td class="description last">Create a transformation middleware for router parameters.</td>
           </tr>
           </table>
   </div>
@@ -1537,8 +795,6 @@ with virtual path if defined.</td>
 
       <th>Type</th>
 
-      
-        <th>Attributes</th>
       
 
       
@@ -1553,7 +809,7 @@ with virtual path if defined.</td>
     
       <tr>
         
-          <td class="name"><code>root</code></td>
+          <td class="name"><code>route</code></td>
         
 
         <td class="type">
@@ -1570,113 +826,17 @@ with virtual path if defined.</td>
         </td>
 
         
-          <td class="attributes">
-            
-
-            
-
-            
-          </td>
-        
 
         
           <td class="default">
+            
+              *
             
           </td>
         
 
         <td class="description last">
-          <p>Root directory</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>virtual</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      string
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-          <td class="attributes">
-            
-              &lt;optional><br>
-            
-
-            
-
-            
-          </td>
-        
-
-        
-          <td class="default">
-            
-              null
-            
-          </td>
-        
-
-        <td class="description last">
-          <p>Virtual Path</p>
-          
-        </td>
-      </tr>
-
-    
-      <tr>
-        
-          <td class="name"><code>options</code></td>
-        
-
-        <td class="type">
-          
-            
-    <span class="param-type">
-      object
-    </span>
-
-    
-
-
-          
-        </td>
-
-        
-          <td class="attributes">
-            
-              &lt;optional><br>
-            
-
-            
-
-            
-          </td>
-        
-
-        
-          <td class="default">
-            
-              {}
-            
-          </td>
-        
-
-        <td class="description last">
-          <p>Static Server Options</p>
+          <p>URL Part to mount create a handler.</p>
           
         </td>
       </tr>
@@ -1720,7 +880,7 @@ with virtual path if defined.</td>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
-          <a href="decorators_server.js.html">decorators/server.js</a>, <a href="decorators_server.js.html#line141">line 141</a>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line186">line 186</a>
         </li>
       </ul>
     </dd>
@@ -1744,6 +904,831 @@ with virtual path if defined.</td>
 
 
 
+
+  <div class="example-container">
+    <a class="link-icon" href="#Param-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Param-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Param('userId') // This Response to all GET Requests for controller route.
+  async methodError(req, res, next, param, id) {
+    const user = await User.find(id)
+    try {
+      if(!user) throw new Error('User not Found');
+
+      req.user = user;
+      next();
+    } catch(e) {
+      next(e);
+    }
+  }
+
+  @Get('/:userId') // This Response to "/:userId" GET Requests for controller route.
+  methodData(req, res) {
+   res.json(req.user);
+  }
+}</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#~Patch">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="~Patch">
+      <span class="type-signature">(inner) </span>Patch<span class="signature">(route)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      <p>Define a PATCH Controller Endpoint on Controller.</p>
+    </p>
+  
+
+
+
+  <div class="description">
+    <p>Define a PATCH Endpoint response over the controller router and can define in which route should be responds and
+by default this is responding to everything on the controller root path.</p>
+                              <h5>Decorator:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">Patch</td>
+            <td class="type">MethodDecorator</td>
+            
+            
+            <td class="description last">Create an PATCH Response over the designed route.</td>
+          </tr>
+          </table>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>route</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+          <td class="default">
+            
+              *
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>URL Part to mount create a handler.</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line128">line 128</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#Patch-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Patch-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Patch() // This Response to all PATCH Requests for controller route.
+  methodError() {}
+
+  @Patch('/data') // This Response to "/data" PATCH Requests for controller route.
+  methodData() {}
+}</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#~Post">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="~Post">
+      <span class="type-signature">(inner) </span>Post<span class="signature">(route)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      <p>Define a POST Controller Endpoint on Controller.</p>
+    </p>
+  
+
+
+
+  <div class="description">
+    <p>Define a POST Endpoint response over the controller router and can define in which route should be responds and
+by default this is responding to everything on the controller root path.</p>
+                              <h5>Decorator:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">POST</td>
+            <td class="type">MethodDecorator</td>
+            
+            
+            <td class="description last">Create an POST Response over the designed route.</td>
+          </tr>
+          </table>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>route</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+          <td class="default">
+            
+              *
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>URL Part to mount create a handler.</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line86">line 86</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#Post-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Post-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Post() // This Response to all GET Requests for controller route.
+  methodError() {}
+
+  @Post('/data') // This Response to "/data" GET Requests for controller route.
+  methodData() {}
+}</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#~Put">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="~Put">
+      <span class="type-signature">(inner) </span>Put<span class="signature">(route)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      <p>Define a PUT Controller Endpoint on Controller.</p>
+    </p>
+  
+
+
+
+  <div class="description">
+    <p>Define a PUT Endpoint response over the controller router and can define in which route should be responds and
+by default this is responding to everything on the controller root path.</p>
+                              <h5>Decorator:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">Put</td>
+            <td class="type">MethodDecorator</td>
+            
+            
+            <td class="description last">Create an PUT Response over the designed route.</td>
+          </tr>
+          </table>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>route</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+          <td class="default">
+            
+              *
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>URL Part to mount create a handler.</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line107">line 107</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#Put-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Put-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/')
+class GenericController {
+  @Put() // This Response to all PUT Requests for controller route.
+  methodError() {}
+
+  @Put('/data') // This Response to "/data" PUT Requests for controller route.
+  methodData() {}
+}</code></pre>
+
+
+  </div>
+
+
+      
+        
+
+
+  
+
+  <span class='name-container'>
+    <a class="link-icon" href="#~Route">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h4 class="name" id="~Route">
+      <span class="type-signature">(inner) </span>Route<span class="signature">(mountpoint)</span><span class="type-signature"></span>
+    </h4>
+  </span>
+
+  
+    <p class="summary">
+      <p>Generate a Placeholder endpoint root for controller routes.</p>
+    </p>
+  
+
+
+
+  <div class="description">
+    <p>Route Controller Decorator assign a router point into the module mount-point placeholder and is used just to create
+a bucket to contains all the endpoints defined by method of the Controller.  If mount-point is not defined automati-
+cally this must considerate mounted on root, but is mandatory define the Controller with this decorator in order
+to allow Expressive Tea Setting up the Controller as part of a Module.</p>
+                              <h5>Decorator:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">Route</td>
+            <td class="type">ClassDecorator</td>
+            
+            
+            <td class="description last">Assign a route to controller endpoints.</td>
+          </tr>
+          </table>
+  </div>
+
+
+
+
+
+
+
+  <h5>Parameters:</h5>
+  
+
+<table class="params">
+  <thead>
+    <tr>
+      
+        <th>Name</th>
+      
+
+      <th>Type</th>
+
+      
+
+      
+        <th>Default</th>
+      
+
+      <th class="last">Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    
+      <tr>
+        
+          <td class="name"><code>mountpoint</code></td>
+        
+
+        <td class="type">
+          
+            
+    <span class="param-type">
+      string
+    </span>
+
+    
+
+
+          
+        </td>
+
+        
+
+        
+          <td class="default">
+            
+              /
+            
+          </td>
+        
+
+        <td class="description last">
+          <p>Register the url part to mount the Controller.</p>
+          
+        </td>
+      </tr>
+
+    
+  </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source">
+      <ul class="dummy">
+        <li>
+          <a href="decorators_router.js.html">decorators/router.js</a>, <a href="decorators_router.js.html#line23">line 23</a>
+        </li>
+      </ul>
+    </dd>
+  
+
+  
+
+  
+
+  
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="example-container">
+    <a class="link-icon" href="#Route-examples">
+      <svg height="20" width="20" style="fill: black;">
+        <use xlink:href="#linkIcon"></use>
+      </svg>
+    </a>
+    <h5 id="Route-examples">Example</h5>
+    
+
+  <pre class="prettyprint"><code>@Route('/)
+class Example {}</code></pre>
+
+
+  </div>
 
 
       

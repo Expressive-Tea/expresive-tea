@@ -13,7 +13,8 @@ function cleanOutput() {
       '!coverage/**/*',
       '!gulpfile.js',
       '!tasks/*.js',
-      '!jest.config.js'
+      '!jest.config.js',
+      '!tools/**/*'
     ],
     {
       read: false

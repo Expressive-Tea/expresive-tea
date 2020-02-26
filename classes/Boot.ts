@@ -5,54 +5,70 @@ import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import { BOOT_ORDER, BOOT_STAGES, BOOT_STAGES_KEY, REGISTERED_MODULE_KEY, STAGES_INIT } from '../libs/constants';
-import { ExpressiveTeaApplication } from '../libs/interfaces';
+import {
+  BOOT_ORDER,
+  BOOT_STAGES,
+  BOOT_STAGES_KEY, REGISTERED_DIRECTIVES_KEY,
+  REGISTERED_MODULE_KEY,
+  REGISTERED_STATIC_KEY,
+  STAGES_INIT
+} from '../libs/constants';
+import { ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective } from '../libs/interfaces';
 import { Rejector, Resolver } from '../libs/types';
 
 /**
+ * Expressive Tea Application interface is the response from an started application, contains the express application
+ * and a node http server instance.
  * @typedef {Object} ExpressiveTeaApplication
- * @property {Express} application Express Application Instance
- * @property {HTTPServer} server HTTP Server Object
+ * @property {Express} application - Express Application Instance
+ * @property {HTTPServer} server - HTTP Server Object
+ * @summary Application Interface
  */
 
 /**
- * Bootstrap Server Configuration Class
+ * <b>Bootstrap Server Engine Class</b> is an abstract class to provide the Expressive Tea engine and bootstraps tools.
+ * This is containing the logic and full functionality of Expressive Tea and only can be extended.
  *
  * @abstract
  * @class Boot
+ * @summary Bootstrap Engine Class
  */
 abstract class Boot {
   /**
-   * Contains a instance of Settings
+   * Maintain a reference to Singleton instance of Settings, if settings still does not initialized it will created
+   * automatically when extended class create a new instance.
    *
    * @type {Settings}
-   * @memberof Boot
+   * @public
+   * @summary Server Settings instance reference
    */
-  settings: Settings;
+  settings: Settings = new Settings();
 
   /**
-   * Express Application instance internal property.
-   *
-   * @private
+   * Automatically create an Express application instance which will be user to configure over all the boot stages.
    * @type {Express}
-   * @memberof Boot
+   * @private
+   * @readonly
+   * @summary Express Application instance internal property.
    */
   private readonly server: Express = express();
 
   constructor() {
-    this.settings = new Settings();
     this.settings.set('application', this.server);
   }
 
   /**
-   * Initialize and Bootstrap Server.
-   *
+   * Bootstrap and verify that all the required plugins are correctly configured and proceed to attach all the
+   * registered modules. <b>Remember</b> this is the unique method that must be decorated for the Register Module
+   * decorator.
+   * @summary Initialize and Bootstrap Server.
    * @returns {Promise<ExpressiveTeaApplication>}
-   * @memberof Boot
    */
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
+        await resolveDirectives(this, this.server);
+        await resolveStatic(this, this.server);
         for (const stage of BOOT_ORDER) {
           await resolveStage(stage, this, this.server);
         }
@@ -79,6 +95,25 @@ async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Pro
   }
 }
 
+async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
+  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, instance) || [];
+  registeredDirectives.forEach((options: ExprresiveTeaDirective) => {
+    server.set.call(server, options.name, ...options.settings);
+  });
+}
+
+async function resolveStatic(instance: typeof Boot | Boot, server: Express): Promise<void> {
+  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, instance) || [];
+  registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
+    if (staticOptions.virtual) {
+      server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
+    } else {
+      server.use(express.static(staticOptions.root, staticOptions.options));
+    }
+
+  });
+}
+
 async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {
   const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
   registeredModules.forEach(Module => {
@@ -99,13 +134,14 @@ async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: 
 }
 
 async function selectLoaderType(loader, server: Express) {
-  return loader.isPlugin ? loader.method(server, Settings.getInstance()) : loader.method(server);
+  return loader.method(server);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
   if (e instanceof BootLoaderSoftExceptions) {
     console.info(e.message);
   } else {
+    console.error(e.message);
     // Re Throwing Error to Get it a top level.
     throw e;
   }

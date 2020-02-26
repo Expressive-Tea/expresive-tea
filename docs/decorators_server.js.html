@@ -1,54 +1,157 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>decorators/server.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"></script>
-    <script src="scripts/prettify/lang-css.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      decorators/server.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
 </head>
+
 <body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
 
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
 
-<label for="nav-trigger" class="overlay"></label>
+  <label for="nav-trigger" class="overlay"></label>
 
-<nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Boot.html">Boot</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Boot.html#start">start</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="GenericRequestException.html">GenericRequestException</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Settings.html">Settings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.getInstance">getInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#.reset">reset</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#get">get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#getOptions">getOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#merge">merge</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Settings.html#set">set</a></span></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Module.html">Decorators/Module</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Module.html#~Module">Module</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Route.html">Decorators/Route</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Delete">Delete</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Get">Get</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Middleware">Middleware</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Param">Param</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Patch">Patch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Post">Post</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Put">Put</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Route.html#~Route">Route</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-Decorators_Server.html">Decorators/Server</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Plug">Plug</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="module-Decorators_Server.html#~Setting">Setting</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></span></li>
-</nav>
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
 
-<div id="main">
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      Expressive Tea
+    </h3>
+
     
-    <h1 class="page-title">decorators/server.js</h1>
+      <h3>
+        Resources
+      </h3>
+      
+        <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">Expressive Tea Core</a>
+      
+        <a href="https://www.npmjs.com/package/@expressive-tea/plugin">Expressive Tea Plugin</a>
+      
+        <a href="https://medium.com/@diego.resendez/a-simple-rest-api-with-expressive-tea-part-one-97ef6c08f9c4">Expressive Tea Tutorial</a>
+      
+    
+
+    <h3>Classes</h3><ul><li id="BadRequestException-nav"><a href="BadRequestException.html">BadRequestException</a></li><li id="Boot-nav"><a href="Boot.html">Boot</a><ul class='methods'><li data-type="method" id="Boot-start-nav"><a href="Boot.html#start">start</a></li></ul></li><li id="BootLoaderRequiredExceptions-nav"><a href="BootLoaderRequiredExceptions.html">BootLoaderRequiredExceptions</a></li><li id="BootLoaderSoftExceptions-nav"><a href="BootLoaderSoftExceptions.html">BootLoaderSoftExceptions</a></li><li id="GenericRequestException-nav"><a href="GenericRequestException.html">GenericRequestException</a></li><li id="DependencyInjection-nav"><a href="module-Services-DependencyInjection.html">DependencyInjection</a><ul class='methods'><li data-type="method" id="DependencyInjection-setProvider-nav"><a href="module-Services-DependencyInjection.html#.setProvider">setProvider</a></li></ul></li><li id="Settings-nav"><a href="Settings.html">Settings</a><ul class='methods'><li data-type="method" id="Settings-getInstance-nav"><a href="Settings.html#.getInstance">getInstance</a></li><li data-type="method" id="Settings-reset-nav"><a href="Settings.html#.reset">reset</a></li><li data-type="method" id="Settings-get-nav"><a href="Settings.html#get">get</a></li><li data-type="method" id="Settings-getOptions-nav"><a href="Settings.html#getOptions">getOptions</a></li><li data-type="method" id="Settings-merge-nav"><a href="Settings.html#merge">merge</a></li><li data-type="method" id="Settings-set-nav"><a href="Settings.html#set">set</a></li></ul></li><li id="UnauthorizedException-nav"><a href="UnauthorizedException.html">UnauthorizedException</a></li></ul><h3>Modules</h3><ul><li id="Decorators_DependencyInjection-nav"><a href="module-Decorators_DependencyInjection.html">Decorators/DependencyInjection</a><ul class='methods'><li data-type="method" id="Decorators_DependencyInjection-Inject-nav"><a href="module-Decorators_DependencyInjection.html#.Inject">Inject</a></li><li data-type="method" id="Decorators_DependencyInjection-InjectNamed-nav"><a href="module-Decorators_DependencyInjection.html#.InjectNamed">InjectNamed</a></li><li data-type="method" id="Decorators_DependencyInjection-InjectTagged-nav"><a href="module-Decorators_DependencyInjection.html#.InjectTagged">InjectTagged</a></li><li data-type="method" id="Decorators_DependencyInjection-MultiInject-nav"><a href="module-Decorators_DependencyInjection.html#.MultiInject">MultiInject</a></li></ul></li><li id="Decorators_Module-nav"><a href="module-Decorators_Module.html">Decorators/Module</a><ul class='methods'><li data-type="method" id="Decorators_Module-Module-nav"><a href="module-Decorators_Module.html#~Module">Module</a></li></ul></li><li id="Decorators_Router-nav"><a href="module-Decorators_Router.html">Decorators/Router</a><ul class='methods'><li data-type="method" id="Decorators_Router-Delete-nav"><a href="module-Decorators_Router.html#~Delete">Delete</a></li><li data-type="method" id="Decorators_Router-Get-nav"><a href="module-Decorators_Router.html#~Get">Get</a></li><li data-type="method" id="Decorators_Router-Middleware-nav"><a href="module-Decorators_Router.html#~Middleware">Middleware</a></li><li data-type="method" id="Decorators_Router-Param-nav"><a href="module-Decorators_Router.html#~Param">Param</a></li><li data-type="method" id="Decorators_Router-Patch-nav"><a href="module-Decorators_Router.html#~Patch">Patch</a></li><li data-type="method" id="Decorators_Router-Post-nav"><a href="module-Decorators_Router.html#~Post">Post</a></li><li data-type="method" id="Decorators_Router-Put-nav"><a href="module-Decorators_Router.html#~Put">Put</a></li><li data-type="method" id="Decorators_Router-Route-nav"><a href="module-Decorators_Router.html#~Route">Route</a></li></ul></li><li id="Decorators_Server-nav"><a href="module-Decorators_Server.html">Decorators/Server</a><ul class='methods'><li data-type="method" id="Decorators_Server-ExpressDirecive-nav"><a href="module-Decorators_Server.html#~ExpressDirecive">ExpressDirecive</a></li><li data-type="method" id="Decorators_Server-Plug-nav"><a href="module-Decorators_Server.html#~Plug">Plug</a></li><li data-type="method" id="Decorators_Server-Pour-nav"><a href="module-Decorators_Server.html#~Pour">Pour</a></li><li data-type="method" id="Decorators_Server-RegisterModule-nav"><a href="module-Decorators_Server.html#~RegisterModule">RegisterModule</a></li><li data-type="method" id="Decorators_Server-ServerSettings-nav"><a href="module-Decorators_Server.html#~ServerSettings">ServerSettings</a></li><li data-type="method" id="Decorators_Server-Setting-nav"><a href="module-Decorators_Server.html#~Setting">Setting</a></li><li data-type="method" id="Decorators_Server-Static-nav"><a href="module-Decorators_Server.html#~Static">Static</a></li></ul></li><li id="Services-nav"><a href="module-Services.html">Services</a></li></ul><h3 id="global-nav">Global</h3><ul><li><a href="global.html#BOOT_ORDER">BOOT_ORDER</a></li><li><a href="global.html#BOOT_STAGES">BOOT_STAGES</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        decorators/server.js
+      </h1>
     
 
     
+      
 
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>"use strict";
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const lodash_1 = require("lodash");
 const MetaData_1 = require("../classes/MetaData");
 const Settings_1 = require("../classes/Settings");
 const constants_1 = require("../libs/constants");
 /**
+ * Define the Main Plugins Properties.
+ * @typedef {Object} ExpressiveTeaPluginProps
+ * @property {string} name - Define a Plugin Name
+ * @property {number} priority - Define a Plugin Priority.
+ * @summary Plugin Properties
+ */
+/**
+ * Declare an annotation only usable at Class Level Declaration
+ * @typedef {Function} ClassDecorator
+ * @summary Class Decorator
+ * @example
+ * {REPLACE-AT}Decorator
+ * class Decorated {}
+ */
+/**
+ * Declare an annotation only usable at Method Class Level Declaration
+ * @typedef {Function} MethodDecorator
+ * @summary Method Decorator
+ * @example
+ * class Decorated {
+ *   {REPLACE-AT}MethodDecorator
+ *   decoratedMethod(){}
+ * }
+ *
+ */
+/**
+ * Declare an annotation only usable at Property Class Level Declaration
+ * @typedef {Function} PropertyDecorator
+ * @summary Property Decorator
+ * @example
+ * class Decorated {
+ *   {REPLACE-AT}PropertyDecorator
+ *   decoratedProperty:string = '';
+ * }
+ */
+/**
+ * Declare an annotation only usable at Property Class Level Declaration
  * @module Decorators/Server
  */
 function getStages(target) {
     return MetaData_1.default.get(constants_1.BOOT_STAGES_KEY, target) || {};
+}
+function getRegisteredPlugins(target) {
+    return MetaData_1.default.get(constants_1.PLUGINS_KEY, target) || [];
 }
 function getStage(stage, target) {
     const stages = getStages(target);
@@ -62,16 +165,23 @@ function setStage(stage, value, target) {
     stages[stage] = value;
     MetaData_1.default.set(constants_1.BOOT_STAGES_KEY, stages, target);
 }
+function setPlugins(plugins, target) {
+    MetaData_1.default.set(constants_1.PLUGINS_KEY, plugins, target);
+}
 /**
- * Plug Class Decorator
+ * Plug Class Decorator create a simple plugin to execute in one of the public stages defined on BOOT_STAGES, might
+ * be useful to attach a simple Express Server configuration.
  *
- * This Decorators is add plugin initialization to one of the selected stages.
- * @example @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'test', s => console.log, true) class Example {}
+ * @decorator {ClassDecorator} Plug - Simple Plugin Decorator.
+ * @summary This Decorators is add plugin initialization to one of the selected stages.
  * @param {ExpressiveTeaModuleProps} options
  * @param {BOOT_STAGES} stage   Boot Stage where the plugin should run or initialize.
  * @param {string} name         Plugin Name (recommended short names)
  * @param {Function} method     A Function to  initialize the plugin, it will get a express application as argument.
  * @param {boolean} required    A Flag to let know if this is a hard requirement.
+ * @example
+ * {REPLACE-AT}Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'test', s => console.log, true)
+ * class Example extends Boot {}
  */
 function Plug(stage, name, method, required = false) {
     return (target) => {
@@ -81,25 +191,33 @@ function Plug(stage, name, method, required = false) {
     };
 }
 exports.Plug = Plug;
-function Pour(Plugin) {
+/**
+ * Since version 1.1.0 Expressive Tea allow to use external plugins using the node
+ * package @expressive-tea/plugin. This plugin engine allows to create more complex plugin configuration and provision
+ * since is allowing multi Boot Stage configuration and check other plugin dependencies.
+ *
+ * @decorator {ClassDecorator} Pour - Use Expressive Tea plugin definition instance.
+ * @summary Attach an Expressive Tea Definition Instance.
+ * @param plugin Plugin - A Plugin instance which extends @expressive-tea/plugin/Plugin Class.
+ * @version 1.1
+ * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
+ */
+function Pour(plugin) {
     return (target) => {
-        const plugin = new Plugin();
-        const selectedStage = getStage(plugin.stage, target);
-        selectedStage.unshift({
-            isPlugin: true,
-            method: plugin.register.bind(plugin),
-            name: plugin.name,
-            required: plugin.required
+        const stages = getStages(target);
+        const plugins = plugin.register(Settings_1.default.getInstance().getOptions(), getRegisteredPlugins(target));
+        constants_1.BOOT_ORDER.forEach(STAGE => {
+            setStage(STAGE, (stages[STAGE] || []).concat(plugin.getRegisteredStage(STAGE)), target);
         });
-        setStage(plugin.stage, selectedStage, target);
+        setPlugins(lodash_1.orderBy(plugins, ['priority'], ['asc']), target);
     };
 }
 exports.Pour = Pour;
 /**
- * Server Settings Class Decorator
- *
- * This Provide the Configuration to the server or another component on the projects, is working as a container
- * to store user and library settings.
+ * Server Settings Singleton Class Decorator this Provide the Configuration to the server or another component on
+ * the projects,is working as a container to store user and library settings.
+ * @decorator {ClassDecorator} ServerSettings - Declares Server Settings.
+ * @summary Declare Server Properties.
  * @param {ExpressiveTeaModuleProps} options
  * @param {number} [port=3000] Select Port Number where the server should be listening.
  */
@@ -111,10 +229,55 @@ function ServerSettings(options = {}) {
 }
 exports.ServerSettings = ServerSettings;
 /**
- * Setting Property Decorator
- *
- * Automatically assign a settings declared on Settings Service into the decorated property.
- * @param {string | undefined} settingName The Setting name tha
+ * Create a new middleware function to serve files from within a given root directory. The file to serve will be
+ * determined by combining req.url with the provided root directory. When a file is not found, instead of sending a 404
+ * response, this module will instead call next() to move on to the next middleware, allowing for stacking
+ * and fall-backs. Check it out {@link https://expressjs.com/en/4x/api.html#express.static Express Static} to more
+ * information.
+ * @summary Static File Server
+ * @param {string} root - Root directory
+ * @param {string} [virtual=null] - Virtual Path
+ * @param {object} [options={}] - Static Server Options
+ * @decorator {ClassDecorator} Static - Create an Static mount static file server  on root directory
+ * with virtual path if defined.
+ */
+function Static(root, virtual = null, options = {}) {
+    return target => {
+        if (lodash_1.isNil(root)) {
+            throw new Error('Root must be defined');
+        }
+        const registeredStatics = MetaData_1.default.get(constants_1.REGISTERED_STATIC_KEY, target) || [];
+        registeredStatics.unshift({ root, options, virtual });
+        MetaData_1.default.set(constants_1.REGISTERED_STATIC_KEY, registeredStatics, target);
+    };
+}
+exports.Static = Static;
+/**
+ * Set or Update Express application settings, and allow to change the behavior of the server where is listed on the
+ * next link {@link http://expressjs.com/en/4x/api.html#app.settings.table Express Settings} as this is using the same
+ * principle of app.set you should understand that is only apply the special settings mentioned above.
+ * @summary Express Setting Directive
+ * @param {string} name - Express Directive Setting Name
+ * @param {*} settings - Setting Arguments
+ * @decorator {ClassDecorator} ExpressDirecive - Set a Express App Setting.
+ */
+function ExpressDirecive(name, ...settings) {
+    return target => {
+        if (!constants_1.EXPRESS_DIRECTIVES.includes(name)) {
+            throw new Error(`Directive Name ${name} is not valid express behavior setting`);
+        }
+        const registeredDirectives = MetaData_1.default.get(constants_1.REGISTERED_DIRECTIVES_KEY, target) || [];
+        registeredDirectives.unshift({ name, settings });
+        MetaData_1.default.set(constants_1.REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
+    };
+}
+exports.ExpressDirecive = ExpressDirecive;
+/**
+ * Setting Property Decorator Automatically assign a settings declared on Settings Service into the decorated property.
+ * All properties will contains the settings value or undefined if current settings is not founded.
+ * @decorator {PropertyDecorator} Setting - Assign Server Settings to Property as default value.
+ * @summary Automatically assign a settings declared on the Server Settings decorator to a class property.
+ * @param {string} settingName The Setting name tha
  */
 function Setting(settingName) {
     return (target, propertyName) => {
@@ -126,36 +289,42 @@ function Setting(settingName) {
 }
 exports.Setting = Setting;
 /**
- * Register Module Method Decorator.
- *
- * This Method Decorator is used at bootstrap level and should decorate the start method
- * with a Module Class.
- * @param {class} Module
+ * Register Module Method Decorator this Method Decorator is used at bootstrap level and should decorate the start
+ * method with a Module Class.
+ * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
+ * @summary &lt;b>ONLY&lt;/b> Decorate Start Method, this register the Module Classes created by the user.
+ * @param {Class} Module
  */
 function RegisterModule(Module) {
     return (target, property) => {
+        if (property !== 'start') {
+            throw new Error('Register Module needs to decorate ONLY start method');
+        }
         const registeredModules = MetaData_1.default.get(constants_1.REGISTERED_MODULE_KEY, target, property) || [];
         registeredModules.push(Module);
         MetaData_1.default.set(constants_1.REGISTERED_MODULE_KEY, registeredModules, target, property);
     };
 }
 exports.RegisterModule = RegisterModule;
-//# sourceMappingURL=server.js.map</code></pre>
-        </article>
-    </section>
+</code></pre>
+  </article>
+</section>
+
+    
 
 
+  </div>
 
+  <br class="clear">
 
-</div>
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a>
+  </footer>
 
-<br class="clear">
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
 
-<footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Sep 10 2019 21:47:11 GMT-0500 (Central Daylight Time) using the Minami theme.
-</footer>
+  
 
-<script>prettyPrint();</script>
-<script src="scripts/linenumber.js"></script>
 </body>
 </html>

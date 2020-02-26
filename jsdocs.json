@@ -4,21 +4,33 @@
     "dictionaries": ["jsdoc", "closure"]
   },
   "source": {
-    "include": ["build", "README.md"],
+    "include": ["./", "README.md"],
     "includePattern": ".js$",
-    "excludePattern": "(node_modules/|docs)"
+    "excludePattern": "(node_modules/|docs/|__test__/|benchmark/)"
   },
-  "plugins": ["plugins/markdown", "plugins/summarize"],
+  "plugins": [
+    "plugins/markdown",
+    "plugins/summarize",
+    "tools/jsdocs/plugins/custom-tags",
+    "tools/jsdocs/plugins/scape-at"
+  ],
   "templates": {
     "cleverLinks": true,
     "monospaceLinks": true,
     "useLongnameInNav": false,
-    "showInheritedInNav": true
+    "showInheritedInNav": true,
+    "referenceTitle": "Expressive Tea",
+    "disableSort": false,
+    "resources": {
+      "Expressive Tea Core": "https://www.npmjs.com/package/@zerooneit/expressive-tea",
+      "Expressive Tea Plugin": "https://www.npmjs.com/package/@expressive-tea/plugin",
+      "Expressive Tea Tutorial": "https://medium.com/@diego.resendez/a-simple-rest-api-with-expressive-tea-part-one-97ef6c08f9c4"
+    }
   },
   "opts": {
     "destination": "./docs/",
     "encoding": "utf8",
     "recurse": true,
-    "template": "./node_modules/minami"
+    "template": "./node_modules/braintree-jsdoc-template"
   }
 }
