@@ -2,6 +2,14 @@ import * as _ from 'lodash';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
 
 /**
+ * Declare the properties which the server will save into settings, is a semi dynamic object since is allowed to save
+ * any property but is contains only one defined property to keep the port of the server.
+ * @typedef {Object} ExpressiveTeaServerProps
+ * @property {number} [port] - Properties where server will be listen requests.
+ * @summary Expressive Tea Server Properties
+ */
+
+/**
  * Settings Singleton Class to allow store server, application and plugins settings during design mode. Can be used on
  * run stage except by the port setting or any other in-design properties everything can be changed and reflected
  * immediatly, the fact that some of the properties will be ignored after design stage is because is used only one time

@@ -13,6 +13,47 @@ import {
 import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
 
 /**
+ * Define the Main Plugins Properties.
+ * @typedef {Object} ExpressiveTeaPluginProps
+ * @property {string} name - Define a Plugin Name
+ * @property {number} priority - Define a Plugin Priority.
+ * @summary Plugin Properties
+ */
+
+/**
+ * Declare an annotation only usable at Class Level Declaration
+ * @typedef {Function} ClassDecorator()
+ * @summary Class Decorator
+ * @example
+ * {REPLACE-AT}Decorator
+ * class Decorated {}
+ */
+
+/**
+ * Declare an annotation only usable at Method Class Level Declaration
+ * @typedef {Function} MethodDecorator
+ * @summary Method Decorator
+ * @example
+ * class Decorated {
+ *   {REPLACE-AT}MethodDecorator()
+ *   decoratedMethod(){}
+ * }
+ *
+ */
+
+/**
+ * Declare an annotation only usable at Property Class Level Declaration
+ * @typedef {Function} PropertyDecorator
+ * @summary Property Decorator
+ * @example
+ * class Decorated {
+ *   {REPLACE-AT}PropertyDecorator()
+ *   decoratedProperty:string = '';
+ * }
+ */
+
+/**
+ * Declare an annotation only usable at Property Class Level Declaration
  * @module Decorators/Server
  */
 
@@ -121,8 +162,8 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
  * information.
  * @summary Static File Server
  * @param {string} root - Root directory
- * @param {string} virtual = Viartual Path
- * @param {object} options - Static Server Options
+ * @param {string} [virtual=null] - Virtual Path
+ * @param {object} [options={}] - Static Server Options
  * @decorator {ClassDecorator} Static - Create an Static mount static file server  on root directory
  * with virtual path if defined.
  */
@@ -177,7 +218,7 @@ export function Setting(settingName: string): (target: any, propertyName: string
  * Register Module Method Decorator this Method Decorator is used at bootstrap level and should decorate the start
  * method with a Module Class.
  * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
- * @summary ONLY Decorate Start Method, this register the Module Classes created by the user.
+ * @summary <b>ONLY</b> Decorate Start Method, this register the Module Classes created by the user.
  * @param {Class} Module
  */
 export function RegisterModule(Module) {

@@ -12,7 +12,7 @@
  * @example
  * {REPLACE-AT}Router('/')
  * class ExceptionExampleController {
- *   {REPLACE-AT}@Get('/exception')
+ *   {REPLACE-AT}Get('/exception')
  *   exceptionMethod(req, res, next) {
  *     try {
  *       throw new GenericRequestException('Page not found', 404);
@@ -43,7 +43,7 @@ export class GenericRequestException extends Error {
  * @example
  * {REPLACE-AT}Router('/')
  * class ExceptionExampleController {
- *   {REPLACE-AT}@Get('/exception')
+ *   {REPLACE-AT}Get('/exception')
  *   exceptionMethod(req, res, next) {
  *     try {
  *       throw new BadRequestException();
@@ -69,7 +69,7 @@ export class BadRequestException extends GenericRequestException {
  * @example
  * {REPLACE-AT}Router('/')
  * class ExceptionExampleController {
- *   {REPLACE-AT}@Get('/exception')
+ *   {REPLACE-AT}Get('/exception')
  *   exceptionMethod(req, res, next) {
  *     try {
  *       throw new UnauthorizedException();

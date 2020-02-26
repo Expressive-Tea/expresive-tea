@@ -1,16 +1,17 @@
+// tslint:disable:max-line-length
 /**
  * As Expressive Tea have some stages when is boot the application, this enum helps to attach plugin when use the Pour
  * or Plug decorations and this is the definition.
  *
- * BOOT_DEPENDENCIES: Used for some application dependencies, example, databases configuration or websocket settings.
+ * <b>BOOT_DEPENDENCIES</b>: Used for some application dependencies, example, databases configuration or websocket settings.
  *
- * INITIALIZE_MIDDLEWARES: Used for application middlewares, example body-parser, cors, sessions express plugins.
+ * <b>INITIALIZE_MIDDLEWARES</b>: Used for application middlewares, example body-parser, cors, sessions express plugins.
  *
- * APPLICATION: Used internally to register all modules registered by Module decorator.
+ * <b>APPLICATION</b>: Used internally to register all modules registered by Module decorator.
  *
- * AFTER_APPLICATION_MIDDLEWARES: Used to add middlewares after  routers, commonly used for Error handling.
+ * <b>AFTER_APPLICATION_MIDDLEWARES</b>: Used to add middlewares after  routers, commonly used for Error handling.
  *
- * START: This Stage is used to execute some code or attach middlewares before application starts and might be used to
+ * <b>START</b>: This Stage is used to execute some code or attach middlewares before application starts and might be used to
  * settings something after  plugins/middlewares registered.
  *
  * @inner
@@ -18,6 +19,7 @@
  * @enum {number}
  * @summary Available Boot Stages
  */
+// tslint:enable:max-line-length
 export enum BOOT_STAGES {
   BOOT_DEPENDENCIES,
   INITIALIZE_MIDDLEWARES,
@@ -30,7 +32,8 @@ export enum BOOT_STAGES {
  * This Determinate how the application is booting internally, this should not be modified unless you know what are you
  * doing, however, even that is the case should not be modified. The Order is the next one:
  *
- * BOOT_DEPENDENCIES --> INITIALIZE_MIDDLEWARES --> APPLICATION --> AFTER_APPLICATION_MIDDLEWARES --> START
+ * <b><i>BOOT_DEPENDENCIES</i></b> --> <b><i>INITIALIZE_MIDDLEWARES</i></b> --> <b><i>APPLICATION</i></b> -->
+ * <b><i>AFTER_APPLICATION_MIDDLEWARES</i></b> --> <b><i>START</i></b>
  * @inner
  * @type Array<BOOT_STAGES>
  * @constant
