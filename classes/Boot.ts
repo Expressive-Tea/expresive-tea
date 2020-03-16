@@ -124,6 +124,9 @@ async function resolveModules(instance: typeof Boot | Boot, server: Express): Pr
 
 async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: typeof Boot | Boot): Promise<void> {
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
+
+  if (!bootLoader) { return; }
+
   for (const loader of bootLoader[STAGE]) {
     try {
       await selectLoaderType(loader, server);
