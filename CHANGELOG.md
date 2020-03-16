@@ -2,7 +2,7 @@ CHANGELOG
 ----------------------
 
 [Current]
-
+ * [a3c0e01](https://github.com/Zero-OneiT/expresive-tea/commit/a3c0e01d4a8f7f09a516340b3d36ed116d02c619) [HOTFIX] Plugin Issues
 
 [v1.1.1]
  * [93ec93f](https://github.com/Zero-OneiT/expresive-tea/commit/93ec93fb875022fc502023b969f1b5aaed3a77ca) [MAINTENANCE] Fixes Small Issues and Documentation
