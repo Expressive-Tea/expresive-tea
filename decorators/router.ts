@@ -21,8 +21,6 @@ import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
  */
 export function Route(mountpoint = '/') {
   return <T extends new (...args: any[]) => {}>(Route: T) => {
-    const handlers = MetaData.get(ROUTER_HANDLERS_KEY, Route) || [];
-    const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, Route) || [];
 
     return class ExpressiveTeaRoute extends Route {
       readonly router: Router;
@@ -30,8 +28,11 @@ export function Route(mountpoint = '/') {
 
       constructor(...args: any[]) {
         super(...args);
+        const handlers = MetaData.get(ROUTER_HANDLERS_KEY, this) || [];
+
         this.router = Router();
         this.mountpoint = mountpoint;
+
         each(handlers, h => {
           const middlewares = h.handler.$middlewares || [];
           this.router[h.verb](h.route, ...middlewares, h.handler.bind(this));
@@ -39,6 +40,7 @@ export function Route(mountpoint = '/') {
       }
 
       __mount(parent: Router): ExpressiveTeaRoute {
+        const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, this) || [];
         parent.use(this.mountpoint, ...rootMiddlewares, this.router);
         return this;
       }

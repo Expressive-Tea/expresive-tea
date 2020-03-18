@@ -5,6 +5,7 @@ import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
+import { getClass } from '../helpers/object-helper';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
@@ -96,14 +97,14 @@ async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Pro
 }
 
 async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, instance) || [];
+  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
   registeredDirectives.forEach((options: ExprresiveTeaDirective) => {
     server.set.call(server, options.name, ...options.settings);
   });
 }
 
 async function resolveStatic(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, instance) || [];
+  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
   registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
     if (staticOptions.virtual) {
       server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
@@ -123,9 +124,7 @@ async function resolveModules(instance: typeof Boot | Boot, server: Express): Pr
 }
 
 async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: typeof Boot | Boot): Promise<void> {
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
-
-  if (!bootLoader) { return; }
+  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance));
 
   for (const loader of bootLoader[STAGE]) {
     try {

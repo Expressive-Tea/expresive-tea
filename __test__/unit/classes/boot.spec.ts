@@ -1,7 +1,7 @@
 import * as express from 'express';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { ExpressDirecive, Plug, RegisterModule, Static } from '../../../decorators/server';
+import { Plug, RegisterModule } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
 
@@ -72,7 +72,7 @@ describe('Boot Class', () => {
     expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
   });
 
-  test('should fail if hard plugin fails',  () => {
+  test('should fail if hard plugin fails', async () => {
     const errorMessage = new Error('test');
     hardPluginMock.mockImplementationOnce(() => {
       throw errorMessage;
@@ -81,72 +81,4 @@ describe('Boot Class', () => {
     expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
 
-});
-
-describe('Boot Class Extends', () => {
-
-  beforeEach(() => {
-    serverMock.use.mockReset();
-    serverMock.set.mockReset();
-    // @ts-ignore
-    express.static.mockReset();
-  });
-
-  test('should register a new static', async () => {
-    @Static('/public')
-    class Bootstrap extends Boot {}
-
-    this.instance = new Bootstrap();
-
-    await this.instance.start();
-
-    expect(serverMock.use).toHaveBeenCalledWith(undefined);
-    expect(express.static).toHaveBeenCalledWith('/public', {});
-  });
-
-  test('should register a new static with virtual', async () => {
-    @Static('/public', '/virtual')
-    class Bootstrap extends Boot {}
-
-    this.instance = new Bootstrap();
-
-    await this.instance.start();
-
-    expect(serverMock.use).toHaveBeenCalledWith('/virtual', undefined);
-    expect(express.static).toHaveBeenCalledWith('/public', {});
-  });
-
-  test('should register a new static with virtual and change options', async () => {
-    @Static('/public', '/virtual', { etag: false })
-    class Bootstrap extends Boot {}
-
-    this.instance = new Bootstrap();
-
-    await this.instance.start();
-
-    expect(serverMock.use).toHaveBeenCalledWith('/virtual', undefined);
-    expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
-  });
-
-  test('should set a new directive setting value', async () => {
-    @ExpressDirecive('etag', true)
-    class Bootstrap extends Boot {}
-
-    this.instance = new Bootstrap();
-
-    await this.instance.start();
-
-    expect(serverMock.set).toHaveBeenCalledWith('etag', true);
-  });
-
-  test('should set a new directive setting value and pass multiple arguments', async () => {
-    @ExpressDirecive('trust proxy', 'loopback', '123.123.123.123')
-    class Bootstrap extends Boot {}
-
-    this.instance = new Bootstrap();
-
-    await this.instance.start();
-
-    expect(serverMock.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
-  });
 });
