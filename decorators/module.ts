@@ -1,7 +1,6 @@
 import { Express, Router } from 'express';
 import { each, map } from 'lodash';
-import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../libs/interfaces';
-import { ExpressiveTeaModuleClass } from '../libs/types';
+import { ExpressiveTeaModuleProps } from '../libs/interfaces';
 import DependencyInjection from '../services/DependencyInjection';
 /**
  * @typedef {Object} ExpressiveTeaModuleProps
@@ -30,28 +29,23 @@ import DependencyInjection from '../services/DependencyInjection';
  * class Example {}
  */
 export function Module(options: ExpressiveTeaModuleProps) {
-  return target => generateModuleClass(target, options);
-}
+  return <T extends new (...args: any[]) => {}>(Module: T) => {
+    return class extends Module {
+      readonly settings: ExpressiveTeaModuleProps;
+      readonly router: Router = Router();
+      readonly controllers: any[];
 
-// tslint:disable-next-line:max-line-length
-function generateModuleClass<T extends IExpressiveTeaModule>(baseClass: ExpressiveTeaModuleClass<T>, options: ExpressiveTeaModuleProps) {
-  class ExpressiveTeaModule extends (baseClass as ExpressiveTeaModuleClass<IExpressiveTeaModule>) {
-    readonly settings: ExpressiveTeaModuleProps;
-    readonly router: Router = Router();
-    readonly controllers: any[];
+      constructor(...args: any[]) {
+        super(...args);
+        this.settings = options;
+        each(this.settings.providers, P => DependencyInjection.setProvider(P));
+        this.controllers = map(this.settings.controllers, C => new C());
+      }
 
-    constructor(...args: any[]) {
-      super(...args);
-      this.settings = options;
-      each(this.settings.providers, P => DependencyInjection.setProvider(P));
-      this.controllers = map(this.settings.controllers, C => new C());
-    }
-
-    __register(server: Express) {
-      each(this.controllers, c => c.__mount(this.router));
-      server.use(this.settings.mountpoint, this.router);
-    }
-  }
-
-  return ExpressiveTeaModule as ExpressiveTeaModuleClass<T & IExpressiveTeaModule>;
+      __register(server: Express) {
+        each(this.controllers, c => c.__mount(this.router));
+        server.use(this.settings.mountpoint, this.router);
+      }
+    };
+  };
 }
