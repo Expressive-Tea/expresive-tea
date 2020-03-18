@@ -14,6 +14,9 @@
     "postpublish": "gulp clean",
     "prepublishOnly": "npm test && npm run publish:prepare"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
   "license": "Apache-2.0",
   "devDependencies": {
