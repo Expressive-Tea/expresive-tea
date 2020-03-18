@@ -1,16 +1,26 @@
 language: node_js
 node_js:
-  - "10"
-  - "13"
+- '10'
+- '13'
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 cha> ./cc-test-reporter
   - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - "./cc-test-reporter before-build"
+  - npm install -g gulp-cli
 script: npm test
 env:
   - CODECOV_TOKEN="3dab63ec-b748-4e67-8d23-9f3a998281f3"
   - CC_TEST_REPORTER_ID="bd26cc6c907283d1564f5f881621984f3414461bb36c5005aa0bf3b47e2dac9b"
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+notifications:
+  slack:
+    secure: BKRfnhTZ4e0PsITk1MNuQkaxbYdk/PwrTGyUNXqSEYEFmadyzbd6VZaX9tVq9Ae3vnwp31BmW2exfT8ZDt5o5Yqj6FGlb5ZyX5FxRH6QbHhYWz07pT7r9o36vSdtMldy9qnnSL7nUFTUuUnBwXmN3Leb6a9aGLG9nAbgTDuDDUZl800SF6nVlap+0rXhtdhDxXbtFTRrsJ0zjFLs/DuCXniIzNbcL55PFX8VnoqPK+u6DV29cmEUHO9HZZoIr4Upu7KC6Fe4vv/aBAY9w9n1I/wmUbKoPeTtr4eytbS1JBDsregkcR/k+J7Uz1VYiMWMJyo7XcBYGK374HLmzO6IY8DMndmOP2kyNVs27CKq+B0e3RlGfKBxpj614ZQSKPY4BGlWkyj9+PsYi7FpH6BnCpCa4KQbckLvCU8kAEJi8VQpiXdK6K0WlDt3dpSA/Hx41uJTSJhraLyhc/757xeuybEd4pCzXCDqNU/HBrChDyZ6jYROMyrWfVLSIoFzcZshFnHQ6/KCT4SGjkZFOC8dafNk5cfI+OpQ+oW7h0PvmV/ODisfG4MtvAzF5OjUIMttsDC1eacr86udBwV5G19vOpiukLsxbo9Kumo6aM7+H84doyDxYnsjOV5MC/orzlWrMBj7E2EGoIS/7aKHzkhUddG+qruIqA/SGsyzqkAxiyU=
+deploy:
+  provider: npm
+  email: aion.chrno@gmail.com
+  api_key:
+    secure: Frclk95fj1cLGRirqscIZVqoqLebMgNaLBHXVvTlDu9+Q7ufuK0Vi9SPFC/ZhdgovtzKdGZtwvVmuFCCi/P7lLQIgZL7RKw0CHxHfd+oCR+oyKLOKNO2EcILKkBLdf3uAoCwBldXRxxgjCRDmmlo5QWdTbQlnabs6Nafld6zPKmhjryjmr2HReaFd95ni1Po35CRRPO/Yke8BfSHNcTh+iXIRCBTA28GY6fsyu45JerFH09KkGWUfaEqUqGR8XCEAXuu/t1G6Yq5CF4nV6LFgR5uw1EdWInw1yp4ng18Es76Uk7CL+v+E4bTLkh/IXtSQtBKe+C7xQSUp4pLveeBi9XdK5DcU8QUF+BJDz3TlaKf+HDR1hxB0kyMXhozsybXGpNu22x6FntVQhBTT7ix6gYwobtlVn0mQg8TAIy/VK1/FPd8TzA3vnV8pfcsKt7ntnsx4NGpCqLjDPdnFpOQADZygLIRVcmuanfwjPl9q1kMjGDypZo8AqgC/tE3HAVqAF4ilnzTeHi0uQYyrqj0OD9gjOm4Sixu9e2UzKp+595eVWGFGo4NPHnunbCLXJXALjF9hh/nD7gVH73hqd650/lVPwG5HpRjv1Ws/PJLaRRg4JXfGP0YNmjyADMHbMQ6M3pCi2ypuTIbZV7BNmzsws1dVLn2MVifXY+4rhRyOoY=
+  on:
+    tags: true

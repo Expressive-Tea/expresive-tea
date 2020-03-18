@@ -2,6 +2,17 @@ CHANGELOG
 ----------------------
 
 [Current]
+
+
+[v1.1.3]
+ * [56ead3e](https://github.com/Zero-OneiT/expresive-tea/commit/56ead3e153ccf2369ccdbab2aadde4300a744cfc) [BUG] Reflect Metadata is getting incorrect instance.
+ * [c97e2cd](https://github.com/Zero-OneiT/expresive-tea/commit/c97e2cd3036a1c84cff68404ee74cd556c18a384) [BUG] Reflect Metadata is getting incorrect instance.
+ * [f7bd252](https://github.com/Zero-OneiT/expresive-tea/commit/f7bd2529539d2c7bd67fcf0ca9a96d9babc3d39b) [HOTFIX] Plugin Issues
+ * [596926c](https://github.com/Zero-OneiT/expresive-tea/commit/596926c2c833e43cf6e7881f23880fd3142e7dd3) [HOTFIX] Plugin Issues
+ * [a7db6b1](https://github.com/Zero-OneiT/expresive-tea/commit/a7db6b13556bb7aafe798f1eebaa4483d747b172) [MAINTENANCE] Fixes Small Issues and Documentation
+
+[v1.1.2]
+ * [d5cfd64](https://github.com/Zero-OneiT/expresive-tea/commit/d5cfd64edb826d30fb25b8418c562bfc91beeffa) [HOTFIX] Plugin Issues
  * [a3c0e01](https://github.com/Zero-OneiT/expresive-tea/commit/a3c0e01d4a8f7f09a516340b3d36ed116d02c619) [HOTFIX] Plugin Issues
 
 [v1.1.1]
