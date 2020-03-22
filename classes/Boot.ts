@@ -124,7 +124,7 @@ async function resolveModules(instance: typeof Boot | Boot, server: Express): Pr
 }
 
 async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: typeof Boot | Boot): Promise<void> {
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance));
+  const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance);
 
   for (const loader of bootLoader[STAGE]) {
     try {
@@ -158,8 +158,4 @@ function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExc
   throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
 }
 
-/**
- * Initialize Meta Keys.
- */
-MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, Boot);
 export default Boot;
