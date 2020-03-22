@@ -1,14 +1,16 @@
+import { Plugin } from '@expressive-tea/plugin';
 import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
+import { getClass } from '../helpers/object-helper';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
   BOOT_STAGES_KEY, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY
+  REGISTERED_STATIC_KEY, STAGES_INIT
 } from '../libs/constants';
 import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
 
@@ -119,20 +121,22 @@ export function Plug(
  *
  * @decorator {ClassDecorator} Pour - Use Expressive Tea plugin definition instance.
  * @summary Attach an Expressive Tea Definition Instance.
- * @param plugin Plugin - A Plugin instance which extends @expressive-tea/plugin/Plugin Class.
- * @version 1.1
+ * @param plugin Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
+ * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
-export function Pour(plugin) {
+export function Pour(Plugin) {
   return (target: any): void => {
-    const stages = getStages(target);
-    const plugins: ExpressiveTeaPluginProps[] = plugin.register(
+    const stages = getStages(getClass(target));
+    const instance = new Plugin();
+
+    const plugins: ExpressiveTeaPluginProps[] = instance.register(
       Settings.getInstance().getOptions(),
       getRegisteredPlugins(target)
     );
 
     BOOT_ORDER.forEach(STAGE => {
-      setStage(STAGE, (stages[STAGE] || []).concat(plugin.getRegisteredStage(STAGE)), target);
+      setStage(STAGE, (stages[STAGE] || []).concat(instance.getRegisteredStage(STAGE)), target);
     });
 
     setPlugins(orderBy(plugins, ['priority'], ['asc']), target);
@@ -150,6 +154,7 @@ export function Pour(plugin) {
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
     Settings.getInstance().merge(options);
+    MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, target);
     return target;
   };
 }
