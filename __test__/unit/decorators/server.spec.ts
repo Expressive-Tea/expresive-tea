@@ -90,7 +90,7 @@ describe('Pour Decorator', () => {
     class TestPlugin extends Plugin {
     }
 
-    @Pour(new TestPlugin())
+    @Pour(TestPlugin)
     class Test {
     }
 
@@ -112,7 +112,7 @@ describe('Pour Decorator', () => {
     class TestPlugin extends Plugin {
     }
 
-    @Pour(new TestPlugin())
+    @Pour(TestPlugin)
     class TestFail extends Boot {
     }
 
