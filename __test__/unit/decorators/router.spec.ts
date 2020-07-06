@@ -260,7 +260,6 @@ describe('View Decorator', () => {
 
     @Route('/')
     class TestController {
-      @Get('/getTest')
       @View('test')
       test() {
       }
@@ -271,11 +270,11 @@ describe('View Decorator', () => {
 
   test('should call correctly the decorator', () => {
     this.controller = new this.Controller();
-    console.log(metadataMock.mock.calls);
+
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_ANNOTATIONS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ arguments: ['test'], type: 'view' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/test' }));
   });
 });
