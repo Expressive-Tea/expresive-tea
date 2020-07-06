@@ -1,6 +1,6 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.js",
   "scripts": {
@@ -17,7 +17,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "Diego Resendez <diego.resendez@zero-oneit.com>",
+  "contributors": [
+    "Diego Resendez <diego.resendez@zero-oneit.com>"
+  ],
   "license": "Apache-2.0",
   "devDependencies": {
     "@expressive-tea/plugin": "^0.0.4",
@@ -29,7 +31,7 @@
     "gulp-clean": "0.4.0",
     "gulp-typescript": "5.0.1",
     "jest": "24.9.0",
-    "jest-express": "^1.11.0",
+    "jest-express": "^1.12.0",
     "jsdoc": "3.6.3",
     "jsdoc-json": "2.0.2",
     "minami": "1.2.3",

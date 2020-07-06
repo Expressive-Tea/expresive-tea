@@ -1,7 +1,7 @@
 import * as express from 'express';
 import Metadata from '../../../classes/MetaData';
-import { Delete, Get, Middleware, Param, Patch, Post, Put, Route } from '../../../decorators/router';
-import { ROUTER_HANDLERS_KEY } from '../../../libs/constants';
+import { Delete, Get, Middleware, Param, Patch, Post, Put, Route, View } from '../../../decorators/router';
+import { ROUTER_ANNOTATIONS_KEY, ROUTER_HANDLERS_KEY } from '../../../libs/constants';
 
 const metadataMock = jest.spyOn(Metadata, 'set');
 jest.mock('express', () => ({
@@ -251,5 +251,31 @@ describe('Delete Decorator', () => {
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '*' }));
+  });
+});
+
+describe('View Decorator', () => {
+  beforeEach(() => {
+    metadataMock.mockReset();
+
+    @Route('/')
+    class TestController {
+      @Get('/getTest')
+      @View('test')
+      test() {
+      }
+    }
+
+    this.Controller = TestController;
+  });
+
+  test('should call correctly the decorator', () => {
+    this.controller = new this.Controller();
+    console.log(metadataMock.mock.calls);
+    expect(metadataMock).toHaveBeenCalled();
+    expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_ANNOTATIONS_KEY);
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ arguments: ['test'], type: 'view' }));
+    expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
   });
 });

@@ -1,5 +1,6 @@
 import { Express, Router } from 'express';
 import { Server } from 'http';
+import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler } from './types';
 
 /**
  * Define the dynamic structure for an object and useful to provide a dynamic object type on the applications.
@@ -32,6 +33,7 @@ export interface ExpressiveTeaApplication {
  */
 export interface ExpressiveTeaServerProps {
   port?: number;
+
   [key: string]: any;
 }
 
@@ -65,13 +67,16 @@ export interface IExpressiveTeaModule {
   readonly settings: ExpressiveTeaModuleProps;
   readonly router: Router;
   readonly controllers: any[];
+
   __register(server: Express): void;
 }
 
 export interface IExpressiveTeaRoute {
   readonly router: Router;
   readonly mountpoint: string;
+
   __mount(parent: Router): any;
+
   [key: string]: any;
 }
 
@@ -87,6 +92,7 @@ export interface ExpressiveTeaStaticFileServer {
   index?: boolean;
   maxAge?: string;
   redirect?: boolean;
+
   setHeaders?(res, path, stat);
 }
 
@@ -96,7 +102,31 @@ export interface ExpressiveTeaStatic {
   options: ExpressiveTeaStaticFileServer | never;
 }
 
-export  interface ExprresiveTeaDirective {
+export interface ExprresiveTeaDirective {
   name: string;
   settings: any[];
+}
+
+export interface ExpressiveTeaHandlerOptions {
+  verb: string;
+  route: string;
+  handler: ExpressiveTeaMiddleware & ExpressiveTeaMiddlewareExtends;
+  target: unknown;
+  propertyKey: string | symbol;
+}
+
+export interface ExpressiveTeaArgumentOptions {
+  key: string | symbol;
+  index: number;
+  type: symbol;
+  arguments?: string | string [];
+}
+
+export interface ExpressiveTeaAnnotations {
+  type: string;
+  arguments?: any[];
+}
+
+export interface ExpressiveTeaMiddlewareExtends {
+  $middlewares?: ExpressMiddlewareHandler[];
 }
