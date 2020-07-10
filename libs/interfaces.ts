@@ -1,5 +1,6 @@
 import { Express, Router } from 'express';
-import { Server } from 'http';
+import * as http from 'http';
+import * as https from 'https';
 import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler } from './types';
 
 /**
@@ -21,7 +22,8 @@ export interface IDynamicObject {
  */
 export interface ExpressiveTeaApplication {
   application: Express;
-  server: Server;
+  server: http.Server;
+  secureServer?: https.Server;
 }
 
 /**
