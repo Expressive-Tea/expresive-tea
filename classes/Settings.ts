@@ -66,12 +66,12 @@ class Settings {
    */
   private options: ExpressiveTeaServerProps;
 
-  constructor(options: ExpressiveTeaServerProps = { port: 3000 }) {
+  constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }) {
     if (Settings.instance) {
       return Settings.instance;
     }
 
-    this.options = Object.assign({}, { port: 3000 }, options);
+    this.options = Object.assign({}, { port: 3000, securePort: 4443 }, options);
     Settings.instance = this;
   }
 
@@ -120,7 +120,7 @@ class Settings {
    * @memberof Settings
    * @summary Merge Options
    */
-  merge(options: ExpressiveTeaServerProps = { port: 3000 }) {
+  merge(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }) {
     this.options = Object.assign(this.options, options);
   }
 }

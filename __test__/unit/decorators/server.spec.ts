@@ -29,7 +29,7 @@ describe('ServerSettings Decorator', () => {
     }
 
     this.testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080 });
+    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
   });
 
   test('should modify server settings as default options', () => {
@@ -40,7 +40,7 @@ describe('ServerSettings Decorator', () => {
     }
 
     this.testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000 });
+    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
   });
 });
 

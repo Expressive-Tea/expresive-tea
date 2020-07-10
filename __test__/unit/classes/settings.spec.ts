@@ -8,10 +8,10 @@ describe('Settings Class', () => {
 
   test.each`
     options                   | expected
-    ${undefined}              | ${{ port: 3000 }}
-    ${{ port: 8080 }}         | ${{ port: 8080 }}
-    ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b' }}
-    ${{ c: 'd' }}             | ${{ port: 3000, c: 'd' }}
+    ${undefined}              | ${{ port: 3000, securePort: 4443 }}
+    ${{ port: 8080 }}         | ${{ port: 8080, securePort: 4443 }}
+    ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b', securePort: 4443 }}
+    ${{ c: 'd' }}             | ${{ port: 3000, c: 'd', securePort: 4443 }}
   `('should create a new instance with $options and return value correctly', ({ options, expected }) => {
     const settings = new Settings(options);
     expect(settings.getOptions()).toStrictEqual(expected);
@@ -19,10 +19,10 @@ describe('Settings Class', () => {
 
   test.each`
     options                   | expected
-    ${undefined}              | ${{ port: 3000 }}
-    ${{ port: 8080 }}         | ${{ port: 8080 }}
-    ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b' }}
-    ${{ c: 'd' }}             | ${{ port: 3000, c: 'd' }}
+    ${undefined}              | ${{ port: 3000, securePort: 4443 }}
+    ${{ port: 8080 }}         | ${{ port: 8080, securePort: 4443 }}
+    ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b', securePort: 4443 }}
+    ${{ c: 'd' }}             | ${{ port: 3000, c: 'd', securePort: 4443 }}
   `('should merge $options with the existed values', ({ options, expected }) => {
     const settings = new Settings();
     settings.merge(options);

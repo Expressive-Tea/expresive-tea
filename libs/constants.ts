@@ -19,6 +19,7 @@
  * @enum {number}
  * @summary Available Boot Stages
  */
+
 // tslint:enable:max-line-length
 export enum BOOT_STAGES {
   BOOT_DEPENDENCIES,
@@ -81,3 +82,14 @@ export const REGISTERED_MODULE_KEY = 'app:modules:registered';
 export const PLUGINS_KEY = 'boot:app-plugins';
 export const REGISTERED_STATIC_KEY = 'app:statics';
 export const REGISTERED_DIRECTIVES_KEY = 'app:directives';
+export const ARGUMENTS_KEY = 'app:routes:arguments';
+export const ROUTER_ANNOTATIONS_KEY = 'app:routes:annotations';
+
+export const ARGUMENT_TYPES = {
+  BODY: Symbol('BODY'),
+  GET_PARAM: Symbol('GET_PARAM'),
+  NEXT: Symbol('NEXT'),
+  QUERY: Symbol('QUERY'),
+  REQUEST: Symbol('REQUEST'),
+  RESPONSE: Symbol('RESPONSE')
+};

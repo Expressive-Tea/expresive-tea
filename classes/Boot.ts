@@ -1,5 +1,9 @@
 import * as $P from 'bluebird';
 import { Express } from 'express';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
+
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 import MetaData from '../classes/MetaData';
@@ -68,16 +72,40 @@ abstract class Boot {
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
+        const privateKey = this.settings.get('privateKey');
+        const certificate = this.settings.get('certificate');
+        const serverConfigQueue: Promise<void>[] = [];
+
         await resolveDirectives(this, this.server);
         await resolveStatic(this, this.server);
         for (const stage of BOOT_ORDER) {
           await resolveStage(stage, this, this.server);
         }
 
-        const server = this.server.listen(this.settings.get('port'), () => {
-          console.log(`Running Server on [${this.settings.get('port')}]`);
-          resolver({ application: this.server, server });
-        });
+        const server = http.createServer(this.server);
+        let secureServer;
+
+        serverConfigQueue.push(new $P(resolve => server.listen(this.settings.get('port'), () => {
+          console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
+          resolve();
+        })));
+
+        if (privateKey && certificate) {
+          // fs.existsSync(privateKey)
+          // fs.existsSync(certificate)
+          secureServer = https.createServer({
+            cert: fs.readFileSync(certificate).toString('utf-8'),
+            key: fs.readFileSync(privateKey).toString('utf-8')
+          }, this.server);
+
+          serverConfigQueue.push(new $P(resolve => secureServer.listen(this.settings.get('securePort'), () => {
+            console.log(`Running Secure HTTP Server on [${this.settings.get('securePort')}]`);
+            resolve();
+          })));
+        }
+
+        $P.all(serverConfigQueue)
+          .then(() => resolver({ application: this.server, server, secureServer }));
       } catch (e) {
         return rejector(e);
       }

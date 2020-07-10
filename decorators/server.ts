@@ -192,7 +192,7 @@ export function Static(root: string, virtual: string | null = null, options: Exp
  * @param {*} settings - Setting Arguments
  * @decorator {ClassDecorator} ExpressDirecive - Set a Express App Setting.
  */
-export function ExpressDirecive(name: string, ...settings: any) {
+export function ExpressDirecive(name: string, ...settings: any[]) {
   return target => {
     if (!EXPRESS_DIRECTIVES.includes(name)) {
       throw new Error(`Directive Name ${name} is not valid express behavior setting`);
