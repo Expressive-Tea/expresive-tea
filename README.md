@@ -2,7 +2,6 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/Zero-OneiT/expresive-tea/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json)
 [![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
 [![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6bd5ef9d884a295c7f2b/maintainability)](https://codeclimate.com/github/Zero-OneiT/expresive-tea/maintainability)
 ![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
 ![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
 ![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
@@ -13,7 +12,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Zero-OneiT/expresive-tea">
-    <img src="images/logo.png" alt="Logo" width="80" />
+    <img src="images/logo.png" alt="Logo" width="120" />
   </a>
 
   <h3 align="center">Expressive Tea</h3>
@@ -31,6 +30,28 @@
     <a href="https://github.com/Zero-OneiT/expresive-tea/issues">Request Feature</a>
   </p>
 </p>
+
+<!-- TABLE OF CONTENTS -->
+## Table of Contents
+
+* [About the Project](#about-the-project)
+  * [Motivation](#motivation)
+  * [Features](#features)  
+  * [Built With](#built-with)
+* [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+  * [Setting Up Typescript](#setting-up-typescript)
+  * [Examples](#examples)
+* [Contributing](#contributing)
+* [Versioning](#versioning)
+* [Contributors](#contributors)
+* [Support](#support)
+  * [Principal Sponsors](#principal-sponsors)  
+* [Stay on touch](#stay-on-touch)
+* [License](#license)
+* [Disclamers](#disclaimers)
+
 
 ## About the project  
 Expressive Tea is framework to help build server-side applications in [NodeJS](https://nodejs.org/) and use modern Javascript powered by 
@@ -81,7 +102,7 @@ on Express it is woking as **Bring Your Own Architecture**.
 npm i --save @zerooneit/expressive-tea
 ```
 
-## Setting up Typescript
+### Setting up Typescript
 
 ```json
 {
