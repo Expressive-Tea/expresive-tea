@@ -1,7 +1,22 @@
-import { Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
-import { ROUTER_HANDLERS_KEY, ROUTER_MIDDLEWARES_KEY } from '../libs/constants';
+import { GenericRequestException } from '../exceptions/RequestExceptions';
+import { addAnnotation } from '../helpers/decorators';
+import { autoResponse, generateRoute, mapArguments, router } from '../helpers/server';
+import {
+  ARGUMENT_TYPES,
+  ARGUMENTS_KEY,
+  ROUTER_ANNOTATIONS_KEY,
+  ROUTER_HANDLERS_KEY,
+  ROUTER_MIDDLEWARES_KEY
+} from '../libs/constants';
+import {
+  ExpressiveTeaAnnotations,
+  ExpressiveTeaArgumentOptions,
+  ExpressiveTeaHandlerOptions
+} from '../libs/interfaces';
+import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } from '../libs/types';
 
 /**
  * @module Decorators/Router
@@ -28,14 +43,15 @@ export function Route(mountpoint = '/') {
 
       constructor(...args: any[]) {
         super(...args);
-        const handlers = MetaData.get(ROUTER_HANDLERS_KEY, this) || [];
+        const handlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, this) || [];
 
         this.router = Router();
         this.mountpoint = mountpoint;
 
         each(handlers, h => {
           const middlewares = h.handler.$middlewares || [];
-          this.router[h.verb](h.route, ...middlewares, h.handler.bind(this));
+          this.router[h.verb](h.route, ...middlewares, this.__registerHandler(h));
+          console.log(`[${h.verb}] ${mountpoint}${h.route} - Register Route`);
         });
       }
 
@@ -44,12 +60,29 @@ export function Route(mountpoint = '/') {
         parent.use(this.mountpoint, ...rootMiddlewares, this.router);
         return this;
       }
+
+      __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler {
+        const self: this = this;
+        const decoratedArguments: ExpressiveTeaArgumentOptions[] = MetaData.get(ARGUMENTS_KEY,
+          options.target, options.propertyKey);
+        const annotations: ExpressiveTeaAnnotations[] = MetaData.get(ROUTER_ANNOTATIONS_KEY,
+          options.target, options.propertyKey);
+
+        return async function exec(request: Request, response: Response, next: NextFunction) {
+          try {
+            // TODO: Must be Depecrated in prior version.
+            const result = await options.handler.apply(self, mapArguments(decoratedArguments, request, response, next));
+
+            if (!response.headersSent) {
+              autoResponse(request, response, annotations, result);
+            }
+          } catch (e) {
+            next(new GenericRequestException(e.message));
+          }
+        };
+      }
     };
   };
-}
-
-function generateRoute(route, verb): (target, propertyKey, descriptor) => void {
-  return (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value);
 }
 
 /**
@@ -220,9 +253,9 @@ export function Param(route = '*') {
  *   }
  * }
  *
- * @param {Function} middleware Register a middleware over routerr.
+ * @param {Function} middleware Register a middleware over router.
  */
-export function Middleware(middleware) {
+export function Middleware(middleware): ClassDecorator & MethodDecorator {
   return (target, property?, descriptor?) => {
     if (!property) {
       rootMiddleware(target, middleware);
@@ -232,19 +265,37 @@ export function Middleware(middleware) {
   };
 }
 
+/**
+ * Will generate a GET route to respond rendering a view template setting up before; the controller method <b>MUST</b>
+ * return an object in order to fulfilled the local variables into the view.
+ * @decorator {MethodDecorator}  View - Create a Vew Response over the designed route.
+ * @summary Define a View response endpoint on Controller.
+ * @param {string} viewName - View render layout name defined by configuration.
+ * @param {string} route - URL Part to mount create a handler.
+ * @return {object} Controller must return and object as local variables for the view.
+ * @example
+ * {REPLACE-AT}Route('/')
+ * class GenericController {
+ *   {REPLACE-AT}View('login', '/view') // This Response to all GET Requests for controller route.
+ *   methodError() {}
+ * }
+ *
+ */
+export function View(viewName: string, route?: string): MethodDecorator {
+  route = route || `/${viewName}`;
+  return (target, propertyKey, descriptor) => {
+    addAnnotation('view', target, propertyKey, viewName);
+    router('get', route as string, target, descriptor.value, propertyKey);
+  };
+}
+
 function rootMiddleware(target: any, middleware: (...args: any[]) => any | Promise<any>): void {
   const existedRoutesHandlers = MetaData.get(ROUTER_MIDDLEWARES_KEY, target) || [];
   existedRoutesHandlers.unshift(middleware);
   MetaData.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
 }
 
-function routeMiddleware(target: any, descriptor: any, middleware: (...args: any[]) => any | Promise<any>) {
+function routeMiddleware(target: any, descriptor: any, middleware: ExpressiveTeaMiddleware) {
   descriptor.value.$middlewares = descriptor.value.$middlewares || [];
   descriptor.value.$middlewares.unshift(middleware);
-}
-
-function router(verb: string, route: string, target: any, handler: (...args: any[]) => void | any | Promise<any>) {
-  const existedRoutesHandlers = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
-  existedRoutesHandlers.unshift({ verb, route, handler, routerKey: target });
-  MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }

@@ -1,28 +1,12 @@
 import * as express from 'express';
+import * as http from 'http';
 import Boot from '../../../classes/Boot';
 import { ExpressDirecive, Static } from '../../../decorators/server';
 
-const serverMock = {
-  listen: jest.fn().mockImplementation((port, cb) => {
-    setTimeout(() => cb(), 200);
-    return { port };
-  }),
-  set: jest.fn(),
-  use: jest.fn()
-};
-
-jest.mock('express');
-// @ts-ignore
-express.mockImplementation(() => serverMock);
+jest.mock('express', () => require('jest-express'));
+jest.mock('http');
 
 describe('Boot Class Extends', () => {
-
-  beforeEach(() => {
-    serverMock.use.mockReset();
-    serverMock.set.mockReset();
-    // @ts-ignore
-    express.static.mockReset();
-  });
 
   test('should register a new static', async () => {
     @Static('/public')
@@ -31,9 +15,9 @@ describe('Boot Class Extends', () => {
 
     this.instance = new Bootstrap();
 
-    await this.instance.start();
+    const app = await this.instance.start();
 
-    expect(serverMock.use).toHaveBeenCalledWith(undefined);
+    expect(app.application.use).toHaveBeenCalledWith(undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
   });
 
@@ -44,9 +28,9 @@ describe('Boot Class Extends', () => {
 
     this.instance = new Bootstrap();
 
-    await this.instance.start();
+    const app = await this.instance.start();
 
-    expect(serverMock.use).toHaveBeenCalledWith('/virtual', undefined);
+    expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
   });
 
@@ -57,9 +41,9 @@ describe('Boot Class Extends', () => {
 
     this.instance = new Bootstrap();
 
-    await this.instance.start();
+    const app = await this.instance.start();
 
-    expect(serverMock.use).toHaveBeenCalledWith('/virtual', undefined);
+    expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
   });
 
@@ -70,9 +54,9 @@ describe('Boot Class Extends', () => {
 
     this.instance = new Bootstrap();
 
-    await this.instance.start();
+    const app = await this.instance.start();
 
-    expect(serverMock.set).toHaveBeenCalledWith('etag', true);
+    expect(app.application.set).toHaveBeenCalledWith('etag', true);
   });
 
   test('should set a new directive setting value and pass multiple arguments', async () => {
@@ -82,8 +66,8 @@ describe('Boot Class Extends', () => {
 
     this.instance = new Bootstrap();
 
-    await this.instance.start();
+    const app = await this.instance.start();
 
-    expect(serverMock.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
+    expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
   });
 });

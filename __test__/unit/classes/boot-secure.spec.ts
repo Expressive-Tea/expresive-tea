@@ -1,8 +1,9 @@
 import * as express from 'express';
 import * as http from 'http';
+import * as https from 'https';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { Plug, RegisterModule } from '../../../decorators/server';
+import { Plug, RegisterModule, ServerSettings } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
 
@@ -11,8 +12,10 @@ const hardPluginMock = jest.fn();
 
 jest.mock('express', () => require('jest-express'));
 jest.mock('http');
+jest.mock('https');
+jest.mock('fs');
 
-describe('Boot Class', () => {
+describe('Boot Class Secure Server', () => {
   @Plug(BOOT_STAGES.APPLICATION, 'Soft Plugin', softPluginMock)
   @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Hard Plugin', hardPluginMock, true)
   class Bootstrap extends Boot {
@@ -25,21 +28,10 @@ describe('Boot Class', () => {
   class DefaultBootstrap extends Boot {
   }
 
-  test('should start server as default', async () => {
-    const boot = new DefaultBootstrap();
-    const app = await boot.start();
-
-    beforeEach(() => {
-      Settings.getInstance().set('certificate', undefined);
-      Settings.getInstance().set('privateKey', undefined);
-      jest.clearAllMocks();
-    });
-
-    expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
-    expect(http.createServer).toHaveBeenCalled();
-    expect(app.server.listen).toHaveBeenCalled();
-    expect(registerMock).not.toHaveBeenCalled();
+  beforeEach(() => {
+    Settings.getInstance().set('certificate', 'certificate.pem');
+    Settings.getInstance().set('privateKey', 'privatekey.pem');
+    jest.clearAllMocks();
   });
 
   test('should create instance correctly', () => {
@@ -49,34 +41,33 @@ describe('Boot Class', () => {
     expect(boot.settings).toEqual(Settings.getInstance());
   });
 
+  test('should start server as default', async () => {
+    const boot = new DefaultBootstrap();
+    const app = await boot.start();
+
+    expect(boot.settings).toBeInstanceOf(Settings);
+    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(http.createServer).toHaveBeenCalled();
+    expect(https.createServer).toHaveBeenCalled();
+    expect(app.server.listen).toHaveBeenCalled();
+    expect(app.secureServer!.listen).toHaveBeenCalled();
+    expect(registerMock).not.toHaveBeenCalled();
+  });
+
   test('should start an application', async () => {
     const boot = new Bootstrap();
-
     const app = await boot.start();
 
     expect(http.createServer).toHaveBeenCalled();
+    expect(https.createServer).toHaveBeenLastCalledWith(
+      { cert: 'certificate.pem', key: 'privatekey.pem' },
+      expect.anything()
+    );
+    expect(app.server.listen).toHaveBeenCalled();
+    expect(app.secureServer!.listen).toHaveBeenCalled();
     expect(boot.settings).toBeInstanceOf(Settings);
     expect(boot.settings).toEqual(Settings.getInstance());
-    expect(app.server.listen).toHaveBeenCalled();
     expect(registerMock).toHaveBeenCalled();
-  });
-
-  test('should not fail if soft plugin fails', () => {
-    softPluginMock.mockImplementationOnce(() => {
-      throw new Error('Test');
-    });
-    const boot = new Bootstrap();
-
-    expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
-  });
-
-  test('should fail if hard plugin fails', async () => {
-    const errorMessage = new Error('test');
-    hardPluginMock.mockImplementationOnce(() => {
-      throw errorMessage;
-    });
-    const boot = new Bootstrap();
-    expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
 
 });
