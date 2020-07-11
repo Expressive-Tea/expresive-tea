@@ -20,8 +20,6 @@
   <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 
 
-
-
   <!-- start Mixpanel -->
   <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
   0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
@@ -52,7 +50,7 @@
       <li >
         <a href="index.html">
 
-            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
@@ -60,7 +58,6 @@
 
         </a>
       </li>
-
 
 
     </ul>
@@ -72,9 +69,9 @@
     </h3>
 
 
-      <h3>
-        Resources
-      </h3>
+    <h3>
+      Resources
+    </h3>
 
     <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">Expressive Tea Core</a>
 
@@ -200,22 +197,19 @@
 
   <div id="main">
 
-      <h1 class="page-title">
+    <h1 class="page-title">
         UnauthorizedException
       </h1>
 
 
-
-
-<section>
+    <section>
   <header>
 
-      <h2>
+    <h2>
 
-        UnauthorizedException
+      UnauthorizedException
 
-      </h2>
-
+    </h2>
 
 
   </header>
@@ -240,14 +234,12 @@
   </span>
 
 
-    <p class="summary">
+      <p class="summary">
       <p>401 Exception</p>
     </p>
 
 
-
-
-  <div class="description">
+      <div class="description">
     <p>Shortcut Exception for 401 HTTP Errors (Unauthorized Request).</p>
   </div>
 
@@ -260,21 +252,20 @@
   <h5>Parameters:</h5>
 
 
-<table class="params">
+      <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-        <th>Attributes</th>
+      <th>Attributes</th>
 
 
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -283,12 +274,12 @@
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>message</code></td>
+    <td class="name"><code>message</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -296,35 +287,28 @@
     </span>
 
 
+    </td>
 
 
+    <td class="attributes">
 
-        </td>
-
-
-          <td class="attributes">
-
-              &lt;optional><br>
+      &lt;optional><br>
 
 
+    </td>
 
 
+    <td class="default">
 
-          </td>
+      'Unauthorized Request'
 
-
-
-          <td class="default">
-
-              'Unauthorized Request'
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>Provide the Error message.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -338,31 +322,7 @@
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -370,11 +330,6 @@
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -400,7 +355,7 @@
     <h5 id="UnauthorizedException-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Router('/')
+    <pre class="prettyprint"><code>@Router('/')
 class ExceptionExampleController {
   @Get('/exception')
   exceptionMethod(req, res, next) {
@@ -416,35 +371,15 @@ class ExceptionExampleController {
   </div>
 
 
-
     </div>
 
 
-      <h3 class="subsection-title">Extends</h3>
+    <h3 class="subsection-title">Extends</h3>
 
 
-
-
-  <ul>
+    <ul>
     <li><a href="GenericRequestException.html">GenericRequestException</a></li>
   </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   </article>
@@ -463,7 +398,6 @@ class ExceptionExampleController {
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>
-
 
 
 </body>

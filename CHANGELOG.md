@@ -1,4 +1,25 @@
 
+<a name="v1.2.0"></a>
+## [v1.2.0](https://github.com/Zero-OneiT/expresive-tea/compare/v1.1.4...v1.2.0)
+
+> 2020-07-11
+
+### ARCHITECTURE
+
+* [e5389c8](https://github.com/Zero-OneiT/expresive-tea/commit/e5389c814e17711bc098b24a4989c3901cfc462a) Test, Documentation Improvement
+
+### FEATURES
+
+* [4e52465](https://github.com/Zero-OneiT/expresive-tea/commit/4e524656a5c4091e52e63ffbdf138147fc505f29) View and Parameter Decorators.
+* [f629a1b](https://github.com/Zero-OneiT/expresive-tea/commit/f629a1b371b92e24c4936f90ae4a77b30bed606c) View and Parameter Decorators.
+* [a6b21a1](https://github.com/Zero-OneiT/expresive-tea/commit/a6b21a172184af268c8d90738fd295a4b26c71d0) View and Parameter Decorators.
+* [791e037](https://github.com/Zero-OneiT/expresive-tea/commit/791e03786c62f59688c52729bfc563ee59e67916) View and Parameter Decorators.
+
+### Release Work
+
+* [ee3fec0](https://github.com/Zero-OneiT/expresive-tea/commit/ee3fec0b838690a348ea00f9ff0c2df10fe9d7c6) 1.2.0 Release
+
+
 <a name="v1.1.4"></a>
 ## [v1.1.4](https://github.com/Zero-OneiT/expresive-tea/compare/v1.1.3...v1.1.4)
 

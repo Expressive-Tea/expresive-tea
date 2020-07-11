@@ -20,8 +20,6 @@
   <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 
 
-
-
   <!-- start Mixpanel -->
   <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
   0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
@@ -52,7 +50,7 @@
       <li >
         <a href="index.html">
 
-            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
               <path d="M0 0h24v24H0z" fill="none"/>
             </svg>
@@ -60,7 +58,6 @@
 
         </a>
       </li>
-
 
 
     </ul>
@@ -72,9 +69,9 @@
     </h3>
 
 
-      <h3>
-        Resources
-      </h3>
+    <h3>
+      Resources
+    </h3>
 
     <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">Expressive Tea Core</a>
 
@@ -200,14 +197,12 @@
 
   <div id="main">
 
-      <h1 class="page-title">
+    <h1 class="page-title">
         Decorators/Router
       </h1>
 
 
-
-
-<section>
+    <section>
   <header>
 
 
@@ -217,33 +212,13 @@
     <div class="container-overview">
 
 
-
-
-
     </div>
 
 
+    <h3 class="subsection-title">Methods</h3>
 
 
-
-
-
-
-
-
-
-
-
-
-      <h3 class="subsection-title">Methods</h3>
-
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Delete">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -260,9 +235,7 @@
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a DELETE Endpoint response over the controller router and can define in which route should be responds and
 by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
@@ -281,7 +254,7 @@ by default this is responding to everything on the controller root path.</p>
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create an DELETE Response over the designed route.</td>
+              <td class="description last">Create an DELETE Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -295,19 +268,17 @@ by default this is responding to everything on the controller root path.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -316,12 +287,12 @@ by default this is responding to everything on the controller root path.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -329,25 +300,20 @@ by default this is responding to everything on the controller root path.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -361,31 +327,7 @@ by default this is responding to everything on the controller root path.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -394,11 +336,6 @@ by default this is responding to everything on the controller root path.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -424,7 +361,7 @@ by default this is responding to everything on the controller root path.</p>
     <h5 id="Delete-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Delete() // This Response to all DELETE Requests for controller route.
   methodError() {}
@@ -437,13 +374,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Get">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -460,9 +391,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a GET Endpoint response over the controller router and can define in which route should be responds and
 by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
@@ -481,7 +410,7 @@ by default this is responding to everything on the controller root path.</p>
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create an GET Response over the designed route.</td>
+              <td class="description last">Create an GET Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -495,19 +424,17 @@ by default this is responding to everything on the controller root path.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -516,12 +443,12 @@ by default this is responding to everything on the controller root path.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -529,25 +456,20 @@ by default this is responding to everything on the controller root path.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -561,31 +483,7 @@ by default this is responding to everything on the controller root path.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -594,11 +492,6 @@ by default this is responding to everything on the controller root path.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -624,7 +517,7 @@ by default this is responding to everything on the controller root path.</p>
     <h5 id="Get-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Get() // This Response to all GET Requests for controller route.
   methodError() {}
@@ -637,13 +530,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Middleware">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -660,9 +547,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Middleware Decorator is following the middleware functionality inheritance from Express framework itself and follow
 the same rules, that execute any code before response the request and can change the current request or response
 object, and requires use next callback to pass control to next middleware.</p>
@@ -684,7 +569,7 @@ Plug Decorator which can be useful to declare at that level..</p>
             <td class="type">MethodDecorator,ClassDecorator</td>
 
 
-            <td class="description last">Attach a middleware definition on the root route or endpoint
+              <td class="description last">Attach a middleware definition on the root route or endpoint
 routes.</td>
           </tr>
           </table>
@@ -699,17 +584,14 @@ routes.</td>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
-
-
-
 
 
       <th class="last">Description</th>
@@ -718,12 +600,12 @@ routes.</td>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>middleware</code></td>
+    <td class="name"><code>middleware</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -731,19 +613,13 @@ routes.</td>
     </span>
 
 
+    </td>
 
 
-
-        </td>
-
-
-
-
-
-        <td class="description last">
+    <td class="description last">
           <p>Register a middleware over router.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -757,31 +633,7 @@ routes.</td>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -790,11 +642,6 @@ routes.</td>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -820,7 +667,7 @@ routes.</td>
     <h5 id="Middleware-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Middleware((req, res, next) {
+    <pre class="prettyprint"><code>@Middleware((req, res, next) {
     req.controllerName = 'Example';
     next();
  })
@@ -839,13 +686,7 @@ class ExampleController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Param">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -862,9 +703,7 @@ class ExampleController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a Route path parameter transformation method as mentioned on Express this is just call by controller endpoints
 route paths and it helps to define logic on each route path parameters. Example, you can require transform userId
 parameter and added to request object.</p>
@@ -886,7 +725,7 @@ also must be use Next method to allow continue the process flow from Express.</p
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create a transformation middleware for router parameters.</td>
+              <td class="description last">Create a transformation middleware for router parameters.</td>
           </tr>
           </table>
   </div>
@@ -900,19 +739,17 @@ also must be use Next method to allow continue the process flow from Express.</p
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -921,12 +758,12 @@ also must be use Next method to allow continue the process flow from Express.</p
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -934,25 +771,20 @@ also must be use Next method to allow continue the process flow from Express.</p
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -966,31 +798,7 @@ also must be use Next method to allow continue the process flow from Express.</p
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -999,11 +807,6 @@ also must be use Next method to allow continue the process flow from Express.</p
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -1029,7 +832,7 @@ also must be use Next method to allow continue the process flow from Express.</p
     <h5 id="Param-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Param('userId') // This Response to all GET Requests for controller route.
   async methodError(req, res, next, param, id) {
@@ -1054,13 +857,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Patch">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -1077,9 +874,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a PATCH Endpoint response over the controller router and can define in which route should be responds and
 by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
@@ -1098,7 +893,7 @@ by default this is responding to everything on the controller root path.</p>
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create an PATCH Response over the designed route.</td>
+              <td class="description last">Create an PATCH Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -1112,19 +907,17 @@ by default this is responding to everything on the controller root path.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -1133,12 +926,12 @@ by default this is responding to everything on the controller root path.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -1146,25 +939,20 @@ by default this is responding to everything on the controller root path.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -1178,31 +966,7 @@ by default this is responding to everything on the controller root path.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -1211,11 +975,6 @@ by default this is responding to everything on the controller root path.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -1241,7 +1000,7 @@ by default this is responding to everything on the controller root path.</p>
     <h5 id="Patch-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Patch() // This Response to all PATCH Requests for controller route.
   methodError() {}
@@ -1254,13 +1013,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Post">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -1277,9 +1030,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a POST Endpoint response over the controller router and can define in which route should be responds and
 by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
@@ -1298,7 +1049,7 @@ by default this is responding to everything on the controller root path.</p>
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create an POST Response over the designed route.</td>
+              <td class="description last">Create an POST Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -1312,19 +1063,17 @@ by default this is responding to everything on the controller root path.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -1333,12 +1082,12 @@ by default this is responding to everything on the controller root path.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -1346,25 +1095,20 @@ by default this is responding to everything on the controller root path.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -1378,31 +1122,7 @@ by default this is responding to everything on the controller root path.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -1411,11 +1131,6 @@ by default this is responding to everything on the controller root path.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -1441,7 +1156,7 @@ by default this is responding to everything on the controller root path.</p>
     <h5 id="Post-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Post() // This Response to all GET Requests for controller route.
   methodError() {}
@@ -1454,13 +1169,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Put">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -1477,9 +1186,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Define a PUT Endpoint response over the controller router and can define in which route should be responds and
 by default this is responding to everything on the controller root path.</p>
                               <h5>Decorator:</h5>
@@ -1498,7 +1205,7 @@ by default this is responding to everything on the controller root path.</p>
             <td class="type">MethodDecorator</td>
 
 
-            <td class="description last">Create an PUT Response over the designed route.</td>
+              <td class="description last">Create an PUT Response over the designed route.</td>
           </tr>
           </table>
   </div>
@@ -1512,19 +1219,17 @@ by default this is responding to everything on the controller root path.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -1533,12 +1238,12 @@ by default this is responding to everything on the controller root path.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>route</code></td>
+    <td class="name"><code>route</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -1546,25 +1251,20 @@ by default this is responding to everything on the controller root path.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      *
 
-
-
-
-          <td class="default">
-
-              *
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>URL Part to mount create a handler.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -1578,31 +1278,7 @@ by default this is responding to everything on the controller root path.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -1611,11 +1287,6 @@ by default this is responding to everything on the controller root path.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -1641,7 +1312,7 @@ by default this is responding to everything on the controller root path.</p>
     <h5 id="Put-examples">Example</h5>
 
 
-  <pre class="prettyprint"><code>@Route('/')
+    <pre class="prettyprint"><code>@Route('/')
 class GenericController {
   @Put() // This Response to all PUT Requests for controller route.
   methodError() {}
@@ -1654,13 +1325,7 @@ class GenericController {
   </div>
 
 
-
-
-
-
-
-
-  <span class='name-container'>
+    <span class='name-container'>
     <a class="link-icon" href="#~Route">
       <svg height="20" width="20" style="fill: black;">
         <use xlink:href="#linkIcon"></use>
@@ -1677,9 +1342,7 @@ class GenericController {
     </p>
 
 
-
-
-  <div class="description">
+    <div class="description">
     <p>Route Controller Decorator assign a router point into the module mount-point placeholder and is used just to create
 a bucket to contains all the endpoints defined by method of the Controller.  If mount-point is not defined automati-
 cally this must considerate mounted on root, but is mandatory define the Controller with this decorator in order
@@ -1700,7 +1363,7 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
             <td class="type">ClassDecorator</td>
 
 
-            <td class="description last">Assign a route to controller endpoints.</td>
+              <td class="description last">Assign a route to controller endpoints.</td>
           </tr>
           </table>
   </div>
@@ -1714,19 +1377,17 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
   <h5>Parameters:</h5>
 
 
-<table class="params">
+    <table class="params">
   <thead>
     <tr>
 
-        <th>Name</th>
+      <th>Name</th>
 
 
       <th>Type</th>
 
 
-
-
-        <th>Default</th>
+      <th>Default</th>
 
 
       <th class="last">Description</th>
@@ -1735,12 +1396,12 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
 
   <tbody>
 
-      <tr>
+  <tr>
 
-          <td class="name"><code>mountpoint</code></td>
+    <td class="name"><code>mountpoint</code></td>
 
 
-        <td class="type">
+    <td class="type">
 
 
     <span class="param-type">
@@ -1748,25 +1409,20 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
     </span>
 
 
+    </td>
 
 
+    <td class="default">
 
-        </td>
+      /
 
-
-
-
-          <td class="default">
-
-              /
-
-          </td>
+    </td>
 
 
-        <td class="description last">
+    <td class="description last">
           <p>Register the url part to mount the Controller.</p>
 
-        </td>
+    </td>
       </tr>
 
 
@@ -1780,31 +1436,7 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
 <dl class="details">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <dt class="tag-source">Source:</dt>
+  <dt class="tag-source">Source:</dt>
     <dd class="tag-source">
       <ul class="dummy">
         <li>
@@ -1813,11 +1445,6 @@ to allow Expressive Tea Setting up the Controller as part of a Module.</p>
         </li>
       </ul>
     </dd>
-
-
-
-
-
 
 
 </dl>
@@ -2015,7 +1642,6 @@ class GenericController {
 
   <script src="scripts/linenumber.js"></script>
   <script src="scripts/pagelocation.js"></script>
-
 
 
 </body>
