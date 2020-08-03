@@ -75,8 +75,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/Zero-OneiT/expresive-tea">
-    <img src="images/logo.png" alt="Logo" width="120" />
+  <a href="https://expressive-tea.io/2020/08/03/breaking-news-organization-changes/">
+    <img src="images/logo.png" alt="Logo" width="160" />
   </a>
 
   <h3 align="center">Expressive Tea</h3>
