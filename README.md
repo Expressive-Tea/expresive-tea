@@ -1,18 +1,82 @@
-![npm (scoped)](https://img.shields.io/npm/v/@zerooneit/expressive-tea)
-[![Known Vulnerabilities](https://snyk.io//test/github/Zero-OneiT/expresive-tea/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json)
-[![Build Status](https://travis-ci.org/Zero-OneiT/expresive-tea.svg?branch=develop)](https://travis-ci.org/Zero-OneiT/expresive-tea)
-[![codecov](https://codecov.io/gh/Zero-OneiT/expresive-tea/branch/develop/graph/badge.svg)](https://codecov.io/gh/Zero-OneiT/expresive-tea)
-![npm](https://img.shields.io/npm/dw/@zerooneit/expressive-tea)
-![GitHub issues](https://img.shields.io/github/issues/Zero-OneIT/expresive-tea)
-![GitHub](https://img.shields.io/github/license/Zero-OneIT/expresive-tea)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_shield)
-![Twitter Follow](https://img.shields.io/twitter/follow/expressive_tea)
+<p align="center">
+  <!-- Npm Version -->
+  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
+  <img alt="npm (scoped)" src="https://img.shields.io/npm/v/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Downloads -->
+  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
+  <img alt="npm" src="https://img.shields.io/npm/dw/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Dependencies -->
+  <a href="https://libraries.io/npm/@zerooneit%2Fexpressive-tea">
+  <img alt="Libraries.io dependency status for latest release, scoped npm package" src="https://img.shields.io/librariesio/release/npm/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- License -->
+  <a href="https://github.com/Zero-OneiT/expresive-tea/blob/develop/LICENSE">
+  <img alt="NPM" src="https://img.shields.io/npm/l/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Vulnerabilities -->
+  <a href="https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json">
+  <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Last Commit -->
+  <a href="https://github.com/Zero-OneiT/expresive-tea">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Zero-OneiT/expresive-tea?style=for-the-badge">
+  </a>    
+  
+  <!-- Stars -->
+  <a href="https://github.com/Zero-OneiT/expresive-tea/stargazers">
+  <img alt="GitHub stars" src="https://img.shields.io/github/stars/Zero-OneiT/expresive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Source Rank -->
+  <a href="https://libraries.io/npm/@zerooneit%2Fexpressive-tea/sourcerank">
+  <img alt="Libraries.io SourceRank, scoped npm package" src="https://img.shields.io/librariesio/sourcerank/npm/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Rating -->
+  <a href="https://pkgreview.dev/npm/@zerooneit%2Fexpressive-tea">
+  <img alt="pkgreview.dev Package Ratings" src="https://img.shields.io/pkgreview/rating/npm/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Issues -->
+  <a href="https://github.com/Zero-OneiT/expresive-tea/issues">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Zero-Oneit/expresive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Gitter -->                                  
+  <a href="https://gitter.im/Zero-OneiT/expresive-tea">
+  <img alt="Gitter" src="https://img.shields.io/gitter/room/zero-oneit/expresive-tea?style=for-the-badge">
+  </a>
+  
+  <!-- Test Coverage -->
+  <a href="https://codecov.io/gh/Zero-OneiT/expresive-tea">
+  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/zero-oneit/expresive-tea?label=Test%20coverage&style=for-the-badge">
+  </a>
+  
+  <!-- Build -->
+  <a href="https://travis-ci.org/Zero-OneiT/expresive-tea">
+  <img alt="Travis (.org) branch" src="https://img.shields.io/travis/zero-oneit/expresive-tea/master?style=for-the-badge">
+  </a>
+</p>
+
+<p align="center">
+  <!-- Npm Version -->
+  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
+  <img alt="Announcement Expressive Tea" src="images/announcement-01.png">
+  </a>
+</p>
 
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/Zero-OneiT/expresive-tea">
-    <img src="images/logo.png" alt="Logo" width="120" />
+  <a href="https://expressive-tea.io/2020/08/03/breaking-news-organization-changes/">
+    <img src="images/logo.png" alt="Logo" width="160" />
   </a>
 
   <h3 align="center">Expressive Tea</h3>
@@ -123,7 +187,13 @@ npm i --save @zerooneit/expressive-tea
 ### Examples
 You can looking into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-sandbox).
 
-or edit or see how is working [![Edit expressive-tea](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark)
+<p align="center">
+or edit or see how is working on our live preview
+<br/>
+<a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark">
+<img src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>
+</p>
 
 ## Contributing
 
@@ -157,12 +227,16 @@ Expressive Tea is an open source project, our goal is create an awesome framewor
 
 * Author - [Diego Resendez](https://twitter.com/diegoresendez)
 * Twitter - [@expressive_tea](https://twitter.com/expressive_tea)
-* Email - [contact@zero-oneit.com](mailto:contact@zero-oneit.com)
+* Email - [support@expressive-tea.io](support@expressive-tea.io)
 
 ## License
 This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large)
+<p align="center">
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large">
+<img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large" />
+</a>
+</p>
 
 ## Disclaimers
 The banner and the logo is a derivate work [Designed by Freepik](http://www.freepik.com)
