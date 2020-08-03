@@ -67,7 +67,7 @@
 
 <p align="center">
   <!-- Npm Version -->
-  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
+  <a href="https://expressive-tea.io/2020/08/03/breaking-news-organization-changes/">
   <img alt="Announcement Expressive Tea" src="images/announcement-01.png">
   </a>
 </p>
@@ -75,7 +75,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://expressive-tea.io/2020/08/03/breaking-news-organization-changes/">
+  <a href="https://github.com/Zero-OneiT/expresive-tea">
     <img src="images/logo.png" alt="Logo" width="160" />
   </a>
 
