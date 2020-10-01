@@ -1,11 +1,11 @@
 import * as $P from 'bluebird';
+// tslint:disable-next-line:no-duplicate-imports
+import * as express from 'express';
+// tslint:disable-next-line:no-duplicate-imports
 import { Express } from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-
-// tslint:disable-next-line:no-duplicate-imports
-import * as express from 'express';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
@@ -13,13 +13,17 @@ import { getClass } from '../helpers/object-helper';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
-  BOOT_STAGES_KEY, REGISTERED_DIRECTIVES_KEY,
+  BOOT_STAGES_KEY,
+  REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   STAGES_INIT
 } from '../libs/constants';
 import { ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective } from '../libs/interfaces';
 import { Rejector, Resolver } from '../libs/types';
+import * as WebSocket from 'ws';
+import WebsocketService from '../services/WebsocketService';
+
 
 /**
  * Expressive Tea Application interface is the response from an started application, contains the express application
@@ -74,7 +78,31 @@ abstract class Boot {
       try {
         const privateKey = this.settings.get('privateKey');
         const certificate = this.settings.get('certificate');
+        const startWebsocket = this.settings.get('startWebsocket');
+        const detachWebsocket = this.settings.get('detachWebsocket');
         const serverConfigQueue: Promise<void>[] = [];
+
+        // tslint:disable-next-line:one-variable-per-declaration
+        let ws, wss;
+
+        const server:http.Server = http.createServer(this.server);
+        const secureServer:https.Server = privateKey && certificate && https.createServer({
+          cert: fs.readFileSync(certificate).toString('utf-8'),
+          key: fs.readFileSync(privateKey).toString('utf-8')
+        }, this.server);
+
+        if (startWebsocket) {
+
+          ws = new WebSocket.Server(detachWebsocket ?{ noServer: true} : {server});
+
+          if (secureServer) {
+            wss = new WebSocket.Server(detachWebsocket? {noServer: true} : {server: secureServer});
+          }
+
+          WebsocketService.init(ws, wss);
+          WebsocketService.getInstance().setHttpServer(server);
+          WebsocketService.getInstance().setHttpServer(secureServer);
+        }
 
         await resolveDirectives(this, this.server);
         await resolveStatic(this, this.server);
@@ -82,29 +110,29 @@ abstract class Boot {
           await resolveStage(stage, this, this.server);
         }
 
-        const server = http.createServer(this.server);
-        let secureServer;
+        await resolveStage(BOOT_STAGES.APPLICATION, this, this.server);
 
         serverConfigQueue.push(new $P(resolve => server.listen(this.settings.get('port'), () => {
           console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
           resolve();
         })));
 
-        if (privateKey && certificate) {
-          // fs.existsSync(privateKey)
-          // fs.existsSync(certificate)
-          secureServer = https.createServer({
-            cert: fs.readFileSync(certificate).toString('utf-8'),
-            key: fs.readFileSync(privateKey).toString('utf-8')
-          }, this.server);
-
+        if (secureServer) {
           serverConfigQueue.push(new $P(resolve => secureServer.listen(this.settings.get('securePort'), () => {
             console.log(`Running Secure HTTP Server on [${this.settings.get('securePort')}]`);
             resolve();
           })));
         }
 
+        await $P.all([
+          resolveStage(BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, this, this.server),
+          resolveStage(BOOT_STAGES.ON_HTTP_CREATION, this, this.server, server, secureServer)
+        ])
+
         $P.all(serverConfigQueue)
+          .then(() => {
+            return resolveStage(BOOT_STAGES.START, this, this.server, server, secureServer);
+          })
           .then(() => resolver({ application: this.server, server, secureServer }));
       } catch (e) {
         return rejector(e);
@@ -113,9 +141,9 @@ abstract class Boot {
   }
 }
 
-async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express): Promise<void> {
+async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
   try {
-    await bootloaderResolve(stage, server, ctx);
+    await bootloaderResolve(stage, server, ctx, ...extraArgs);
     if (stage === BOOT_STAGES.APPLICATION) {
       await resolveModules(ctx, server);
     }
@@ -151,20 +179,24 @@ async function resolveModules(instance: typeof Boot | Boot, server: Express): Pr
   });
 }
 
-async function bootloaderResolve(STAGE: BOOT_STAGES, server: Express, instance: typeof Boot | Boot): Promise<void> {
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, instance) || STAGES_INIT;
+async function bootloaderResolve(
+  STAGE: BOOT_STAGES,
+  server: Express,
+  instance: typeof Boot | Boot,
+  ...args: unknown[]): Promise<void> {
 
+  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
   for (const loader of bootLoader[STAGE] || []) {
     try {
-      await selectLoaderType(loader, server);
+      await selectLoaderType(loader, server, ...args);
     } catch (e) {
       shouldFailIfRequire(e, loader);
     }
   }
 }
 
-async function selectLoaderType(loader, server: Express) {
-  return loader.method(server);
+async function selectLoaderType(loader, server: Express, ...args: unknown[]) {
+  return loader.method(server, ...args);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {

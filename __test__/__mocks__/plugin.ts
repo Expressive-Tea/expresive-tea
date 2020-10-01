@@ -1,13 +1,16 @@
-export const mockRegister = jest.fn((appSettings, registeredPlugins) => {
+// tslint:disable-next-line:only-arrow-functions
+export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   registeredPlugins.push({
     name: 'Mocked',
-    priority: this.priority || 999
+    priority: 999
   });
   return registeredPlugins;
 });
 export const mockGetRegisteredStage = jest.fn(() => []);
 
-const Plugin = jest.fn().mockImplementation(() => {
+// tslint:disable-next-line:only-arrow-functions
+const Plugin = jest.fn().mockImplementation(function () {
+  this.priority = 999;
   return {
     getRegisteredStage: mockGetRegisteredStage,
     register: mockRegister

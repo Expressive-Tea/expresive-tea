@@ -5,14 +5,14 @@ import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '../libs/constants';
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions
+  ExpressiveTeaHandlerOptions, IDynamicObject
 } from '../libs/interfaces';
 
 export function autoResponse(
   request: Request,
   response: Response,
   annotations: ExpressiveTeaAnnotations[],
-  responseResult: any
+  responseResult?: any
 ) {
   const view = find(annotations, { type: 'view' });
   if (view) {

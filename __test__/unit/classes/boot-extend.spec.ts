@@ -13,9 +13,9 @@ describe('Boot Class Extends', () => {
     class Bootstrap extends Boot {
     }
 
-    this.instance = new Bootstrap();
+    const instance = new Bootstrap();
 
-    const app = await this.instance.start();
+    const app = await instance.start();
 
     expect(app.application.use).toHaveBeenCalledWith(undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
@@ -26,9 +26,9 @@ describe('Boot Class Extends', () => {
     class Bootstrap extends Boot {
     }
 
-    this.instance = new Bootstrap();
+    const instance = new Bootstrap();
 
-    const app = await this.instance.start();
+    const app = await instance.start();
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
@@ -39,9 +39,9 @@ describe('Boot Class Extends', () => {
     class Bootstrap extends Boot {
     }
 
-    this.instance = new Bootstrap();
+    const instance = new Bootstrap();
 
-    const app = await this.instance.start();
+    const app = await instance.start();
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
@@ -52,9 +52,9 @@ describe('Boot Class Extends', () => {
     class Bootstrap extends Boot {
     }
 
-    this.instance = new Bootstrap();
+    const instance = new Bootstrap();
 
-    const app = await this.instance.start();
+    const app = await instance.start();
 
     expect(app.application.set).toHaveBeenCalledWith('etag', true);
   });
@@ -64,9 +64,9 @@ describe('Boot Class Extends', () => {
     class Bootstrap extends Boot {
     }
 
-    this.instance = new Bootstrap();
+    const instance = new Bootstrap();
 
-    const app = await this.instance.start();
+    const app = await instance.start();
 
     expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
   });

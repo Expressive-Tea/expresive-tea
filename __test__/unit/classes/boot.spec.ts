@@ -67,7 +67,11 @@ describe('Boot Class', () => {
     });
     const boot = new Bootstrap();
 
-    expect(boot.start()).resolves.toEqual({ application: expect.anything(), server: expect.anything() });
+    expect(boot.start()).resolves.toEqual({
+      application: expect.anything(),
+      secureServer: null,
+      server: expect.anything()
+    });
   });
 
   test('should fail if hard plugin fails', async () => {

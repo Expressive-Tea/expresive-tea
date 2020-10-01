@@ -51,7 +51,6 @@ export function Route(mountpoint = '/') {
         each(handlers, h => {
           const middlewares = h.handler.$middlewares || [];
           this.router[h.verb](h.route, ...middlewares, this.__registerHandler(h));
-          console.log(`[${h.verb}] ${mountpoint}${h.route} - Register Route`);
         });
       }
 
@@ -70,10 +69,16 @@ export function Route(mountpoint = '/') {
 
         return async function exec(request: Request, response: Response, next: NextFunction) {
           try {
+            let isNextUsed = false;
+            const nextWrapper = () => (error: unknown) => {
+              next(error);
+              isNextUsed = true;
+            }
             // TODO: Must be Depecrated in prior version.
-            const result = await options.handler.apply(self, mapArguments(decoratedArguments, request, response, next));
+            const result = await options.handler.apply(self, mapArguments(decoratedArguments, request, response, nextWrapper()));
 
-            if (!response.headersSent) {
+
+            if (!response.headersSent && !isNextUsed) {
               autoResponse(request, response, annotations, result);
             }
           } catch (e) {
