@@ -1,4 +1,3 @@
-import { Plugin } from '@expressive-tea/plugin';
 import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
@@ -7,7 +6,7 @@ import { getClass } from '../helpers/object-helper';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
-  BOOT_STAGES_KEY, EXPRESS_DIRECTIVES,
+  BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY, STAGES_INIT
@@ -104,7 +103,7 @@ function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
 export function Plug(
   stage: BOOT_STAGES,
   name: string,
-  method: (server: Express | never) => Promise<any> | any,
+  method: (server?: Express | never, ...extraArgs: unknown[]) => Promise<any> | any,
   required: boolean = false
 ) {
   return (target: any): void => {
@@ -127,7 +126,7 @@ export function Plug(
  */
 export function Pour(Plugin) {
   return (target: any): void => {
-    const stages = getStages(getClass(target));
+    const stages = getStages(target);
     const instance = new Plugin();
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
@@ -135,7 +134,7 @@ export function Pour(Plugin) {
       getRegisteredPlugins(target)
     );
 
-    BOOT_ORDER.forEach(STAGE => {
+    BOOT_STAGES_LIST.forEach(STAGE => {
       setStage(STAGE, (stages[STAGE] || []).concat(instance.getRegisteredStage(STAGE)), target);
     });
 
@@ -154,7 +153,7 @@ export function Pour(Plugin) {
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
     Settings.getInstance().merge(options);
-    MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, target);
+    // MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, target);
     return target;
   };
 }

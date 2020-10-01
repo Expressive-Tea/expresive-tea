@@ -1,35 +1,40 @@
 import { Module } from '../../../decorators/module';
 
 describe('Module Decorator', () => {
+  let Controller;
+  let mockMountController;
+  let MockProvider;
+  let TestClass;
+
   beforeEach(() => {
-    this.mockMountControler = jest.fn();
-    this.Controller = jest.fn().mockImplementation(() => ({
-      __mount: this.mockMountControler
+    mockMountController = jest.fn();
+    Controller = jest.fn().mockImplementation(() => ({
+      __mount: mockMountController
     }));
 
-    this.Provider = class Provider {
+    MockProvider = class Provider {
     };
 
     @Module({
-      controllers: [this.Controller],
+      controllers: [Controller],
       mountpoint: '/',
-      providers: [this.Provider]
+      providers: [MockProvider]
     })
     class TestModule {
     }
 
-    this.TestClass = TestModule;
+    TestClass = TestModule;
   });
 
   test('should instanciate correctly', () => {
-    const testModule = new this.TestClass();
+    const testModule = new TestClass();
 
     expect(testModule.settings).not.toBeUndefined();
-    expect(this.Controller).toHaveBeenCalled();
+    expect(Controller).toHaveBeenCalled();
   });
 
   test('should register the module on express route correctly', () => {
-    const testModule = new this.TestClass();
+    const testModule = new TestClass();
     const server = {
       use: jest.fn()
     };
@@ -39,6 +44,6 @@ describe('Module Decorator', () => {
     testModule.__register(server);
 
     expect(server.use.mock.calls[0][0]).toEqual('/');
-    expect(this.mockMountControler).toHaveBeenCalled();
+    expect(mockMountController).toHaveBeenCalled();
   });
 });

@@ -21,6 +21,7 @@ import {
 import Plugin from '../../__mocks__/plugin';
 
 describe('ServerSettings Decorator', () => {
+  let testClass;
   test('should modify server settings', () => {
     @ServerSettings({
       port: 8080
@@ -28,7 +29,7 @@ describe('ServerSettings Decorator', () => {
     class Test {
     }
 
-    this.testClass = new Test();
+    testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
   });
 
@@ -39,14 +40,17 @@ describe('ServerSettings Decorator', () => {
     class Test {
     }
 
-    this.testClass = new Test();
+    testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
   });
 });
 
 describe('Plug Decorator', () => {
+  let TestClass;
+  let spyMetadataSet;
+
   beforeAll(() => {
-    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
 
     @Plug(BOOT_STAGES.APPLICATION, 'test', () => {
     })
@@ -55,16 +59,16 @@ describe('Plug Decorator', () => {
     class Test {
     }
 
-    this.TestClass = Test;
+    TestClass = Test;
   });
 
   afterAll(() => {
-    this.spyMetadataSet.mockRestore();
+    spyMetadataSet.mockRestore();
   });
 
   test('should attach plug to respective level', () => {
-    this.testInstance = new this.TestClass();
-    const args = this.spyMetadataSet.mock.calls[0];
+    const testInstance = new TestClass();
+    const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(BOOT_STAGES_KEY);
     expect(args[1]['2'][0]).toEqual(
@@ -73,29 +77,27 @@ describe('Plug Decorator', () => {
         required: false
       })
     );
-    expect(args[2]).toEqual(this.TestClass);
+    expect(args[2]).toEqual(TestClass);
   });
 });
 
 describe('Pour Decorator', () => {
+  let spyMetadataSet;
   beforeEach(() => {
-    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
-    this.spyMetadataSet.mockRestore();
+    spyMetadataSet.mockRestore();
   });
 
   test('should attach plug to respective level', () => {
-    class TestPlugin extends Plugin {
-    }
-
-    @Pour(TestPlugin)
+    @Pour(Plugin)
     class Test {
     }
 
-    this.testInstance = new Test();
-    const args: any[] = last(this.spyMetadataSet.mock.calls) || [];
+    const testInstance = new Test();
+    const args: any[] = last(spyMetadataSet.mock.calls) || [];
 
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
@@ -107,21 +109,11 @@ describe('Pour Decorator', () => {
     );
     expect(args[2]).toEqual(Test);
   });
-
-  test('should attach plug to respective level', () => {
-    class TestPlugin extends Plugin {
-    }
-
-    @Pour(TestPlugin)
-    class TestFail extends Boot {
-    }
-
-    this.testInstance = new TestFail();
-    expect(this.testInstance.start()).resolves.toEqual(expect.anything());
-  });
 });
 
 describe('Setting Decorator', () => {
+  let TestClass;
+
   beforeEach(() => {
     @ServerSettings({
       test: 'this is a test string'
@@ -131,24 +123,26 @@ describe('Setting Decorator', () => {
       test: string;
     }
 
-    this.TestClass = Test;
+    TestClass = Test;
   });
 
   afterEach(() => Settings.reset());
 
   test('should get setting test on instances', () => {
-    const instance = new this.TestClass();
+    const instance = new TestClass();
     expect(instance.test).toEqual('this is a test string');
   });
 });
 
 describe('RegisterModule Decorator', () => {
+  let spyMetadataSet;
+
   beforeEach(() => {
-    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
-    this.spyMetadataSet.mockRestore();
+    spyMetadataSet.mockRestore();
   });
 
   test('should register a module', () => {
@@ -161,8 +155,8 @@ describe('RegisterModule Decorator', () => {
       }
     }
 
-    this.testInstance = new Test();
-    const args = this.spyMetadataSet.mock.calls[0];
+    const testInstance = new Test();
+    const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
     expect(args[1]).toEqual([Module]);
@@ -183,12 +177,14 @@ describe('RegisterModule Decorator', () => {
 });
 
 describe('Static Decorator', () => {
+  let spyMetadataSet;
+
   beforeEach(() => {
-    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
-    this.spyMetadataSet.mockRestore();
+    spyMetadataSet.mockRestore();
   });
 
   test('should register a static server', () => {
@@ -196,9 +192,9 @@ describe('Static Decorator', () => {
     class Test {
     }
 
-    this.instance = new Test();
+    const instance = new Test();
 
-    const args = this.spyMetadataSet.mock.calls[0];
+    const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
     expect(args[1]).toEqual([{
@@ -213,9 +209,9 @@ describe('Static Decorator', () => {
     class Test {
     }
 
-    this.instance = new Test();
+    const instance = new Test();
 
-    const args = this.spyMetadataSet.mock.calls[0];
+    const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
     expect(args[1]).toEqual([{
@@ -236,12 +232,13 @@ describe('Static Decorator', () => {
 });
 
 describe('Express Directive Decorator', () => {
+  let spyMetadataSet;
   beforeEach(() => {
-    this.spyMetadataSet = jest.spyOn(Metadata, 'set');
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
-    this.spyMetadataSet.mockRestore();
+    spyMetadataSet.mockRestore();
   });
 
   test('should allow to modify etag', () => {
@@ -249,9 +246,9 @@ describe('Express Directive Decorator', () => {
     class Test {
     }
 
-    this.instance = new Test();
+    const instance = new Test();
 
-    const args = this.spyMetadataSet.mock.calls[0];
+    const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_DIRECTIVES_KEY);
     expect(args[1]).toEqual([{
