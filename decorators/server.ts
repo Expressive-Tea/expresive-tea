@@ -2,16 +2,21 @@ import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import { getClass } from '../helpers/object-helper';
 import {
-  BOOT_ORDER,
+  ASSIGN_TEACUP_KEY,
+  ASSIGN_TEAPOT_KEY,
   BOOT_STAGES,
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY, STAGES_INIT
+  REGISTERED_STATIC_KEY
 } from '../libs/constants';
-import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
+import {
+  ExpressiveTeaPotSettings,
+  ExpressiveTeaPluginProps,
+  ExpressiveTeaServerProps,
+  ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings
+} from '../libs/interfaces';
 
 /**
  * Define the Main Plugins Properties.
@@ -235,4 +240,18 @@ export function RegisterModule(Module) {
     registeredModules.push(Module);
     MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
   };
+}
+
+export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
+  return (target: object) => {
+    Settings.getInstance().set('isTeapot', true);
+    MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
+  }
+}
+
+export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
+  return (target: object) => {
+    Settings.getInstance().set('isTeacup', true);
+    MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
+  }
 }

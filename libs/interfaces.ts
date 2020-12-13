@@ -51,6 +51,17 @@ export interface ExpressiveTeaPluginProps {
   priority: number;
 }
 
+export interface ExpressiveTeaPotSettings {
+  serverKey: string;
+  clientKey: string;
+  port?: number;
+}
+
+export interface ExpressiveTeaCupSettings {
+  clientKey: string;
+  serverUrl: string;
+}
+
 /**
  * Define Expressive Module Properties.
  * @typedef {Object} ExpressiveTeaModuleProps

@@ -2,14 +2,14 @@ import * as $P from 'bluebird';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
-import { Express } from 'express';
+import {Express} from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import { getClass } from '../helpers/object-helper';
+import {BootLoaderRequiredExceptions, BootLoaderSoftExceptions} from '../exceptions/BootLoaderExceptions';
+import {getClass} from '../helpers/object-helper';
 import {
   BOOT_ORDER,
   BOOT_STAGES,
@@ -19,10 +19,11 @@ import {
   REGISTERED_STATIC_KEY,
   STAGES_INIT
 } from '../libs/constants';
-import { ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective } from '../libs/interfaces';
-import { Rejector, Resolver } from '../libs/types';
+import {ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective} from '../libs/interfaces';
+import {Rejector, Resolver} from '../libs/types';
 import * as WebSocket from 'ws';
 import WebsocketService from '../services/WebsocketService';
+import {teacupInitialize, teapotInitialize} from '../helpers/teapot-helper';
 
 
 /**
@@ -79,30 +80,33 @@ abstract class Boot {
         const privateKey = this.settings.get('privateKey');
         const certificate = this.settings.get('certificate');
         const startWebsocket = this.settings.get('startWebsocket');
+        const isTeapot = this.settings.get('isTeapot');
+        const isTeacup = this.settings.get('isTeacup');
         const detachWebsocket = this.settings.get('detachWebsocket');
-        const serverConfigQueue: Promise<void>[] = [];
+        const serverConfigQueue: Promise<http.Server | https.Server>[] = [];
 
         // tslint:disable-next-line:one-variable-per-declaration
         let ws, wss;
 
-        const server:http.Server = http.createServer(this.server);
-        const secureServer:https.Server = privateKey && certificate && https.createServer({
+        const server: http.Server = http.createServer(this.server);
+        const secureServer: https.Server = privateKey && certificate && https.createServer({
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
         }, this.server);
 
         if (startWebsocket) {
 
-          ws = new WebSocket.Server(detachWebsocket ?{ noServer: true} : {server});
+          ws = new WebSocket.Server(detachWebsocket ? {noServer: true} : {server});
 
           if (secureServer) {
-            wss = new WebSocket.Server(detachWebsocket? {noServer: true} : {server: secureServer});
+            wss = new WebSocket.Server(detachWebsocket ? {noServer: true} : {server: secureServer});
           }
 
           WebsocketService.init(ws, wss);
           WebsocketService.getInstance().setHttpServer(server);
           WebsocketService.getInstance().setHttpServer(secureServer);
         }
+
 
         await resolveDirectives(this, this.server);
         await resolveStatic(this, this.server);
@@ -112,16 +116,21 @@ abstract class Boot {
 
         await resolveStage(BOOT_STAGES.APPLICATION, this, this.server);
 
-        serverConfigQueue.push(new $P(resolve => server.listen(this.settings.get('port'), () => {
-          console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
-          resolve();
-        })));
+
+        serverConfigQueue.push( new $P(resolve => {
+          const httpServer: http.Server = server.listen(this.settings.get('port'), () => {
+            console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
+            resolve(httpServer);
+          });
+        }));
 
         if (secureServer) {
-          serverConfigQueue.push(new $P(resolve => secureServer.listen(this.settings.get('securePort'), () => {
-            console.log(`Running Secure HTTP Server on [${this.settings.get('securePort')}]`);
-            resolve();
-          })));
+          serverConfigQueue.push(new $P(resolve => {
+            const httpsServer: https.Server = secureServer.listen(this.settings.get('port'), () => {
+              console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
+              resolve(httpsServer);
+            });
+          }));
         }
 
         await $P.all([
@@ -129,11 +138,17 @@ abstract class Boot {
           resolveStage(BOOT_STAGES.ON_HTTP_CREATION, this, this.server, server, secureServer)
         ])
 
-        $P.all(serverConfigQueue)
-          .then(() => {
-            return resolveStage(BOOT_STAGES.START, this, this.server, server, secureServer);
-          })
-          .then(() => resolver({ application: this.server, server, secureServer }));
+        const listenerServers: (http.Server | https.Server)[] = await $P.all(serverConfigQueue);
+        await resolveStage(BOOT_STAGES.START, this, this.server, server, secureServer);
+
+        if (isTeapot) {
+          teapotInitialize.call(this, this, ...listenerServers);
+        }
+
+        if (isTeacup) {
+          teacupInitialize(this);
+        }
+
       } catch (e) {
         return rejector(e);
       }

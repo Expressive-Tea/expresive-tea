@@ -93,6 +93,8 @@ export const REGISTERED_STATIC_KEY = 'app:statics';
 export const REGISTERED_DIRECTIVES_KEY = 'app:directives';
 export const ARGUMENTS_KEY = 'app:routes:arguments';
 export const ROUTER_ANNOTATIONS_KEY = 'app:routes:annotations';
+export const ASSIGN_TEAPOT_KEY = 'app:gateway:teapot';
+export const ASSIGN_TEACUP_KEY = 'app:gateway:teacup';
 
 export const ARGUMENT_TYPES = {
   BODY: Symbol('BODY'),
