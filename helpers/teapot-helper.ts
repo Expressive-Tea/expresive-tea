@@ -25,12 +25,12 @@ export function teapotInitialize(context: Boot, server: http.Server, secureServe
   });
 
   const { publicKey, privateKey } = generateKeys(teapotSettings.serverKey);
+  const iv = crypto.randomBytes(32).toString('hex');
   settings.set('teapot:privateKey', privateKey);
   settings.set('teapot:publicKey', publicKey);
+  settings.set('teapot:iv', iv);
 
   const signature = sign(teapotSettings.clientKey, privateKey, teapotSettings.serverKey);
-
-  console.log(signature.toString('base64'));
 
   /*
   socketServer.use((socket, next) => {
@@ -40,7 +40,7 @@ export function teapotInitialize(context: Boot, server: http.Server, secureServe
    */
 
   socketServer.on('connection', teacup => {
-    console.log('Connection ---> ', signature);
+    console.log('Connection ---> ', signature, iv);
 
     teacup.emit('handshake', {
       key: Buffer.from(publicKey).toString('base64'),
@@ -57,10 +57,15 @@ export function teapotInitialize(context: Boot, server: http.Server, secureServe
 
         if (verify(teapotSettings.clientKey, clientPublicKey, signature)) {
           clients.set(this.id, {
-            publicKey: clientPublicKey,
-            signature
+            message: createMessage({test: 'testing'}, signature.toString('base64'), iv),
+            signature,
+            iv
           });
-          this.emit('accepted', '');
+
+          const message = {
+            signature: signature.toString('base64')
+          };
+          // this.emit('accepted', createMessage({accepted: true}, clientPublicKey));
           return;
         }
 
@@ -77,7 +82,19 @@ export function teapotInitialize(context: Boot, server: http.Server, secureServe
 
 }
 
-function onHandshakeResponse(data) {}
+function createMessage(data: { [property: string]: any }, signature: string, iv: string) {
+  const packet: string = Buffer.from(JSON.stringify(data)).toString('base64');
+  const cipher: crypto.Cipher = crypto.createCipheriv('aes-256-cbc', signature, signature);
+  let encrypted: string = cipher.update(packet, 'utf8', 'base64');
+  encrypted += cipher.final('base64');
+  console.log('CREATE ENCRYPTED MESSAGE');
+  console.log(`
+  Data: ${data},
+  Signature: ${signature},
+  iv: ${iv}
+  `);
+  return encrypted;
+}
 
 export function teacupInitialize(context: Boot) {
   const settings = Settings.getInstance();
@@ -125,6 +142,8 @@ export function teacupInitialize(context: Boot) {
      */
   });
 
+  client.on('accepted', data => console.log(data, 'accepted----'));
+
   client.connect();
 }
 
@@ -148,7 +167,8 @@ function verify(data: string, publicKey, signature) {
 
 function encryptData(publicKey, data: Buffer) {
   return crypto.publicEncrypt({
-    key: publicKey
+    key: publicKey,
+    oaepHash:'sha256'
   }, data);
 }
 
