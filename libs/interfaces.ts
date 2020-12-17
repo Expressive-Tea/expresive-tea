@@ -58,7 +58,9 @@ export interface ExpressiveTeaPotSettings {
 }
 
 export interface ExpressiveTeaCupSettings {
+  address: string;
   clientKey: string;
+  mountTo: string;
   serverUrl: string;
 }
 

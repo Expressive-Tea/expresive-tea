@@ -68,6 +68,14 @@ abstract class Boot {
   }
 
   /**
+   * Get Express Application
+   * @returns Express
+   */
+  getApplication(): Express {
+    return this.server;
+  }
+
+  /**
    * Bootstrap and verify that all the required plugins are correctly configured and proceed to attach all the
    * registered modules. <b>Remember</b> this is the unique method that must be decorated for the Register Module
    * decorator.
@@ -116,27 +124,28 @@ abstract class Boot {
 
         await resolveStage(BOOT_STAGES.APPLICATION, this, this.server);
 
-
-        serverConfigQueue.push( new $P(resolve => {
-          const httpServer: http.Server = server.listen(this.settings.get('port'), () => {
-            console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
-            resolve(httpServer);
-          });
-        }));
-
-        if (secureServer) {
-          serverConfigQueue.push(new $P(resolve => {
-            const httpsServer: https.Server = secureServer.listen(this.settings.get('port'), () => {
-              console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
-              resolve(httpsServer);
-            });
-          }));
-        }
-
         await $P.all([
           resolveStage(BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, this, this.server),
           resolveStage(BOOT_STAGES.ON_HTTP_CREATION, this, this.server, server, secureServer)
         ])
+
+        serverConfigQueue.push( new $P(resolve => {
+          const httpServer: http.Server = server.listen(this.settings.get('port'), () => {
+            console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
+          });
+
+          resolve(httpServer);
+        }));
+
+        if (secureServer) {
+          serverConfigQueue.push(new $P(resolve => {
+            const httpsServer: https.Server = secureServer.listen(this.settings.get('securePort'), () => {
+              console.log(`Running HTTP Server on [${this.settings.get('securePort')}]`);
+            });
+            resolve(httpsServer);
+          }));
+        }
+
 
         const listenerServers: (http.Server | https.Server)[] = await $P.all(serverConfigQueue);
         await resolveStage(BOOT_STAGES.START, this, this.server, server, secureServer);
@@ -148,6 +157,8 @@ abstract class Boot {
         if (isTeacup) {
           teacupInitialize(this);
         }
+
+        resolver({ application: this.server, server, secureServer })
 
       } catch (e) {
         return rejector(e);
