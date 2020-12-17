@@ -1,9 +1,9 @@
 import * as proxy from 'express-http-proxy';
-import { P2cBalancer } from 'load-balancers';
+import LoadBalancer from './LoadBalancer';
 
 export default class ProxyRoute {
   readonly registeredOn: string;
-  private balancer: P2cBalancer;
+  private balancer: LoadBalancer;
   private servers: any[] = [];
   private lastServerSelected: number = 0;
 
@@ -13,7 +13,7 @@ export default class ProxyRoute {
 
   registerServer(address: string, teacupId: string) {
     this.servers.push({ teacupId, address });
-    this.balancer = new P2cBalancer(this.servers.length, this.lastServerSelected);
+    this.balancer = new LoadBalancer(this.servers.length, this.lastServerSelected);
   }
 
   registerRoute() {
