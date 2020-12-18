@@ -6,24 +6,15 @@ import {Express} from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import {BootLoaderRequiredExceptions, BootLoaderSoftExceptions} from '../exceptions/BootLoaderExceptions';
-import {getClass} from '../helpers/object-helper';
-import {
-  BOOT_ORDER,
-  BOOT_STAGES,
-  BOOT_STAGES_KEY,
-  REGISTERED_DIRECTIVES_KEY,
-  REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY,
-  STAGES_INIT
-} from '../libs/constants';
+import { BOOT_ORDER, BOOT_STAGES} from '../libs/constants';
 import {ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective} from '../libs/interfaces';
 import {Rejector, Resolver} from '../libs/types';
 import * as WebSocket from 'ws';
 import WebsocketService from '../services/WebsocketService';
 import {teacupInitialize, teapotInitialize} from '../helpers/teapot-helper';
+import {resolveDirectives, resolveStage, resolveStatic} from '../helpers/boot-helper';
+import {initWebsocket} from '../helpers/websocket-helper';
 
 
 /**
@@ -87,42 +78,22 @@ abstract class Boot {
       try {
         const privateKey = this.settings.get('privateKey');
         const certificate = this.settings.get('certificate');
-        const startWebsocket = this.settings.get('startWebsocket');
         const isTeapot = this.settings.get('isTeapot');
         const isTeacup = this.settings.get('isTeacup');
-        const detachWebsocket = this.settings.get('detachWebsocket');
         const serverConfigQueue: Promise<http.Server | https.Server>[] = [];
-
-        // tslint:disable-next-line:one-variable-per-declaration
-        let ws, wss;
-
         const server: http.Server = http.createServer(this.server);
         const secureServer: https.Server = privateKey && certificate && https.createServer({
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
         }, this.server);
 
-        if (startWebsocket) {
-
-          ws = new WebSocket.Server(detachWebsocket ? {noServer: true} : {server});
-
-          if (secureServer) {
-            wss = new WebSocket.Server(detachWebsocket ? {noServer: true} : {server: secureServer});
-          }
-
-          WebsocketService.init(ws, wss);
-          WebsocketService.getInstance().setHttpServer(server);
-          WebsocketService.getInstance().setHttpServer(secureServer);
-        }
-
-
+        await initWebsocket(server, secureServer);
         await resolveDirectives(this, this.server);
         await resolveStatic(this, this.server);
+
         for (const stage of BOOT_ORDER) {
           await resolveStage(stage, this, this.server);
         }
-
-        await resolveStage(BOOT_STAGES.APPLICATION, this, this.server);
 
         await $P.all([
           resolveStage(BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, this, this.server),
@@ -148,7 +119,7 @@ abstract class Boot {
 
 
         const listenerServers: (http.Server | https.Server)[] = await $P.all(serverConfigQueue);
-        await resolveStage(BOOT_STAGES.START, this, this.server, server, secureServer);
+        await resolveStage.call(this, BOOT_STAGES.START, this, this.server, ...listenerServers);
 
         if (isTeapot) {
           teapotInitialize.call(this, this, ...listenerServers);
@@ -165,83 +136,6 @@ abstract class Boot {
       }
     });
   }
-}
-
-async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
-  try {
-    await bootloaderResolve(stage, server, ctx, ...extraArgs);
-    if (stage === BOOT_STAGES.APPLICATION) {
-      await resolveModules(ctx, server);
-    }
-  } catch (e) {
-    checkIfStageFails(e);
-  }
-}
-
-async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
-  registeredDirectives.forEach((options: ExprresiveTeaDirective) => {
-    server.set.call(server, options.name, ...options.settings);
-  });
-}
-
-async function resolveStatic(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
-  registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
-    if (staticOptions.virtual) {
-      server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
-    } else {
-      server.use(express.static(staticOptions.root, staticOptions.options));
-    }
-
-  });
-}
-
-async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
-  registeredModules.forEach(Module => {
-    const moduleInstance = new Module();
-    moduleInstance.__register(server);
-  });
-}
-
-async function bootloaderResolve(
-  STAGE: BOOT_STAGES,
-  server: Express,
-  instance: typeof Boot | Boot,
-  ...args: unknown[]): Promise<void> {
-
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
-  for (const loader of bootLoader[STAGE] || []) {
-    try {
-      await selectLoaderType(loader, server, ...args);
-    } catch (e) {
-      shouldFailIfRequire(e, loader);
-    }
-  }
-}
-
-async function selectLoaderType(loader, server: Express, ...args: unknown[]) {
-  return loader.method(server, ...args);
-}
-
-function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
-  if (e instanceof BootLoaderSoftExceptions) {
-    console.info(e.message);
-  } else {
-    console.error(e.message);
-    // Re Throwing Error to Get it a top level.
-    throw e;
-  }
-}
-
-function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {
-  const failMessage = `Failed [${loader.name}]: ${e.message}`;
-  if (!loader || loader.required) {
-    throw new BootLoaderRequiredExceptions(failMessage);
-  }
-
-  throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
 }
 
 export default Boot;
