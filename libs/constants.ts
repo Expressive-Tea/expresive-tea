@@ -44,9 +44,7 @@ export enum BOOT_STAGES {
 export const BOOT_ORDER = [
   BOOT_STAGES.BOOT_DEPENDENCIES,
   BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-  // BOOT_STAGES.APPLICATION,
-  // BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES,
-  // BOOT_STAGES.START
+  BOOT_STAGES.APPLICATION
 ];
 
 export const BOOT_STAGES_LIST = [
@@ -93,6 +91,8 @@ export const REGISTERED_STATIC_KEY = 'app:statics';
 export const REGISTERED_DIRECTIVES_KEY = 'app:directives';
 export const ARGUMENTS_KEY = 'app:routes:arguments';
 export const ROUTER_ANNOTATIONS_KEY = 'app:routes:annotations';
+export const ASSIGN_TEAPOT_KEY = 'app:gateway:teapot';
+export const ASSIGN_TEACUP_KEY = 'app:gateway:teacup';
 
 export const ARGUMENT_TYPES = {
   BODY: Symbol('BODY'),

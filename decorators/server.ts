@@ -2,16 +2,22 @@ import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import { getClass } from '../helpers/object-helper';
 import {
-  BOOT_ORDER,
+  ASSIGN_TEACUP_KEY,
+  ASSIGN_TEAPOT_KEY,
   BOOT_STAGES,
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY, STAGES_INIT
+  REGISTERED_STATIC_KEY
 } from '../libs/constants';
-import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
+import {
+  ExpressiveTeaPotSettings,
+  ExpressiveTeaPluginProps,
+  ExpressiveTeaServerProps,
+  ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings
+} from '../libs/interfaces';
+import { getClass } from '../helpers/object-helper';
 
 /**
  * Define the Main Plugins Properties.
@@ -130,7 +136,7 @@ export function Pour(Plugin) {
     const instance = new Plugin();
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
-      Settings.getInstance().getOptions(),
+      Settings.getInstance(target).getOptions(),
       getRegisteredPlugins(target)
     );
 
@@ -152,8 +158,7 @@ export function Pour(Plugin) {
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
-    Settings.getInstance().merge(options);
-    // MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, target);
+    Settings.getInstance(target).merge(options);
     return target;
   };
 }
@@ -213,7 +218,7 @@ export function Setting(settingName: string): (target: any, propertyName: string
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,
-      get: () => Settings.getInstance().get(propertyName)
+      get: () => Settings.getInstance(target).get(propertyName)
     });
   };
 }
@@ -235,4 +240,18 @@ export function RegisterModule(Module) {
     registeredModules.push(Module);
     MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
   };
+}
+
+export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
+  return (target: object) => {
+    MetaData.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
+    MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
+  }
+}
+
+export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
+  return (target: object) => {
+    MetaData.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
+    MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
+  }
 }

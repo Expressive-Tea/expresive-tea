@@ -5,14 +5,12 @@ import * as https from 'https';
 export default class WebsocketService {
   static instance: WebsocketService;
 
-  private readonly ws: WebSocket.Server;
-  private readonly wss: WebSocket.Server;
+  private  ws: WebSocket.Server;
+  private  wss: WebSocket.Server;
   httpServer: http.Server;
   httpsServer: https.Server;
 
-  isDetached: boolean = false;
-
-  constructor(ws: WebSocket.Server | never, wss?: WebSocket.Server | never) {
+  constructor(ws?: WebSocket.Server | never, wss?: WebSocket.Server | never) {
     if (WebsocketService.instance) {
       return WebsocketService.instance;
     }
@@ -34,6 +32,14 @@ export default class WebsocketService {
     }
   }
 
+  setWebSocket(ws: WebSocket.Server) {
+    this.ws = ws;
+  }
+
+  setSecureWebsocket(wss: WebSocket.Server) {
+    this.wss = wss;
+  }
+
   static getInstance(ws?: WebSocket.Server, wss?: WebSocket.Server): WebsocketService {
     if (!WebsocketService.instance) {
       WebsocketService.instance = new WebsocketService(ws, wss);
@@ -42,7 +48,7 @@ export default class WebsocketService {
     return WebsocketService.instance;
   }
 
-  static init(ws: WebSocket.Server, wss?: WebSocket.Server):void {
+  static init(ws?: WebSocket.Server, wss?: WebSocket.Server):void {
     if (!WebsocketService.instance) {
       WebsocketService.instance = new WebsocketService(ws, wss);
     }

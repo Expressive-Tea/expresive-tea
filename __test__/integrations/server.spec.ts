@@ -1,5 +1,6 @@
 import { ExpressiveTeaApplication } from '../../libs/interfaces';
 import initServer from './helpers/server-init';
+import container from '../../inversify.config';
 
 describe('Webserver integration', () => {
   let app: ExpressiveTeaApplication;
@@ -12,6 +13,7 @@ describe('Webserver integration', () => {
   });
 
   afterEach(() => {
+    container.unbindAll();
     app.server.close();
   });
 

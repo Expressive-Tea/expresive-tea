@@ -2,12 +2,14 @@ import * as path from 'path';
 import Boot from '../../classes/Boot';
 import { ServerSettings } from '../../decorators/server';
 import { ExpressiveTeaApplication } from '../../libs/interfaces';
+import container from '../../inversify.config';
 
 
 describe('Websocket integration', () => {
   let app: ExpressiveTeaApplication;
 
   afterEach(() => {
+    container.unbindAll();
     app.server.close();
     app.secureServer?.close();
   });

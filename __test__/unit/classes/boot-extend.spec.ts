@@ -2,11 +2,16 @@ import * as express from 'express';
 import * as http from 'http';
 import Boot from '../../../classes/Boot';
 import { ExpressDirecive, Static } from '../../../decorators/server';
+import container from '../../../inversify.config';
 
 jest.mock('express', () => require('jest-express'));
 jest.mock('http');
 
 describe('Boot Class Extends', () => {
+
+  afterEach(() => {
+    container.unbindAll();
+  });
 
   test('should register a new static', async () => {
     @Static('/public')

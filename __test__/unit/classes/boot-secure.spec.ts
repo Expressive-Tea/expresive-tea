@@ -6,6 +6,7 @@ import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule, ServerSettings } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
+import container from '../../../inversify.config';
 
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();
@@ -16,6 +17,7 @@ jest.mock('https');
 jest.mock('fs');
 
 describe('Boot Class Secure Server', () => {
+  let boot: Boot;
   @Plug(BOOT_STAGES.APPLICATION, 'Soft Plugin', softPluginMock)
   @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Hard Plugin', hardPluginMock, true)
   class Bootstrap extends Boot {
@@ -29,9 +31,11 @@ describe('Boot Class Secure Server', () => {
   }
 
   beforeEach(() => {
-    Settings.getInstance().set('certificate', 'certificate.pem');
-    Settings.getInstance().set('privateKey', 'privatekey.pem');
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    container.unbindAll();
   });
 
   test('should create instance correctly', () => {
@@ -43,6 +47,8 @@ describe('Boot Class Secure Server', () => {
 
   test('should start server as default', async () => {
     const boot = new DefaultBootstrap();
+    Settings.getInstance(boot).set('certificate', 'certificate.pem');
+    Settings.getInstance(boot).set('privateKey', 'privatekey.pem');
     const app = await boot.start();
 
     expect(boot.settings).toBeInstanceOf(Settings);
@@ -56,6 +62,8 @@ describe('Boot Class Secure Server', () => {
 
   test('should start an application', async () => {
     const boot = new Bootstrap();
+    Settings.getInstance(boot).set('certificate', 'certificate.pem');
+    Settings.getInstance(boot).set('privateKey', 'privatekey.pem');
     const app = await boot.start();
 
     expect(http.createServer).toHaveBeenCalled();
