@@ -3,6 +3,9 @@
   "version": "1.3.0-alpha",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.js",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "doc": "rimraf docs && npm run publish:prepare && jsdoc -c jsdocs.json",
     "doc:json": "jsdoc -c jsdocs-json.json",
