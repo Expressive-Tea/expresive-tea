@@ -17,6 +17,7 @@ import {
   ExpressiveTeaServerProps,
   ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings
 } from '../libs/interfaces';
+import { getClass } from '../helpers/object-helper';
 
 /**
  * Define the Main Plugins Properties.
@@ -135,7 +136,7 @@ export function Pour(Plugin) {
     const instance = new Plugin();
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
-      Settings.getInstance().getOptions(),
+      Settings.getInstance(target).getOptions(),
       getRegisteredPlugins(target)
     );
 
@@ -157,8 +158,7 @@ export function Pour(Plugin) {
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
-    Settings.getInstance().merge(options);
-    // MetaData.set(BOOT_STAGES_KEY, STAGES_INIT, target);
+    Settings.getInstance(target).merge(options);
     return target;
   };
 }
@@ -218,7 +218,7 @@ export function Setting(settingName: string): (target: any, propertyName: string
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,
-      get: () => Settings.getInstance().get(propertyName)
+      get: () => Settings.getInstance(target).get(propertyName)
     });
   };
 }
@@ -244,14 +244,14 @@ export function RegisterModule(Module) {
 
 export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
   return (target: object) => {
-    Settings.getInstance().set('isTeapot', true);
+    MetaData.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
     MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
   }
 }
 
 export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
   return (target: object) => {
-    Settings.getInstance().set('isTeacup', true);
+    MetaData.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
     MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
   }
 }

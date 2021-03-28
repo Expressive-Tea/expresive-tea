@@ -1,20 +1,23 @@
+import 'reflect-metadata';
+import '../inversify.config';
 import * as $P from 'bluebird';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
-import {Express} from 'express';
+import { Express } from 'express';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import Settings from '../classes/Settings';
-import { BOOT_ORDER, BOOT_STAGES} from '../libs/constants';
-import {ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective} from '../libs/interfaces';
-import {Rejector, Resolver} from '../libs/types';
-import * as WebSocket from 'ws';
-import WebsocketService from '../services/WebsocketService';
-import {teacupInitialize, teapotInitialize} from '../helpers/teapot-helper';
-import {resolveDirectives, resolveStage, resolveStatic} from '../helpers/boot-helper';
-import {initWebsocket} from '../helpers/websocket-helper';
+import { BOOT_ORDER, BOOT_STAGES } from '../libs/constants';
+import { ExpressiveTeaApplication } from '../libs/interfaces';
+import { Rejector, Resolver } from '../libs/types';
+import HTTPEngine from '../engines/http/index';
+import WebsocketEngine from '../engines/websocket/index';
+import TeapotEngine from '../engines/teapot/index';
+import TeacupEngine from '../engines/teacup';
+// tslint:disable-next-line:no-duplicate-imports
+import container from '../inversify.config';
 
 
 /**
@@ -43,7 +46,7 @@ abstract class Boot {
    * @public
    * @summary Server Settings instance reference
    */
-  settings: Settings = new Settings();
+  settings: Settings;
 
   /**
    * Automatically create an Express application instance which will be user to configure over all the boot stages.
@@ -55,9 +58,8 @@ abstract class Boot {
   private readonly server: Express = express();
 
   constructor() {
-    this.settings.set('application', this.server);
+    this.settings = Settings.getInstance(this);
   }
-
   /**
    * Get Express Application
    * @returns Express
@@ -76,60 +78,38 @@ abstract class Boot {
   async start(): Promise<ExpressiveTeaApplication> {
     return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
+        const localContainer = container.createChild();
         const privateKey = this.settings.get('privateKey');
         const certificate = this.settings.get('certificate');
-        const isTeapot = this.settings.get('isTeapot');
-        const isTeacup = this.settings.get('isTeacup');
-        const serverConfigQueue: Promise<http.Server | https.Server>[] = [];
         const server: http.Server = http.createServer(this.server);
         const secureServer: https.Server = privateKey && certificate && https.createServer({
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
         }, this.server);
 
-        await initWebsocket(server, secureServer);
-        await resolveDirectives(this, this.server);
-        await resolveStatic(this, this.server);
+        // Injectables
+        localContainer.bind<http.Server>('server').toConstantValue(server);
+        localContainer.bind<https.Server>('secureServer').toConstantValue(secureServer);
+        localContainer.bind<Boot>('context').toConstantValue(this);
+        localContainer.bind<Settings>('settings').toConstantValue(this.settings);
 
-        for (const stage of BOOT_ORDER) {
-          await resolveStage(stage, this, this.server);
-        }
+        const httpEngine = localContainer.resolve(HTTPEngine);
+        const websocketEngine = localContainer.resolve(WebsocketEngine);
+        const teapotEngine = localContainer.resolve(TeapotEngine);
+        const teacupEngine = localContainer.resolve(TeacupEngine);
 
-        await $P.all([
-          resolveStage(BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, this, this.server),
-          resolveStage(BOOT_STAGES.ON_HTTP_CREATION, this, this.server, server, secureServer)
-        ])
+        await websocketEngine.init();
+        await httpEngine.init();
 
-        serverConfigQueue.push( new $P(resolve => {
-          const httpServer: http.Server = server.listen(this.settings.get('port'), () => {
-            console.log(`Running HTTP Server on [${this.settings.get('port')}]`);
-          });
+        await httpEngine.resolveStages(BOOT_ORDER);
+        await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
 
-          resolve(httpServer);
-        }));
+        const listenerServers: (http.Server | https.Server)[] = await httpEngine.start();
+        await httpEngine.resolveStages([BOOT_STAGES.START ],...listenerServers);
+        await teapotEngine.start();
+        await teacupEngine.start();
 
-        if (secureServer) {
-          serverConfigQueue.push(new $P(resolve => {
-            const httpsServer: https.Server = secureServer.listen(this.settings.get('securePort'), () => {
-              console.log(`Running HTTP Server on [${this.settings.get('securePort')}]`);
-            });
-            resolve(httpsServer);
-          }));
-        }
-
-
-        const listenerServers: (http.Server | https.Server)[] = await $P.all(serverConfigQueue);
-        await resolveStage.call(this, BOOT_STAGES.START, this, this.server, ...listenerServers);
-
-        if (isTeapot) {
-          teapotInitialize.call(this, this, ...listenerServers);
-        }
-
-        if (isTeacup) {
-          teacupInitialize(this);
-        }
-
-        resolver({ application: this.server, server, secureServer })
+        resolver({ application: this.server, server, secureServer });
 
       } catch (e) {
         return rejector(e);

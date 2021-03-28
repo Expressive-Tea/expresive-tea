@@ -1,6 +1,6 @@
 import * as supertest from 'supertest';
 import Boot from '../../../classes/Boot';
-import { RegisterModule} from '../../../decorators/server';
+import { RegisterModule } from '../../../decorators/server';
 import RootModule from './modules/root/RootModule';
 import { ExpressiveTeaApplication } from '../../../libs/interfaces';
 
@@ -18,5 +18,5 @@ export default async function initServer() {
   return {
     app,
     request: supertest(app.application)
-  }
+  };
 }

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import Settings from '../../../classes/Settings';
 
 describe('Settings Class', () => {

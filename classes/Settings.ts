@@ -1,5 +1,9 @@
 import * as _ from 'lodash';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
+import { injectable } from 'inversify';
+import Metadata from './MetaData';
+import { getClass, nameOfClass } from '../helpers/object-helper';
+
 
 /**
  * Declare the properties which the server will save into settings, is a semi dynamic object since is allowed to save
@@ -17,9 +21,13 @@ import { ExpressiveTeaServerProps } from '../libs/interfaces';
  *
  * @class Settings
  * @param {ExpressiveTeaServerProps} [options={ port: 3000 }]
+ * @param {boolean} [isIsolated=false]
  * @summary Singleton Class to Store Server Settings
  */
+@injectable()
 class Settings {
+
+  static isolatedContext:Map<any, Settings> = new Map<any, Settings>();
   /**
    * Reset Singleton instance to the default values, all changes will be erased is not recommendable to use it
    * multiple times since all your options will be lost. Unless you have an option how to recover this is not
@@ -43,7 +51,15 @@ class Settings {
    * @memberof Settings
    * @summary Get Singleton Instance.
    */
-  static getInstance(): Settings {
+  static getInstance(ctx?: any): Settings {
+    if (ctx) {
+      const context = nameOfClass(ctx);
+      if (!Settings.isolatedContext.has(context)) {
+        Settings.isolatedContext.set(context, new Settings(null, true));
+      }
+      return Settings.isolatedContext.get(context);
+    }
+
     return Settings.instance || new Settings();
   }
 
@@ -66,8 +82,8 @@ class Settings {
    */
   private options: ExpressiveTeaServerProps;
 
-  constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }) {
-    if (Settings.instance) {
+  constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }, isIsolated: boolean = false) {
+    if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
 

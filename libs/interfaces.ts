@@ -74,7 +74,7 @@ export interface ExpressiveTeaCupSettings {
  */
 export interface ExpressiveTeaModuleProps {
   controllers: any[];
-  providers: any[];
+  providers?: any[];
   mountpoint: string;
 }
 

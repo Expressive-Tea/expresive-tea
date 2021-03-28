@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { chain, find, get, pick, size } from 'lodash';
+import { chain, find, get, has, pick, size } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '../libs/constants';
 import {
@@ -36,11 +36,11 @@ export function mapArguments(
         case ARGUMENT_TYPES.NEXT:
           return next;
         case ARGUMENT_TYPES.QUERY:
-          return extractParameters(request.query, argument.arguments);
+          return extractParameters(request.query, argument.arguments, argument.key);
         case ARGUMENT_TYPES.BODY:
-          return extractParameters(request.body, argument.arguments);
+          return extractParameters(request.body, argument.arguments, argument.key);
         case ARGUMENT_TYPES.GET_PARAM:
-          return extractParameters(request.params, argument.arguments);
+          return extractParameters(request.params, argument.arguments, argument.key);
         default:
           return;
       }
@@ -49,12 +49,12 @@ export function mapArguments(
     .value();
 }
 
-export function extractParameters(target: unknown, args?: string | string[]) {
+export function extractParameters(target: unknown, args?: string | string[], propertyName? : string | symbol) {
   if (!args && !target) {
     return;
   }
 
-  if (!args) {
+  if (!args && !has(target, propertyName as string)) {
     return target;
   }
 
@@ -62,7 +62,7 @@ export function extractParameters(target: unknown, args?: string | string[]) {
     return pick(target, args);
   }
 
-  return get(target, args as string);
+  return get(target, args as string, get(target, propertyName));
 }
 
 export function generateRoute(route: string, verb: string): (

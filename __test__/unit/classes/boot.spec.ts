@@ -5,6 +5,7 @@ import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule } from '../../../decorators/server';
 import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
+import container from '../../../inversify.config';
 
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();
@@ -33,6 +34,10 @@ describe('Boot Class', () => {
       Settings.getInstance().set('certificate', undefined);
       Settings.getInstance().set('privateKey', undefined);
       jest.clearAllMocks();
+    });
+
+    afterEach(() => {
+      container.unbindAll();
     });
 
     expect(boot.settings).toBeInstanceOf(Settings);
