@@ -61,7 +61,7 @@
     "eiows": "^3.4.1",
     "express": "4.17.1",
     "express-http-proxy": "^1.6.2",
-    "inversify": "5.0.1",
+    "inversify": "5.0.5",
     "inversify-inject-decorators": "3.1.0",
     "lodash": "4.17.20",
     "socket.io": "^3.0.3",
