@@ -90,7 +90,8 @@ export interface IExpressiveTeaRoute {
   readonly router: Router;
   readonly mountpoint: string;
 
-  __mount(parent: Router): any;
+  __mount(parent: Router): IExpressiveTeaRoute;
+  __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler;
 
   [key: string]: any;
 }
@@ -117,7 +118,7 @@ export interface ExpressiveTeaStatic {
   options: ExpressiveTeaStaticFileServer | never;
 }
 
-export interface ExprresiveTeaDirective {
+export interface ExpressiveTeaDirective {
   name: string;
   settings: any[];
 }
