@@ -91,7 +91,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         });
       }
     } catch (e) {
-      console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed wiht next message: ${e.message}`);
+      console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${e.message}`);
     }
   }
 

@@ -20,15 +20,15 @@ export default class WebsocketService {
     WebsocketService.instance = this;
   }
 
-  getWebsocket(serverKind: http.Server | https.Server): WebSocket.Server {
-    return (serverKind instanceof https.Server) ? this.wss : this.ws;
+  getWebsocket(httpServer: http.Server | https.Server): WebSocket.Server {
+    return (httpServer instanceof https.Server) ? this.wss : this.ws;
   }
 
-  setHttpServer(server: http.Server | https.Server) {
-    if (server instanceof https.Server) {
-      this.httpsServer = server;
+  setHttpServer(httpServer: http.Server | https.Server) {
+    if (httpServer instanceof https.Server) {
+      this.httpsServer = httpServer;
     } else {
-      this.httpServer = server;
+      this.httpServer = httpServer;
     }
   }
 
