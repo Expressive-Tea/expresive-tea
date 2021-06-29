@@ -1,6 +1,6 @@
 import { Express, Router } from 'express';
 import { each, map } from 'lodash';
-import { ExpressiveTeaModuleProps } from '../libs/interfaces';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../libs/interfaces';
 import DependencyInjection from '../services/DependencyInjection';
 /**
  * @typedef {Object} ExpressiveTeaModuleProps
@@ -30,7 +30,7 @@ import DependencyInjection from '../services/DependencyInjection';
  */
 export function Module(options: ExpressiveTeaModuleProps) {
   return <T extends new (...args: any[]) => {}>(Module: T) => {
-    return class extends Module {
+    return class ExpressiveTeaModule extends Module implements IExpressiveTeaModule{
       readonly settings: ExpressiveTeaModuleProps;
       readonly router: Router = Router();
       readonly controllers: any[];

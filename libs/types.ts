@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { ExpressiveTeaMiddlewareExtends, IExpressiveTeaRoute } from './interfaces';
 
 export type Resolvable<R> = R | PromiseLike<R>;
 export type Resolver<R> = (thenableOrResult?: Resolvable<R>) => void;

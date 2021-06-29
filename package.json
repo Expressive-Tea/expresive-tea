@@ -45,6 +45,7 @@
     "jest-express": "1.12.0",
     "jsdoc": "3.6.6",
     "jsdoc-json": "2.0.2",
+    "jsdoc-to-markdown": "^7.0.1",
     "minami": "1.2.3",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
@@ -58,7 +59,7 @@
   "dependencies": {
     "bluebird": "3.7.2",
     "braintree-jsdoc-template": "3.3.0",
-    "eiows": "3.4.1",
+    "eiows": "3.4.2",
     "express": "4.17.1",
     "express-http-proxy": "1.6.2",
     "inversify": "5.0.5",
