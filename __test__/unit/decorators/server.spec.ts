@@ -3,7 +3,7 @@ import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import {
-  ExpressDirecive,
+  ExpressDirective,
   Plug,
   Pour,
   RegisterModule,
@@ -242,7 +242,7 @@ describe('Express Directive Decorator', () => {
   });
 
   test('should allow to modify etag', () => {
-    @ExpressDirecive('etag', true)
+    @ExpressDirective('etag', true)
     class Test {
     }
 
@@ -260,7 +260,7 @@ describe('Express Directive Decorator', () => {
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
       // @ts-ignore
-      @ExpressDirecive('invalid', false)
+      @ExpressDirective('invalid', false)
       class Test {
       }
     }).toThrow();
@@ -269,7 +269,7 @@ describe('Express Directive Decorator', () => {
   test('should fail if directive is not named ', () => {
     expect(() => {
       // @ts-ignore
-      @ExpressDirecive()
+      @ExpressDirective()
       class Test {
       }
     }).toThrow();

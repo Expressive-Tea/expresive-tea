@@ -14,7 +14,7 @@ import {
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions
+  ExpressiveTeaHandlerOptions, IExpressiveTeaRoute
 } from '../libs/interfaces';
 import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } from '../libs/types';
 
@@ -37,7 +37,7 @@ import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } fr
 export function Route(mountpoint = '/') {
   return <T extends new (...args: any[]) => {}>(Route: T) => {
 
-    return class ExpressiveTeaRoute extends Route {
+    return class ExpressiveTeaRoute extends Route implements IExpressiveTeaRoute{
       readonly router: Router;
       readonly mountpoint: string;
 

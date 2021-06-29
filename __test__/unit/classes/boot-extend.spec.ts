@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import Boot from '../../../classes/Boot';
-import { ExpressDirecive, Static } from '../../../decorators/server';
+import { ExpressDirective, Static } from '../../../decorators/server';
 import container from '../../../inversify.config';
 
 jest.mock('express', () => require('jest-express'));
@@ -53,7 +53,7 @@ describe('Boot Class Extends', () => {
   });
 
   test('should set a new directive setting value', async () => {
-    @ExpressDirecive('etag', true)
+    @ExpressDirective('etag', true)
     class Bootstrap extends Boot {
     }
 
@@ -65,7 +65,7 @@ describe('Boot Class Extends', () => {
   });
 
   test('should set a new directive setting value and pass multiple arguments', async () => {
-    @ExpressDirecive('trust proxy', 'loopback', '123.123.123.123')
+    @ExpressDirective('trust proxy', 'loopback', '123.123.123.123')
     class Bootstrap extends Boot {
     }
 

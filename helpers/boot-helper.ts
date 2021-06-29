@@ -11,7 +11,7 @@ import * as express from 'express';
 import {Express} from 'express';
 import MetaData from '../classes/MetaData';
 import {getClass} from './object-helper';
-import {ExpressiveTeaStatic, ExprresiveTeaDirective} from '../libs/interfaces';
+import {ExpressiveTeaStatic, ExpressiveTeaDirective} from '../libs/interfaces';
 import {BootLoaderRequiredExceptions, BootLoaderSoftExceptions} from '../exceptions/BootLoaderExceptions';
 import Boot from '../classes/Boot';
 
@@ -28,7 +28,7 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
 
 export async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
   const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
-  registeredDirectives.forEach((options: ExprresiveTeaDirective) => {
+  registeredDirectives.forEach((options: ExpressiveTeaDirective) => {
     server.set.call(server, options.name, ...options.settings);
   });
 }
