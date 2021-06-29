@@ -172,9 +172,9 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.privateKey = privateKey;
 
     this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey, this.teapotSettings.serverKey);
-    this.socketServer = new Server({
+    this.socketServer = require('socket.io')({
       path: '/teapot',
-      wsEngine: 'eiows',
+      wsEngine: require('eiows').Server,
       cookie: false
     });
   }
