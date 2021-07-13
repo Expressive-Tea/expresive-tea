@@ -1,9 +1,9 @@
 module.exports = {
 	roots: [
-    "<rootDir>/"
+    '<rootDir>/'
   ],
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    '^.+\\.tsx?$': 'ts-jest'
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
@@ -11,9 +11,22 @@ module.exports = {
   displayName: 'EXP-TEA:CORE',
   testTimeout: 30000,
   collectCoverage: true,
-  coverageDirectory: "./coverage",
+  coverageDirectory: './coverage',
   coveragePathIgnorePatterns: [
     '__test__/integrations/helpers',
     '__test__/test-classes'
+  ],
+  reporters: [
+    'default',
+    [ 'jest-junit', {
+	    suiteName: 'Expressive Tea Tests',
+      outputDirectory: './coverage',
+      outputName: 'junit.xml',
+      uniqueOutputName: false,
+      classNameTemplate: '{classname}-{title}',
+      titleTemplate: '{classname}-{title}',
+      ancestorSeparator: ' › ',
+      usePathForSuiteName: 'true'
+	  }]
   ]
 };

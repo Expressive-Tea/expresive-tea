@@ -3,11 +3,10 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'npm install -g gulp-cli'
                 sh 'npm install'
             }
         }
-      
+
         stage('test') {
             steps {
                 sh 'npm test'
@@ -19,6 +18,12 @@ pipeline {
                   unhealthyTarget: [methodCoverage: 70, conditionalCoverage: 70, statementCoverage: 70], // optional, default is none
                   failingTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50]     // optional, default is none
                 ])
+            }
+
+            post {
+                  always {
+                    junit 'coverage/junit.xml'
+                  }
             }
         }
     }
