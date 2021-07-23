@@ -1,17 +1,26 @@
 # source
 **/*.ts
 *.ts
+**/*.md
 
 # definitions
+!README.md
 !**/*.d.ts
 !*.d.ts
 
 # configuration
+jsdocs-json.json
+yarn-lock.json
 package-lock.json
 tslint.json
 tsconfig.json
 .prettierrc
 .nycrc
+.editorconfig
+Jenkinsfile
+.travis.yml
+codecov.yml
+
 __test__
 benchmark
 docs
@@ -25,3 +34,4 @@ tasks
 gulpfile.js
 jest.config.js
 jsdocs.json
+tools
