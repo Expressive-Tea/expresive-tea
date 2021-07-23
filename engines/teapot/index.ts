@@ -10,6 +10,7 @@ import Metadata from '../../classes/MetaData';
 import { ASSIGN_TEAPOT_KEY } from '../../libs/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { Server, Socket } from 'socket.io';
+import { NextFunction, Request, Response } from 'express';
 
 @injectable()
 export default class TeapotEngine {
@@ -102,9 +103,9 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         proxyRoute = new ProxyRoute(message.mountTo);
         proxyRoute.registerServer(message.address, self.id);
         ctx.registeredRoute.set(message.mountTo, proxyRoute);
-        ctx.context.getApplication().use(message.mountTo, (req, res, next) => {
+        ctx.context.getApplication().use(message.mountTo, (req: Request, res: Response, next: NextFunction) => {
           const router = proxyRoute.registerRoute();
-          console.log(proxyRoute.hasClients());
+
           if (!proxyRoute.hasClients()) {
             return next();
           }
