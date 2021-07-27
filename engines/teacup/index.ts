@@ -1,7 +1,7 @@
 import * as chalk from 'chalk';
 import * as url from 'url';
 // tslint:disable-next-line:no-duplicate-imports
-import * as io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { inject, injectable } from 'inversify';
 import Boot from '../../classes/Boot';
 import Settings from '../../classes/Settings';
@@ -27,7 +27,7 @@ export default class TeacupEngine {
   private publicServerKey: any;
   private serverSignature: any;
   private clientSignature: Buffer;
-  private client: SocketIOClient.Socket;
+  private client: Socket;
 
   private header() {
     console.log(chalk.white.bold('Teacup Engine is initializing...'))
@@ -91,7 +91,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         });
       }
     } catch (e) {
-      console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed wiht next message: ${e.message}`);
+      console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${e.message}`);
     }
   }
 

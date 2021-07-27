@@ -1,6 +1,7 @@
 import MetaData from '../classes/MetaData';
 import { ARGUMENT_TYPES, ARGUMENTS_KEY } from '../libs/constants';
 import { ExpressiveTeaArgumentOptions } from '../libs/interfaces';
+import { ParameterDecorator } from '../libs/types';
 
 /**
  * @module Decorators/Annotations
