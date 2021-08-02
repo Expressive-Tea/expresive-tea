@@ -93,7 +93,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     const self: Socket = this as unknown as Socket;
     try {
       const message = TeaGatewayHelper.decrypt(data, ctx.serverSignature.slice(0,32));
-      console.log('Registered, ', message);
       let proxyRoute: ProxyRoute;
 
       if (ctx.registeredRoute.has(message.mountTo)) {
@@ -131,7 +130,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     const routes: string[] = [];
 
     this.registeredRoute.forEach((proxyRoute, route) => {
-      console.log(`map.get('${route}') = ${proxyRoute}`);
       if (proxyRoute.isClientOnRoute(teacupId)) {
         routes.push(route);
       }
