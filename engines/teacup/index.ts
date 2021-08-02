@@ -90,8 +90,10 @@ All Communication are encrypted to ensure intruder can not connected, however, p
           signature: this.clientSignature.toString('base64')
         });
       }
+      throw new Error('Fail to Verify Client on Teapod.')
     } catch (e) {
       console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${e.message}`);
+      this.client.disconnect();
     }
   }
 
