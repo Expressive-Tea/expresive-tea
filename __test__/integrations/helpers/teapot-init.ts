@@ -87,8 +87,6 @@ export default async function initTeapot() {
 
   await $P.delay(5000);
 
-  console.log(request);
-
   return {
     appTeapot, appTeacup, extraTeacups, request
   };

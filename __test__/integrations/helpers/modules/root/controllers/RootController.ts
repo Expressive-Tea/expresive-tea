@@ -50,4 +50,9 @@ export default class RootController {
   async indexBody(@body('test') test: unknown ): Promise<unknown> {
     return `<h1> Body Test ${test}</h1>`;
   }
+
+  @Get('/with-number')
+  async withNumber(): Promise<number> {
+    return 300;
+  }
 }
