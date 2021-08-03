@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { chain, find, get, has, pick, size } from 'lodash';
+import { chain, find, get, has, isNumber, pick, size } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '../libs/constants';
 import {
@@ -18,7 +18,8 @@ export function autoResponse(
   if (view) {
     return response.render(view!.arguments![0], responseResult);
   }
-  response.send(responseResult);
+
+  response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
 }
 
 export function mapArguments(

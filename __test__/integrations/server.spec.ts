@@ -81,4 +81,12 @@ describe('Webserver integration', () => {
 
     expect(res.text).toEqual('<h1> Body Test pass</h1>');
   });
+
+  test('should test returning number correctly', async () => {
+    const res = await request.get('/with-number')
+      .expect('Content-Type', /html/)
+      .expect(200);
+
+    expect(res.text).toEqual('300');
+  });
 });

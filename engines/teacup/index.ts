@@ -89,6 +89,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
           key: Buffer.from(this.publicKey).toString('base64'),
           signature: this.clientSignature.toString('base64')
         });
+        return;
       }
       throw new Error('Fail to Verify Client on Teapod.')
     } catch (e) {
