@@ -5,7 +5,6 @@ import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { addAnnotation } from '../helpers/decorators';
 import { autoResponse, generateRoute, mapArguments, router } from '../helpers/server';
 import {
-  ARGUMENT_TYPES,
   ARGUMENTS_KEY,
   ROUTER_ANNOTATIONS_KEY,
   ROUTER_HANDLERS_KEY,
@@ -82,7 +81,10 @@ export function Route(mountpoint = '/') {
               autoResponse(request, response, annotations, result);
             }
           } catch (e) {
-            next(new GenericRequestException(e.message));
+            if (e instanceof GenericRequestException) {
+              return next(e);
+            }
+            next(new GenericRequestException(e.message || 'System Error'));
           }
         };
       }
