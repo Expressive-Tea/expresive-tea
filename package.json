@@ -30,7 +30,7 @@
     "@types/express-http-proxy": "1.6.1",
     "@types/jest": "26.0.23",
     "@types/lodash": "4.14.170",
-    "@types/node": "15.12.5",
+    "@types/node": "16.7.5",
     "@types/reflect-metadata": "0.1.0",
     "@types/socket.io": "3.0.2",
     "@types/socket.io-client": "3.0.0",
