@@ -38,7 +38,10 @@ export async function executeRequest(request: Request, response: Response, next:
       autoResponse(request, response, this.annotations, result);
     }
   } catch (e) {
-    next(new GenericRequestException(e.message));
+    if (e instanceof GenericRequestException) {
+      return next(e);
+    }
+    next(new GenericRequestException(e.message || 'System Error'));
   }
 }
 
