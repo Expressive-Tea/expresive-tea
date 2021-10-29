@@ -6,8 +6,8 @@ describe('Load Balancer', () => {
   test('should create load balancer instance', () => {
     const loadBalancer = new LoadBalancer(2);
 
-    expect(loadBalancer.pick()).toEqual(0);
-    expect(loadBalancer.pick()).toEqual(1);
+    expect(inRange(loadBalancer.pick(), 0, 2)).toBeTruthy();
+    expect(inRange(loadBalancer.pick(), 0, 2)).toBeTruthy();
   });
 
   test('should resolve when bins is new', () => {

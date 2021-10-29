@@ -30,12 +30,8 @@ export default class ProxyRoute {
 
   unregisterServer(teacupId: string): void {
     const index: number = indexOf(this.clients, teacupId);
-    console.log(`Unregister ${teacupId}`, this.servers, this.clients, index);
-
     this.servers.splice(index, 1);
     this.clients.splice(index, 1);
-
-    console.log(`Deleted ${teacupId}`, this.servers, this.clients, index);
 
     this.balancer = new LoadBalancer(this.servers.length);
   }

@@ -67,6 +67,12 @@ describe('Teapot/Teacup integration', () => {
     expect(res.text).toEqual('<h1> Body Test pass teacup2</h1>');
   });
 
+  test('should get 404 when call a unverified teacup', async () => {
+    await request.post('/teacup-3/test')
+      .expect('Content-Type', /html/)
+      .expect(404);
+  });
+
   test('should remove a teacup from teapot gateway', async () => {
     const serverTerminator = createHttpTerminator({ server: extraTeacups[0].server});
     await serverTerminator.terminate();

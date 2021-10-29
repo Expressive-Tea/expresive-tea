@@ -7,8 +7,8 @@
     "node": ">=12.0.0"
   },
   "scripts": {
-    "test": "npm run linter && jest --clearCache && jest --coverage  --ci --detectOpenHandles --forceExit --silent",
-    "test:dev": "npm run linter && jest --detectOpenHandles --forceExit",
+    "test": "npm run linter && jest --clearCache && jest --coverage  --ci --detectOpenHandles --forceExit --silent --runInBand",
+    "test:dev": "npm run linter && jest --clearCache && jest --detectOpenHandles --forceExit",
     "linter": "tslint -c tslint.json -p tsconfig.json",
     "build:dev": "tsc --project tsconfig.json --watch",
     "build": "tsc --project tsconfig.json",

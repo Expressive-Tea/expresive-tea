@@ -3,9 +3,9 @@ import * as http from 'http';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule } from '../../../decorators/server';
-import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
+import { BOOT_STAGES } from '../../../libs/constants';
 
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();

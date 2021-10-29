@@ -1,8 +1,7 @@
 import * as _ from 'lodash';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
 import { injectable } from 'inversify';
-import Metadata from './MetaData';
-import { getClass, nameOfClass } from '../helpers/object-helper';
+import { nameOfClass } from '../helpers/object-helper';
 
 
 /**

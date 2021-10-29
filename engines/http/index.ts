@@ -56,7 +56,7 @@ export default class HTTPEngine {
 
   async resolveStages(stages: BOOT_STAGES[], ...extraArgs) {
     return $P.map(stages,s => {
-      resolveStage(s, this.context, this.context.getApplication(), ...extraArgs);
+      return resolveStage(s, this.context, this.context.getApplication(), ...extraArgs);
     })
   }
 }

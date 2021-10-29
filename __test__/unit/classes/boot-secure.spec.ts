@@ -3,13 +3,9 @@ import * as http from 'http';
 import * as https from 'https';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { Plug, RegisterModule, ServerSettings } from '../../../decorators/server';
-import { BOOT_STAGES } from '../../../libs/constants';
 import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
-
-const softPluginMock = jest.fn();
-const hardPluginMock = jest.fn();
+import { RegisterModule } from '../../../decorators/server';
 
 jest.mock('express', () => require('jest-express'));
 jest.mock('http');
@@ -17,9 +13,6 @@ jest.mock('https');
 jest.mock('fs');
 
 describe('Boot Class Secure Server', () => {
-  let boot: Boot;
-  @Plug(BOOT_STAGES.APPLICATION, 'Soft Plugin', softPluginMock)
-  @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Hard Plugin', hardPluginMock, true)
   class Bootstrap extends Boot {
     @RegisterModule(Module)
     async start() {

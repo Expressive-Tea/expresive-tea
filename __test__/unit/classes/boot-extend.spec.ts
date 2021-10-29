@@ -3,11 +3,18 @@ import * as http from 'http';
 import Boot from '../../../classes/Boot';
 import { ExpressDirective, Static } from '../../../decorators/server';
 import container from '../../../inversify.config';
+import Settings from '../../../classes/Settings';
 
 jest.mock('express', () => require('jest-express'));
 jest.mock('http');
 
 describe('Boot Class Extends', () => {
+
+  beforeEach(() => {
+    Settings.getInstance().set('certificate', undefined);
+    Settings.getInstance().set('privateKey', undefined);
+    jest.clearAllMocks();
+  });
 
   afterEach(() => {
     container.unbindAll();
