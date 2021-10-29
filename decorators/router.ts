@@ -1,11 +1,9 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { Router } from 'express';
 import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
-import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { addAnnotation } from '../helpers/decorators';
-import { autoResponse, executeRequest, generateRoute, mapArguments, router } from '../helpers/server';
+import { executeRequest, generateRoute, router } from '../helpers/server';
 import {
-  ARGUMENT_TYPES,
   ARGUMENTS_KEY,
   ROUTER_ANNOTATIONS_KEY,
   ROUTER_HANDLERS_KEY,

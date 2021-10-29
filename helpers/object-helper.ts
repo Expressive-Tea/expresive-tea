@@ -285,3 +285,12 @@ export function descriptorOf(target: any, propertyKey: string): PropertyDescript
 export function prototypeOf(target: any) {
   return classOf(target) === target ? target.prototype : target;
 }
+
+const argumentsRegExp = /\(([\s\S]*?)\)/;
+const replaceRegExp = /[ ,\n\r\t]+/;
+// tslint:disable-next-line:ban-types
+export function getOwnArgumentNames(fn: Function) {
+  const fnArguments = argumentsRegExp.exec(fn.toString())[1].trim();
+
+  return fnArguments && fnArguments.length ? fnArguments.split(replaceRegExp) : [];
+}
