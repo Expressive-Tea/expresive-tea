@@ -92,8 +92,6 @@ export interface IExpressiveTeaRoute {
 
   __mount(parent: Router): IExpressiveTeaRoute;
   __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler;
-
-  [key: string]: any;
 }
 
 /**

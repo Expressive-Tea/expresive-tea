@@ -56,13 +56,29 @@ class TeacupTest2 extends Boot {
 }
 
 @ServerSettings({
-  port: 8083
+  port: 8084
 })
 @Teacup({
   clientKey: 'testKey',
   serverUrl: `teapot://127.0.0.1:${teapotPort}/teapot`,
-  address: 'http://127.0.0.1:8083',
+  address: 'http://127.0.0.1:8084',
   mountTo: '/teacup-1'
+})
+class TeacupTest4 extends Boot {
+  @RegisterModule(TeacupModule1)
+  async start(): Promise<ExpressiveTeaApplication> {
+    return super.start();
+  }
+}
+
+@ServerSettings({
+  port: 8083
+})
+@Teacup({
+  clientKey: 'testKeyFail',
+  serverUrl: `teapot://127.0.0.1:${teapotPort}/teapot`,
+  address: 'http://127.0.0.1:8083',
+  mountTo: '/teacup-3'
 })
 class TeacupTest3 extends Boot {
   @RegisterModule(TeacupModule1)
@@ -76,13 +92,15 @@ export default async function initTeapot() {
   const teacup1 = new TeacupTest();
   const teacup2 = new TeacupTest2();
   const teacup3 = new TeacupTest3();
+  const teacup4 = new TeacupTest4();
 
   const appTeapot = await teapot.start();
   const request = supertest(appTeapot.application);
   const appTeacup = await teacup1.start();
   const extraTeacups = await $P.all([
     teacup2.start(),
-    teacup3.start()
+    teacup3.start(),
+    teacup4.start()
   ]);
 
   await $P.delay(5000);

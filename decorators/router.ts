@@ -3,8 +3,9 @@ import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { addAnnotation } from '../helpers/decorators';
-import { autoResponse, generateRoute, mapArguments, router } from '../helpers/server';
+import { autoResponse, executeRequest, generateRoute, mapArguments, router } from '../helpers/server';
 import {
+  ARGUMENT_TYPES,
   ARGUMENTS_KEY,
   ROUTER_ANNOTATIONS_KEY,
   ROUTER_HANDLERS_KEY,
@@ -66,27 +67,12 @@ export function Route(mountpoint = '/') {
         const annotations: ExpressiveTeaAnnotations[] = MetaData.get(ROUTER_ANNOTATIONS_KEY,
           options.target, options.propertyKey);
 
-        return async function exec(request: Request, response: Response, next: NextFunction) {
-          try {
-            let isNextUsed = false;
-            const nextWrapper = () => (error: unknown) => {
-              next(error);
-              isNextUsed = true;
-            }
-            // TODO: Must be Depecrated in prior version.
-            const result = await options.handler.apply(self, mapArguments(decoratedArguments, request, response, nextWrapper()));
-
-
-            if (!response.headersSent && !isNextUsed) {
-              autoResponse(request, response, annotations, result);
-            }
-          } catch (e) {
-            if (e instanceof GenericRequestException) {
-              return next(e);
-            }
-            next(new GenericRequestException(e.message || 'System Error'));
-          }
-        };
+        return executeRequest.bind({
+          options,
+          decoratedArguments,
+          annotations,
+          self
+        });
       }
     };
   };

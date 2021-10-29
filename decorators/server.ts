@@ -4,8 +4,7 @@ import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
-  ASSIGN_TEAPOT_KEY,
-  BOOT_STAGES,
+  ASSIGN_TEAPOT_KEY, BOOT_STAGES,
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
@@ -15,9 +14,8 @@ import {
   ExpressiveTeaPotSettings,
   ExpressiveTeaPluginProps,
   ExpressiveTeaServerProps,
-  ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings
+  ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings, IExpressiveTeaModule
 } from '../libs/interfaces';
-import { getClass } from '../helpers/object-helper';
 
 /**
  * Define the Main Plugins Properties.
@@ -225,6 +223,25 @@ export function Setting(settingName: string): (target: any, propertyName: string
 }
 
 /**
+ * Register Modules Method Decorator this Method Decorator is used at bootstrap level and should decorate bootstrap class
+ * and register modules.
+ * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
+ * @summary This register the Module Classes created by the user.
+ * @param Modules
+ */
+export function Modules(Modules: IExpressiveTeaModule[]) {
+  return target => {
+
+    for (const Module of Modules) {
+      const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+      registeredModules.unshift(Module);
+      MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
+    }
+
+  };
+}
+
+/**
  * Register Module Method Decorator this Method Decorator is used at bootstrap level and should decorate the start
  * method with a Module Class.
  * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
@@ -247,12 +264,12 @@ export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
   return (target: object) => {
     MetaData.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
     MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
-  }
+  };
 }
 
 export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
   return (target: object) => {
     MetaData.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
     MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
-  }
+  };
 }

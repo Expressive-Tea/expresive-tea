@@ -7,6 +7,7 @@ import {
   ExpressiveTeaArgumentOptions,
   ExpressiveTeaHandlerOptions, IDynamicObject
 } from '../libs/interfaces';
+import { GenericRequestException } from '../exceptions/RequestExceptions';
 
 export function autoResponse(
   request: Request,
@@ -20,6 +21,25 @@ export function autoResponse(
   }
 
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
+}
+
+export async function executeRequest(request: Request, response: Response, next: NextFunction) {
+  try {
+    let isNextUsed = false;
+    const nextWrapper = () => (error: unknown) => {
+      next(error);
+      isNextUsed = true;
+    }
+    // TODO: Must be Depecrated in prior version.
+    const result = await this.options.handler.apply(this.self, mapArguments(this.decoratedArguments, request, response, nextWrapper()));
+
+
+    if (!response.headersSent && !isNextUsed) {
+      autoResponse(request, response, this.annotations, result);
+    }
+  } catch (e) {
+    next(new GenericRequestException(e.message));
+  }
 }
 
 export function mapArguments(
