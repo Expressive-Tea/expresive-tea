@@ -9,6 +9,7 @@ import {
 } from '../libs/interfaces';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { getOwnArgumentNames } from './object-helper';
+import * as fs from 'fs';
 
 export function autoResponse(
   request: Request,
@@ -120,4 +121,8 @@ export function router(
   const existedRoutesHandlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey });
   MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
+}
+
+export function fileSettings() {
+  if (fs.existsSync('.expressive-tea')) {}
 }
