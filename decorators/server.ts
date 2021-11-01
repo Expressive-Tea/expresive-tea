@@ -124,7 +124,7 @@ export function Plug(
  *
  * @decorator {ClassDecorator} Pour - Use Expressive Tea plugin definition instance.
  * @summary Attach an Expressive Tea Definition Instance.
- * @param plugin Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
+ * @param Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
  * @param pluginArgs any[] - Arguments passed directly to the Plugin constructor.
  * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
@@ -153,7 +153,6 @@ export function Pour(Plugin, ...pluginArgs: any[]) {
  * @decorator {ClassDecorator} ServerSettings - Declares Server Settings.
  * @summary Declare Server Properties.
  * @param {ExpressiveTeaModuleProps} options
- * @param {number} [port=3000] Select Port Number where the server should be listening.
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {
@@ -247,6 +246,7 @@ export function Modules(Modules: IExpressiveTeaModule[]) {
  * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
  * @summary <b>ONLY</b> Decorate Start Method, this register the Module Classes created by the user.
  * @param {Class} Module
+ * @deprecated Use the new decorator Modules that allow add modules into registered modules.
  */
 export function RegisterModule(Module) {
   return (target, property) => {
