@@ -228,7 +228,7 @@ export function Setting(settingName: string): (target: any, propertyName: string
  * @summary This register the Module Classes created by the user.
  * @param Modules
  */
-export function Modules(Modules: IExpressiveTeaModule[]) {
+export function Modules(Modules: any[]) {
   return target => {
 
     for (const Module of Modules) {
