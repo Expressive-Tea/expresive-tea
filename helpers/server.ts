@@ -124,5 +124,12 @@ export function router(
 }
 
 export function fileSettings() {
-  if (fs.existsSync('.expressive-tea')) {}
+  try {
+    if (fs.existsSync('.expressive-tea')) {
+      const configString = fs.readFileSync('.expressive-tea');
+      return JSON.parse(configString.toString());
+    }
+  } catch (e) {
+    return {};
+  }
 }
