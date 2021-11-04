@@ -29,6 +29,12 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+          environment:
+            JEST_JUNIT_OUTPUT: "coverage/junit.xml"
+      - store_test_results:
+          path: coverage
+      - store_artifacts:
+          path: coverage
 
 workflows:
   # Below is the definition of your workflow.
