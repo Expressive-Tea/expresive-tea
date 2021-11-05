@@ -2,14 +2,12 @@ import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '../classes/MetaData';
 import Settings from '../classes/Settings';
-import { getClass } from '../helpers/object-helper';
 import {
-  BOOT_ORDER,
   BOOT_STAGES,
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY, STAGES_INIT
+  REGISTERED_STATIC_KEY
 } from '../libs/constants';
 import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
 
@@ -120,7 +118,7 @@ export function Plug(
  *
  * @decorator {ClassDecorator} Pour - Use Expressive Tea plugin definition instance.
  * @summary Attach an Expressive Tea Definition Instance.
- * @param plugin Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
+ * @param Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
  * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
@@ -148,7 +146,7 @@ export function Pour(Plugin) {
  * @decorator {ClassDecorator} ServerSettings - Declares Server Settings.
  * @summary Declare Server Properties.
  * @param {ExpressiveTeaModuleProps} options
- * @param {number} [port=3000] Select Port Number where the server should be listening.
+ * @param {object} [port=3000] Select Port Number where the server should be listening.
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
   return target => {

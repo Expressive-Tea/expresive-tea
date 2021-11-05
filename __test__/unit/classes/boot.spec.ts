@@ -25,15 +25,15 @@ describe('Boot Class', () => {
   class DefaultBootstrap extends Boot {
   }
 
+  beforeEach(() => {
+    Settings.getInstance().set('certificate', undefined);
+    Settings.getInstance().set('privateKey', undefined);
+    jest.clearAllMocks();
+  });
+
   test('should start server as default', async () => {
     const boot = new DefaultBootstrap();
     const app = await boot.start();
-
-    beforeEach(() => {
-      Settings.getInstance().set('certificate', undefined);
-      Settings.getInstance().set('privateKey', undefined);
-      jest.clearAllMocks();
-    });
 
     expect(boot.settings).toBeInstanceOf(Settings);
     expect(boot.settings).toEqual(Settings.getInstance());
