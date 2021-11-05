@@ -77,3 +77,12 @@ examples/
 
 *.d.ts
 *.js.map
+benchmark/*.js
+classes/*.js
+decorators/*.js
+exceptions/*.js
+helpers/*.js
+libs/*.js
+services/*.js
+engines/**/*.js
+inversify.config.js
