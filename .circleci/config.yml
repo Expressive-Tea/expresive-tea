@@ -23,18 +23,9 @@ jobs:
       - checkout
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
       # The orb install-packages step will also automatically cache them for faster future runs.
-      - restore_cache:
-          keys:
-            - expressive-tea-{{ checksum "package.json" }}
-            - expressive-tea-
-
       - node/install-packages:
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
-      - save_cache:
-          paths:
-            - node_modules
-          key: expressive-tea-{{ checksum "package.json" }}
       - run:
           name: Expressive Tea Tests
           command: npm test
