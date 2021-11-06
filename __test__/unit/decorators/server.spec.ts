@@ -1,5 +1,4 @@
 import { last } from 'lodash';
-import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import {
@@ -18,7 +17,7 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../../../libs/constants';
-import Plugin from '../../__mocks__/plugin';
+import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
 
 describe('ServerSettings Decorator', () => {
   let testClass;
@@ -99,6 +98,28 @@ describe('Pour Decorator', () => {
     const testInstance = new Test();
     const args: any[] = last(spyMetadataSet.mock.calls) || [];
 
+    expect(testInstance).toBeDefined();
+    expect(args).toBeDefined();
+    expect(args[0]).toEqual(PLUGINS_KEY);
+    expect(args[1][0]).toEqual(
+      expect.objectContaining({
+        name: 'Mocked',
+        priority: 999
+      })
+    );
+    expect(args[2]).toEqual(Test);
+  });
+
+  test('should attach plug to respective level and pass the arguments', () => {
+    @Pour(Plugin, 'a', 1, 2, {x: 'y'})
+    class Test {
+    }
+
+    const instance = new Test();
+    const args: any[] = last(spyMetadataSet.mock.calls) || [];
+
+    expect(instance).toBeDefined();
+    expect(mockPluginArguments).toEqual(['a', 1, 2, {x: 'y'}]);
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
     expect(args[1][0]).toEqual(

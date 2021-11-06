@@ -61,16 +61,10 @@
   
   <!-- Build -->
   <a href="https://travis-ci.org/Zero-OneiT/expresive-tea">
-  <img alt="Travis (.org) branch" src="https://img.shields.io/travis/zero-oneit/expresive-tea/master?style=for-the-badge">
+  <img alt="Circle CI" src="https://circleci.com/gh/Expressive-Tea/expresive-tea/tree/master.svg?style=svg">
   </a>
 </p>
 
-<p align="center">
-  <!-- Npm Version -->
-  <a href="https://expressive-tea.io/2020/08/03/breaking-news-organization-changes/">
-  <img alt="Announcement Expressive Tea" src="images/announcement-01.png">
-  </a>
-</p>
 
 <!-- PROJECT LOGO -->
 <br />
@@ -161,7 +155,28 @@ architecture.
 Expressive Tea is not having any configuration of any Express Plugin or any database connection beside is built it 
 on Express it is woking as **Bring Your Own Architecture**.
 
-### Installation
+### Installation using Tea CLI
+
+#### Installing tea
+```bash
+npm i -g @expressive-tea/tea
+```
+
+#### Create a Project
+```bash
+tea brew <name_of_project>
+```
+
+#### Run Project
+
+In the project directory. 
+
+```bash
+tea serve
+```
+
+### Installation by pure typescript
+
 ```bash
 npm i --save @zerooneit/expressive-tea
 ```

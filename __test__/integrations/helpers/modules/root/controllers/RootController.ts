@@ -1,12 +1,18 @@
 import { Get, Middleware, Post, Route } from '../../../../../../decorators/router';
 import { body, next, request, response, param, query } from '../../../../../../decorators/annotations';
 import { Response, Request } from 'express';
+import { BadRequestException } from '../../../../../../exceptions/RequestExceptions';
 
 @Route('/')
 export default class RootController {
   @Get('/test')
   async index(): Promise<string> {
     return 'this is a test';
+  }
+
+  @Get('/test-number')
+  async indexNumber(): Promise<number> {
+    return 20;
   }
 
   @Get('/next')
@@ -24,6 +30,12 @@ export default class RootController {
   @Get('/error')
   async withError(): Promise<string> {
     throw new Error('not pass');
+    return 'this is a test';
+  }
+
+  @Get('/error-generic')
+  async withErrorGeneric(): Promise<string> {
+    throw new BadRequestException('not pass');
     return 'this is a test';
   }
 
