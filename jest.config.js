@@ -15,5 +15,18 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '__test__/integrations/helpers',
     '__test__/test-classes'
+  ],
+  reporters: [
+    'default',
+    [ 'jest-junit', {
+      suiteName: 'Expressive Tea Tests',
+      outputDirectory: './coverage',
+      outputName: 'junit.xml',
+      uniqueOutputName: false,
+      classNameTemplate: '{classname}-{title}',
+      titleTemplate: '{classname}-{title}',
+      ancestorSeparator: ' › ',
+      usePathForSuiteName: 'true'
+    }]
   ]
 };
