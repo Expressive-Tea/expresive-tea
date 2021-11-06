@@ -119,13 +119,14 @@ export function Plug(
  * @decorator {ClassDecorator} Pour - Use Expressive Tea plugin definition instance.
  * @summary Attach an Expressive Tea Definition Instance.
  * @param Plugin - A Plugin Class which extends @expressive-tea/plugin/Plugin Class.
+ * @param pluginArgs - Plugin Constructor Arguments
  * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
-export function Pour(Plugin) {
+export function Pour(Plugin, ...pluginArgs) {
   return (target: any): void => {
     const stages = getStages(target);
-    const instance = new Plugin();
+    const instance = new Plugin(...pluginArgs);
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
       Settings.getInstance().getOptions(),
