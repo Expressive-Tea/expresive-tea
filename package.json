@@ -1,6 +1,6 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.js",
   "scripts": {
@@ -87,9 +87,9 @@
     "nodejs"
   ],
   "bugs": {
-    "url": "https://github.com/Zero-OneiT/expresive-tea/issues"
+    "url": "https://github.com/Expressive-Tea/expresive-tea/issues"
   },
-  "homepage": "https://github.com/Zero-OneiT/expresive-tea#readme",
+  "homepage": "https://github.com/Expressive-Tea/expresive-tea#readme",
   "jest": {
     "coverageDirectory": "./coverage/",
     "collectCoverage": true
