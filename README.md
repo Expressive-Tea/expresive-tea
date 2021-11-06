@@ -3,6 +3,21 @@
   <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
   <img alt="npm (scoped)" src="https://img.shields.io/npm/v/@zerooneit/expressive-tea?style=for-the-badge">
   </a>
+
+  <!-- Test Coverage -->
+  <a href="https://codecov.io/gh/Expressive-Tea/expresive-tea">
+  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/Expressive-Tea/expresive-tea?style=for-the-badge">
+  </a>
+
+  <!-- Build -->
+  <a href="https://travis-ci.org/Zero-OneiT/expresive-tea">
+  <img alt="Circle CI" src="https://img.shields.io/circleci/build/github/Expressive-Tea/expresive-tea/master?style=for-the-badge">
+  </a>
+
+  <!-- License -->
+  <a href="https://github.com/Zero-OneiT/expresive-tea/blob/develop/LICENSE">
+  <img alt="NPM" src="https://img.shields.io/npm/l/@zerooneit/expressive-tea?style=for-the-badge">
+  </a>
   
   <!-- Downloads -->
   <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
@@ -14,55 +29,42 @@
   <img alt="Libraries.io dependency status for latest release, scoped npm package" src="https://img.shields.io/librariesio/release/npm/@zerooneit/expressive-tea?style=for-the-badge">
   </a>
   
-  <!-- License -->
-  <a href="https://github.com/Zero-OneiT/expresive-tea/blob/develop/LICENSE">
-  <img alt="NPM" src="https://img.shields.io/npm/l/@zerooneit/expressive-tea?style=for-the-badge">
-  </a>
-  
   <!-- Vulnerabilities -->
-  <a href="https://snyk.io//test/github/Zero-OneiT/expresive-tea?targetFile=package.json">
-  <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/npm/@zerooneit/expressive-tea?style=for-the-badge">
+  <a href="https://snyk.io//test/github/Expressive-Tea/expresive-tea?targetFile=package.json">
+  <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/github/Expressive-Tea/expresive-tea?style=for-the-badge">
   </a>
   
-  <!-- Last Commit -->
+  <!-- Last Commit 
   <a href="https://github.com/Zero-OneiT/expresive-tea">
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Zero-OneiT/expresive-tea?style=for-the-badge">
-  </a>    
+  </a> -->
   
   <!-- Stars -->
   <a href="https://github.com/Zero-OneiT/expresive-tea/stargazers">
   <img alt="GitHub stars" src="https://img.shields.io/github/stars/Zero-OneiT/expresive-tea?style=for-the-badge">
   </a>
   
-  <!-- Source Rank -->
+  <!-- Source Rank
   <a href="https://libraries.io/npm/@zerooneit%2Fexpressive-tea/sourcerank">
   <img alt="Libraries.io SourceRank, scoped npm package" src="https://img.shields.io/librariesio/sourcerank/npm/@zerooneit/expressive-tea?style=for-the-badge">
-  </a>
+  </a>  -->
   
-  <!-- Rating -->
+  <!-- Rating 
   <a href="https://pkgreview.dev/npm/@zerooneit%2Fexpressive-tea">
   <img alt="pkgreview.dev Package Ratings" src="https://img.shields.io/pkgreview/rating/npm/@zerooneit/expressive-tea?style=for-the-badge">
-  </a>
+  </a> -->
   
-  <!-- Issues -->
+  <!-- Issues 
   <a href="https://github.com/Zero-OneiT/expresive-tea/issues">
   <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Zero-Oneit/expresive-tea?style=for-the-badge">
-  </a>
+  </a> -->
   
   <!-- Gitter -->                                  
   <a href="https://gitter.im/Zero-OneiT/expresive-tea">
   <img alt="Gitter" src="https://img.shields.io/gitter/room/zero-oneit/expresive-tea?style=for-the-badge">
   </a>
   
-  <!-- Test Coverage -->
-  <a href="https://codecov.io/gh/Zero-OneiT/expresive-tea">
-  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/zero-oneit/expresive-tea?label=Test%20coverage&style=for-the-badge">
-  </a>
   
-  <!-- Build -->
-  <a href="https://travis-ci.org/Zero-OneiT/expresive-tea">
-  <img alt="Circle CI" src="https://circleci.com/gh/Expressive-Tea/expresive-tea/tree/master.svg?style=svg">
-  </a>
 </p>
 
 
@@ -108,31 +110,28 @@
   * [Principal Sponsors](#principal-sponsors)  
 * [Stay on touch](#stay-on-touch)
 * [License](#license)
-* [Disclamers](#disclaimers)
+* [Disclaimers](#disclaimers)
 
 
 ## About the project  
-Expressive Tea is framework to help build server-side applications in [NodeJS](https://nodejs.org/) and use modern Javascript powered by 
-[Typescript](https://www.typescriptlang.org/). As Expressive Tea is using [express](https://expressjs.com/) is compatible with all the middlewares and modules and provide 
-an easy migration from express applications.
+Expressive Tea is a framework to help build server-side applications in [NodeJS](https://nodejs.org/) and use modern Javascript powered by 
+[Typescript](https://www.typescriptlang.org/). As Expressive Tea is using [express](https://expressjs.com/) is compatible with all the middlewares and modules and provides 
+easy migration from express applications.
 
-Expressive Tea is a flexible framework but also giving freedom to the developer to build their own architectures 
-by providing descriptive decorators, a plugin engine, shareable modules and moder Javascript.
+Expressive Tea is a flexible framework. It also gives developers the freedom to build their architectures by providing descriptive decorators, a plugin engine, shareable modules, and modern Javascript.
 
 ### Motivation
-Server-side applications it contains awesome tools, helpers, and libraries to improve productivity but at same time it
-haves a large downside, **architecture**. Expressive Tea main motivation is relief the stress of the architecture by 
-providing a shareable/pluggable projects, you can write a plugin to setting up express middlewares, databases settings,
-or websockets to name some; and you can share them through your next projects or the community.
+Server-side applications contain excellent tools, helpers, and libraries to improve productivity, but at the same time, it haves a considerable downside, **architecture**. Expressive Tea's primary motivation is a relief the stress of the architecture by providing shareable/pluggable projects; you can write a plugin to set up express middlewares, databases settings, or WebSockets, to name some; and you can share them through your following projects or the community.
+The main goal is making uncomplicated creation of server-side applications, module-driven, pluggable, accessible, and effortless architecture.
 
 Main goal is making uncomplicaded creation of server-side applications, modulables, plugables, free and efortless 
 architecture.
    
 ### Features
-* Easy Setting up and start up of webserver.
+* Easy Setting up and start-up of a webserver.
 * Extends and configuration with plugins and well-defined boot stages.
-* Modules are not hard dependencies and can be shareable between projects.
-* Declare Server Middlewares configuration as hard or soft dependency at server level.
+* Modules are not complex dependencies and can be shareable between projects.
+* Declare Server Middlewares configuration as hard or soft dependent at the server level.
 * Dependency Injection is available for controllers as providers declared in modules using InversifyJs.
 * Declarative Router on Controllers.
 * Declarative Verbs and Middlewares under module and verb level.
@@ -152,8 +151,7 @@ architecture.
 **Important!** Expressive Tea requires Node >= 6, Express >= 4, TypeScript >= 2.0 and the `experimentalDecorators`, 
 `lib` compilation options in your `tsconfig.json` with the next configuration.
 
-Expressive Tea is not having any configuration of any Express Plugin or any database connection beside is built it 
-on Express it is woking as **Bring Your Own Architecture**.
+Expressive Tea is woking as **Bring Your Own Architecture**, which means is not include any plugin or particular configuration for Express.
 
 ### Installation using Tea CLI
 
@@ -200,10 +198,9 @@ npm i --save @zerooneit/expressive-tea
 }
 ```
 ### Examples
-You can looking into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-sandbox).
+You can look into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-sandbox), or edit or see how is working on our live preview.
 
 <p align="center">
-or edit or see how is working on our live preview
 <br/>
 <a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark">
 <img src="https://codesandbox.io/static/img/play-codesandbox.svg">
@@ -212,7 +209,7 @@ or edit or see how is working on our live preview
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct and the process for submitting pull requests to us.
 
 ## Versioning
 
@@ -225,12 +222,13 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 See also the list of [contributors](https://github.com/Zero-OneiT/expresive-tea/contributors) who participated in this project.
 
 ## Support
-If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Zero-OneiT/expresive-tea/issues) or the [chat](https://gitter.im/Zero-OneiT/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
+If you are experiencing any issues, we will be happy to help. You can report a problem using the [issues page](https://github.com/Zero-OneiT/expresive-tea/issues) or the [chat](https://gitter.im/Zero-OneiT/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
 
-If you want to share your thoughts with the development team or join us you will be able to do so using the [official the mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
+If you want to share your thoughts with the development team or join us, you will do so using the [official mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
 [wiki](https://github.com/Zero-OneiT/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals or check our [documentation](https://zero-oneit.github.io/expresive-tea/).
 
-Expressive Tea is an open source project, our goal is create an awesome framework that helps to build marvelous server side applications. If you like to join as Sponsor or backer to continue grow, please you can contact us on [projects@zero-oneit.com](mailto:projects@zero-oneit.com)
+Expressive Tea is an open-source project; our goal is to create a fantastic framework that helps build marvelous server-side applications. If you like to join as a Sponsor or backer to continue growing, don't hesitate to get in touch with us at [projects@zero-oneit.com](mailto:projects@zero-oneit.com).
+
 #### Principal Sponsors
 
 <table style="text-align:center;"><tr><td>
@@ -245,7 +243,7 @@ Expressive Tea is an open source project, our goal is create an awesome framewor
 * Email - [support@expressive-tea.io](support@expressive-tea.io)
 
 ## License
-This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details.
 
 <p align="center">
 <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large">
