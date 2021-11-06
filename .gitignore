@@ -28,7 +28,8 @@ coverage
 bower_components
 
 # node-waf configuration
-.lock-wscript
+.lock-wscrip
+package-lock.json
 
 # api docs (should be generated on the fly)
 docs/api_data.*
