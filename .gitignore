@@ -29,7 +29,7 @@ bower_components
 
 # node-waf configuration
 .lock-wscript
-#package-lock.json
+package-lock.json
 
 # api docs (should be generated on the fly)
 docs/api_data.*
