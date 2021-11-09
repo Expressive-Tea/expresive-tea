@@ -16,7 +16,7 @@
   -->
 
   <!-- License 
-  <a href="https://github.com/Zero-OneiT/expresive-tea/blob/develop/LICENSE">
+  <a href="https://github.com/Expressive-Tea/expresive-tea/blob/develop/LICENSE">
   <img alt="NPM" src="https://img.shields.io/npm/l/@zerooneit/expressive-tea?style=flat-square">
   </a>
   -->
@@ -27,12 +27,12 @@
   </a>
   
   <!-- Last Commit 
-  <a href="https://github.com/Zero-OneiT/expresive-tea">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Zero-OneiT/expresive-tea?style=flat-square">
+  <a href="https://github.com/Expressive-Tea/expresive-tea">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Expressive-Tea/expresive-tea?style=flat-square">
   </a>    
   -->
   <!-- Stars -->
-  <a href="https://github.com/Zero-OneiT/expresive-tea/stargazers">
+  <a href="https://github.com/Expressive-Tea/expresive-tea/stargazers">
   <img alt="GitHub stars" src="https://img.shields.io/github/stars/Expressive-Tea/expresive-tea?style=flat-square">
   </a>
   
@@ -47,22 +47,22 @@
   </a>
   -->
   <!-- Issues 
-  <a href="https://github.com/Zero-OneiT/expresive-tea/issues">
+  <a href="https://github.com/Expressive-Tea/expresive-tea/issues">
   <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Zero-Oneit/expresive-tea?style=flat-square">
   </a>
   -->
   <!-- Gitter                            
-  <a href="https://gitter.im/Zero-OneiT/expresive-tea">
+  <a href="https://gitter.im/Expressive-Tea/expresive-tea">
   <img alt="Gitter" src="https://img.shields.io/gitter/room/zero-oneit/expresive-tea?style=flat-square">
   </a>
    -->      
   <!-- Test Coverage --> 
-  <a href="https://codecov.io/gh/Zero-OneiT/expresive-tea">
+  <a href="https://codecov.io/gh/Expressive-Tea/expresive-tea">
   <img alt="Codecov" src="https://img.shields.io/codecov/c/github/expressive-tea/expresive-tea?label=Test%20coverage&style=flat-square">
   </a>
   
   <!-- Build -->
-  <a href="https://travis-ci.org/Zero-OneiT/expresive-tea">
+  <a href="https://travis-ci.org/Expressive-Tea/expresive-tea">
   <img alt="Travis (.org) branch" src="https://ci.zero-oneit.systems/buildStatus/icon?job=Expressive+Tea&style=flat-square">
   </a>
 </p>
@@ -70,7 +70,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/Zero-OneiT/expresive-tea">
+  <a href="https://github.com/Expressive-Tea/expresive-tea">
     <img src="images/logo.png" alt="Logo" width="160" />
   </a>
 
@@ -84,9 +84,9 @@
     <br />
     <a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&theme=dark">View Demo</a>
     ·
-    <a href="https://github.com/Zero-OneiT/expresive-tea/issues">Report Bug</a>
+    <a href="https://github.com/Expressive-Tea/expresive-tea/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Zero-OneiT/expresive-tea/issues">Request Feature</a>
+    <a href="https://github.com/Expressive-Tea/expresive-tea/issues">Request Feature</a>
   </p>
 </p>
 
@@ -145,6 +145,7 @@ architecture.
 * [Typescript](https://www.typescriptlang.org/) - Main Language
 * [Inversify](https://github.com/inversify/InversifyJS/) - Used for dependency Injection
 * [Reflect Metadata](https://github.com/rbuckton/reflect-metadata) - Used to get code metadata.
+* [YARN](https://yarnpkg.com/) - Used to build and dependencies.
 
 ## Getting Started
 
@@ -180,10 +181,9 @@ npm i --save @zerooneit/expressive-tea
 }
 ```
 ### Examples
-You can looking into our simple example [here](https://github.com/Zero-OneiT/expressive-tea-sandbox).
+You can looking into our simple example [here](https://github.com/Expressive-Tea/expressive-tea-sandbox), or edit or see how is working on our live preview using th button below.
 
 <p align="center">
-or edit or see how is working on our live preview
 <br/>
 <a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark">
 <img src="https://codesandbox.io/static/img/play-codesandbox.svg">
@@ -192,23 +192,23 @@ or edit or see how is working on our live preview
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Expressive-Tea/expresive-tea/tags). 
 
 ## Contributors
 
 * **Diego Resendez** - *Lead Developer / Author* - [zerooneit](https://github.com/zerooneit)
 
-See also the list of [contributors](https://github.com/Zero-OneiT/expresive-tea/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/Expressive-Tea/expresive-tea/contributors) who participated in this project.
 
 ## Support
-If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Zero-OneiT/expresive-tea/issues) or the [chat](https://gitter.im/Zero-OneiT/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
+If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Expressive-Tea/expresive-tea/issues) or the [chat](https://gitter.im/Expressive-Tea/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
 
 If you want to share your thoughts with the development team or join us you will be able to do so using the [official the mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
-[wiki](https://github.com/Zero-OneiT/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals or check our [documentation](https://zero-oneit.github.io/expresive-tea/).
+[wiki](https://github.com/Expressive-Tea/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals or check our [documentation](https://docs.expressive-tea.io).
 
 Expressive Tea is an open source project, our goal is create an awesome framework that helps to build marvelous server side applications. If you like to join as Sponsor or backer to continue grow, please you can contact us on [projects@zero-oneit.com](mailto:projects@zero-oneit.com)
 #### Principal Sponsors
