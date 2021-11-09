@@ -1,5 +1,5 @@
 export default class LoadBalancer {
-  private bins: number[];
+  private readonly bins: number[];
 
   /**
    * @offset should be used for unit testing and nothing else.

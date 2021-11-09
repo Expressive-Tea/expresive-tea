@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
-import { chain, find, get, has, pick, size } from 'lodash';
+import { chain, find, get, has, isNumber, pick, size } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '../libs/constants';
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions, IDynamicObject
+  ExpressiveTeaHandlerOptions
 } from '../libs/interfaces';
+import { GenericRequestException } from '../exceptions/RequestExceptions';
+import { getOwnArgumentNames } from './object-helper';
+import * as fs from 'fs';
 
 export function autoResponse(
   request: Request,
@@ -18,16 +21,47 @@ export function autoResponse(
   if (view) {
     return response.render(view!.arguments![0], responseResult);
   }
-  response.send(responseResult);
+
+  response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
+}
+
+export async function executeRequest(request: Request, response: Response, next: NextFunction) {
+  try {
+    let isNextUsed = false;
+    const nextWrapper = () => (error: unknown) => {
+      next(error);
+      isNextUsed = true;
+    };
+
+    const result = await this.options.handler.apply(this.self, mapArguments(
+      this.decoratedArguments,
+      request,
+      response,
+      nextWrapper(),
+      getOwnArgumentNames(this.options.handler)));
+
+
+    if (!response.headersSent && !isNextUsed) {
+      autoResponse(request, response, this.annotations, result);
+    }
+  } catch (e) {
+    if (e instanceof GenericRequestException) {
+      return next(e);
+    }
+    next(new GenericRequestException(e.message || 'System Error'));
+  }
 }
 
 export function mapArguments(
   decoratedArguments: ExpressiveTeaArgumentOptions[],
-  request: Request, response: Response, next: NextFunction
+  request: Request, response: Response, next: NextFunction,
+  introspectedArgs: string[] = []
 ) {
   return chain(decoratedArguments)
     .sortBy('index')
     .map((argument: ExpressiveTeaArgumentOptions) => {
+      const argumentKey = get(introspectedArgs, argument.index);
+
       switch (argument.type) {
         case ARGUMENT_TYPES.REQUEST:
           return request;
@@ -36,11 +70,11 @@ export function mapArguments(
         case ARGUMENT_TYPES.NEXT:
           return next;
         case ARGUMENT_TYPES.QUERY:
-          return extractParameters(request.query, argument.arguments, argument.key);
+          return extractParameters(request.query, argument.arguments, argumentKey);
         case ARGUMENT_TYPES.BODY:
-          return extractParameters(request.body, argument.arguments, argument.key);
+          return extractParameters(request.body, argument.arguments, argumentKey);
         case ARGUMENT_TYPES.GET_PARAM:
-          return extractParameters(request.params, argument.arguments, argument.key);
+          return extractParameters(request.params, argument.arguments, argumentKey);
         default:
           return;
       }
@@ -49,20 +83,25 @@ export function mapArguments(
     .value();
 }
 
-export function extractParameters(target: unknown, args?: string | string[], propertyName? : string | symbol) {
+export function extractParameters(target: unknown, args?: string | string[], propertyName?: string | symbol) {
   if (!args && !target) {
     return;
   }
 
-  if (!args && !has(target, propertyName as string)) {
-    return target;
+  if (size(args)) {
+
+    if (Array.isArray(args)) {
+      return pick(target, args);
+    }
+
+    return get(target, args as string);
   }
 
-  if (Array.isArray(args)) {
-    return pick(target, args);
+  if (has(target, propertyName as string)) {
+    return get(target, propertyName);
   }
 
-  return get(target, args as string, get(target, propertyName));
+  return target;
 }
 
 export function generateRoute(route: string, verb: string): (
@@ -82,4 +121,15 @@ export function router(
   const existedRoutesHandlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey });
   MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
+}
+
+export function fileSettings() {
+  try {
+    if (fs.existsSync('.expressive-tea')) {
+      const configString = fs.readFileSync('.expressive-tea');
+      return JSON.parse(configString.toString());
+    }
+  } catch (e) {
+    return {};
+  }
 }

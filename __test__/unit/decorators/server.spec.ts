@@ -1,24 +1,23 @@
 import { last } from 'lodash';
-import Boot from '../../../classes/Boot';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import {
   ExpressDirective,
-  Plug,
   Pour,
   RegisterModule,
   ServerSettings,
   Setting,
-  Static
+  Static,
+  Modules
 } from '../../../decorators/server';
 import {
-  BOOT_STAGES,
-  BOOT_STAGES_KEY,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../../../libs/constants';
 import Plugin from '../../__mocks__/plugin';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../../../libs/interfaces';
+import { Express } from 'express';
 
 describe('ServerSettings Decorator', () => {
   let testClass;
@@ -42,42 +41,6 @@ describe('ServerSettings Decorator', () => {
 
     testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
-  });
-});
-
-describe('Plug Decorator', () => {
-  let TestClass;
-  let spyMetadataSet;
-
-  beforeAll(() => {
-    spyMetadataSet = jest.spyOn(Metadata, 'set');
-
-    @Plug(BOOT_STAGES.APPLICATION, 'test', () => {
-    })
-    @Plug(BOOT_STAGES.APPLICATION, '', () => {
-    })
-    class Test {
-    }
-
-    TestClass = Test;
-  });
-
-  afterAll(() => {
-    spyMetadataSet.mockRestore();
-  });
-
-  test('should attach plug to respective level', () => {
-    const testInstance = new TestClass();
-    const args = spyMetadataSet.mock.calls[0];
-
-    expect(args[0]).toEqual(BOOT_STAGES_KEY);
-    expect(args[1]['2'][0]).toEqual(
-      expect.objectContaining({
-        name: 'test',
-        required: false
-      })
-    );
-    expect(args[2]).toEqual(TestClass);
   });
 });
 
@@ -271,6 +234,55 @@ describe('Express Directive Decorator', () => {
       // @ts-ignore
       @ExpressDirective()
       class Test {
+      }
+    }).toThrow();
+  });
+});
+
+describe('Modules Decorator', () => {
+  let spyMetadataSet;
+
+  beforeEach(() => {
+    spyMetadataSet = jest.spyOn(Metadata, 'set');
+  });
+
+  afterEach(() => {
+    spyMetadataSet.mockRestore();
+  });
+
+  test('should register a module', () => {
+    class ModuleA implements IExpressiveTeaModule{
+      readonly controllers: any[];
+      readonly router: Express;
+      readonly settings: ExpressiveTeaModuleProps;
+
+      __register(server: Express): void {
+      }
+    }
+
+    // @ts-ignore
+    @Modules( [ ModuleA ])
+    class Test {
+      async start() {
+      }
+    }
+
+    const testInstance = new Test();
+    const args = spyMetadataSet.mock.calls[0];
+
+    expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
+    expect(args[1]).toEqual([ModuleA]);
+  });
+
+  test('should fail if use different method to register a module', () => {
+    expect(() => {
+      class Module {
+      }
+
+      class Test {
+        @RegisterModule(Module)
+        async init() {
+        }
       }
     }).toThrow();
   });

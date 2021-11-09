@@ -5,14 +5,15 @@ import {
   BOOT_STAGES_KEY,
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY, STAGES_INIT
+  REGISTERED_STATIC_KEY,
+  STAGES_INIT
 } from '../libs/constants';
 import * as express from 'express';
-import {Express} from 'express';
+import { Express } from 'express';
 import MetaData from '../classes/MetaData';
-import {getClass} from './object-helper';
-import {ExpressiveTeaStatic, ExpressiveTeaDirective} from '../libs/interfaces';
-import {BootLoaderRequiredExceptions, BootLoaderSoftExceptions} from '../exceptions/BootLoaderExceptions';
+import { getClass } from './object-helper';
+import { ExpressiveTeaDirective, ExpressiveTeaStatic } from '../libs/interfaces';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import Boot from '../classes/Boot';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
@@ -22,7 +23,9 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
       await resolveModules(ctx, server);
     }
   } catch (e) {
-    checkIfStageFails(e);
+    if (checkIfStageFails(e)) {
+      throw e;
+    }
   }
 }
 
@@ -60,6 +63,7 @@ async function bootloaderResolve(
   ...args: unknown[]): Promise<void> {
 
   const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
+
   for (const loader of bootLoader[STAGE] || []) {
     try {
       await selectLoaderType(loader, server, ...args);
@@ -74,13 +78,7 @@ async function selectLoaderType(loader, server: Express, ...args: unknown[]) {
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
-  if (e instanceof BootLoaderSoftExceptions) {
-    console.info(e.message);
-  } else {
-    console.error(e.message);
-    // Re Throwing Error to Get it a top level.
-    throw e;
-  }
+  return !(e instanceof BootLoaderSoftExceptions)
 }
 
 function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {

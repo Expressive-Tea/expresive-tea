@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { ExpressiveTeaServerProps } from '../libs/interfaces';
 import { injectable } from 'inversify';
-import Metadata from './MetaData';
-import { getClass, nameOfClass } from '../helpers/object-helper';
+import { nameOfClass } from '../helpers/object-helper';
+import { fileSettings } from '../helpers/server';
 
 
 /**
@@ -86,8 +86,8 @@ class Settings {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
-
-    this.options = Object.assign({}, { port: 3000, securePort: 4443 }, options);
+    const settingsFile = fileSettings();
+    this.options = Object.assign({}, { port: 3000, securePort: 4443 }, settingsFile, options);
     Settings.instance = this;
   }
 
