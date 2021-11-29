@@ -1,4 +1,4 @@
-import { last } from 'lodash';
+import {last} from 'lodash';
 import Metadata from '../../../classes/MetaData';
 import Settings from '../../../classes/Settings';
 import {
@@ -16,9 +16,9 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../../../libs/constants';
-import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
-import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../../../libs/interfaces';
-import { Express } from 'express';
+import Plugin, {mockPluginArguments} from '../../__mocks__/plugin';
+import {ExpressiveTeaModuleProps, IExpressiveTeaModule} from '../../../libs/interfaces';
+import {Express} from 'express';
 
 describe('ServerSettings Decorator', () => {
   let testClass;
@@ -26,20 +26,22 @@ describe('ServerSettings Decorator', () => {
     @ServerSettings({
       port: 8080
     })
-    class Test {}
+    class Test {
+    }
 
     testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
+    expect(Settings.getInstance().getOptions()).toEqual({port: 8080, securePort: 4443});
   });
 
   test('should modify server settings as default options', () => {
     Settings.reset();
 
     @ServerSettings()
-    class Test {}
+    class Test {
+    }
 
     testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
+    expect(Settings.getInstance().getOptions()).toEqual({port: 3000, securePort: 4443});
   });
 });
 
@@ -55,7 +57,8 @@ describe('Pour Decorator', () => {
 
   test('should attach plug to respective level', () => {
     @Pour(Plugin)
-    class Test {}
+    class Test {
+    }
 
     const testInstance = new Test();
     const args: any[] = last(spyMetadataSet.mock.calls) || [];
@@ -73,14 +76,15 @@ describe('Pour Decorator', () => {
   });
 
   test('should attach plug to respective level with arguments', () => {
-    @Pour(Plugin, 'a', 1, 2, { x: 'y' })
-    class Test {}
+    @Pour(Plugin, 'a', 1, 2, {x: 'y'})
+    class Test {
+    }
 
     const instance = new Test();
     const args: any[] = last(spyMetadataSet.mock.calls) || [];
 
     expect(instance).toBeDefined();
-    expect(mockPluginArguments).toEqual(['a', 1, 2, { x: 'y' }]);
+    expect(mockPluginArguments).toEqual(['a', 1, 2, {x: 'y'}]);
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
     expect(args[1][0]).toEqual(
@@ -128,27 +132,33 @@ describe('RegisterModule Decorator', () => {
   });
 
   test('should register a module', () => {
-    class Module {}
+    class Module {
+    }
 
     class Test {
       @RegisterModule(Module)
-      async start() {}
+      async start() {
+      }
     }
 
     const testInstance = new Test();
     const args = spyMetadataSet.mock.calls[0];
 
+    expect(testInstance).toBeDefined();
     expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
     expect(args[1]).toEqual([Module]);
   });
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {}
+      class Module {
+      }
 
+      // @ts-ignore
       class Test {
         @RegisterModule(Module)
-        async init() {}
+        async init() {
+        }
       }
     }).toThrow();
   });
@@ -167,12 +177,14 @@ describe('Static Decorator', () => {
 
   test('should register a static server', () => {
     @Static('/public')
-    class Test {}
+    class Test {
+    }
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
+    expect(instance).toBeDefined();
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
     expect(args[1]).toEqual([
       {
@@ -185,12 +197,14 @@ describe('Static Decorator', () => {
 
   test('should register a static server with virtual', () => {
     @Static('/public', '/virtual')
-    class Test {}
+    class Test {
+    }
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
+    expect(instance).toBeDefined();
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
     expect(args[1]).toEqual([
       {
@@ -205,7 +219,9 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-ignore
       @Static()
-      class Test {}
+        // @ts-ignore
+      class Test {
+      }
     }).toThrow();
   });
 });
@@ -222,12 +238,15 @@ describe('Express Directive Decorator', () => {
 
   test('should allow to modify etag', () => {
     @ExpressDirective('etag', true)
-    class Test {}
+      // @ts-ignore
+    class Test {
+    }
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
+    expect(instance).toBeDefined();
     expect(args[0]).toEqual(REGISTERED_DIRECTIVES_KEY);
     expect(args[1]).toEqual([
       {
@@ -241,7 +260,9 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-ignore
       @ExpressDirective('invalid', false)
-      class Test {}
+        // @ts-ignore
+      class Test {
+      }
     }).toThrow();
   });
 
@@ -249,7 +270,9 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-ignore
       @ExpressDirective()
-      class Test {}
+        // @ts-ignore
+      class Test {
+      }
     }).toThrow();
   });
 });
@@ -271,29 +294,35 @@ describe('Modules Decorator', () => {
       readonly router: Express;
       readonly settings: ExpressiveTeaModuleProps;
 
-      __register(server: Express): void {}
+      __register(server: Express): void {
+      }
     }
 
     // @ts-ignore
     @Modules([ModuleA])
     class Test {
-      async start() {}
+      async start() {
+      }
     }
 
     const testInstance = new Test();
     const args = spyMetadataSet.mock.calls[0];
 
+    expect(testInstance).toBeDefined();
     expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
     expect(args[1]).toEqual([ModuleA]);
   });
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {}
+      class Module {
+      }
 
+      // @ts-ignore
       class Test {
         @RegisterModule(Module)
-        async init() {}
+        async init() {
+        }
       }
     }).toThrow();
   });
