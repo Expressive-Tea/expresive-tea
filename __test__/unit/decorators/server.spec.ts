@@ -154,7 +154,6 @@ describe('RegisterModule Decorator', () => {
       class Module {
       }
 
-      // @ts-ignore
       class Test {
         @RegisterModule(Module)
         async init() {
@@ -219,7 +218,6 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-ignore
       @Static()
-        // @ts-ignore
       class Test {
       }
     }).toThrow();
@@ -238,7 +236,6 @@ describe('Express Directive Decorator', () => {
 
   test('should allow to modify etag', () => {
     @ExpressDirective('etag', true)
-      // @ts-ignore
     class Test {
     }
 
@@ -270,7 +267,6 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-ignore
       @ExpressDirective()
-        // @ts-ignore
       class Test {
       }
     }).toThrow();
@@ -318,7 +314,6 @@ describe('Modules Decorator', () => {
       class Module {
       }
 
-      // @ts-ignore
       class Test {
         @RegisterModule(Module)
         async init() {
