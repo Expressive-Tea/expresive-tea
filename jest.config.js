@@ -1,5 +1,5 @@
 module.exports = {
-	roots: [
+  roots: [
     '<rootDir>/'
   ],
   transform: {
@@ -18,8 +18,8 @@ module.exports = {
   ],
   reporters: [
     'default',
-    [ 'jest-junit', {
-	    suiteName: 'Expressive Tea Tests',
+    ['jest-junit', {
+      suiteName: 'Expressive Tea Tests',
       outputDirectory: './coverage',
       outputName: 'junit.xml',
       uniqueOutputName: false,
@@ -27,6 +27,6 @@ module.exports = {
       titleTemplate: '{classname}-{title}',
       ancestorSeparator: ' › ',
       usePathForSuiteName: 'true'
-	  }]
+    }]
   ]
 };

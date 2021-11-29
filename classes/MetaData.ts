@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 import { getClass } from '../helpers/object-helper';
 
-function get(key: string, target: any, propertyKey?: string | symbol, own: boolean = false) {
+function get(key: string, target: any, propertyKey?: string | symbol, own = false) {
   return own ?
     Reflect.getOwnMetadata(key, getClass(target), propertyKey!) :
     Reflect.getMetadata(key, getClass(target), propertyKey!);
@@ -37,9 +37,8 @@ export default class Metadata {
     try {
       return Reflect.hasMetadata(key, getClass(target), propertyKey!);
     } catch (er) {
+      return false;
     }
-
-    return false;
   }
 
   static hasOwn(key: string, target: any, propertyKey?: string | symbol): boolean {
