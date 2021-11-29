@@ -4,7 +4,7 @@ export default class LoadBalancer {
   /**
    * @offset should be used for unit testing and nothing else.
    */
-  constructor(count: number, offset: number = 0) {
+  constructor(count: number, offset = 0) {
     this.bins = new Array(count);
 
     // Initializes the elements of the array to zero.
