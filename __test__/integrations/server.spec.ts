@@ -17,12 +17,20 @@ describe('Webserver integration', () => {
     app.server.close();
   });
 
-  test('should initialize websockets', async () => {
+  test('should response string correctly', async () => {
     const res = await request.get('/test')
       .expect('Content-Type', /html/)
       .expect(200);
 
     expect(res.text).toEqual('this is a test');
+  });
+
+  test('should response number correctly', async () => {
+    const res = await request.get('/test-number')
+      .expect('Content-Type', /html/)
+      .expect(200);
+
+    expect(res.text).toEqual('20');
   });
 
   test('should go next as result of 404', async () => {
@@ -41,10 +49,18 @@ describe('Webserver integration', () => {
     expect(res.text).toContain('Error: this is an error');
   });
 
-  test('should initialize websockets', async () => {
+  test('should return a generic error', async () => {
     const res = await request.get('/error')
       .expect('Content-Type', /html/)
       .expect(500);
+
+    expect(res.text).toContain('Error: not pass');
+  });
+
+  test('should return a bad request error', async () => {
+    const res = await request.get('/error-generic')
+      .expect('Content-Type', /html/)
+      .expect(400);
 
     expect(res.text).toContain('Error: not pass');
   });

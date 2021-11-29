@@ -11,11 +11,12 @@ import {
   Modules
 } from '../../../decorators/server';
 import {
-  PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
+  PLUGINS_KEY,
+  REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '../../../libs/constants';
-import Plugin from '../../__mocks__/plugin';
+import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
 import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../../../libs/interfaces';
 import { Express } from 'express';
 
@@ -25,8 +26,7 @@ describe('ServerSettings Decorator', () => {
     @ServerSettings({
       port: 8080
     })
-    class Test {
-    }
+    class Test {}
 
     testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
@@ -36,8 +36,7 @@ describe('ServerSettings Decorator', () => {
     Settings.reset();
 
     @ServerSettings()
-    class Test {
-    }
+    class Test {}
 
     testClass = new Test();
     expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
@@ -56,12 +55,32 @@ describe('Pour Decorator', () => {
 
   test('should attach plug to respective level', () => {
     @Pour(Plugin)
-    class Test {
-    }
+    class Test {}
 
     const testInstance = new Test();
     const args: any[] = last(spyMetadataSet.mock.calls) || [];
 
+    expect(testInstance).toBeDefined();
+    expect(args).toBeDefined();
+    expect(args[0]).toEqual(PLUGINS_KEY);
+    expect(args[1][0]).toEqual(
+      expect.objectContaining({
+        name: 'Mocked',
+        priority: 999
+      })
+    );
+    expect(args[2]).toEqual(Test);
+  });
+
+  test('should attach plug to respective level with arguments', () => {
+    @Pour(Plugin, 'a', 1, 2, { x: 'y' })
+    class Test {}
+
+    const instance = new Test();
+    const args: any[] = last(spyMetadataSet.mock.calls) || [];
+
+    expect(instance).toBeDefined();
+    expect(mockPluginArguments).toEqual(['a', 1, 2, { x: 'y' }]);
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
     expect(args[1][0]).toEqual(
@@ -109,13 +128,11 @@ describe('RegisterModule Decorator', () => {
   });
 
   test('should register a module', () => {
-    class Module {
-    }
+    class Module {}
 
     class Test {
       @RegisterModule(Module)
-      async start() {
-      }
+      async start() {}
     }
 
     const testInstance = new Test();
@@ -127,13 +144,11 @@ describe('RegisterModule Decorator', () => {
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {
-      }
+      class Module {}
 
       class Test {
         @RegisterModule(Module)
-        async init() {
-        }
+        async init() {}
       }
     }).toThrow();
   });
@@ -152,44 +167,45 @@ describe('Static Decorator', () => {
 
   test('should register a static server', () => {
     @Static('/public')
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
-    expect(args[1]).toEqual([{
-      options: {},
-      root: '/public',
-      virtual: null
-    }]);
+    expect(args[1]).toEqual([
+      {
+        options: {},
+        root: '/public',
+        virtual: null
+      }
+    ]);
   });
 
   test('should register a static server with virtual', () => {
     @Static('/public', '/virtual')
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_STATIC_KEY);
-    expect(args[1]).toEqual([{
-      options: {},
-      root: '/public',
-      virtual: '/virtual'
-    }]);
+    expect(args[1]).toEqual([
+      {
+        options: {},
+        root: '/public',
+        virtual: '/virtual'
+      }
+    ]);
   });
 
   test('should fail if not root folder is present', () => {
     expect(() => {
       // @ts-ignore
       @Static()
-      class Test {
-      }
+      class Test {}
     }).toThrow();
   });
 });
@@ -206,26 +222,26 @@ describe('Express Directive Decorator', () => {
 
   test('should allow to modify etag', () => {
     @ExpressDirective('etag', true)
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
     const args = spyMetadataSet.mock.calls[0];
 
     expect(args[0]).toEqual(REGISTERED_DIRECTIVES_KEY);
-    expect(args[1]).toEqual([{
-      name: 'etag',
-      settings: [true]
-    }]);
+    expect(args[1]).toEqual([
+      {
+        name: 'etag',
+        settings: [true]
+      }
+    ]);
   });
 
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
       // @ts-ignore
       @ExpressDirective('invalid', false)
-      class Test {
-      }
+      class Test {}
     }).toThrow();
   });
 
@@ -233,8 +249,7 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-ignore
       @ExpressDirective()
-      class Test {
-      }
+      class Test {}
     }).toThrow();
   });
 });
@@ -251,20 +266,18 @@ describe('Modules Decorator', () => {
   });
 
   test('should register a module', () => {
-    class ModuleA implements IExpressiveTeaModule{
+    class ModuleA implements IExpressiveTeaModule {
       readonly controllers: any[];
       readonly router: Express;
       readonly settings: ExpressiveTeaModuleProps;
 
-      __register(server: Express): void {
-      }
+      __register(server: Express): void {}
     }
 
     // @ts-ignore
-    @Modules( [ ModuleA ])
+    @Modules([ModuleA])
     class Test {
-      async start() {
-      }
+      async start() {}
     }
 
     const testInstance = new Test();
@@ -276,13 +289,11 @@ describe('Modules Decorator', () => {
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {
-      }
+      class Module {}
 
       class Test {
         @RegisterModule(Module)
-        async init() {
-        }
+        async init() {}
       }
     }).toThrow();
   });
