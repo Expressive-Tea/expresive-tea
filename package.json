@@ -4,14 +4,14 @@
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.js",
   "scripts": {
-    "doc": "rimraf docs && npm run publish:prepare && jsdoc -c jsdocs.json",
-    "doc:json": "jsdoc -c jsdocs-json.json",
-    "test": "npm run linter && jest --clearCache && jest --coverage --silent --ci --detectOpenHandles --forceExit --runInBand",
-    "test:dev": "npm run linter && jest --detectOpenHandles --forceExit",
+    "test": "npm run linter && jest --clearCache && jest --coverage  --ci --detectOpenHandles --forceExit --silent --runInBand",
+    "test:dev": "npm run linter && jest --clearCache && jest --detectOpenHandles --forceExit",
     "linter": "tslint -c tslint.json -p tsconfig.json",
-    "clean:build": "gulp clean",
-    "publish:prepare": "gulp clean build",
-    "postpublish": "gulp clean",
+    "build:dev": "tsc --project tsconfig.json --watch",
+    "build": "tsc --project tsconfig.json",
+    "clean:build": "trash '**/*.js' '**/*.d.ts' '**/*.js.map' '**/*.d.ts.map' '!node_modules/**/*' '!docs/**/*' '!coverage/**/*' '!gulpfile.js' '!tasks/*.js' '!jest.config.js' '!tools/**/*'",
+    "publish:prepare": "npm run clean:build && npm run build",
+    "postpublish": "npm run clean:build",
     "prepublishOnly": "npm test && npm run publish:prepare"
   },
   "publishConfig": {
@@ -28,9 +28,7 @@
     "@types/jest": "26.0.23",
     "@types/lodash": "4.14.170",
     "@types/ws": "^7.2.6",
-    "gulp": "^3.9.1",
-    "gulp-clean": "0.4.0",
-    "gulp-typescript": "^2.12.2",
+    "trash-cli":"5.0.0",
     "jest": "27.0.6",
     "jest-express": "^1.12.0",
     "jest-junit": "12.2.0",
@@ -90,9 +88,5 @@
   "bugs": {
     "url": "https://github.com/Expressive-Tea/expresive-tea/issues"
   },
-  "homepage": "https://github.com/Expressive-Tea/expresive-tea#readme",
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
-  }
+  "homepage": "https://github.com/Expressive-Tea/expresive-tea#readme"
 }
