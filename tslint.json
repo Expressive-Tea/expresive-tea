@@ -18,7 +18,8 @@
     "no-duplicate-imports": true,
     "no-conditional-assignment": false,
     "member-access": [true, "no-public"],
-    "no-non-null-assertion": false
+    "no-non-null-assertion": false,
+    "no-explicit-any": false
   },
   "rulesDirectory": [],
   "linterOptions": {

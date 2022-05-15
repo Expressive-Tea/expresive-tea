@@ -6,17 +6,15 @@ import {
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
-  STAGES_INIT,
-  PROXY_SETTING_KEY
+  STAGES_INIT
 } from '../libs/constants';
 import * as express from 'express';
 import { Express } from 'express';
 import MetaData from '../classes/MetaData';
 import { getClass } from './object-helper';
-import { ExpressiveTeaDirective, ExpressiveTeaStatic, IExpressiveTeaProxySettings, IExpressiveTeaProxy } from '../libs/interfaces';
+import { ExpressiveTeaDirective, ExpressiveTeaStatic } from '../libs/interfaces';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import Boot from '../classes/Boot';
-import * as httpProxy from 'express-http-proxy';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
   try {
