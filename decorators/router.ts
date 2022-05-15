@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { each } from 'lodash';
+import { Express, RequestHandler, Router } from 'express';
+import { each, has } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { addAnnotation } from '../helpers/decorators';
 import { executeRequest, generateRoute, router } from '../helpers/server';
@@ -7,14 +7,15 @@ import {
   ARGUMENTS_KEY,
   ROUTER_ANNOTATIONS_KEY,
   ROUTER_HANDLERS_KEY,
-  ROUTER_MIDDLEWARES_KEY
+  ROUTER_MIDDLEWARES_KEY,
 } from '../libs/constants';
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions, IExpressiveTeaRoute
+  ExpressiveTeaHandlerOptions,
+  IExpressiveTeaRoute,
 } from '../libs/interfaces';
-import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } from '../libs/types';
+import { ClassDecorator, ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } from '../libs/types';
 
 /**
  * @module Decorators/Router
@@ -33,9 +34,9 @@ import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } fr
  * class Example {}
  */
 export function Route(mountpoint = '/') {
-  return <T extends new (...args: any[]) => {}>(Route: T) => {
+  return <T extends new (...args: any[]) => {}>(RouterClass: T) => {
 
-    return class ExpressiveTeaRoute extends Route implements IExpressiveTeaRoute{
+    return class ExpressiveTeaRoute extends RouterClass implements IExpressiveTeaRoute{
       readonly router: Router;
       readonly mountpoint: string;
 

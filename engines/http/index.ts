@@ -4,8 +4,10 @@ import * as $P from 'bluebird';
 import { inject, injectable } from 'inversify';
 import Settings from '../../classes/Settings';
 import Boot from '../../classes/Boot';
-import { resolveDirectives, resolveStage, resolveStatic } from '../../helpers/boot-helper';
-import { BOOT_STAGES } from '../../libs/constants';
+import { resolveDirectives, resolveStage, resolveStatic, resolveProxy } from '../../helpers/boot-helper';
+import { BOOT_STAGES, ROUTER_PROXIES_KEY } from '../../libs/constants';
+import { getClass } from '../../helpers/object-helper';
+import Metadata from '../../classes/MetaData';
 
 @injectable()
 export default class HTTPEngine {
@@ -58,5 +60,12 @@ export default class HTTPEngine {
     return $P.map(stages,s => {
       return resolveStage(s, this.context, this.context.getApplication(), ...extraArgs);
     })
+  }
+
+  async resolveProxyContainers() {
+    const ProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, getClass(this.context)) || [];
+    for (const Container of ProxyContainers) {
+      resolveProxy(Container, this.context.getApplication());
+    }
   }
 }

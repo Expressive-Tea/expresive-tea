@@ -8,7 +8,8 @@ import {
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY
+  REGISTERED_STATIC_KEY,
+  ROUTER_PROXIES_KEY
 } from '../libs/constants';
 import {
   ExpressiveTeaPotSettings,
@@ -235,6 +236,18 @@ export function Modules(Modules: any[]) {
       const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
       registeredModules.unshift(Module);
       MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
+    }
+
+  };
+}
+
+export function Proxies(proxyContainers: any[]) {
+  return target => {
+
+    for (const proxyContainer of proxyContainers) {
+      const registeredProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, target) || [];
+      registeredProxyContainers.unshift(proxyContainer);
+      MetaData.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
     }
 
   };
