@@ -19,7 +19,7 @@ const NON_ASYNC_METHODS = ['host'];
 
 export function ProxyContainer(source: string, targetUrl: string) {
 
-  return <T extends new (...args: any[]) => Record<string, unknown>>(ProxyContainerClass: T) => {
+  return <T extends new (...args: any[]) => any>(ProxyContainerClass: T) => {
 
     class ExpressiveTeaProxy extends ProxyContainerClass implements IExpressiveTeaProxy {
       readonly source: string;
