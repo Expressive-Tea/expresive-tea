@@ -68,6 +68,7 @@ typings/
 # Buildx
 build/*
 /.idea/
+/.vscode/
 
 .scannerwork/
 .chglog
