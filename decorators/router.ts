@@ -1,5 +1,5 @@
-import { Express, RequestHandler, Router } from 'express';
-import { each, has } from 'lodash';
+import { Router } from 'express';
+import { each } from 'lodash';
 import MetaData from '../classes/MetaData';
 import { addAnnotation } from '../helpers/decorators';
 import { executeRequest, generateRoute, router } from '../helpers/server';
