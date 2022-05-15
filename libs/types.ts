@@ -15,3 +15,10 @@ export type MethodDecorator = (target: Object, propertyKey: string | symbol, des
   PropertyDescriptor) => PropertyDescriptor | void;
 
 export type ParameterDecorator = (target: Object, propertyKey: string | symbol, parameterIndex: number) => void;
+
+export type ExpressiveTeaProxyOptions = 'proxyReqPathResolver' |'host' | 'filter'| 'userResDecorator' |
+  'userResHeaderDecorator' | 'skipToNextHandlerFilter' | 'proxyErrorHandler' | 'proxyReqOptDecorator' |
+  'proxyReqBodyDecorator';
+
+export type ExpressiveTeaProxyProperty = 'limit' | 'memoizeHost' | 'https' | 'preserveHostHdr' | 'parseReqBody' |
+  'reqAsBuffer' | 'reqBodyEncoding' | 'timeout';

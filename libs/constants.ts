@@ -84,6 +84,8 @@ export const EXPRESS_DIRECTIVES = [
 export const BOOT_STAGES_KEY = 'boot:stage-settings';
 export const ROUTER_HANDLERS_KEY = 'app:routes:handlers';
 export const ROUTER_MIDDLEWARES_KEY = 'app:routes:middlewares';
+export const ROUTER_PROXIES_KEY = 'app:routes:proxies';
+export const PROXY_SETTING_KEY = 'app:proxy:settings';
 export const REGISTERED_MODEL_KEY = 'app:models:registered';
 export const REGISTERED_MODULE_KEY = 'app:modules:registered';
 export const PLUGINS_KEY = 'boot:app-plugins';
@@ -102,3 +104,28 @@ export const ARGUMENT_TYPES = {
   REQUEST: Symbol('REQUEST'),
   RESPONSE: Symbol('RESPONSE')
 };
+
+export enum PROXY_METHODS {
+  HOST = 'host',
+  PROXY_REQ_PATH_RESOLVER = 'proxyReqPathResolver',
+  FILTER = 'filter',
+  USER_RES_DECORATOR = 'userResDecorator',
+  USER_RES_HEADER_DECORATOR = 'userResHeaderDecorator',
+  SKIP_TO_NEXT_HANDLER_FILTER = 'skipToNextHandlerFilter',
+  PROXY_ERROR_HANDLER = 'proxyErrorHandler',
+  PROXY_REQ_OPT_DECORATOR = 'proxyReqOptDecorator',
+  PROXY_REQ_BODY_DECORATOR = 'proxyReqBodyDecorator'
+}
+
+// 'limit' | 'memoizeHost' | 'https' | 'preserveHostHdr' | 'parseReqBody' |
+// 'reqAsBuffer' | 'reqBodyEncoding' | 'timeout';
+export enum PROXY_PROPERTIES {
+  LIMIT = 'limit',
+  MEMOIZE_HOST = 'memoizeHost',
+  HTTPS = 'https',
+  PRESERVE_HOST_HDR = 'preserveHostHdr',
+  PARSE_REQ_BODY = 'parseReqBody',
+  REQ_AS_BUFFER = 'reqAsBuffer',
+  REQ_BODY_ENCODING = 'reqBodyEncoding',
+  TIMEOUT = 'timeout'
+}

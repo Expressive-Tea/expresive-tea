@@ -104,11 +104,11 @@ export function extractParameters(target: unknown, args?: string | string[], pro
   return target;
 }
 
-export function generateRoute(route: string, verb: string): (
+export function generateRoute(route: string, verb: string, ...settings: any): (
   target: object,
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor) => void {
-  return (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value, propertyKey);
+  return (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value, propertyKey, settings);
 }
 
 export function router(
@@ -116,10 +116,11 @@ export function router(
   route: string,
   target: any,
   handler: (...args: any[]) => void | any | Promise<any>,
-  propertyKey: string | symbol
+  propertyKey: string | symbol,
+  settings?: any
 ) {
   const existedRoutesHandlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
-  existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey });
+  existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings });
   MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
 

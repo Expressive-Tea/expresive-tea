@@ -101,6 +101,7 @@ abstract class Boot {
         await websocketEngine.init();
         await httpEngine.init();
 
+        await httpEngine.resolveProxyContainers();
         await httpEngine.resolveStages(BOOT_ORDER);
         await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
 

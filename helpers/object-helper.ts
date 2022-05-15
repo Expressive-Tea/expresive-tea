@@ -294,3 +294,7 @@ export function getOwnArgumentNames(fn: Function) {
 
   return fnArguments && fnArguments.length ? fnArguments.split(replaceRegExp) : [];
 }
+
+export function isAsyncFunction(fn: () => any) {
+  return fn.constructor.name === 'AsyncFunction' || fn.constructor.name.includes('__awaiter');
+}
