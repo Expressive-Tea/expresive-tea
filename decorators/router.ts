@@ -34,7 +34,7 @@ import { ClassDecorator, ExpressiveTeaMiddleware, ExpressMiddlewareHandler, Meth
  * class Example {}
  */
 export function Route(mountpoint = '/') {
-  return <T extends new (...args: any[]) => {}>(RouterClass: T) => {
+  return <T extends new (...args: any[]) => Record<string, unknown>>(RouterClass: T) => {
 
     return class ExpressiveTeaRoute extends RouterClass implements IExpressiveTeaRoute{
       readonly router: Router;
