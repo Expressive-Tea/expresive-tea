@@ -1,6 +1,6 @@
 import * as supertest from 'supertest';
 import Boot from '../../../classes/Boot';
-import { Modules, RegisterModule } from '../../../decorators/server';
+import { Modules } from '../../../decorators/server';
 import RootModule from './modules/root/RootModule';
 import { ExpressiveTeaApplication } from '../../../libs/interfaces';
 
