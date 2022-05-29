@@ -89,7 +89,7 @@ abstract class Boot {
 
         // Injectables
         localContainer.bind<http.Server>('server').toConstantValue(server);
-        localContainer.bind<https.Server>('secureServer').toConstantValue(secureServer);
+        localContainer.bind<https.Server>('secureServer').toConstantValue(secureServer || undefined);
         localContainer.bind<Boot>('context').toConstantValue(this);
         localContainer.bind<Settings>('settings').toConstantValue(this.settings);
 

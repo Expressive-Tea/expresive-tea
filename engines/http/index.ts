@@ -1,7 +1,7 @@
 import * as http from 'http';
 import * as https from 'https';
 import * as $P from 'bluebird';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 import Settings from '../../classes/Settings';
 import Boot from '../../classes/Boot';
 import { resolveDirectives, resolveStage, resolveStatic, resolveProxy } from '../../helpers/boot-helper';
@@ -20,7 +20,7 @@ export default class HTTPEngine {
   constructor(
     @inject('context') ctx,
     @inject('server') server,
-    @inject( 'secureServer') serverSecure,
+    @inject( 'secureServer') @optional() serverSecure,
     @inject( 'settings') settings
   ) {
     this.context = ctx;

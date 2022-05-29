@@ -1,14 +1,11 @@
 import * as supertest from 'supertest';
 import Boot from '../../../classes/Boot';
-import { RegisterModule } from '../../../decorators/server';
+import { Modules, RegisterModule } from '../../../decorators/server';
 import RootModule from './modules/root/RootModule';
 import { ExpressiveTeaApplication } from '../../../libs/interfaces';
 
+@Modules([RootModule])
 class Bootstrap extends Boot {
-  @RegisterModule(RootModule)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
 }
 
 export default async function initServer() {

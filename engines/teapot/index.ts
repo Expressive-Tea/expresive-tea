@@ -1,6 +1,6 @@
 import * as chalk from 'chalk';
 import Settings from '../../classes/Settings';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 import * as http from 'http';
 import * as https from 'https';
 import Boot from '../../classes/Boot';
@@ -151,7 +151,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   constructor(
     @inject('context') ctx,
     @inject('server') server,
-    @inject( 'secureServer') serverSecure,
+    @inject( 'secureServer') @optional() serverSecure,
     @inject( 'settings') settings
   ) {
     this.settings = settings;
