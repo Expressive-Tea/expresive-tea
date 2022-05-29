@@ -2,18 +2,12 @@ import MetaData from '../classes/MetaData';
 import {  ExpressiveTeaProxyOptions, ExpressiveTeaProxyProperty, MethodDecorator } from '../libs/types';
 import * as httpProxy from 'express-http-proxy';
 import { Express, RequestHandler } from 'express';
-import {
-  PROXY_SETTING_KEY,
-  PROXY_METHODS,
-  PROXY_PROPERTIES
-} from '../libs/constants';
-import {
-  IExpressiveTeaProxySettings,
-  IExpressiveTeaProxy
-} from '../libs/interfaces';
 import { getClass, isAsyncFunction } from '../helpers/object-helper';
 import { isUndefined } from 'lodash';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
+
+import { PROXY_SETTING_KEY, PROXY_METHODS, PROXY_PROPERTIES } from '../libs/constants';
+import { IExpressiveTeaProxySettings, IExpressiveTeaProxy } from '../libs/interfaces';
 
 const NON_ASYNC_METHODS = ['host'];
 
@@ -45,7 +39,6 @@ export function ProxyContainer(source: string, targetUrl: string) {
           if (!isUndefined(key)) {
             // @ts-ignore:next-line
             options[value] = this[key];
-            console.log(`${value}: ${key}, ${this[key]}`);
           }
         }
 

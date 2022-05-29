@@ -2,7 +2,7 @@ import * as http from 'http';
 import * as https from 'https';
 import WebsocketService from '../../services/WebsocketService';
 import * as WebSocket from 'ws';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 import Settings from '../../classes/Settings';
 
 @injectable()
@@ -16,7 +16,7 @@ export default class WebsocketEngine {
 
   constructor(
     @inject('server') server,
-    @inject( 'secureServer') serverSecure,
+    @inject( 'secureServer') @optional() serverSecure,
     @inject( 'settings') settings
   ) {
     this.settings = settings;

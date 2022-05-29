@@ -2,7 +2,7 @@ import * as chalk from 'chalk';
 import * as url from 'url';
 // tslint:disable-next-line:no-duplicate-imports
 import { io, Socket } from 'socket.io-client';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, optional } from 'inversify';
 import Boot from '../../classes/Boot';
 import Settings from '../../classes/Settings';
 import { ExpressiveTeaCupSettings } from '../../libs/interfaces';
@@ -48,7 +48,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     @inject('context') ctx,
     @inject( 'settings') settings,
     @inject('server') server,
-    @inject( 'secureServer') serverSecure,
+    @inject( 'secureServer') @optional() serverSecure,
   ) {
     this.server = server;
     this.serverSecure = serverSecure;
