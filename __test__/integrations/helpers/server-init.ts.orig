@@ -1,0 +1,23 @@
+import * as supertest from 'supertest';
+import Boot from '../../../classes/Boot';
+<<<<<<< HEAD
+import { Modules } from '../../../decorators/server';
+=======
+import { Modules, RegisterModule } from '../../../decorators/server';
+>>>>>>> 733c658 ([RELEASE] Upgrade Packages)
+import RootModule from './modules/root/RootModule';
+import { ExpressiveTeaApplication } from '../../../libs/interfaces';
+
+@Modules([RootModule])
+class Bootstrap extends Boot {
+}
+
+export default async function initServer() {
+  const bootstrap = new Bootstrap();
+  const app: ExpressiveTeaApplication = await bootstrap.start();
+
+  return {
+    app,
+    request: supertest(app.application)
+  };
+}
