@@ -1,4 +1,4 @@
-import { Express, Router } from 'express';
+import { Express, Router, RequestHandler } from 'express';
 import * as http from 'http';
 import * as https from 'https';
 import { ExpressiveTeaMiddleware, ExpressMiddlewareHandler } from './types';
@@ -131,4 +131,18 @@ export interface ExpressiveTeaAnnotations {
 
 export interface ExpressiveTeaMiddlewareExtends {
   $middlewares?: ExpressMiddlewareHandler[];
+}
+
+export interface IExpressiveTeaProxySettings {
+  name: string;
+  source: string;
+  targetUrl: string;
+}
+
+export interface IExpressiveTeaProxy {
+  readonly source: string;
+  readonly target: string;
+  readonly proxyHandler: RequestHandler;
+
+  __register(server: Express): void;
 }

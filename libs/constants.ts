@@ -93,6 +93,8 @@ export const REGISTERED_STATIC_KEY = 'app:statics';
 export const REGISTERED_DIRECTIVES_KEY = 'app:directives';
 export const ARGUMENTS_KEY = 'app:routes:arguments';
 export const ROUTER_ANNOTATIONS_KEY = 'app:routes:annotations';
+export const ROUTER_PROXIES_KEY = 'app:routes:proxies';
+export const PROXY_SETTING_KEY = 'app:proxy:settings';
 
 export const ARGUMENT_TYPES = {
   BODY: Symbol('BODY'),
@@ -102,3 +104,26 @@ export const ARGUMENT_TYPES = {
   REQUEST: Symbol('REQUEST'),
   RESPONSE: Symbol('RESPONSE')
 };
+
+export enum PROXY_METHODS {
+  HOST = 'host',
+  PROXY_REQ_PATH_RESOLVER = 'proxyReqPathResolver',
+  FILTER = 'filter',
+  USER_RES_DECORATOR = 'userResDecorator',
+  USER_RES_HEADER_DECORATOR = 'userResHeaderDecorator',
+  SKIP_TO_NEXT_HANDLER_FILTER = 'skipToNextHandlerFilter',
+  PROXY_ERROR_HANDLER = 'proxyErrorHandler',
+  PROXY_REQ_OPT_DECORATOR = 'proxyReqOptDecorator',
+  PROXY_REQ_BODY_DECORATOR = 'proxyReqBodyDecorator'
+}
+
+export enum PROXY_PROPERTIES {
+  LIMIT = 'limit',
+  MEMOIZE_HOST = 'memoizeHost',
+  HTTPS = 'https',
+  PRESERVE_HOST_HDR = 'preserveHostHdr',
+  PARSE_REQ_BODY = 'parseReqBody',
+  REQ_AS_BUFFER = 'reqAsBuffer',
+  REQ_BODY_ENCODING = 'reqBodyEncoding',
+  TIMEOUT = 'timeout'
+}

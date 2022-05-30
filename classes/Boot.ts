@@ -17,6 +17,7 @@ import {
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
+  ROUTER_PROXIES_KEY,
   STAGES_INIT
 } from '../libs/constants';
 import { ExpressiveTeaApplication, ExpressiveTeaStatic, ExprresiveTeaDirective } from '../libs/interfaces';
@@ -104,6 +105,7 @@ abstract class Boot {
           WebsocketService.getInstance().setHttpServer(secureServer);
         }
 
+        await resolveProxyContainers(this);
         await resolveDirectives(this, this.server);
         await resolveStatic(this, this.server);
         for (const stage of BOOT_ORDER) {
@@ -195,6 +197,18 @@ async function bootloaderResolve(
   }
 }
 
+async function resolveProxyContainers(context) {
+  const ProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, getClass(context)) || [];
+  for (const Container of ProxyContainers) {
+    resolveProxy(Container, context.server);
+  }
+}
+
+export async function resolveProxy(ProxyContainer: any, server: Express): Promise<void> {
+  const proxyContainer = new ProxyContainer();
+  proxyContainer.__register(server);
+}
+
 async function selectLoaderType(loader, server: Express, ...args: unknown[]) {
   return loader.method(server, ...args);
 }
@@ -217,5 +231,6 @@ function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExc
 
   throw new BootLoaderSoftExceptions(`${failMessage} and will be not enabled`);
 }
+
 
 export default Boot;

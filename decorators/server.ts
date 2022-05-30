@@ -7,7 +7,8 @@ import {
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
-  REGISTERED_STATIC_KEY
+  REGISTERED_STATIC_KEY,
+  ROUTER_PROXIES_KEY
 } from '../libs/constants';
 import { ExpressiveTeaPluginProps, ExpressiveTeaServerProps, ExpressiveTeaStaticFileServer } from '../libs/interfaces';
 
@@ -233,5 +234,36 @@ export function RegisterModule(Module) {
     const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, property) || [];
     registeredModules.push(Module);
     MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
+  };
+}
+
+export function Proxies(proxyContainers: any[]) {
+  return target => {
+
+    for (const proxyContainer of proxyContainers) {
+      const registeredProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, target) || [];
+      registeredProxyContainers.unshift(proxyContainer);
+      MetaData.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
+    }
+
+  };
+}
+
+/**
+ * Register Modules Method Decorator this Method Decorator is used at bootstrap level and should decorate bootstrap class
+ * and register modules.
+ * @decorator {MethodDecorator} RegisterModule - Register a Expressive Tea module to application.
+ * @summary This register the Module Classes created by the user.
+ * @param Modules
+ */
+ export function Modules(Modules: any[]) {
+  return target => {
+
+    for (const Module of Modules) {
+      const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+      registeredModules.unshift(Module);
+      MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
+    }
+
   };
 }
