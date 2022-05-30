@@ -285,3 +285,7 @@ export function descriptorOf(target: any, propertyKey: string): PropertyDescript
 export function prototypeOf(target: any) {
   return classOf(target) === target ? target.prototype : target;
 }
+
+export function isAsyncFunction(fn: () => any) {
+  return fn.constructor.name === 'AsyncFunction' || fn.constructor.name.includes('__awaiter');
+}
