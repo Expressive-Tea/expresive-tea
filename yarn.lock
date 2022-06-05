@@ -1724,10 +1724,10 @@ ee-first@1.1.1:
   resolved "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-eiows@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/eiows/-/eiows-4.0.1.tgz#73afedc04119cb7ee47e293b59b9cb82dd0d444e"
-  integrity sha512-kjZtN7NSHUUjzmmkwz4icAbwJ+D9NINf/WX5zDiRwhzLx0ZWeBXmQWcyDr1+0Yvz10WhR2tFXeoWJ+Uur9elYA==
+eiows@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/eiows/-/eiows-4.1.2.tgz#68a4ed4a221877557dd5d7ad616381143072b07d"
+  integrity sha512-dNu+yOdp/mPROgEIW9pFnx+iBLob130BPqspXxSt63OvICtitrpYQSmdJ2M7irIwqh3oj1JfDKadHPCocKPBpg==
 
 electron-to-chromium@^1.3.886:
   version "1.3.892"
