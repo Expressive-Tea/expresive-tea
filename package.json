@@ -62,7 +62,7 @@
     "socket.io": "4.5.1",
     "socket.io-client": "4.5.1",
     "url-scheme": "1.0.5",
-    "ws": "8.7.0"
+    "ws": "8.8.1"
   },
   "repository": {
     "type": "git",
