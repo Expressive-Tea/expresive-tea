@@ -1,4 +1,4 @@
-import { ExpressiveTeaApplication } from '../../libs/interfaces';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import initServer from './helpers/server-init';
 import container from '../../inversify.config';
 

@@ -5,7 +5,7 @@ import Settings from '../../../classes/Settings';
 import { Plug, RegisterModule } from '../../../decorators/server';
 import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
-import { BOOT_STAGES } from '../../../libs/constants';
+import { BOOT_STAGES } from '@expressive-tea/commons/constants';
 
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();

@@ -5,11 +5,11 @@ import { io, Socket } from 'socket.io-client';
 import { inject, injectable, optional } from 'inversify';
 import Boot from '../../classes/Boot';
 import Settings from '../../classes/Settings';
-import { ExpressiveTeaCupSettings } from '../../libs/interfaces';
-import MetaData from '../../classes/MetaData';
-import { ASSIGN_TEACUP_KEY } from '../../libs/constants';
+import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
-import { getClass } from '../../helpers/object-helper';
+import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import http from 'http';
 import https from 'https';
 

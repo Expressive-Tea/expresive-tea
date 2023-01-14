@@ -1,21 +1,26 @@
 import { Router } from 'express';
 import { each } from 'lodash';
-import MetaData from '../classes/MetaData';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { addAnnotation } from '../helpers/decorators';
 import { executeRequest, generateRoute, router } from '../helpers/server';
 import {
   ARGUMENTS_KEY,
   ROUTER_ANNOTATIONS_KEY,
   ROUTER_HANDLERS_KEY,
-  ROUTER_MIDDLEWARES_KEY,
-} from '../libs/constants';
+  ROUTER_MIDDLEWARES_KEY
+} from '@expressive-tea/commons/constants';
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
   ExpressiveTeaHandlerOptions,
-  IExpressiveTeaRoute,
-} from '../libs/interfaces';
-import { ClassDecorator, ExpressiveTeaMiddleware, ExpressMiddlewareHandler, MethodDecorator } from '../libs/types';
+  IExpressiveTeaRoute
+} from '@expressive-tea/commons/interfaces';
+import {
+  ClassDecorator,
+  ExpressiveTeaMiddleware,
+  ExpressMiddlewareHandler,
+  MethodDecorator
+} from '@expressive-tea/commons/types';
 
 /**
  * @module Decorators/Router
@@ -35,8 +40,7 @@ import { ClassDecorator, ExpressiveTeaMiddleware, ExpressMiddlewareHandler, Meth
  */
 export function Route(mountpoint = '/') {
   return <T extends new (...args: any[]) => any>(RouterClass: T) => {
-
-    return class ExpressiveTeaRoute extends RouterClass implements IExpressiveTeaRoute{
+    return class ExpressiveTeaRoute extends RouterClass implements IExpressiveTeaRoute {
       readonly router: Router;
       readonly mountpoint: string;
 
@@ -61,10 +65,16 @@ export function Route(mountpoint = '/') {
 
       __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler {
         const self: this = this;
-        const decoratedArguments: ExpressiveTeaArgumentOptions[] = MetaData.get(ARGUMENTS_KEY,
-          options.target, options.propertyKey);
-        const annotations: ExpressiveTeaAnnotations[] = MetaData.get(ROUTER_ANNOTATIONS_KEY,
-          options.target, options.propertyKey);
+        const decoratedArguments: ExpressiveTeaArgumentOptions[] = MetaData.get(
+          ARGUMENTS_KEY,
+          options.target,
+          options.propertyKey
+        );
+        const annotations: ExpressiveTeaAnnotations[] = MetaData.get(
+          ROUTER_ANNOTATIONS_KEY,
+          options.target,
+          options.propertyKey
+        );
 
         return executeRequest.bind({
           options,

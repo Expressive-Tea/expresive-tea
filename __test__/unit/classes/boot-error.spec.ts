@@ -1,4 +1,5 @@
-import { Plugin, BOOT_STAGES } from '@expressive-tea/plugin';
+import { BOOT_STAGES } from '@expressive-tea/commons/constants';
+import { Plugin } from '@expressive-tea/plugin';
 import { Stage } from '@expressive-tea/plugin/decorators';
 import * as express from 'express';
 import * as http from 'http';

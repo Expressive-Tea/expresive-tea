@@ -1,7 +1,7 @@
 import * as express from 'express';
-import Metadata from '../../../classes/MetaData';
+import Metadata from '@expressive-tea/commons/classes/Metadata';
 import { Delete, Get, Middleware, Param, Patch, Post, Put, Route, View } from '../../../decorators/router';
-import { ROUTER_ANNOTATIONS_KEY, ROUTER_HANDLERS_KEY } from '../../../libs/constants';
+import { ROUTER_ANNOTATIONS_KEY, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
 
 const metadataMock = jest.spyOn(Metadata, 'set');
 jest.mock('express', () => ({

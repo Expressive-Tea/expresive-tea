@@ -1,13 +1,13 @@
-import MetaData from '../classes/MetaData';
-import {  ExpressiveTeaProxyOptions, ExpressiveTeaProxyProperty, MethodDecorator } from '../libs/types';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
+import {  ExpressiveTeaProxyOptions, ExpressiveTeaProxyProperty, MethodDecorator } from '@expressive-tea/commons/types';
 import * as httpProxy from 'express-http-proxy';
 import { Express, RequestHandler } from 'express';
-import { getClass, isAsyncFunction } from '../helpers/object-helper';
+import { getClass, isAsyncFunction } from '@expressive-tea/commons/helpers/object-helper';
 import { isUndefined } from 'lodash';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 
-import { PROXY_SETTING_KEY, PROXY_METHODS, PROXY_PROPERTIES } from '../libs/constants';
-import { IExpressiveTeaProxySettings, IExpressiveTeaProxy } from '../libs/interfaces';
+import { PROXY_SETTING_KEY, PROXY_METHODS, PROXY_PROPERTIES } from '@expressive-tea/commons/constants';
+import { IExpressiveTeaProxySettings, IExpressiveTeaProxy } from '@expressive-tea/commons/interfaces';
 
 const NON_ASYNC_METHODS = ['host'];
 

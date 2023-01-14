@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { chain, find, get, has, isNumber, pick, size } from 'lodash';
-import MetaData from '../classes/MetaData';
-import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '../libs/constants';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
 import {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
   ExpressiveTeaHandlerOptions
-} from '../libs/interfaces';
+} from '@expressive-tea/commons/interfaces';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
-import { getOwnArgumentNames } from './object-helper';
+import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
 import * as fs from 'fs';
 
 export function autoResponse(

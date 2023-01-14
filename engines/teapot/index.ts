@@ -5,9 +5,9 @@ import * as http from 'http';
 import * as https from 'https';
 import Boot from '../../classes/Boot';
 import ProxyRoute from '../../classes/ProxyRoute';
-import { ExpressiveTeaPotSettings } from '../../libs/interfaces';
-import Metadata from '../../classes/MetaData';
-import { ASSIGN_TEAPOT_KEY } from '../../libs/constants';
+import { ExpressiveTeaPotSettings } from '@expressive-tea/commons/interfaces';
+import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { Server, Socket } from 'socket.io';
 import { NextFunction, Request, Response } from 'express';
@@ -173,7 +173,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey, this.teapotSettings.serverKey);
     this.socketServer = require('socket.io')({
       path: '/teapot',
-      wsEngine: require('eiows').Server,
       cookie: false
     });
   }

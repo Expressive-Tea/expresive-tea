@@ -1,7 +1,7 @@
 import * as path from 'path';
 import Boot from '../../classes/Boot';
 import { ServerSettings } from '../../decorators/server';
-import { ExpressiveTeaApplication } from '../../libs/interfaces';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import container from '../../inversify.config';
 
 

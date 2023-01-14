@@ -1,6 +1,6 @@
 import { Express, Router } from 'express';
 import { each, map } from 'lodash';
-import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '../libs/interfaces';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
 import DependencyInjection from '../services/DependencyInjection';
 /**
  * @typedef {Object} ExpressiveTeaModuleProps

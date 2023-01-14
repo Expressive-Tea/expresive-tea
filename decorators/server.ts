@@ -1,6 +1,6 @@
 import { Express } from 'express';
 import { isNil, orderBy } from 'lodash';
-import MetaData from '../classes/MetaData';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
@@ -10,13 +10,13 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   ROUTER_PROXIES_KEY
-} from '../libs/constants';
+} from '@expressive-tea/commons/constants';
 import {
   ExpressiveTeaPotSettings,
   ExpressiveTeaPluginProps,
   ExpressiveTeaServerProps,
   ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings, IExpressiveTeaModule
-} from '../libs/interfaces';
+} from '@expressive-tea/commons/interfaces';
 
 /**
  * Define the Main Plugins Properties.

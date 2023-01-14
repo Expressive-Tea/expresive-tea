@@ -7,12 +7,12 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   STAGES_INIT
-} from '../libs/constants';
+} from '@expressive-tea/commons/constants';
 import * as express from 'express';
 import { Express } from 'express';
-import MetaData from '../classes/MetaData';
-import { getClass } from './object-helper';
-import { ExpressiveTeaDirective, ExpressiveTeaStatic } from '../libs/interfaces';
+import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { ExpressiveTeaDirective, ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import Boot from '../classes/Boot';
 

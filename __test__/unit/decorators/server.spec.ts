@@ -1,5 +1,5 @@
 import {last} from 'lodash';
-import Metadata from '../../../classes/MetaData';
+import Metadata from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../../../classes/Settings';
 import {
   ExpressDirective,
@@ -15,9 +15,9 @@ import {
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
-} from '../../../libs/constants';
+} from '@expressive-tea/commons/constants';
 import Plugin, {mockPluginArguments} from '../../__mocks__/plugin';
-import {ExpressiveTeaModuleProps, IExpressiveTeaModule} from '../../../libs/interfaces';
+import {ExpressiveTeaModuleProps, IExpressiveTeaModule} from '@expressive-tea/commons/interfaces';
 import {Express} from 'express';
 
 describe('ServerSettings Decorator', () => {

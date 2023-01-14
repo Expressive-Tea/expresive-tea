@@ -4,7 +4,7 @@ import { RegisterModule, ServerSettings, Teacup, Teapot } from '../../../decorat
 import TeapotModule from './modules/teapot/RootModule';
 import TeacupModule1 from './modules/teacup1/RootModule';
 import TeacupModule2 from './modules/teacup2/RootModule';
-import { ExpressiveTeaApplication } from '../../../libs/interfaces';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import * as $P from 'bluebird';
 
 const teapotPort = 8080;

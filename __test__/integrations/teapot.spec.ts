@@ -1,4 +1,4 @@
-import { ExpressiveTeaApplication } from '../../libs/interfaces';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import initTeapot from './helpers/teapot-init';
 import container from '../../inversify.config';
 import * as $P from 'bluebird';
