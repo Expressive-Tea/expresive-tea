@@ -1,6 +1,6 @@
 import Boot from '../classes/Boot';
 import { Plug, ServerSettings } from '../decorators/server';
-import { BOOT_STAGES } from '../libs/constants';
+import { BOOT_STAGES } from '@expressive-tea/commons/constants';
 
 function middlewares(application) {
   let n = parseInt(process.env.MW || '1', 10);
