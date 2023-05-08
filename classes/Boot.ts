@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import '../inversify.config';
-import * as $P from 'bluebird';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
@@ -9,7 +8,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import Settings from '../classes/Settings';
-import { BOOT_ORDER, BOOT_STAGES } from '@expressive-tea/commons/constants';
+import { ASSIGN_TEACUP_KEY, ASSIGN_TEAPOT_KEY, BOOT_ORDER, BOOT_STAGES } from '@expressive-tea/commons/constants';
 import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import { Rejector, Resolver } from '@expressive-tea/commons/types';
 import HTTPEngine from '../engines/http/index';
@@ -18,6 +17,8 @@ import TeapotEngine from '../engines/teapot/index';
 import TeacupEngine from '../engines/teacup';
 // tslint:disable-next-line:no-duplicate-imports
 import container from '../inversify.config';
+import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 
 
 /**
@@ -60,6 +61,7 @@ abstract class Boot {
   constructor() {
     this.settings = Settings.getInstance(this);
   }
+
   /**
    * Get Express Application
    * @returns Express
@@ -76,7 +78,7 @@ abstract class Boot {
    * @returns {Promise<ExpressiveTeaApplication>}
    */
   async start(): Promise<ExpressiveTeaApplication> {
-    return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
+    return new Promise(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
       try {
         const localContainer = container.createChild();
         const privateKey = this.settings.get('privateKey');
@@ -93,12 +95,19 @@ abstract class Boot {
         localContainer.bind<Boot>('context').toConstantValue(this);
         localContainer.bind<Settings>('settings').toConstantValue(this.settings);
 
-        const httpEngine = localContainer.resolve(HTTPEngine);
-        const websocketEngine = localContainer.resolve(WebsocketEngine);
-        const teapotEngine = localContainer.resolve(TeapotEngine);
-        const teacupEngine = localContainer.resolve(TeacupEngine);
+        // Activation
+        const isActiveTeapot = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this), 'isTeapotActive');
+        const isActiveTeacup = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this), 'isTeacupActive');
+        const isActiveWebsockets = this.settings.get('startWebsocket');
 
-        await websocketEngine.init();
+        // Engines
+
+        const httpEngine = localContainer.resolve(HTTPEngine);
+        const websocketEngine = isActiveWebsockets ? localContainer.resolve(WebsocketEngine) : null;
+        const teapotEngine = isActiveTeapot ? localContainer.resolve(TeapotEngine) : null;
+        const teacupEngine = isActiveTeacup ? localContainer.resolve(TeacupEngine) : null;
+
+        await websocketEngine?.init();
         await httpEngine.init();
 
         await httpEngine.resolveProxyContainers();
@@ -106,9 +115,9 @@ abstract class Boot {
         await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
 
         const listenerServers: (http.Server | https.Server)[] = await httpEngine.start();
-        await httpEngine.resolveStages([BOOT_STAGES.START ],...listenerServers);
-        await teapotEngine.start();
-        await teacupEngine.start();
+        await httpEngine.resolveStages([BOOT_STAGES.START], ...listenerServers);
+        await teapotEngine?.start();
+        await teacupEngine?.start();
 
         resolver({ application: this.server, server, secureServer });
 

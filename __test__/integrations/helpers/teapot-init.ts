@@ -5,7 +5,7 @@ import TeapotModule from './modules/teapot/RootModule';
 import TeacupModule1 from './modules/teacup1/RootModule';
 import TeacupModule2 from './modules/teacup2/RootModule';
 import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import * as $P from 'bluebird';
+import { delay } from '../../../helpers/promise-helper';
 
 const teapotPort = 8080;
 
@@ -97,13 +97,13 @@ export default async function initTeapot() {
   const appTeapot = await teapot.start();
   const request = supertest(appTeapot.application);
   const appTeacup = await teacup1.start();
-  const extraTeacups = await $P.all([
+  const extraTeacups = await Promise.all([
     teacup2.start(),
     teacup3.start(),
     teacup4.start()
   ]);
 
-  await $P.delay(5000);
+  await delay(5000);
 
   return {
     appTeapot, appTeacup, extraTeacups, request

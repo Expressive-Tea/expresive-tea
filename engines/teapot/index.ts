@@ -22,10 +22,9 @@ export default class TeapotEngine {
 
   private clients: Map<string | symbol, any> = new Map<string | symbol, any>();
   private registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
-  private teapotSettings: ExpressiveTeaPotSettings;
+  private readonly teapotSettings: ExpressiveTeaPotSettings;
   private publicKey: any;
   private privateKey: any;
-  private isActive: boolean;
   private serverSignature: Buffer;
   private socketServer: Server;
 
@@ -158,12 +157,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.context = ctx;
     this.server = server;
     this.serverSecure = serverSecure;
-    this.isActive = Metadata.get(ASSIGN_TEAPOT_KEY, this.context, 'isTeapotActive');
     this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, this.context);
-
-    if (!this.isActive) {
-      return;
-    }
 
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
 
@@ -179,10 +173,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
 
   async start(): Promise<void> {
-    if (!this.isActive) {
-      return;
-    }
-
     TeapotEngine.header(this.teapotSettings);
 
     this.socketServer.on('connection', this.registerTeacup.bind(this));

@@ -1,6 +1,5 @@
 import * as http from 'http';
 import * as https from 'https';
-import * as $P from 'bluebird';
 import { inject, injectable, optional } from 'inversify';
 import Settings from '../../classes/Settings';
 import Boot from '../../classes/Boot';
@@ -20,8 +19,8 @@ export default class HTTPEngine {
   constructor(
     @inject('context') ctx,
     @inject('server') server,
-    @inject( 'secureServer') @optional() serverSecure,
-    @inject( 'settings') settings
+    @inject('secureServer') @optional() serverSecure,
+    @inject('settings') settings
   ) {
     this.context = ctx;
     this.server = server;
@@ -29,8 +28,8 @@ export default class HTTPEngine {
     this.settings = settings;
   }
 
-  private listen(server: http.Server | https.Server, port: number): $P<http.Server | https.Server> {
-    return new $P((resolve, reject) => {
+  private listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
+    return new Promise((resolve, reject) => {
       server.listen(port);
 
       server.on('error', error => {
@@ -39,7 +38,7 @@ export default class HTTPEngine {
 
       server.on('listening', () => {
         console.log(`Running HTTP Server on [${port}]`);
-        resolve(server)
+        resolve(server);
       });
     });
   }
@@ -57,9 +56,7 @@ export default class HTTPEngine {
   }
 
   async resolveStages(stages: BOOT_STAGES[], ...extraArgs) {
-    return $P.map(stages,s => {
-      return resolveStage(s, this.context, this.context.getApplication(), ...extraArgs);
-    })
+    return Promise.all(stages.map(s => resolveStage(s, this.context, this.context.getApplication(), ...extraArgs)));
   }
 
   async resolveProxyContainers() {

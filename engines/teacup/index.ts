@@ -21,7 +21,6 @@ export default class TeacupEngine {
   private readonly server: http.Server;
   private readonly serverSecure?: https.Server;
   private teacupSettings: ExpressiveTeaCupSettings;
-  private isActive: boolean;
   private publicKey: any;
   private privateKey: any;
   private publicServerKey: any;
@@ -55,11 +54,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.settings = settings;
     this.context = ctx;
     this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
-    this.isActive =  MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context), 'isTeacupActive');
-
-    if (!this.isActive) {
-      return;
-    }
 
     const scheme = url.parse(this.teacupSettings.serverUrl);
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
@@ -117,11 +111,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async start(): Promise<void> {
-
-    if (!this.isActive) {
-      return;
-    }
-
     this.header();
 
     this.client.on('handshake', this.handshaked.bind(this));
