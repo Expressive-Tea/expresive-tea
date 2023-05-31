@@ -19,6 +19,7 @@ import TeacupEngine from '../engines/teacup';
 import container from '../inversify.config';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import ExpressiveTeaEngine from './Engine';
 
 
 /**
@@ -78,7 +79,7 @@ abstract class Boot {
    * @returns {Promise<ExpressiveTeaApplication>}
    */
   async start(): Promise<ExpressiveTeaApplication> {
-    return new Promise(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
+    return new Promise(async (resolver: Resolver<ExpressiveTeaApplication>, reject: Rejector) => {
       try {
         const localContainer = container.createChild();
         const privateKey = this.settings.get('privateKey');
@@ -88,6 +89,7 @@ abstract class Boot {
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
         }, this.server);
+
 
         // Injectables
         localContainer.bind<http.Server>('server').toConstantValue(server);
@@ -101,28 +103,33 @@ abstract class Boot {
         const isActiveWebsockets = this.settings.get('startWebsocket');
 
         // Engines
+        const availableEngines: ExpressiveTeaEngine[] = [
+          ...isActiveWebsockets ? [localContainer.resolve(WebsocketEngine)] : [],
+          ...isActiveTeapot ? [localContainer.resolve(TeapotEngine)] : [],
+          ...isActiveTeacup ? [localContainer.resolve(TeacupEngine)] : [],
+        ];
 
+        // Resolve Engines
         const httpEngine = localContainer.resolve(HTTPEngine);
-        const websocketEngine = isActiveWebsockets ? localContainer.resolve(WebsocketEngine) : null;
-        const teapotEngine = isActiveTeapot ? localContainer.resolve(TeapotEngine) : null;
-        const teacupEngine = isActiveTeacup ? localContainer.resolve(TeacupEngine) : null;
 
-        await websocketEngine?.init();
+        // Initialize Engines
+        await Promise.all(availableEngines.map(engine => engine.init()));
         await httpEngine.init();
 
+        // HTTP Engine Resolve Stages
         await httpEngine.resolveProxyContainers();
         await httpEngine.resolveStages(BOOT_ORDER);
         await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
 
         const listenerServers: (http.Server | https.Server)[] = await httpEngine.start();
         await httpEngine.resolveStages([BOOT_STAGES.START], ...listenerServers);
-        await teapotEngine?.start();
-        await teacupEngine?.start();
+
+        await Promise.all(availableEngines.map(engine => engine.start()));
 
         resolver({ application: this.server, server, secureServer });
 
       } catch (e) {
-        return rejector(e);
+        return reject(e);
       }
     });
   }

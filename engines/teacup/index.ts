@@ -12,14 +12,10 @@ import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import http from 'http';
 import https from 'https';
+import ExpressiveTeaEngine from '../../classes/Engine';
 
 @injectable()
-export default class TeacupEngine {
-
-  private readonly settings: Settings;
-  private readonly context: Boot;
-  private readonly server: http.Server;
-  private readonly serverSecure?: https.Server;
+export default class TeacupEngine extends ExpressiveTeaEngine {
   private teacupSettings: ExpressiveTeaCupSettings;
   private publicKey: any;
   private privateKey: any;
@@ -41,31 +37,6 @@ export default class TeacupEngine {
 {yellow.bold NOTICE:}
 All Communication are encrypted to ensure intruder can not connected, however, please does not share any sensitive data like keys or passwords to avoid security issues.
   `);
-  }
-
-  constructor(
-    @inject('context') ctx,
-    @inject( 'settings') settings,
-    @inject('server') server,
-    @inject( 'secureServer') @optional() serverSecure,
-  ) {
-    this.server = server;
-    this.serverSecure = serverSecure;
-    this.settings = settings;
-    this.context = ctx;
-    this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
-
-    const scheme = url.parse(this.teacupSettings.serverUrl);
-    const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
-    this.publicKey = publicKey;
-    this.privateKey = privateKey;
-    this.clientSignature = TeaGatewayHelper.sign(this.teacupSettings.clientKey, this.privateKey, this.teacupSettings.clientKey);
-
-    this.client = io(`http://${scheme.host}`, {
-      path: '/teapot',
-      reconnection: true,
-      autoConnect: false
-    });
   }
 
   private handshaked(data) {
@@ -111,6 +82,19 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async start(): Promise<void> {
+    this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
+    const scheme = url.parse(this.teacupSettings.serverUrl);
+    const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
+    this.clientSignature = TeaGatewayHelper.sign(this.teacupSettings.clientKey, this.privateKey, this.teacupSettings.clientKey);
+
+    this.client = io(`http://${scheme.host}`, {
+      path: '/teapot',
+      reconnection: true,
+      autoConnect: false
+    });
+
     this.header();
 
     this.client.on('handshake', this.handshaked.bind(this));

@@ -33,7 +33,7 @@ export default class TeaGatewayHelper {
   }
 
   static sign(data: string, privateKey: string, passphrase: string): Buffer {
-    return crypto.sign('sha256', Buffer.from(data), {
+    return crypto.sign(null, Buffer.from(data), {
       key: privateKey,
       passphrase
     });
@@ -41,7 +41,7 @@ export default class TeaGatewayHelper {
 
   static verify(data: string, publicKey: string, signature: Buffer) {
     return crypto.verify(
-      'sha256',
+      null,
       Buffer.from(data),
       {
         key: publicKey
@@ -52,7 +52,7 @@ export default class TeaGatewayHelper {
 
   static generateKeys(passphrase: string): KeyPairSyncResult<any, any> {
     const { generateKeyPairSync } = require('crypto');
-    return  generateKeyPairSync('rsa', {
+    return  generateKeyPairSync('ed25519', {
       modulusLength: 2048,
       publicKeyEncoding: {
         type: 'spki',

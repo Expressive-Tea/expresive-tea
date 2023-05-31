@@ -1,9 +1,5 @@
 import * as chalk from 'chalk';
-import Settings from '../../classes/Settings';
-import { inject, injectable, optional } from 'inversify';
-import * as http from 'http';
-import * as https from 'https';
-import Boot from '../../classes/Boot';
+import { injectable } from 'inversify';
 import ProxyRoute from '../../classes/ProxyRoute';
 import { ExpressiveTeaPotSettings } from '@expressive-tea/commons/interfaces';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
@@ -11,25 +7,21 @@ import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { Server, Socket } from 'socket.io';
 import { NextFunction, Request, Response } from 'express';
+import ExpressiveTeaEngine from '../../classes/Engine';
 
 @injectable()
-export default class TeapotEngine {
-
-  private readonly settings: Settings;
-  private readonly context: Boot;
-  private readonly server: http.Server;
-  private readonly serverSecure?: https.Server;
+export default class TeapotEngine extends ExpressiveTeaEngine {
 
   private clients: Map<string | symbol, any> = new Map<string | symbol, any>();
   private registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
-  private readonly teapotSettings: ExpressiveTeaPotSettings;
+  private teapotSettings: ExpressiveTeaPotSettings;
   private publicKey: any;
   private privateKey: any;
   private serverSignature: Buffer;
   private socketServer: Server;
 
   private static header(teapotSettings: ExpressiveTeaPotSettings) {
-    console.log(chalk.white.bold('Teapot Engine is initializing...'))
+    console.log(chalk.white.bold('Teapot Engine is initializing...'));
     console.log(chalk`
              {white.bold ;,'}
      {green _o_}    {white.bold ;:;'}
@@ -77,7 +69,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
         self.emit('accepted', TeaGatewayHelper.encrypt({
           signature: ctx.serverSignature.toString('base64')
-        }, clientSignature.slice(0,32)));
+        }, clientSignature.slice(0, 32)));
         return;
       }
       console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${self.id}}]: Failed to verify and will be disconnected...`);
@@ -91,7 +83,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   private registered(ctx: TeapotEngine, data: any) {
     const self: Socket = this as unknown as Socket;
     try {
-      const message = TeaGatewayHelper.decrypt(data, ctx.serverSignature.slice(0,32));
+      const message = TeaGatewayHelper.decrypt(data, ctx.serverSignature.slice(0, 32));
       let proxyRoute: ProxyRoute;
 
       if (ctx.registeredRoute.has(message.mountTo)) {
@@ -132,7 +124,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
       if (proxyRoute.isClientOnRoute(teacupId)) {
         routes.push(route);
       }
-    })
+    });
     return routes;
   }
 
@@ -147,32 +139,23 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     }
   }
 
-  constructor(
-    @inject('context') ctx,
-    @inject('server') server,
-    @inject( 'secureServer') @optional() serverSecure,
-    @inject( 'settings') settings
-  ) {
-    this.settings = settings;
-    this.context = ctx;
-    this.server = server;
-    this.serverSecure = serverSecure;
+  async init(): Promise<void> {
     this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, this.context);
 
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
-
+    console.log(publicKey, privateKey);
     this.publicKey = publicKey;
     this.privateKey = privateKey;
 
     this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey, this.teapotSettings.serverKey);
+  }
+
+  async start(): Promise<void> {
     this.socketServer = require('socket.io')({
       path: '/teapot',
       cookie: false
     });
-  }
 
-
-  async start(): Promise<void> {
     TeapotEngine.header(this.teapotSettings);
 
     this.socketServer.on('connection', this.registerTeacup.bind(this));
