@@ -1,4 +1,3 @@
-import * as SocketIO from 'socket.io';
 import ExpressiveTeaEngine from '../../classes/Engine';
 
 export default class SocketIOEngine extends ExpressiveTeaEngine {

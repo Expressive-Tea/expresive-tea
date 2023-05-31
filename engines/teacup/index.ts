@@ -2,16 +2,12 @@ import * as chalk from 'chalk';
 import * as url from 'url';
 // tslint:disable-next-line:no-duplicate-imports
 import { io, Socket } from 'socket.io-client';
-import { inject, injectable, optional } from 'inversify';
-import Boot from '../../classes/Boot';
-import Settings from '../../classes/Settings';
+import { injectable } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import http from 'http';
-import https from 'https';
 import ExpressiveTeaEngine from '../../classes/Engine';
 
 @injectable()
@@ -56,6 +52,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         });
         return;
       }
+
       throw new Error('Fail to Verify Client on Teapod.')
     } catch (e) {
       console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${e.message}`);
