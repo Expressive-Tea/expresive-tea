@@ -33,7 +33,7 @@ jobs:
             - expressive-tea-
       - node/install-packages:
           # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: yarn
+          pkg-manager: yarn-berry
           override-ci-command: yarn install --immutable
       - save_cache:
           paths:
@@ -41,7 +41,7 @@ jobs:
           key: expressive-tea-{{ checksum "package.json" }}
       - run:
           name: Expressive Tea Tests
-          command: npm test
+          command: yarn test
           environment:
             JEST_JUNIT_OUTPUT_DIR: "./coverage"
             JUNIT_REPORT_NAME: "junit.xml"
