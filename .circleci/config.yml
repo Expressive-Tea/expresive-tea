@@ -31,9 +31,10 @@ jobs:
           keys:
             - expressive-tea-{{ checksum "package.json" }}
             - expressive-tea-
-      - node/install-packages:
-          # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: yarn-berry
+      - run:
+          name: Install Yarn Berry
+          command: |
+            yarn install --immutable
       - save_cache:
           paths:
             - node_modules
