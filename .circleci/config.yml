@@ -32,9 +32,9 @@ jobs:
             - expressive-tea-{{ checksum "package.json" }}
             - expressive-tea-
       - run:
-          name: Install Yarn Berry
+          name: Install Packages
           command: |
-            yarn install --immutable
+            yarn install --immutable --immutable-cache
       - save_cache:
           paths:
             - node_modules
