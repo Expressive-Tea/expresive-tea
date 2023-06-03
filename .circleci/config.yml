@@ -34,6 +34,7 @@ jobs:
       - node/install-packages:
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: yarn
+          override-ci-command: yarn install --immutable
       - save_cache:
           paths:
             - node_modules
