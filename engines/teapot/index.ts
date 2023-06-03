@@ -1,13 +1,13 @@
 import * as chalk from 'chalk';
+import { Server, Socket } from 'socket.io';
 import { injectable } from 'inversify';
-import ProxyRoute from '../../classes/ProxyRoute';
+import { NextFunction, Request, Response } from 'express';
 import { ExpressiveTeaPotSettings } from '@expressive-tea/commons/interfaces';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
-import TeaGatewayHelper from '../../helpers/teapot-helper';
-import { Server, Socket } from 'socket.io';
-import { NextFunction, Request, Response } from 'express';
+import ProxyRoute from '../../classes/ProxyRoute';
 import ExpressiveTeaEngine from '../../classes/Engine';
+import TeaGatewayHelper from '../../helpers/teapot-helper';
 
 @injectable()
 export default class TeapotEngine extends ExpressiveTeaEngine {
@@ -143,7 +143,6 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, this.context);
 
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
-    console.log(publicKey, privateKey);
     this.publicKey = publicKey;
     this.privateKey = privateKey;
 

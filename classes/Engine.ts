@@ -14,8 +14,8 @@ export default class ExpressiveTeaEngine {
   constructor(
     @inject('context') ctx,
     @inject('server') server,
-    @inject( 'secureServer') @optional() serverSecure,
-    @inject( 'settings') settings
+    @inject('secureServer') @optional() serverSecure,
+    @inject('settings') settings
   ) {
     this.settings = settings;
     this.context = ctx;
@@ -23,6 +23,12 @@ export default class ExpressiveTeaEngine {
     this.serverSecure = serverSecure;
   }
 
-  async init(): Promise<void> {}
-  async start(): Promise<void> {}
+  static exec(availableEngines: ExpressiveTeaEngine[], method: string): any {
+    return Promise.all(availableEngines
+      // tslint:disable-next-line:no-string-literal
+      .filter(engine => typeof engine[method] === 'function')
+      // tslint:disable-next-line:no-string-literal
+      .map(engine => engine[method]())
+    );
+  }
 }

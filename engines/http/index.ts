@@ -1,32 +1,14 @@
 import * as http from 'http';
 import * as https from 'https';
-import { inject, injectable, optional } from 'inversify';
-import Settings from '../../classes/Settings';
-import Boot from '../../classes/Boot';
+import { injectable } from 'inversify';
 import { resolveDirectives, resolveStage, resolveStatic, resolveProxy } from '../../helpers/boot-helper';
-import { BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/commons/constants';
+import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/commons/constants';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
+import ExpressiveTeaEngine from '../../classes/Engine';
 
 @injectable()
-export default class HTTPEngine {
-
-  private readonly settings: Settings;
-  private readonly context: Boot;
-  private readonly server: http.Server;
-  private readonly serverSecure?: https.Server;
-
-  constructor(
-    @inject('context') ctx,
-    @inject('server') server,
-    @inject('secureServer') @optional() serverSecure,
-    @inject('settings') settings
-  ) {
-    this.context = ctx;
-    this.server = server;
-    this.serverSecure = serverSecure;
-    this.settings = settings;
-  }
+export default class HTTPEngine extends ExpressiveTeaEngine{
 
   private listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
     return new Promise((resolve, reject) => {
@@ -44,15 +26,22 @@ export default class HTTPEngine {
   }
 
   async start(): Promise<(http.Server | https.Server)[]> {
-    return [
+    const listenerServers = [
       await this.listen(this.server, this.settings.get('port')),
       (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort')) as https.Server : null
     ];
+
+    await this.resolveStages([BOOT_STAGES.START], ...listenerServers);
+    return listenerServers;
   }
 
   async init(): Promise<void> {
     await resolveDirectives(this.context, this.context.getApplication());
     await resolveStatic(this.context, this.context.getApplication());
+    // HTTP Engine Resolve Stages
+    await this.resolveProxyContainers();
+    await this.resolveStages(BOOT_ORDER);
+    await this.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], this.server, this.serverSecure);
   }
 
   async resolveStages(stages: BOOT_STAGES[], ...extraArgs) {

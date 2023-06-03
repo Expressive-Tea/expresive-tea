@@ -25,7 +25,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@expressive-tea/commons": "1.0.1",
+    "@expressive-tea/commons": "^1.0.1",
     "@expressive-tea/plugin": "1.0.3",
     "@types/express": "4.17.17",
     "@types/express-http-proxy": "1.6.3",

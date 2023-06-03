@@ -1,25 +1,24 @@
 import 'reflect-metadata';
-import '../inversify.config';
+import container from '../inversify.config';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
 import { Express } from 'express';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
-import Settings from '../classes/Settings';
-import { ASSIGN_TEACUP_KEY, ASSIGN_TEAPOT_KEY, BOOT_ORDER, BOOT_STAGES } from '@expressive-tea/commons/constants';
-import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import { Rejector, Resolver } from '@expressive-tea/commons/types';
-import HTTPEngine from '../engines/http/index';
-import WebsocketEngine from '../engines/websocket/index';
-import TeapotEngine from '../engines/teapot/index';
-import TeacupEngine from '../engines/teacup';
-// tslint:disable-next-line:no-duplicate-imports
-import container from '../inversify.config';
+import { ASSIGN_TEACUP_KEY, ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import ExpressiveTeaEngine from './Engine';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
+import { Rejector, Resolver } from '@expressive-tea/commons/types';
+import HTTPEngine from '../engines/http';
+import WebsocketEngine from '../engines/websocket';
+import TeapotEngine from '../engines/teapot/index';
+import TeacupEngine from '../engines/teacup';
+import ExpressiveTeaEngine from '../classes/Engine';
+import Settings from '../classes/Settings';
+import SocketIOEngine from '../engines/socketio/index';
 
 
 /**
@@ -27,7 +26,7 @@ import ExpressiveTeaEngine from './Engine';
  * and a node http server instance.
  * @typedef {Object} ExpressiveTeaApplication
  * @property {Express} application - Express Application Instance
- * @property {HTTPServer} server - HTTP Server Object
+ * @property { HTTPServer } server - HTTP Server Object
  * @summary Application Interface
  */
 
@@ -102,29 +101,21 @@ abstract class Boot {
         const isActiveTeacup = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this), 'isTeacupActive');
         const isActiveWebsockets = this.settings.get('startWebsocket');
 
-        // Engines
+        // Resolve Engines
+        const httpEngine = localContainer.resolve(HTTPEngine);
         const availableEngines: ExpressiveTeaEngine[] = [
+          localContainer.resolve(SocketIOEngine),
           ...isActiveWebsockets ? [localContainer.resolve(WebsocketEngine)] : [],
           ...isActiveTeapot ? [localContainer.resolve(TeapotEngine)] : [],
           ...isActiveTeacup ? [localContainer.resolve(TeacupEngine)] : [],
         ];
 
-        // Resolve Engines
-        const httpEngine = localContainer.resolve(HTTPEngine);
-
         // Initialize Engines
-        await Promise.all(availableEngines.map(engine => engine.init()));
+        await ExpressiveTeaEngine.exec(availableEngines, 'init');
         await httpEngine.init();
 
-        // HTTP Engine Resolve Stages
-        await httpEngine.resolveProxyContainers();
-        await httpEngine.resolveStages(BOOT_ORDER);
-        await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
-
-        const listenerServers: (http.Server | https.Server)[] = await httpEngine.start();
-        await httpEngine.resolveStages([BOOT_STAGES.START], ...listenerServers);
-
-        await Promise.all(availableEngines.map(engine => engine.start()));
+        await httpEngine.start();
+        await ExpressiveTeaEngine.exec(availableEngines, 'start');
 
         resolver({ application: this.server, server, secureServer });
 
