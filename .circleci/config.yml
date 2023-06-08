@@ -39,10 +39,10 @@ jobs:
           name: Expressive Tea Tests
           command: yarn test
           environment:
-            JEST_JUNIT_OUTPUT_DIR: "./coverage"
+            JEST_JUNIT_OUTPUT_DIR: "./reports"
             JUNIT_REPORT_NAME: "junit.xml"
       - store_test_results:
-          path: ./coverage
+          path: ./reports
       - store_artifacts:
           path: ./coverage
 
