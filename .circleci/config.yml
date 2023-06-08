@@ -23,10 +23,6 @@ jobs:
       - checkout
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
       # The orb install-packages step will also automatically cache them for faster future runs.
-      - run:
-          name: Install Yarn Berry
-          command: |
-            yarn set version berry
       - restore_cache:
           keys:
             - expressive-tea-{{ checksum "package.json" }}
