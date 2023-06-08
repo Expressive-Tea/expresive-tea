@@ -10,9 +10,6 @@ import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
 
 
-jest.mock('express', () => require('jest-express'));
-jest.mock('http');
-
 
 class SoftPlugin extends Plugin {
   protected name: string = 'Plugin Test';
@@ -57,13 +54,13 @@ describe('Boot Soft Errors Class', () => {
 
   test('should start server as default', async () => {
     const boot = new BootstrapSoftError();
-    try {
-      const app = await boot.start();
-      expect(app).toHaveProperty('application');
-      expect(app).toHaveProperty('server');
-      expect(app).toHaveProperty('serverSecure');
-    } catch (e) {
-    }
+    const app = await boot.start();
+    expect(app).toEqual({
+      application: expect.anything(),
+      secureServer: null,
+      server: expect.anything()
+    });
+    await app.server.close();
   });
 
 });
@@ -89,12 +86,7 @@ describe('Boot Hard Errors Class', () => {
 
   test('should fail server as plugin is required', async () => {
     const boot = new BootstrapHardError();
-    try {
-      await boot.start();
-    } catch (e) {
-      expect(e).toEqual(new Error('Failed [HardPlugin:test]: test'));
-    }
-
+    expect(boot.start()).rejects.toEqual(new Error('Failed [HardPlugin:test]: test'));
   });
 
 });

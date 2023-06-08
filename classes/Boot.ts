@@ -1,8 +1,5 @@
 import 'reflect-metadata';
 import container from '../inversify.config';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
@@ -19,6 +16,9 @@ import TeacupEngine from '../engines/teacup';
 import ExpressiveTeaEngine from '../classes/Engine';
 import Settings from '../classes/Settings';
 import SocketIOEngine from '../engines/socketio/index';
+import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
 
 
 /**
@@ -87,7 +87,7 @@ abstract class Boot {
         const secureServer: https.Server = privateKey && certificate && https.createServer({
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
-        }, this.server);
+        });
 
 
         // Injectables

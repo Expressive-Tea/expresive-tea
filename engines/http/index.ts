@@ -12,6 +12,7 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
 
   private listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
     return new Promise((resolve, reject) => {
+      console.log('Listening on port', port, server.listen)
       server.listen(port);
 
       server.on('error', error => {
@@ -26,6 +27,7 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async start(): Promise<(http.Server | https.Server)[]> {
+    console.log(`Starting Server Test`);
     const listenerServers = [
       await this.listen(this.server, this.settings.get('port')),
       (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort')) as https.Server : null

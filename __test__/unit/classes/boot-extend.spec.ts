@@ -6,7 +6,6 @@ import container from '../../../inversify.config';
 import Settings from '../../../classes/Settings';
 
 jest.mock('express', () => require('jest-express'));
-jest.mock('http');
 
 describe('Boot Class Extends', () => {
 
@@ -31,6 +30,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith(undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
+    await app.server.close();
   });
 
   test('should register a new static with virtual', async () => {
@@ -44,6 +44,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
+    await app.server.close();
   });
 
   test('should register a new static with virtual and change options', async () => {
@@ -57,6 +58,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
+    await app.server.close();
   });
 
   test('should set a new directive setting value', async () => {
@@ -69,6 +71,7 @@ describe('Boot Class Extends', () => {
     const app = await instance.start();
 
     expect(app.application.set).toHaveBeenCalledWith('etag', true);
+    await app.server.close();
   });
 
   test('should set a new directive setting value and pass multiple arguments', async () => {
@@ -81,5 +84,6 @@ describe('Boot Class Extends', () => {
     const app = await instance.start();
 
     expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
+    await app.server.close();
   });
 });
