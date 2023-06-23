@@ -1,10 +1,10 @@
 {
   "name": "@zerooneit/expressive-tea",
-  "version": "1.3.0-beta.4",
+  "version": "1.3.0-beta.5",
   "description": "A REST API  over Express and Typescript",
   "main": "classes/Boot.js",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "test": "yarn run linter && jest --clearCache && jest --coverage  --ci --detectOpenHandles --forceExit --silent",

@@ -1,6 +1,8 @@
 import * as crypto from 'crypto';
 // tslint:disable-next-line:no-duplicate-imports
 import { KeyPairSyncResult } from 'crypto';
+import { NextFunction, Request, Response } from 'express';
+import ProxyRoute from '../classes/ProxyRoute';
 
 export interface EncryptedMessage {
   iv: string;
@@ -65,5 +67,20 @@ export default class TeaGatewayHelper {
         passphrase
       }
     });
+  }
+
+  static proxyResponse(proxyRoute: ProxyRoute, req: Request, res: Response, next: NextFunction) {
+    const router = proxyRoute.registerRoute();
+
+    if (!proxyRoute.hasClients()) return next();
+
+    return router(req, res, next);
+
+  }
+
+  static httpSchema(schema: string) {
+    if (schema.includes('teapot')) return 'http:';
+    if (schema.includes('teapots')) return 'https:';
+    throw new Error(`Invalid Schema: ${schema}`);
   }
 }
