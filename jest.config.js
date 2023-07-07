@@ -20,7 +20,7 @@ module.exports = {
     'default',
     ['jest-junit', {
       suiteName: 'Expressive Tea Tests',
-      outputDirectory: './coverage',
+      outputDirectory: './reports',
       outputName: 'junit.xml',
       uniqueOutputName: false,
       classNameTemplate: '{classname}-{title}',
