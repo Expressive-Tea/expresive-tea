@@ -1,8 +1,8 @@
 import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import initTeapot from './helpers/teapot-init';
 import container from '../../inversify.config';
-import * as $P from 'bluebird';
 import { createHttpTerminator } from 'http-terminator';
+import { delay } from '../../helpers/promise-helper';
 
 describe('Teapot/Teacup integration', () => {
   let appTeapot: ExpressiveTeaApplication;
@@ -76,7 +76,7 @@ describe('Teapot/Teacup integration', () => {
   test('should remove a teacup from teapot gateway', async () => {
     const serverTerminator = createHttpTerminator({ server: extraTeacups[0].server});
     await serverTerminator.terminate();
-    await $P.delay(1500);
+    await delay(1500);
     const res = await request.get('/teacup-2/test')
       .expect('Content-Type', /html/)
       .expect(404);

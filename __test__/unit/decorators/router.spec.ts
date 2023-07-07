@@ -7,6 +7,11 @@ const metadataMock = jest.spyOn(Metadata, 'set');
 jest.mock('express', () => ({
   Router: () => ({
     get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    patch: jest.fn(),
+    delete: jest.fn(),
+    param: jest.fn(),
     use: jest.fn()
   })
 }));
@@ -118,9 +123,9 @@ describe('Get Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '*' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '*' }));
   });
 });
 
@@ -147,7 +152,7 @@ describe('Post Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '/post' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'post', route: '/post' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '*' }));
   });
@@ -175,7 +180,7 @@ describe('Put Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '/put' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'put', route: '/put' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '*' }));
   });
@@ -204,7 +209,7 @@ describe('Patch Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '/patch' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'patch', route: '/patch' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '*' }));
   });
@@ -233,7 +238,7 @@ describe('Param Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '/param' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'param', route: '/param' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '*' }));
   });
@@ -261,7 +266,7 @@ describe('Delete Decorator', () => {
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
+    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '*' }));
   });

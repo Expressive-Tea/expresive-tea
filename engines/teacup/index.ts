@@ -2,35 +2,26 @@ import * as chalk from 'chalk';
 import * as url from 'url';
 // tslint:disable-next-line:no-duplicate-imports
 import { io, Socket } from 'socket.io-client';
-import { inject, injectable, optional } from 'inversify';
-import Boot from '../../classes/Boot';
-import Settings from '../../classes/Settings';
+import { injectable } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import http from 'http';
-import https from 'https';
+import ExpressiveTeaEngine from '../../classes/Engine';
 
 @injectable()
-export default class TeacupEngine {
-
-  private readonly settings: Settings;
-  private readonly context: Boot;
-  private readonly server: http.Server;
-  private readonly serverSecure?: https.Server;
+export default class TeacupEngine extends ExpressiveTeaEngine {
   private teacupSettings: ExpressiveTeaCupSettings;
-  private isActive: boolean;
-  private publicKey: any;
-  private privateKey: any;
-  private publicServerKey: any;
-  private serverSignature: any;
+  private publicKey: string;
+  private privateKey: string;
+  private publicServerKey: Buffer;
+  private serverSignature: Buffer;
   private clientSignature: Buffer;
   private client: Socket;
 
   private header() {
-    console.log(chalk.white.bold('Teacup Engine is initializing...'))
+    console.log(chalk.white.bold('Teacup Engine is initializing...'));
     console.log(chalk`
    {grey ( (}
     {white.bold ) )}
@@ -44,72 +35,39 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   `);
   }
 
-  constructor(
-    @inject('context') ctx,
-    @inject( 'settings') settings,
-    @inject('server') server,
-    @inject( 'secureServer') @optional() serverSecure,
-  ) {
-    this.server = server;
-    this.serverSecure = serverSecure;
-    this.settings = settings;
-    this.context = ctx;
-    this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
-    this.isActive =  MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context), 'isTeacupActive');
-
-    if (!this.isActive) {
-      return;
-    }
-
-    const scheme = url.parse(this.teacupSettings.serverUrl);
-    const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
-    this.publicKey = publicKey;
-    this.privateKey = privateKey;
-    this.clientSignature = TeaGatewayHelper.sign(this.teacupSettings.clientKey, this.privateKey, this.teacupSettings.clientKey);
-
-    this.client = io(`http://${scheme.host}`, {
-      path: '/teapot',
-      reconnection: true,
-      autoConnect: false
-    });
-  }
-
-  private handshaked(data) {
+  private handshaked(key: Buffer, signature: Buffer, isSecure: boolean, cb) {
     try {
-      console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Started Verification}`);
-      const serverPublicKey = Buffer.from(data.key, 'base64').toString('ascii');
-      const serverSignature = Buffer.from(data.signature, 'base64');
-
-      if (TeaGatewayHelper.verify(this.teacupSettings.clientKey, serverPublicKey, serverSignature)) {
-        console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Verified}`);
-        this.publicServerKey = serverPublicKey;
-        this.serverSignature = serverSignature;
-
-        this.client.emit('handshake', {
-          key: Buffer.from(this.publicKey).toString('base64'),
-          signature: this.clientSignature.toString('base64')
-        });
-        return;
+      console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Server Verification Started}`);
+      if (!TeaGatewayHelper.verify(this.teacupSettings.clientKey, key.toString('ascii'), signature)) {
+        throw new Error('Fail to Verify Client on Teapod.');
       }
-      throw new Error('Fail to Verify Client on Teapod.')
+
+      console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Server Has Been Verified}`);
+      this.publicServerKey = key;
+      this.serverSignature = signature;
+
+      cb(Buffer.from(this.publicKey), this.clientSignature);
     } catch (e) {
       console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${e.message}`);
       this.client.disconnect();
     }
   }
 
-  private accepted() {
+  private accepted(cb) {
     console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Registered} - {blue.bold <${this.teacupSettings.serverUrl}>} <-> {white.bold ${this.teacupSettings.mountTo}}`);
 
-    this.client.emit('register', TeaGatewayHelper.encrypt({
+    const encryptedMessage = TeaGatewayHelper.encrypt({
       mountTo: this.teacupSettings.mountTo,
       address: this.teacupSettings.address
-    }, this.serverSignature.slice(0,32)));
+    }, this.serverSignature.slice(0, 32));
+
+    cb(encryptedMessage);
 
     const onClose = () => {
       try {
         this.client.close();
-      } catch (_) {}
+      } catch (_) {
+      }
     };
 
     this.server.on('close', onClose);
@@ -117,10 +75,19 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async start(): Promise<void> {
+    this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
+    const scheme = url.parse(this.teacupSettings.serverUrl);
+    const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
+    const protocol = TeaGatewayHelper.httpSchema(scheme.protocol);
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
+    this.clientSignature = TeaGatewayHelper.sign(this.teacupSettings.clientKey, this.privateKey, this.teacupSettings.clientKey);
 
-    if (!this.isActive) {
-      return;
-    }
+    this.client = io(`${protocol}//${scheme.host}/teapot`, {
+      path: '/exp-tea/',
+      reconnection: true,
+      autoConnect: false
+    });
 
     this.header();
 

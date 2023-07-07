@@ -20,6 +20,7 @@ tsconfig.json
 Jenkinsfile
 .travis.yml
 codecov.yml
+.yarnrc.yml
 
 __test__
 benchmark
@@ -28,6 +29,7 @@ jest.config.js
 node_modules
 .github
 coverage
+reports
 .nyc_output
 .idea
 tasks
@@ -35,3 +37,5 @@ gulpfile.js
 jest.config.js
 jsdocs.json
 tools
+.yarn
+.circleci

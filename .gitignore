@@ -18,6 +18,7 @@ lib-cov
 
 # Coverage directory used by plugins like istanbul
 coverage
+reports
 
 # nyc test coverage
 .nyc_output
@@ -48,6 +49,7 @@ typings/
 
 # Optional npm cache directory
 .npm
+.yarn
 
 # Optional eslint cache
 .eslintcache

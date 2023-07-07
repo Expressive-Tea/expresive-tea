@@ -1,23 +1,24 @@
 import 'reflect-metadata';
-import '../inversify.config';
-import * as $P from 'bluebird';
+import container from '../inversify.config';
 // tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
 // tslint:disable-next-line:no-duplicate-imports
 import { Express } from 'express';
+import { ASSIGN_TEACUP_KEY, ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
+import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
+import { Rejector, Resolver } from '@expressive-tea/commons/types';
+import HTTPEngine from '../engines/http';
+import WebsocketEngine from '../engines/websocket';
+import TeapotEngine from '../engines/teapot/index';
+import TeacupEngine from '../engines/teacup';
+import ExpressiveTeaEngine from '../classes/Engine';
+import Settings from '../classes/Settings';
+import SocketIOEngine from '../engines/socketio/index';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import Settings from '../classes/Settings';
-import { BOOT_ORDER, BOOT_STAGES } from '@expressive-tea/commons/constants';
-import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import { Rejector, Resolver } from '@expressive-tea/commons/types';
-import HTTPEngine from '../engines/http/index';
-import WebsocketEngine from '../engines/websocket/index';
-import TeapotEngine from '../engines/teapot/index';
-import TeacupEngine from '../engines/teacup';
-// tslint:disable-next-line:no-duplicate-imports
-import container from '../inversify.config';
 
 
 /**
@@ -25,7 +26,7 @@ import container from '../inversify.config';
  * and a node http server instance.
  * @typedef {Object} ExpressiveTeaApplication
  * @property {Express} application - Express Application Instance
- * @property {HTTPServer} server - HTTP Server Object
+ * @property { HTTPServer } server - HTTP Server Object
  * @summary Application Interface
  */
 
@@ -60,6 +61,7 @@ abstract class Boot {
   constructor() {
     this.settings = Settings.getInstance(this);
   }
+
   /**
    * Get Express Application
    * @returns Express
@@ -76,7 +78,7 @@ abstract class Boot {
    * @returns {Promise<ExpressiveTeaApplication>}
    */
   async start(): Promise<ExpressiveTeaApplication> {
-    return new $P(async (resolver: Resolver<ExpressiveTeaApplication>, rejector: Rejector) => {
+    return new Promise(async (resolver: Resolver<ExpressiveTeaApplication>, reject: Rejector) => {
       try {
         const localContainer = container.createChild();
         const privateKey = this.settings.get('privateKey');
@@ -85,7 +87,8 @@ abstract class Boot {
         const secureServer: https.Server = privateKey && certificate && https.createServer({
           cert: fs.readFileSync(certificate).toString('utf-8'),
           key: fs.readFileSync(privateKey).toString('utf-8')
-        }, this.server);
+        });
+
 
         // Injectables
         localContainer.bind<http.Server>('server').toConstantValue(server);
@@ -93,27 +96,31 @@ abstract class Boot {
         localContainer.bind<Boot>('context').toConstantValue(this);
         localContainer.bind<Settings>('settings').toConstantValue(this.settings);
 
-        const httpEngine = localContainer.resolve(HTTPEngine);
-        const websocketEngine = localContainer.resolve(WebsocketEngine);
-        const teapotEngine = localContainer.resolve(TeapotEngine);
-        const teacupEngine = localContainer.resolve(TeacupEngine);
+        // Activation
+        const isActiveTeapot = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this), 'isTeapotActive');
+        const isActiveTeacup = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this), 'isTeacupActive');
+        const isActiveWebsockets = this.settings.get('startWebsocket');
 
-        await websocketEngine.init();
+        // Resolve Engines
+        const httpEngine = localContainer.resolve(HTTPEngine);
+        const availableEngines: ExpressiveTeaEngine[] = [
+          localContainer.resolve(SocketIOEngine),
+          ...isActiveWebsockets ? [localContainer.resolve(WebsocketEngine)] : [],
+          ...isActiveTeapot ? [localContainer.resolve(TeapotEngine)] : [],
+          ...isActiveTeacup ? [localContainer.resolve(TeacupEngine)] : [],
+        ];
+
+        // Initialize Engines
+        await ExpressiveTeaEngine.exec(availableEngines, 'init');
         await httpEngine.init();
 
-        await httpEngine.resolveProxyContainers();
-        await httpEngine.resolveStages(BOOT_ORDER);
-        await httpEngine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], server, secureServer);
-
-        const listenerServers: (http.Server | https.Server)[] = await httpEngine.start();
-        await httpEngine.resolveStages([BOOT_STAGES.START ],...listenerServers);
-        await teapotEngine.start();
-        await teacupEngine.start();
+        await httpEngine.start();
+        await ExpressiveTeaEngine.exec(availableEngines, 'start');
 
         resolver({ application: this.server, server, secureServer });
 
       } catch (e) {
-        return rejector(e);
+        return reject(e);
       }
     });
   }

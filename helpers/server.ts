@@ -4,19 +4,21 @@ import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
 import {
   ExpressiveTeaAnnotations,
-  ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions
+  ExpressiveTeaArgumentOptions
 } from '@expressive-tea/commons/interfaces';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
 import * as fs from 'fs';
+import {
+  ExpressiveTeaHandlerOptionsWithInstrospectedArgs
+} from '../interfaces';
 
 export function autoResponse(
   request: Request,
   response: Response,
   annotations: ExpressiveTeaAnnotations[],
   responseResult?: any
-) {
+): void {
   const view = find(annotations, { type: 'view' });
   if (view) {
     return response.render(view!.arguments![0], responseResult);
@@ -25,7 +27,7 @@ export function autoResponse(
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
 }
 
-export async function executeRequest(request: Request, response: Response, next: NextFunction) {
+export async function executeRequest(request: Request, response: Response, next: NextFunction): Promise<void> {
   try {
     let isNextUsed = false;
     const nextWrapper = () => (error: unknown) => {
@@ -38,7 +40,7 @@ export async function executeRequest(request: Request, response: Response, next:
       request,
       response,
       nextWrapper(),
-      getOwnArgumentNames(this.options.handler)));
+      this.options.introspectedArgs));
 
 
     if (!response.headersSent && !isNextUsed) {
@@ -56,12 +58,10 @@ export function mapArguments(
   decoratedArguments: ExpressiveTeaArgumentOptions[],
   request: Request, response: Response, next: NextFunction,
   introspectedArgs: string[] = []
-) {
+): any[] {
   return chain(decoratedArguments)
     .sortBy('index')
     .map((argument: ExpressiveTeaArgumentOptions) => {
-      const argumentKey = get(introspectedArgs, argument.index);
-
       switch (argument.type) {
         case ARGUMENT_TYPES.REQUEST:
           return request;
@@ -70,11 +70,11 @@ export function mapArguments(
         case ARGUMENT_TYPES.NEXT:
           return next;
         case ARGUMENT_TYPES.QUERY:
-          return extractParameters(request.query, argument.arguments, argumentKey);
+          return extractParameters(request.query, argument.arguments, get(introspectedArgs, argument.index));
         case ARGUMENT_TYPES.BODY:
-          return extractParameters(request.body, argument.arguments, argumentKey);
+          return extractParameters(request.body, argument.arguments, get(introspectedArgs, argument.index));
         case ARGUMENT_TYPES.GET_PARAM:
-          return extractParameters(request.params, argument.arguments, argumentKey);
+          return extractParameters(request.params, argument.arguments, get(introspectedArgs, argument.index));
         default:
           return;
       }
@@ -83,7 +83,7 @@ export function mapArguments(
     .value();
 }
 
-export function extractParameters(target: unknown, args?: string | string[], propertyName?: string | symbol) {
+export function extractParameters(target: unknown, args?: string | string[], propertyName?: string): any {
   if (!args && !target) {
     return;
   }
@@ -119,8 +119,9 @@ export function router(
   propertyKey: string | symbol,
   settings?: any
 ) {
-  const existedRoutesHandlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
-  existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings });
+  const introspectedArgs = getOwnArgumentNames(handler);
+  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
+  existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings, introspectedArgs });
   MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
 
