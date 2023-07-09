@@ -974,7 +974,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-serve-static-core@npm:4.17.34, @types/express-serve-static-core@npm:^4.17.33":
+"@types/express-serve-static-core@npm:4.17.35":
+  version: 4.17.35
+  resolution: "@types/express-serve-static-core@npm:4.17.35"
+  dependencies:
+    "@types/node": "*"
+    "@types/qs": "*"
+    "@types/range-parser": "*"
+    "@types/send": "*"
+  checksum: cc8995d10c6feda475ec1b3a0e69eb0f35f21ab6b49129ad5c6f279e0bc5de8175bc04ec51304cb79a43eec3ed2f5a1e01472eb6d5f827b8c35c6ca8ad24eb6e
+  languageName: node
+  linkType: hard
+
+"@types/express-serve-static-core@npm:^4.17.33":
   version: 4.17.34
   resolution: "@types/express-serve-static-core@npm:4.17.34"
   dependencies:
@@ -1185,7 +1197,7 @@ __metadata:
     "@expressive-tea/plugin": 1.0.3
     "@types/express": 4.17.17
     "@types/express-http-proxy": 1.6.3
-    "@types/express-serve-static-core": 4.17.34
+    "@types/express-serve-static-core": 4.17.35
     "@types/jest": 29.5.1
     "@types/lodash": 4.14.194
     "@types/node": 20.1.0
