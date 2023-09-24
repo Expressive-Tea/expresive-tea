@@ -1042,10 +1042,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.14.194":
-  version: 4.14.194
-  resolution: "@types/lodash@npm:4.14.194"
-  checksum: 113f34831c461469d91feca2dde737f88487732898b4d25e9eb23b087bb193985f864d1e1e0f3b777edc5022e460443588b6000a3b2348c966f72d17eedc35ea
+"@types/lodash@npm:4.14.199":
+  version: 4.14.199
+  resolution: "@types/lodash@npm:4.14.199"
+  checksum: e68d1fcbbfce953ed87b296a628573f62939227bcda0c934954e862b421e8a34c5e71cad6fea27b9980567909e6a4698f09025692958e36d64ea9ed99ec6fb2e
   languageName: node
   linkType: hard
 
@@ -1187,7 +1187,7 @@ __metadata:
     "@types/express-http-proxy": 1.6.3
     "@types/express-serve-static-core": 4.17.34
     "@types/jest": 29.5.1
-    "@types/lodash": 4.14.194
+    "@types/lodash": 4.14.199
     "@types/node": 20.1.0
     "@types/reflect-metadata": 0.1.0
     "@types/socket.io": 3.0.2
