@@ -1152,12 +1152,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/ws@npm:8.5.4":
-  version: 8.5.4
-  resolution: "@types/ws@npm:8.5.4"
+"@types/ws@npm:8.5.6":
+  version: 8.5.6
+  resolution: "@types/ws@npm:8.5.6"
   dependencies:
     "@types/node": "*"
-  checksum: fefbad20d211929bb996285c4e6f699b12192548afedbe4930ab4384f8a94577c9cd421acaad163cacd36b88649509970a05a0b8f20615b30c501ed5269038d1
+  checksum: 7addb0c5fa4e7713d5209afb8a90f1852b12c02cb537395adf7a05fbaf21205dc5f7c110fd5ad6f3dbf147112cbff33fb11d8633059cb344f0c14f595b1ea1fb
   languageName: node
   linkType: hard
 
@@ -1192,7 +1192,7 @@ __metadata:
     "@types/reflect-metadata": 0.1.0
     "@types/socket.io": 3.0.2
     "@types/socket.io-client": 3.0.0
-    "@types/ws": 8.5.4
+    "@types/ws": 8.5.6
     bufferutil: 4.0.7
     express: 4.18.2
     express-http-proxy: 1.6.3
@@ -1216,7 +1216,7 @@ __metadata:
     typescript: 5.0.4
     url-scheme: 1.0.5
     utf-8-validate: ^6.0.0
-    ws: 8.13.0
+    ws: 8.14.2
   dependenciesMeta:
     bufferutil:
       optional: true
@@ -5732,9 +5732,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:8.13.0":
-  version: 8.13.0
-  resolution: "ws@npm:8.13.0"
+"ws@npm:8.14.2":
+  version: 8.14.2
+  resolution: "ws@npm:8.14.2"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -5743,7 +5743,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 53e991bbf928faf5dc6efac9b8eb9ab6497c69feeb94f963d648b7a3530a720b19ec2e0ec037344257e05a4f35bd9ad04d9de6f289615ffb133282031b18c61c
+  checksum: 3ca0dad26e8cc6515ff392b622a1467430814c463b3368b0258e33696b1d4bed7510bc7030f7b72838b9fdeb8dbd8839cbf808367d6aae2e1d668ce741d4308b
   languageName: node
   linkType: hard
 
