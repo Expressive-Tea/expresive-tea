@@ -1,5 +1,5 @@
-import WebSocket from 'ws';
-import * as http from 'http';
+import type WebSocket from 'ws';
+import type * as http from 'http';
 import * as https from 'https';
 
 export default class WebsocketService {
@@ -24,7 +24,7 @@ export default class WebsocketService {
     return (httpServer instanceof https.Server) ? this.wss : this.ws;
   }
 
-  setHttpServer(httpServer: http.Server | https.Server) {
+  setHttpServer(httpServer: http.Server | https.Server): void {
     if (httpServer instanceof https.Server) {
       this.httpsServer = httpServer;
     } else {
@@ -32,11 +32,11 @@ export default class WebsocketService {
     }
   }
 
-  setWebSocket(ws: WebSocket.Server) {
+  setWebSocket(ws: WebSocket.Server): void {
     this.ws = ws;
   }
 
-  setSecureWebsocket(wss: WebSocket.Server) {
+  setSecureWebsocket(wss: WebSocket.Server): void {
     this.wss = wss;
   }
 
@@ -54,7 +54,7 @@ export default class WebsocketService {
     }
   }
 
-  static clear() {
+  static clear(): void {
     delete WebsocketService.instance;
   }
 }

@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from 'express';
+import { type NextFunction, type Request, type Response } from 'express';
 import { chain, find, get, has, isNumber, pick, size } from 'lodash';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
 import {
-  ExpressiveTeaAnnotations,
-  ExpressiveTeaArgumentOptions
+  type ExpressiveTeaAnnotations,
+  type ExpressiveTeaArgumentOptions
 } from '@expressive-tea/commons/interfaces';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
 import * as fs from 'fs';
 import {
-  ExpressiveTeaHandlerOptionsWithInstrospectedArgs
+  type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
 } from '../interfaces';
 
 export function autoResponse(
@@ -19,9 +19,9 @@ export function autoResponse(
   annotations: ExpressiveTeaAnnotations[],
   responseResult?: any
 ): void {
-  const view = find(annotations, { type: 'view' });
+  const view: ExpressiveTeaAnnotations = find(annotations, { type: 'view' });
   if (view) {
-    return response.render(view!.arguments![0], responseResult);
+    response.render(view.arguments[0] as string, responseResult as object); return;
   }
 
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
@@ -36,21 +36,21 @@ export async function executeRequest(request: Request, response: Response, next:
     };
 
     const result = await this.options.handler.apply(this.self, mapArguments(
-      this.decoratedArguments,
+      this.decoratedArguments as ExpressiveTeaArgumentOptions[],
       request,
       response,
       nextWrapper(),
-      this.options.introspectedArgs));
+      this.options.introspectedArgs as string[]));
 
 
     if (!response.headersSent && !isNextUsed) {
-      autoResponse(request, response, this.annotations, result);
+      autoResponse(request, response, this.annotations as ExpressiveTeaAnnotations[], result as object);
     }
   } catch (e) {
     if (e instanceof GenericRequestException) {
-      return next(e);
+      next(e); return;
     }
-    next(new GenericRequestException(e.message || 'System Error'));
+    next(new GenericRequestException((e as Error).message || 'System Error'));
   }
 }
 
@@ -76,7 +76,7 @@ export function mapArguments(
         case ARGUMENT_TYPES.GET_PARAM:
           return extractParameters(request.params, argument.arguments, get(introspectedArgs, argument.index));
         default:
-          return;
+          return undefined;
       }
     })
     .thru((args: unknown[]) => size(args) ? args : [request, response, next])
@@ -94,10 +94,10 @@ export function extractParameters(target: unknown, args?: string | string[], pro
       return pick(target, args);
     }
 
-    return get(target, args as string);
+    return get(target, args);
   }
 
-  if (has(target, propertyName as string)) {
+  if (has(target, propertyName)) {
     return get(target, propertyName);
   }
 
@@ -108,14 +108,14 @@ export function generateRoute(route: string, verb: string, ...settings: any): (
   target: object,
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor) => void {
-  return (target, propertyKey, descriptor) => router(verb, route, target, descriptor.value, propertyKey, settings);
+  return (target, propertyKey, descriptor) => { router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings); };
 }
 
 export function router(
   verb: string,
   route: string,
   target: any,
-  handler: (...args: any[]) => void | any | Promise<any>,
+  handler: (...args: any[]) => never | any | Promise<any>,
   propertyKey: string | symbol,
   settings?: any
 ) {

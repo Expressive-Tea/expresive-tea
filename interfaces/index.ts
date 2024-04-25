@@ -1,5 +1,5 @@
 import {
-  ExpressiveTeaHandlerOptions,
+  type ExpressiveTeaHandlerOptions,
 } from '@expressive-tea/commons/interfaces';
 
 export interface ExpressiveTeaHandlerOptionsWithInstrospectedArgs extends ExpressiveTeaHandlerOptions {

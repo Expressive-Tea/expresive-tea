@@ -1,6 +1,5 @@
 import * as chalk from 'chalk';
-import * as url from 'url';
-// tslint:disable-next-line:no-duplicate-imports
+import {URL} from 'url';
 import { io, Socket } from 'socket.io-client';
 import { injectable } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
@@ -9,6 +8,8 @@ import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
 import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import ExpressiveTeaEngine from '../../classes/Engine';
+import Boot from '../../classes/Boot';
+import Settings from '../../classes/Settings';
 
 @injectable()
 export default class TeacupEngine extends ExpressiveTeaEngine {
@@ -76,7 +77,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
   async start(): Promise<void> {
     this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
-    const scheme = url.parse(this.teacupSettings.serverUrl);
+    const scheme = new URL(this.teacupSettings.serverUrl);
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
     const protocol = TeaGatewayHelper.httpSchema(scheme.protocol);
     this.publicKey = publicKey;
@@ -91,11 +92,17 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
     this.header();
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.client.on('handshake', this.handshaked.bind(this));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.client.on('accepted', this.accepted.bind(this));
     this.client.on('error', console.log);
 
     this.client.connect();
+  }
+
+  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    return MetaData.get(ASSIGN_TEACUP_KEY, getClass(ctx), 'isTeacupActive');
   }
 
 }

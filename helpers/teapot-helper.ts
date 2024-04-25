@@ -1,17 +1,14 @@
 import * as crypto from 'crypto';
-// tslint:disable-next-line:no-duplicate-imports
-import { KeyPairSyncResult } from 'crypto';
-import { NextFunction, Request, Response } from 'express';
-import ProxyRoute from '../classes/ProxyRoute';
+import { type KeyPairSyncResult, generateKeyPairSync } from 'crypto';
+import { type NextFunction, type Request, type Response } from 'express';
+import type ProxyRoute from '../classes/ProxyRoute';
 
 export interface EncryptedMessage {
   iv: string;
   message: string;
 }
 
-export interface TeaGatewayMessage {
-  [property: string]: any;
-}
+export type TeaGatewayMessage = Record<string, any>;
 
 export default class TeaGatewayHelper {
 
@@ -53,7 +50,6 @@ export default class TeaGatewayHelper {
   }
 
   static generateKeys(passphrase: string): KeyPairSyncResult<any, any> {
-    const { generateKeyPairSync } = require('crypto');
     return  generateKeyPairSync('ed25519', {
       modulusLength: 2048,
       publicKeyEncoding: {
@@ -72,9 +68,9 @@ export default class TeaGatewayHelper {
   static proxyResponse(proxyRoute: ProxyRoute, req: Request, res: Response, next: NextFunction) {
     const router = proxyRoute.registerRoute();
 
-    if (!proxyRoute.hasClients()) return next();
+    if (!proxyRoute.hasClients()) { next(); return; }
 
-    return router(req, res, next);
+    router(req, res, next);
 
   }
 

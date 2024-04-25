@@ -26,7 +26,7 @@ export class GenericRequestException extends Error {
   statusCode: number = 500;
   message: string = 'Server Error';
 
-  constructor(message, statusCode = 500) {
+  constructor(message: string | never, statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
     this.message = message;

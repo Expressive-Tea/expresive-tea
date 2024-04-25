@@ -1,8 +1,13 @@
 import 'reflect-metadata';
 import Settings from '../../../classes/Settings';
 
+interface SettingsOptionsProps {
+  options: Record<string, any>;
+  expected: Record<string, any>
+}
+
 describe('Settings Class', () => {
-  beforeEach(() => Settings.reset());
+  beforeEach(() => { Settings.reset(); });
   test('should be existed', () => {
     expect(Settings).not.toBeUndefined();
   });
@@ -13,7 +18,7 @@ describe('Settings Class', () => {
     ${{ port: 8080 }}         | ${{ port: 8080, securePort: 4443 }}
     ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b', securePort: 4443 }}
     ${{ c: 'd' }}             | ${{ port: 3000, c: 'd', securePort: 4443 }}
-  `('should create a new instance with $options and return value correctly', ({ options, expected }) => {
+  `('should create a new instance with $options and return value correctly', ({ options, expected }: SettingsOptionsProps) => {
     const settings = new Settings(options);
     expect(settings.getOptions()).toStrictEqual(expected);
   });
@@ -24,7 +29,7 @@ describe('Settings Class', () => {
     ${{ port: 8080 }}         | ${{ port: 8080, securePort: 4443 }}
     ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b', securePort: 4443 }}
     ${{ c: 'd' }}             | ${{ port: 3000, c: 'd', securePort: 4443 }}
-  `('should merge $options with the existed values', ({ options, expected }) => {
+  `('should merge $options with the existed values', ({ options, expected }: SettingsOptionsProps) => {
     const settings = new Settings();
     settings.merge(options);
     expect(settings.getOptions()).toStrictEqual(expected);

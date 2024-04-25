@@ -8,8 +8,10 @@ jest.mock('ws', () => ({
 }));
 
 describe('Websocket Service', () => {
-  // tslint:disable-next-line:one-variable-per-declaration
-  let serverMock, serverSecureMock, ws, wss;
+  let serverMock: http.Server;
+  let serverSecureMock: https.Server;
+  let ws: WebSocket.Server;
+  let wss: WebSocket.Server;
 
   beforeEach(() => {
     serverMock = http.createServer();
@@ -18,21 +20,21 @@ describe('Websocket Service', () => {
     wss = new WebSocket.Server();
   });
 
-  afterEach( () => {
+  afterEach(() => {
     WebsocketService.clear();
-  })
+  });
 
   test('should initialize WebsocketService', () => {
     WebsocketService.init(ws, wss);
 
-    expect(WebsocketService.instance).toBeDefined()
+    expect(WebsocketService.instance).toBeDefined();
   });
 
   test('should create an instance WebsocketService', () => {
-    expect(WebsocketService.instance).not.toBeDefined()
+    expect(WebsocketService.instance).not.toBeDefined();
     WebsocketService.getInstance(ws, wss);
 
-    expect(WebsocketService.instance).toBeDefined()
+    expect(WebsocketService.instance).toBeDefined();
   });
 
   test('should be the same instance of WebsocketService', () => {
@@ -46,7 +48,7 @@ describe('Websocket Service', () => {
   test('should create WebsocketService singleton', () => {
     WebsocketService.init(ws, wss);
 
-    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance())
+    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance());
   });
 
   test('should be the same instance of WebsocketService', () => {
@@ -63,7 +65,7 @@ describe('Websocket Service', () => {
     wsService.setHttpServer(serverMock);
     wsService.setHttpServer(serverSecureMock);
 
-    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance())
+    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance());
   });
 
   test('should get websocket according to the server setting', () => {
@@ -81,6 +83,6 @@ describe('Websocket Service', () => {
     WebsocketService.init(ws, wss);
     WebsocketService.init(ws, wss);
     WebsocketService.init(ws, wss);
-    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance())
+    expect(WebsocketService.instance).toEqual(WebsocketService.getInstance());
   });
 });

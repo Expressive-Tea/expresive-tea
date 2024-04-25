@@ -40,7 +40,7 @@ describe('Boot Class', () => {
       secureServer: null,
       server: expect.anything()
     });
-    await app.server.close();
+    app.server.close();
   });
 
   test('should create instance correctly', () => {
@@ -57,7 +57,7 @@ describe('Boot Class', () => {
     expect(boot.settings).toBeInstanceOf(Settings);
     expect(boot.settings).toEqual(Settings.getInstance());
 
-    await app.server.close();
+    app.server.close();
   });
 
   test('should not fail if soft plugin fails', async () => {
@@ -72,7 +72,7 @@ describe('Boot Class', () => {
       server: expect.anything()
     });
 
-    await app.server.close();
+    app.server.close();
   });
 
   test('should fail if hard plugin fails', async () => {
@@ -83,7 +83,7 @@ describe('Boot Class', () => {
     });
 
     const boot = new Bootstrap();
-    expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
+    void expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
 
 });

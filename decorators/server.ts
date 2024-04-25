@@ -1,10 +1,10 @@
-import { Express } from 'express';
+import { type Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
-  ASSIGN_TEAPOT_KEY, BOOT_STAGES,
+  ASSIGN_TEAPOT_KEY, type BOOT_STAGES,
   BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
   PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
@@ -12,10 +12,10 @@ import {
   ROUTER_PROXIES_KEY
 } from '@expressive-tea/commons/constants';
 import {
-  ExpressiveTeaPotSettings,
-  ExpressiveTeaPluginProps,
-  ExpressiveTeaServerProps,
-  ExpressiveTeaStaticFileServer, ExpressiveTeaCupSettings, IExpressiveTeaModule
+  type ExpressiveTeaPotSettings,
+  type ExpressiveTeaPluginProps,
+  type ExpressiveTeaServerProps,
+  type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
 } from '@expressive-tea/commons/interfaces';
 
 /**
@@ -262,7 +262,7 @@ export function Proxies(proxyContainers: any[]) {
  * @deprecated Use the new decorator Modules that allow add modules into registered modules.
  */
 export function RegisterModule(Module) {
-  return (target, property) => {
+  return (target, property: string | symbol) => {
     if (property !== 'start') {
       throw new Error('Register Module needs to decorate ONLY start method');
     }

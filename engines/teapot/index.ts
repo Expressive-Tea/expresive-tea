@@ -6,8 +6,11 @@ import Metadata from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
 import ProxyRoute from '../../classes/ProxyRoute';
 import ExpressiveTeaEngine from '../../classes/Engine';
-import TeaGatewayHelper, { EncryptedMessage } from '../../helpers/teapot-helper';
+import TeaGatewayHelper, { EncryptedMessage, TeaGatewayMessage } from '../../helpers/teapot-helper';
 import { SOCKET_IO_INSTANCE_KEY } from '../constants/constants';
+import Boot from '../../classes/Boot';
+import Settings from '../../classes/Settings';
+import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 
 interface ClientMetadata {
   publicKey: Buffer;
@@ -17,8 +20,8 @@ interface ClientMetadata {
 @injectable()
 export default class TeapotEngine extends ExpressiveTeaEngine {
 
-  private clients: Map<string | symbol, any> = new Map<string | symbol, ClientMetadata>();
-  private registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
+  private readonly clients: Map<string | symbol, any> = new Map<string | symbol, ClientMetadata>();
+  private readonly registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
   private teapotSettings: ExpressiveTeaPotSettings;
   private publicKey: any;
   private privateKey: any;
@@ -48,7 +51,8 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   private registerTeacup(teacup: Socket) {
     console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {grey.bold Connected}`);
 
-    teacup.emit('handshake', Buffer.from(this.publicKey), this.serverSignature, Boolean(this.serverSecure), this.clientVerification.bind(this, teacup));
+    teacup.emit('handshake', Buffer.from(this.publicKey as string), this.serverSignature, Boolean(this.serverSecure), this.clientVerification.bind(this, teacup));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     teacup.on('disconnect', this.disconnected.bind(this, teacup));
   }
 
@@ -79,14 +83,16 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
   private registered(teacup: Socket, encryptedMessage: EncryptedMessage) {
     try {
-      const message = TeaGatewayHelper.decrypt(encryptedMessage, this.serverSignature.slice(0, 32));
-      const isRegistered = this.registeredRoute.has(message.mountTo);
-      const proxyRoute: ProxyRoute = isRegistered ? this.registeredRoute.get(message.mountTo) : new ProxyRoute(message.mountTo);
-      proxyRoute.registerServer(message.address, teacup.id);
+      const message: TeaGatewayMessage = TeaGatewayHelper.decrypt(encryptedMessage, this.serverSignature.slice(0, 32));
+
+      const isRegistered = this.registeredRoute.has(message.mountTo as string);
+      const proxyRoute: ProxyRoute = isRegistered ? this.registeredRoute.get(message.mountTo as string) : new ProxyRoute(message.mountTo as string);
+      proxyRoute.registerServer(message.address as string, teacup.id);
 
       if (!isRegistered) {
-        this.registeredRoute.set(message.mountTo, proxyRoute);
-        this.context.getApplication().use(message.mountTo, TeaGatewayHelper.proxyResponse.bind(this, proxyRoute));
+        this.registeredRoute.set(message.mountTo as string, proxyRoute);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        this.context.getApplication().use(message.mountTo as string, TeaGatewayHelper.proxyResponse.bind(this, proxyRoute));
       }
 
       console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}] {blue.bold <${message.address}>} <--> {white.bold ${message.mountTo}}`);
@@ -130,13 +136,17 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.publicKey = publicKey;
     this.privateKey = privateKey;
 
-    this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey, this.teapotSettings.serverKey);
+    this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey as string, this.teapotSettings.serverKey);
   }
 
   async start(): Promise<void> {
     this.socketServer = Metadata.get(SOCKET_IO_INSTANCE_KEY, this.context).of('/teapot');
     TeapotEngine.header(this.teapotSettings);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.socketServer.on('connection', this.registerTeacup.bind(this));
   }
 
+  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    return Metadata.get(ASSIGN_TEAPOT_KEY, getClass(ctx), 'isTeapotActive');
+  }
 }

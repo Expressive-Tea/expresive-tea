@@ -1,14 +1,16 @@
-import { Container } from 'inversify';
+import { Container, interfaces } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
+import ServiceIdentifier = interfaces.ServiceIdentifier;
+import Newable = interfaces.Newable;
 
 interface InversifyDecorators {
-  lazyInject(...args: any[]);
+  lazyInject: (...args: any[]) => any;
 
-  lazyInjectNamed(...args: any[]);
+  lazyInjectNamed: (...args: any[]) => any;
 
-  lazyInjectTagged(...args: any[]);
+  lazyInjectTagged: (...args: any[]) => any;
 
-  lazyMultiInject(...args: any[]);
+  lazyMultiInject: (...args: any[]) => any;
 }
 
 const rootContainer: Container = new Container({
@@ -45,9 +47,9 @@ class DependencyInjection {
    * @param {string | symbol |never } [providerName="ClassName"] - Provide the provider identification.
    * @summary Add Provider to Dependency Injection Providers
    */
-  static setProvider(ProviderFactory: any, providerName?: string | symbol): void {
-    if (!rootContainer.isBound(providerName || ProviderFactory.name)) {
-      rootContainer.bind(providerName || ProviderFactory.name).to(ProviderFactory);
+  static setProvider(ProviderFactory: Newable<any>, providerName?: ServiceIdentifier<string | symbol>): void {
+    if (!rootContainer.isBound(providerName ?? ProviderFactory.name)) {
+      rootContainer.bind(providerName ?? ProviderFactory.name).to(ProviderFactory);
     }
   }
 }

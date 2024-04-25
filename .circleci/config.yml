@@ -30,14 +30,14 @@ jobs:
       - run:
           name: Install Packages
           command: |
-            yarn install --immutable
+            npm install
       - save_cache:
           paths:
             - node_modules
           key: expressive-tea-{{ checksum "package.json" }}
       - run:
           name: Expressive Tea Tests
-          command: yarn test
+          command: npm test
           environment:
             JEST_JUNIT_OUTPUT_DIR: "./reports"
             JUNIT_REPORT_NAME: "junit.xml"
