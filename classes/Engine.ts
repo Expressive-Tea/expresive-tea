@@ -25,10 +25,12 @@ export default class ExpressiveTeaEngine {
 
   static exec(availableEngines: ExpressiveTeaEngine[], method: string): any {
     return Promise.all(availableEngines
-      // tslint:disable-next-line:no-string-literal
       .filter(engine => typeof engine[method] === 'function')
-      // tslint:disable-next-line:no-string-literal
       .map(engine => engine[method]())
     );
+  }
+
+  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    return false;
   }
 }

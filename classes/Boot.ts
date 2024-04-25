@@ -1,14 +1,8 @@
 import 'reflect-metadata';
 import container from '../inversify.config';
-// tslint:disable-next-line:no-duplicate-imports
 import * as express from 'express';
-// tslint:disable-next-line:no-duplicate-imports
-import { Express } from 'express';
-import { ASSIGN_TEACUP_KEY, ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
-import Metadata from '@expressive-tea/commons/classes/Metadata';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import { Rejector, Resolver } from '@expressive-tea/commons/types';
+import { type Express } from 'express';
+import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import HTTPEngine from '../engines/http';
 import WebsocketEngine from '../engines/websocket';
 import TeapotEngine from '../engines/teapot/index';
@@ -19,7 +13,7 @@ import SocketIOEngine from '../engines/socketio/index';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-
+import { type Container } from 'inversify';
 
 /**
  * Expressive Tea Application interface is the response from an started application, contains the express application
@@ -58,6 +52,8 @@ abstract class Boot {
    */
   private readonly server: Express = express();
 
+  private readonly containerDI: Container = container.createChild();
+
   constructor() {
     this.settings = Settings.getInstance(this);
   }
@@ -78,51 +74,64 @@ abstract class Boot {
    * @returns {Promise<ExpressiveTeaApplication>}
    */
   async start(): Promise<ExpressiveTeaApplication> {
-    return new Promise(async (resolver: Resolver<ExpressiveTeaApplication>, reject: Rejector) => {
-      try {
-        const localContainer = container.createChild();
-        const privateKey = this.settings.get('privateKey');
-        const certificate = this.settings.get('certificate');
-        const server: http.Server = http.createServer(this.server);
-        const secureServer: https.Server = privateKey && certificate && https.createServer({
-          cert: fs.readFileSync(certificate).toString('utf-8'),
-          key: fs.readFileSync(privateKey).toString('utf-8')
-        });
+    // Initialize Server
+    const [server, secureServer] = this.initializeHttp();
+
+    // Injectables
+    this.initializeContainer(server, secureServer);
 
 
-        // Injectables
-        localContainer.bind<http.Server>('server').toConstantValue(server);
-        localContainer.bind<https.Server>('secureServer').toConstantValue(secureServer || undefined);
-        localContainer.bind<Boot>('context').toConstantValue(this);
-        localContainer.bind<Settings>('settings').toConstantValue(this.settings);
+    // Initialize Engines
+    const availableEngines: typeof ExpressiveTeaEngine[] = [
+      HTTPEngine,
+      SocketIOEngine,
+      WebsocketEngine,
+      TeapotEngine,
+      TeacupEngine
+    ];
 
-        // Activation
-        const isActiveTeapot = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this), 'isTeapotActive');
-        const isActiveTeacup = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this), 'isTeacupActive');
-        const isActiveWebsockets = this.settings.get('startWebsocket');
+    const registeredEngines: typeof ExpressiveTeaEngine[] = availableEngines.filter(Engine => Engine.canRegister(this, this.settings));
 
-        // Resolve Engines
-        const httpEngine = localContainer.resolve(HTTPEngine);
-        const availableEngines: ExpressiveTeaEngine[] = [
-          localContainer.resolve(SocketIOEngine),
-          ...isActiveWebsockets ? [localContainer.resolve(WebsocketEngine)] : [],
-          ...isActiveTeapot ? [localContainer.resolve(TeapotEngine)] : [],
-          ...isActiveTeacup ? [localContainer.resolve(TeacupEngine)] : [],
-        ];
+    this.initializeEngines(registeredEngines);
 
-        // Initialize Engines
-        await ExpressiveTeaEngine.exec(availableEngines, 'init');
-        await httpEngine.init();
+    // Resolve Engines
+    const readyEngines: ExpressiveTeaEngine[] = registeredEngines.map(Engine =>
+      this.containerDI.resolve(Engine)
+    );
 
-        await httpEngine.start();
-        await ExpressiveTeaEngine.exec(availableEngines, 'start');
+    // Initialize Engines
+    await ExpressiveTeaEngine.exec(readyEngines.reverse(), 'init');
+    await ExpressiveTeaEngine.exec(readyEngines, 'start');
 
-        resolver({ application: this.server, server, secureServer });
+    return ({ application: this.server, server, secureServer });
+  }
 
-      } catch (e) {
-        return reject(e);
-      }
-    });
+  private initializeEngines(registeredEngines: typeof ExpressiveTeaEngine[]): void {
+    for (const Engine of registeredEngines) {
+      this.containerDI.bind<ExpressiveTeaEngine>(Engine).to(Engine);
+    }
+  }
+
+  private initializeHttp(): [http.Server, https.Server | never] {
+    const privateKey: fs.PathOrFileDescriptor = this.settings.get('privateKey');
+    const certificate: fs.PathOrFileDescriptor = this.settings.get('certificate');
+    const server: http.Server = http.createServer(this.server);
+    const secureServer: https.Server =
+      privateKey &&
+      certificate &&
+      https.createServer({
+        cert: fs.readFileSync(certificate).toString('utf-8'),
+        key: fs.readFileSync(privateKey).toString('utf-8')
+      });
+
+    return [server, secureServer];
+  }
+
+  private initializeContainer(server: http.Server, secureServer?: https.Server): void {
+    this.containerDI.bind<http.Server>('server').toConstantValue(server);
+    this.containerDI.bind<https.Server>('secureServer').toConstantValue(secureServer ?? undefined);
+    this.containerDI.bind<Boot>('context').toConstantValue(this);
+    this.containerDI.bind<Settings>('settings').toConstantValue(this.settings);
   }
 }
 

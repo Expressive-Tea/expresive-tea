@@ -1,4 +1,4 @@
-import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
+import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import initTeapot from './helpers/teapot-init';
 import container from '../../inversify.config';
 import { createHttpTerminator } from 'http-terminator';
@@ -77,7 +77,7 @@ describe('Teapot/Teacup integration', () => {
     const serverTerminator = createHttpTerminator({ server: extraTeacups[0].server});
     await serverTerminator.terminate();
     await delay(1500);
-    const res = await request.get('/teacup-2/test')
+    await request.get('/teacup-2/test')
       .expect('Content-Type', /html/)
       .expect(404);
   });

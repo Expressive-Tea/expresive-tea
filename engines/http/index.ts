@@ -6,13 +6,14 @@ import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/com
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import ExpressiveTeaEngine from '../../classes/Engine';
+import Boot from '../../classes/Boot';
+import Settings from '../../classes/Settings';
 
 @injectable()
 export default class HTTPEngine extends ExpressiveTeaEngine{
 
-  private listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
+  private async listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
     return new Promise((resolve, reject) => {
-      console.log('Listening on port', port, server.listen)
       server.listen(port);
 
       server.on('error', error => {
@@ -27,10 +28,11 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async start(): Promise<(http.Server | https.Server)[]> {
-    console.log(`Starting Server Test`);
+    console.log('Starting Server Test');
     const listenerServers = [
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.listen(this.server, this.settings.get('port')),
-      (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort')) as https.Server : null
+      (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort') as number) as https.Server : null
     ];
 
     await this.resolveStages([BOOT_STAGES.START], ...listenerServers);
@@ -47,13 +49,18 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async resolveStages(stages: BOOT_STAGES[], ...extraArgs) {
-    return Promise.all(stages.map(s => resolveStage(s, this.context, this.context.getApplication(), ...extraArgs)));
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    return Promise.all(stages.map(async s => resolveStage(s, this.context, this.context.getApplication(), ...extraArgs)));
   }
 
   async resolveProxyContainers() {
     const ProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, getClass(this.context)) || [];
     for (const Container of ProxyContainers) {
-      resolveProxy(Container, this.context.getApplication());
+      await resolveProxy(Container, this.context.getApplication());
     }
+  }
+
+  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    return true;
   }
 }

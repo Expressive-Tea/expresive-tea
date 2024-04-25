@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
+// eslint-disable @typescript-eslint/no-unsafe-argument
+import { type NextFunction, type Request, type Response } from 'express';
 import * as jestRequest from 'jest-express/lib/request';
 import * as jestResponse from 'jest-express/lib/response';
 import { autoResponse, extractParameters, mapArguments } from '../../../helpers/server';
 import { ARGUMENT_TYPES } from '@expressive-tea/commons/constants';
-import { ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
+import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
 
 describe('Server Helper', () => {
 
@@ -358,8 +359,8 @@ describe('Server Helper', () => {
   });
 
   describe('Auto Response', () => {
-    let request: any;
-    let response: any;
+    let request: jestRequest.Request;
+    let response: jestResponse.Response;
 
     beforeEach(() => {
       request = new jestRequest.Request('/');
@@ -375,16 +376,17 @@ describe('Server Helper', () => {
       result              | annotations     | expected     | title
       ${'text'}           | ${null}         | ${['text']}  | ${' send text'}
       ${'<h1>Title</h1>'} | ${null}         | ${['<h1>Title</h1>']} | ${' send html'}
-      ${{ a: 'a' }}         | ${null}         | ${[{ a: 'a' }]} | ${' send object'}
+      ${{ a: 'a' }}         | ${null}       | ${[{ a: 'a' }]} | ${' send object'}
       ${['text']}         | ${null}         | ${[['text']]} | ${' send array'}
       ${{ a: 'a' }}         | ${[{ type: 'view', arguments: ['test'] }]} | ${['test', { a: 'a' }]} | ${' render a view'}
     `('should response', ({ result, annotations, expected }) => {
-      autoResponse(request, response, annotations, result);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      autoResponse(request as any, response as any, annotations, result);
 
       if (annotations) {
-        expect(response.render).toHaveBeenLastCalledWith(...expected);
+        expect(response.render).toHaveBeenLastCalledWith(...expected as []);
       } else {
-        expect(response.send).toHaveBeenLastCalledWith(...expected);
+        expect(response.send).toHaveBeenLastCalledWith(...expected as []);
       }
     });
   });

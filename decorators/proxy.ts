@@ -1,13 +1,13 @@
 import MetaData from '@expressive-tea/commons/classes/Metadata';
-import {  ExpressiveTeaProxyOptions, ExpressiveTeaProxyProperty, MethodDecorator } from '@expressive-tea/commons/types';
+import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons/types';
 import * as httpProxy from 'express-http-proxy';
-import { Express, RequestHandler } from 'express';
+import { type Express, type RequestHandler } from 'express';
 import { getClass, isAsyncFunction } from '@expressive-tea/commons/helpers/object-helper';
 import { isUndefined } from 'lodash';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 
 import { PROXY_SETTING_KEY, PROXY_METHODS, PROXY_PROPERTIES } from '@expressive-tea/commons/constants';
-import { IExpressiveTeaProxySettings, IExpressiveTeaProxy } from '@expressive-tea/commons/interfaces';
+import { type IExpressiveTeaProxySettings, type IExpressiveTeaProxy } from '@expressive-tea/commons/interfaces';
 
 const NON_ASYNC_METHODS = ['host'];
 
@@ -21,6 +21,7 @@ export function ProxyContainer(source: string, targetUrl: string) {
       readonly proxyHandler: RequestHandler;
 
       constructor(...args: any[]) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         super(...args);
         this.source = source;
         this.target = targetUrl;
@@ -37,11 +38,12 @@ export function ProxyContainer(source: string, targetUrl: string) {
         for (const value of Object.values(PROXY_PROPERTIES)) {
           const key: string = MetaData.get(PROXY_SETTING_KEY, this, value);
           if (!isUndefined(key)) {
-            // @ts-ignore:next-line
+            // @ts-expect-error:next-line
             options[value] = this[key];
           }
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.proxyHandler = httpProxy(host ? host.value.bind(this) : this.target)
       }
 
@@ -66,6 +68,7 @@ export function ProxyContainer(source: string, targetUrl: string) {
 export function ProxyOption(option: ExpressiveTeaProxyOptions): MethodDecorator {
   return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     if (NON_ASYNC_METHODS.includes(option) && isAsyncFunction(descriptor.value)){
       throw new GenericRequestException(`${String(propertyKey)} must not be declared as Async Function.`);
     }
@@ -77,6 +80,7 @@ export function ProxyOption(option: ExpressiveTeaProxyOptions): MethodDecorator 
 export function ProxyProperty(option: ExpressiveTeaProxyProperty, value: any): PropertyDecorator {
   return (target: object, propertyKey: string | symbol) => {
     MetaData.set(PROXY_SETTING_KEY, propertyKey, target, option);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let currentValue = target[propertyKey];
 
     Object.defineProperty(target, propertyKey, {

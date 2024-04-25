@@ -5,7 +5,7 @@ export default class LoadBalancer {
    * @offset should be used for unit testing and nothing else.
    */
   constructor(count: number, offset = 0) {
-    this.bins = new Array(count);
+    this.bins = [];
 
     // Initializes the elements of the array to zero.
     for (let i = 0; i < this.bins.length; i++) {

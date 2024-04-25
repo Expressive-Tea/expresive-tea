@@ -16,27 +16,25 @@ export default class RootController {
   }
 
   @Get('/next')
-  async next(@next next): Promise<string> {
-    next();
+  async next(@next nextFunction): Promise<string> {
+    nextFunction();
     return 'this is a test';
   }
 
   @Get('/next-error')
-  async nextError(@next next): Promise<string> {
-    next(new Error('this is an error'));
+  async nextError(@next nextFunction): Promise<string> {
+    nextFunction(new Error('this is an error'));
     return 'this is a test';
   }
 
   @Get('/error')
   async withError(): Promise<string> {
     throw new Error('not pass');
-    return 'this is a test';
   }
 
   @Get('/error-generic')
   async withErrorGeneric(): Promise<string> {
     throw new BadRequestException('not pass');
-    return 'this is a test';
   }
 
   @Get('/request')
@@ -45,12 +43,12 @@ export default class RootController {
   }
 
   @Get('/with-params/:userId')
-  async withParams(@param('userId') userId: unknown): Promise<unknown> {
+  async withParams(@param('userId') userId: string): Promise<string> {
     return `<h1> Data Test ${userId}</h1>`;
   }
 
   @Get('/with-query')
-  async indexQuery(@query('test') test: unknown): Promise<unknown> {
+  async indexQuery(@query('test') test: string): Promise<string> {
     return `<h1> Query Test ${test}</h1>`;
   }
 
@@ -59,7 +57,7 @@ export default class RootController {
     req.body = { test: 'pass' };
     next();
   })
-  async indexBody(@body('test') test: unknown): Promise<unknown> {
+  async indexBody(@body('test') test: string): Promise<string> {
     return `<h1> Body Test ${test}</h1>`;
   }
 

@@ -1,7 +1,7 @@
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ARGUMENT_TYPES, ARGUMENTS_KEY } from '@expressive-tea/commons/constants';
-import { ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
-import { ParameterDecorator } from '@expressive-tea/commons/types';
+import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
+import { type ParameterDecorator } from '@expressive-tea/commons/types';
 
 /**
  * @module Decorators/Annotations

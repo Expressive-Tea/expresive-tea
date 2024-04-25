@@ -10,16 +10,16 @@ import {
   ROUTER_MIDDLEWARES_KEY
 } from '@expressive-tea/commons/constants';
 import {
-  ExpressiveTeaAnnotations,
-  ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions,
-  IExpressiveTeaRoute
+  type ExpressiveTeaAnnotations,
+  type ExpressiveTeaArgumentOptions,
+  type ExpressiveTeaHandlerOptions,
+  type IExpressiveTeaRoute
 } from '@expressive-tea/commons/interfaces';
 import {
-  ClassDecorator,
-  ExpressiveTeaMiddleware,
-  ExpressMiddlewareHandler,
-  MethodDecorator
+  type ClassDecorator,
+  type ExpressiveTeaMiddleware,
+  type ExpressMiddlewareHandler,
+  type MethodDecorator
 } from '@expressive-tea/commons/types';
 
 /**
@@ -44,7 +44,8 @@ export function Route(mountpoint = '/') {
       readonly router: Router;
       readonly mountpoint: string;
 
-      constructor(...args: any[]) {
+      constructor(...args) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         super(...args);
         const handlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, this) || [];
 
@@ -52,19 +53,19 @@ export function Route(mountpoint = '/') {
         this.mountpoint = mountpoint;
 
         each(handlers, h => {
-          const middlewares = h.handler.$middlewares || [];
+          const middlewares = h.handler.$middlewares ?? [];
           this.router[h.verb](h.route, ...middlewares, this.__registerHandler(h));
         });
       }
 
-      __mount(parent: Router): ExpressiveTeaRoute {
+      __mount(parent: Router): this {
         const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, this) || [];
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         parent.use(this.mountpoint, ...rootMiddlewares, this.router);
         return this;
       }
 
       __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler {
-        const self: this = this;
         const decoratedArguments: ExpressiveTeaArgumentOptions[] = MetaData.get(
           ARGUMENTS_KEY,
           options.target,
@@ -80,7 +81,7 @@ export function Route(mountpoint = '/') {
           options,
           decoratedArguments,
           annotations,
-          self
+          self: this
         });
       }
     };
@@ -257,7 +258,7 @@ export function Param(route = '*') {
  *
  * @param {Function} middleware Register a middleware over router.
  */
-export function Middleware(middleware): ClassDecorator & MethodDecorator {
+export function Middleware(middleware:  (...args: any[]) => any): ClassDecorator & MethodDecorator {
   return (target, property?, descriptor?) => {
     if (!property) {
       rootMiddleware(target, middleware);
@@ -284,10 +285,10 @@ export function Middleware(middleware): ClassDecorator & MethodDecorator {
  *
  */
 export function View(viewName: string, route?: string): MethodDecorator {
-  route = route || `/${viewName}`;
+  route = route ?? `/${viewName}`;
   return (target, propertyKey, descriptor) => {
     addAnnotation('view', target, propertyKey, viewName);
-    router('get', route as string, target, descriptor.value, propertyKey);
+    router('get', route, target, descriptor.value as  (...args: any[]) => any, propertyKey);
   };
 }
 

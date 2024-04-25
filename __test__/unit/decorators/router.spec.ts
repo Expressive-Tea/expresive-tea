@@ -111,6 +111,7 @@ describe('Get Decorator', () => {
       @Get('/getTest')
       test() {
       }
+
       @Get()
       default() {
       }
@@ -120,12 +121,13 @@ describe('Get Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '/getTest' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '*' }));
+    expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'get', route: '*' }));
   });
 });
 
@@ -140,6 +142,7 @@ describe('Post Decorator', () => {
       @Post('/post')
       test() {
       }
+
       @Post()
       default() {
       }
@@ -149,10 +152,11 @@ describe('Post Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'post', route: '/post' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '/post' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'post', route: '*' }));
   });
@@ -168,6 +172,7 @@ describe('Put Decorator', () => {
       @Put('/put')
       test() {
       }
+
       @Put()
       default() {
       }
@@ -177,10 +182,11 @@ describe('Put Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'put', route: '/put' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '/put' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'put', route: '*' }));
   });
@@ -197,6 +203,7 @@ describe('Patch Decorator', () => {
       @Patch('/patch')
       test() {
       }
+
       @Patch()
       default() {
       }
@@ -206,10 +213,11 @@ describe('Patch Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'patch', route: '/patch' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '/patch' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'patch', route: '*' }));
   });
@@ -226,6 +234,7 @@ describe('Param Decorator', () => {
       @Param('/param')
       test() {
       }
+
       @Param()
       default() {
       }
@@ -235,10 +244,11 @@ describe('Param Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'param', route: '/param' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '/param' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'param', route: '*' }));
   });
@@ -254,6 +264,7 @@ describe('Delete Decorator', () => {
       @Delete('/delete')
       test() {
       }
+
       @Delete()
       default() {
       }
@@ -263,10 +274,11 @@ describe('Delete Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
-    expect(metadataMock.mock.calls[0][1][1]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
+    expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '/delete' }));
     expect(metadataMock.mock.calls[1][0]).toEqual(ROUTER_HANDLERS_KEY);
     expect(metadataMock.mock.calls[1][1][0]).toEqual(expect.objectContaining({ verb: 'delete', route: '*' }));
   });
@@ -291,6 +303,7 @@ describe('View Decorator', () => {
   test('should call correctly the decorator', () => {
     const controller = new Controller();
 
+    expect(controller).toBeInstanceOf(Controller);
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_ANNOTATIONS_KEY);
     expect(metadataMock.mock.calls[0][1][0]).toEqual(expect.objectContaining({ arguments: ['test'], type: 'view' }));

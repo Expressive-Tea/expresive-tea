@@ -1,4 +1,3 @@
-import * as express from 'express';
 import * as http from 'http';
 import * as https from 'https';
 import * as fs from 'fs';
@@ -30,12 +29,12 @@ describe('Boot Class Secure Server', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     jest.spyOn(http, 'createServer').mockImplementation((...args: any[]) => originalCreateServer(...args));
     jest.spyOn(https, 'createServer').mockImplementation((...args: any[]) => {
-      console.log(args);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return originalCreateSecureServer(...args);
     });
-    // @ts-ignore
     jest.spyOn(fs, 'readFileSync').mockImplementation((fileName: string) => fileName === 'certificate.pem' ? cert : key);
   });
 
@@ -65,8 +64,8 @@ describe('Boot Class Secure Server', () => {
       { cert: cert.toString('utf-8'), key: key.toString('utf-8') }
     );
 
-    await app.server.close();
-    await app.secureServer.close();
+    app.server.close();
+    app.secureServer.close();
   });
 
   test('should start an application', async () => {
@@ -85,8 +84,8 @@ describe('Boot Class Secure Server', () => {
     expect(boot.settings).toEqual(Settings.getInstance());
     expect(registerMock).toHaveBeenCalled();
 
-    await app.server.close();
-    await app.secureServer.close();
+    app.server.close();
+    app.secureServer.close();
   });
 
 });

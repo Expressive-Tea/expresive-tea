@@ -13,7 +13,7 @@ export default class RootController {
     req.body = {test: 'pass teacup2'};
     next();
   })
-  async indexBody(@body('test') test: unknown ): Promise<unknown> {
+  async indexBody(@body('test') test: string ): Promise<string> {
     return `<h1> Body Test ${test}</h1>`;
   }
 }

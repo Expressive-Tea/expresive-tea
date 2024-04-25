@@ -2,6 +2,8 @@ import WebsocketService from '../../services/WebsocketService';
 import * as WebSocket from 'ws';
 import { injectable } from 'inversify';
 import ExpressiveTeaEngine from '../../classes/Engine';
+import Boot from '../../classes/Boot';
+import Settings from '../../classes/Settings';
 
 @injectable()
 export default class WebsocketEngine extends ExpressiveTeaEngine {
@@ -24,5 +26,9 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
       WebsocketService.getInstance().setHttpServer(this.server);
       WebsocketService.getInstance().setHttpServer(this.serverSecure);
     }
+  }
+
+  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    return settings.get('startWebsocket');
   }
 }

@@ -1,13 +1,13 @@
 import * as proxy from 'express-http-proxy';
 import LoadBalancer from './LoadBalancer';
 import {indexOf, includes, size } from 'lodash';
-import { RequestHandler } from 'express';
+import { type RequestHandler } from 'express';
 
 export default class ProxyRoute {
   readonly registeredOn: string;
   private balancer: LoadBalancer;
-  private servers: any[] = [];
-  private clients: string[] = [];
+  private readonly servers: any[] = [];
+  private readonly clients: string[] = [];
   private lastServerSelected: number = 0;
 
   constructor(registeredOn: string) {

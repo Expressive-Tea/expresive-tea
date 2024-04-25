@@ -1,4 +1,4 @@
-import {last} from 'lodash';
+import { last } from 'lodash';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../../../classes/Settings';
 import {
@@ -16,12 +16,11 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '@expressive-tea/commons/constants';
-import Plugin, {mockPluginArguments} from '../../__mocks__/plugin';
-import {ExpressiveTeaModuleProps, IExpressiveTeaModule} from '@expressive-tea/commons/interfaces';
-import {Express} from 'express';
+import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
+import { Express } from 'express';
 
 describe('ServerSettings Decorator', () => {
-  let testClass;
   test('should modify server settings', () => {
     @ServerSettings({
       port: 8080
@@ -29,8 +28,10 @@ describe('ServerSettings Decorator', () => {
     class Test {
     }
 
-    testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({port: 8080, securePort: 4443});
+    const test = new Test();
+
+    expect(test).toBeDefined();
+    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
   });
 
   test('should modify server settings as default options', () => {
@@ -40,13 +41,15 @@ describe('ServerSettings Decorator', () => {
     class Test {
     }
 
-    testClass = new Test();
-    expect(Settings.getInstance().getOptions()).toEqual({port: 3000, securePort: 4443});
+    const test = new Test();
+
+    expect(test).toBeDefined();
+    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
   });
 });
 
 describe('Pour Decorator', () => {
-  let spyMetadataSet;
+  let spyMetadataSet: jest.SpyInstance;
   beforeEach(() => {
     spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
@@ -61,7 +64,7 @@ describe('Pour Decorator', () => {
     }
 
     const testInstance = new Test();
-    const args: any[] = last(spyMetadataSet.mock.calls) || [];
+    const args: any[] = last(spyMetadataSet.mock.calls) ?? [];
 
     expect(testInstance).toBeDefined();
     expect(args).toBeDefined();
@@ -76,15 +79,15 @@ describe('Pour Decorator', () => {
   });
 
   test('should attach plug to respective level with arguments', () => {
-    @Pour(Plugin, 'a', 1, 2, {x: 'y'})
+    @Pour(Plugin, 'a', 1, 2, { x: 'y' })
     class Test {
     }
 
     const instance = new Test();
-    const args: any[] = last(spyMetadataSet.mock.calls) || [];
+    const args: any[] | unknown = last<any>(spyMetadataSet.mock.calls) ?? [];
 
     expect(instance).toBeDefined();
-    expect(mockPluginArguments).toEqual(['a', 1, 2, {x: 'y'}]);
+    expect(mockPluginArguments).toEqual(['a', 1, 2, { x: 'y' }]);
     expect(args).toBeDefined();
     expect(args[0]).toEqual(PLUGINS_KEY);
     expect(args[1][0]).toEqual(
@@ -112,7 +115,9 @@ describe('Setting Decorator', () => {
     TestClass = Test;
   });
 
-  afterEach(() => Settings.reset());
+  afterEach(() => {
+    Settings.reset();
+  });
 
   test('should get setting test on instances', () => {
     const instance = new TestClass();
@@ -154,6 +159,7 @@ describe('RegisterModule Decorator', () => {
       class Module {
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
         @RegisterModule(Module)
         async init() {
@@ -164,7 +170,7 @@ describe('RegisterModule Decorator', () => {
 });
 
 describe('Static Decorator', () => {
-  let spyMetadataSet;
+  let spyMetadataSet: jest.SpyInstance;
 
   beforeEach(() => {
     spyMetadataSet = jest.spyOn(Metadata, 'set');
@@ -216,8 +222,9 @@ describe('Static Decorator', () => {
 
   test('should fail if not root folder is present', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error Probe application error.
       @Static()
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
       }
     }).toThrow();
@@ -225,7 +232,7 @@ describe('Static Decorator', () => {
 });
 
 describe('Express Directive Decorator', () => {
-  let spyMetadataSet;
+  let spyMetadataSet: jest.SpyInstance;
   beforeEach(() => {
     spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
@@ -255,9 +262,8 @@ describe('Express Directive Decorator', () => {
 
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
-      // @ts-ignore
       @ExpressDirective('invalid', false)
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
       }
     }).toThrow();
@@ -265,8 +271,9 @@ describe('Express Directive Decorator', () => {
 
   test('should fail if directive is not named ', () => {
     expect(() => {
-      // @ts-ignore
+      // @ts-expect-error Probe application error.
       @ExpressDirective()
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
       }
     }).toThrow();
@@ -274,7 +281,7 @@ describe('Express Directive Decorator', () => {
 });
 
 describe('Modules Decorator', () => {
-  let spyMetadataSet;
+  let spyMetadataSet: jest.SpyInstance;
 
   beforeEach(() => {
     spyMetadataSet = jest.spyOn(Metadata, 'set');
@@ -294,7 +301,6 @@ describe('Modules Decorator', () => {
       }
     }
 
-    // @ts-ignore
     @Modules([ModuleA])
     class Test {
       async start() {
@@ -314,6 +320,7 @@ describe('Modules Decorator', () => {
       class Module {
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       class Test {
         @RegisterModule(Module)
         async init() {

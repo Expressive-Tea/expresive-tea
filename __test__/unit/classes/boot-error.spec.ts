@@ -1,12 +1,10 @@
 import { BOOT_STAGES } from '@expressive-tea/commons/constants';
 import { Plugin } from '@expressive-tea/plugin';
 import { Stage } from '@expressive-tea/plugin/decorators';
-import * as express from 'express';
-import * as http from 'http';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
 import { Pour, RegisterModule } from '../../../decorators/server';
-import Module, { registerMock } from '../../test-classes/module';
+import Module from '../../test-classes/module';
 import container from '../../../inversify.config';
 
 
@@ -60,7 +58,7 @@ describe('Boot Soft Errors Class', () => {
       secureServer: null,
       server: expect.anything()
     });
-    await app.server.close();
+    app.server.close();
   });
 
 });
@@ -86,7 +84,7 @@ describe('Boot Hard Errors Class', () => {
 
   test('should fail server as plugin is required', async () => {
     const boot = new BootstrapHardError();
-    expect(boot.start()).rejects.toEqual(new Error('Failed [HardPlugin:test]: test'));
+    void expect(boot.start()).rejects.toEqual(new Error('Failed [HardPlugin:test]: test'));
   });
 
 });

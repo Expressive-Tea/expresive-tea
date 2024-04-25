@@ -1,4 +1,3 @@
-// tslint:disable:no-duplicate-imports
 
 import {
   BOOT_STAGES,
@@ -9,12 +8,12 @@ import {
   STAGES_INIT
 } from '@expressive-tea/commons/constants';
 import * as express from 'express';
-import { Express } from 'express';
+import { type Express } from 'express';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import { ExpressiveTeaDirective, ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
+import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import Boot from '../classes/Boot';
+import type Boot from '../classes/Boot';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
   try {
@@ -23,7 +22,7 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
       await resolveModules(ctx, server);
     }
   } catch (e) {
-    if (checkIfStageFails(e)) {
+    if (checkIfStageFails(e as Error)) {
       throw e;
     }
   }
@@ -32,7 +31,9 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
 export async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
   const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
   registeredDirectives.forEach((options: ExpressiveTeaDirective) => {
-    server.set.call(server, options.name, ...options.settings);
+    // @ts-expect-error Settings can be any parameter
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    server.set(options.name, ...options.settings);
   });
 }
 
@@ -73,7 +74,7 @@ async function bootloaderResolve(
     try {
       await selectLoaderType(loader, server, ...args);
     } catch (e) {
-      shouldFailIfRequire(e, loader);
+      shouldFailIfRequire(e as Error, loader);
     }
   }
 }
