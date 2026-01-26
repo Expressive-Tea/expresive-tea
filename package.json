@@ -65,7 +65,7 @@
     "express-http-proxy": "2.0.0",
     "inversify": "6.0.2",
     "inversify-inject-decorators": "3.1.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "socket.io": "4.7.5",
     "socket.io-client": "4.7.5",
     "url-scheme": "1.0.5",
