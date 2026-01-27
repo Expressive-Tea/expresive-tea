@@ -79,6 +79,11 @@ examples/
 
 .data
 
+# AI
+.claude/
+.opencode/
+
+# TypeScript compiled files
 *.d.ts
 *.js.map
 benchmark/*.js

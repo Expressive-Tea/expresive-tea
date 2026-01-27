@@ -1,15 +1,14 @@
-import * as http from 'http';
-import * as https from 'https';
-import { injectable } from 'inversify';
+import * as http from 'node:http';
+import * as https from 'node:https';
+import { injectable, injectFromBase } from 'inversify';
 import { resolveDirectives, resolveStage, resolveStatic, resolveProxy } from '../../helpers/boot-helper';
 import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/commons/constants';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import ExpressiveTeaEngine from '../../classes/Engine';
-import Boot from '../../classes/Boot';
-import Settings from '../../classes/Settings';
 
 @injectable()
+@injectFromBase({ extendConstructorArguments: true })
 export default class HTTPEngine extends ExpressiveTeaEngine{
 
   private async listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
@@ -28,7 +27,6 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async start(): Promise<(http.Server | https.Server)[]> {
-    console.log('Starting Server Test');
     const listenerServers = [
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.listen(this.server, this.settings.get('port')),
@@ -40,27 +38,28 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async init(): Promise<void> {
-    await resolveDirectives(this.context, this.context.getApplication());
-    await resolveStatic(this.context, this.context.getApplication());
+    resolveDirectives(this.context, this.context.getApplication());
+    resolveStatic(this.context, this.context.getApplication());
     // HTTP Engine Resolve Stages
-    await this.resolveProxyContainers();
+    this.resolveProxyContainers();
     await this.resolveStages(BOOT_ORDER);
     await this.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], this.server, this.serverSecure);
   }
 
-  async resolveStages(stages: BOOT_STAGES[], ...extraArgs) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  async resolveStages(stages: BOOT_STAGES[], ...extraArgs: unknown[]): Promise<unknown[]> {
     return Promise.all(stages.map(async s => resolveStage(s, this.context, this.context.getApplication(), ...extraArgs)));
   }
 
-  async resolveProxyContainers() {
+  resolveProxyContainers(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const ProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, getClass(this.context)) || [];
+     
     for (const Container of ProxyContainers) {
-      await resolveProxy(Container, this.context.getApplication());
+      resolveProxy(Container, this.context.getApplication());
     }
   }
 
-  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+  static canRegister(): boolean {
     return true;
   }
 }

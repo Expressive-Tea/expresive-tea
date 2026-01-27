@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/require-await */
 import * as chalk from 'chalk';
 import {URL} from 'url';
 import { io, Socket } from 'socket.io-client';
-import { injectable } from 'inversify';
+import { injectable, injectFromBase } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
@@ -9,9 +10,9 @@ import TeaGatewayHelper from '../../helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import ExpressiveTeaEngine from '../../classes/Engine';
 import Boot from '../../classes/Boot';
-import Settings from '../../classes/Settings';
 
 @injectable()
+@injectFromBase({ extendConstructorArguments: true })
 export default class TeacupEngine extends ExpressiveTeaEngine {
   private teacupSettings: ExpressiveTeaCupSettings;
   private publicKey: string;
@@ -67,7 +68,9 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     const onClose = () => {
       try {
         this.client.close();
+       
       } catch (_) {
+        // Intentionally empty - ignore close errors
       }
     };
 
@@ -101,7 +104,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.client.connect();
   }
 
-  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+  static canRegister(ctx?: Boot): boolean {
     return MetaData.get(ASSIGN_TEACUP_KEY, getClass(ctx), 'isTeacupActive');
   }
 

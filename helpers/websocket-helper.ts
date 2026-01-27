@@ -1,10 +1,11 @@
 import WebsocketService from '../services/WebsocketService';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as WebSocket from 'ws';
 import Settings from '../classes/Settings';
 import type * as http from 'http';
 import type * as https from 'https';
 
-export async function initWebsocket(server: http.Server, secureServer: https.Server) {
+export function initWebsocket(server: http.Server, secureServer: https.Server) {
   const settings = Settings.getInstance();
   const isDetached = settings.get('detachWebsocket');
 

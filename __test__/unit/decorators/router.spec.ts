@@ -89,7 +89,7 @@ describe('Middleware Decorator', () => {
   });
 
   test('should call middleware root correctly', () => {
-    expect(metadataMock).toBeCalled();
+    expect(metadataMock).toHaveBeenCalled();
   });
 
   test('should register endpoint middleware correctly', () => {
@@ -121,7 +121,7 @@ describe('Get Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -152,7 +152,7 @@ describe('Post Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -182,7 +182,7 @@ describe('Put Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -213,7 +213,7 @@ describe('Patch Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -244,7 +244,7 @@ describe('Param Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -274,7 +274,7 @@ describe('Delete Decorator', () => {
   });
 
   test('should call correctly the decorator', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);

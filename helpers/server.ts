@@ -1,4 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { chain, find, get, has, isNumber, pick, size } from 'lodash';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
@@ -8,20 +9,22 @@ import {
 } from '@expressive-tea/commons/interfaces';
 import { GenericRequestException } from '../exceptions/RequestExceptions';
 import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
 } from '../interfaces';
+import { TFunction } from '../types/core';
 
 export function autoResponse(
-  request: Request,
+  _: any,
   response: Response,
   annotations: ExpressiveTeaAnnotations[],
   responseResult?: any
 ): void {
   const view: ExpressiveTeaAnnotations = find(annotations, { type: 'view' });
   if (view) {
-    response.render(view.arguments[0] as string, responseResult as object); return;
+    response.render(view.arguments[0] as string, responseResult as object);
+    return;
   }
 
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
@@ -48,7 +51,8 @@ export async function executeRequest(request: Request, response: Response, next:
     }
   } catch (e) {
     if (e instanceof GenericRequestException) {
-      next(e); return;
+      next(e);
+      return;
     }
     next(new GenericRequestException((e as Error).message || 'System Error'));
   }
@@ -108,14 +112,16 @@ export function generateRoute(route: string, verb: string, ...settings: any): (
   target: object,
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor) => void {
-  return (target, propertyKey, descriptor) => { router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings); };
+  return (target, propertyKey, descriptor) => {
+    router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings);
+  };
 }
 
 export function router(
   verb: string,
   route: string,
   target: any,
-  handler: (...args: any[]) => never | any | Promise<any>,
+  handler: TFunction,
   propertyKey: string | symbol,
   settings?: any
 ) {
@@ -131,7 +137,7 @@ export function fileSettings() {
       const configString = fs.readFileSync('.expressive-tea');
       return JSON.parse(configString.toString());
     }
-  } catch (e) {
+  } catch {
     return {};
   }
 }

@@ -6,7 +6,7 @@ import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
 import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
-import { RegisterModule } from '../../../decorators/server';
+import { Modules } from '../../../decorators/server';
 
 
 const originalCreateServer = http.createServer;
@@ -17,22 +17,18 @@ const key = originalFsReadFileSync(path.resolve(__dirname, '../../certs/key.pem'
 jest.mock('express', () => require('jest-express'));
 
 describe('Boot Class Secure Server', () => {
-  class Bootstrap extends Boot {
-    @RegisterModule(Module)
-    async start() {
-      return super.start();
-    }
-  }
+  @Modules([Module])
+  class Bootstrap extends Boot {}
 
   class DefaultBootstrap extends Boot {
   }
 
   beforeEach(() => {
     jest.clearAllMocks();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+     
     jest.spyOn(http, 'createServer').mockImplementation((...args: any[]) => originalCreateServer(...args));
     jest.spyOn(https, 'createServer').mockImplementation((...args: any[]) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       return originalCreateSecureServer(...args);
     });
     jest.spyOn(fs, 'readFileSync').mockImplementation((fileName: string) => fileName === 'certificate.pem' ? cert : key);

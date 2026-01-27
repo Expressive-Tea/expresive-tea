@@ -1,4 +1,5 @@
 import MetaData from '@expressive-tea/commons/classes/Metadata';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ARGUMENT_TYPES, ARGUMENTS_KEY } from '@expressive-tea/commons/constants';
 import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
 import { type ParameterDecorator } from '@expressive-tea/commons/types';

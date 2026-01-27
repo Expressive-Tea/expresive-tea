@@ -1,16 +1,27 @@
 import * as chalk from 'chalk';
+ 
 import { Server, Socket } from 'socket.io';
-import { injectable } from 'inversify';
+ 
+import { injectable, injectFromBase } from 'inversify';
+ 
 import { ExpressiveTeaPotSettings } from '@expressive-tea/commons/interfaces';
+ 
 import Metadata from '@expressive-tea/commons/classes/Metadata';
+ 
 import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
+ 
 import ProxyRoute from '../../classes/ProxyRoute';
+ 
 import ExpressiveTeaEngine from '../../classes/Engine';
+ 
 import TeaGatewayHelper, { EncryptedMessage, TeaGatewayMessage } from '../../helpers/teapot-helper';
+ 
 import { SOCKET_IO_INSTANCE_KEY } from '../constants/constants';
+ 
 import Boot from '../../classes/Boot';
-import Settings from '../../classes/Settings';
+ 
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/require-await */
 
 interface ClientMetadata {
   publicKey: Buffer;
@@ -18,12 +29,16 @@ interface ClientMetadata {
 }
 
 @injectable()
+@injectFromBase({ extendConstructorArguments: true })
 export default class TeapotEngine extends ExpressiveTeaEngine {
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly clients: Map<string | symbol, any> = new Map<string | symbol, ClientMetadata>();
   private readonly registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
   private teapotSettings: ExpressiveTeaPotSettings;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private publicKey: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private privateKey: any;
   private serverSignature: Buffer;
   private socketServer: Server;
@@ -146,7 +161,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.socketServer.on('connection', this.registerTeacup.bind(this));
   }
 
-  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+  static canRegister(ctx?: Boot): boolean {
     return Metadata.get(ASSIGN_TEAPOT_KEY, getClass(ctx), 'isTeapotActive');
   }
 }

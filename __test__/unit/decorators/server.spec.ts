@@ -108,7 +108,7 @@ describe('Setting Decorator', () => {
       test: 'this is a test string'
     })
     class Test {
-      @Setting('test')
+      @Setting()
       test: string;
     }
 
@@ -126,32 +126,18 @@ describe('Setting Decorator', () => {
 });
 
 describe('RegisterModule Decorator', () => {
-  let spyMetadataSet;
-
-  beforeEach(() => {
-    spyMetadataSet = jest.spyOn(Metadata, 'set');
-  });
-
-  afterEach(() => {
-    spyMetadataSet.mockRestore();
-  });
-
-  test('should register a module', () => {
-    class Module {
-    }
-
-    class Test {
-      @RegisterModule(Module)
-      async start() {
+  test('should fail register a module', () => {
+    expect(() => {
+      class Module {
       }
-    }
 
-    const testInstance = new Test();
-    const args = spyMetadataSet.mock.calls[0];
 
-    expect(testInstance).toBeDefined();
-    expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
-    expect(args[1]).toEqual([Module]);
+      class Test {
+        @RegisterModule(Module)
+        async start() {
+        }
+      }
+    }).toThrow();
   });
 
   test('should fail if use different method to register a module', () => {
@@ -159,7 +145,7 @@ describe('RegisterModule Decorator', () => {
       class Module {
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       class Test {
         @RegisterModule(Module)
         async init() {
@@ -224,7 +210,7 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @Static()
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       class Test {
       }
     }).toThrow();
@@ -263,7 +249,7 @@ describe('Express Directive Decorator', () => {
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
       @ExpressDirective('invalid', false)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       class Test {
       }
     }).toThrow();
@@ -273,7 +259,7 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @ExpressDirective()
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       class Test {
       }
     }).toThrow();
@@ -320,7 +306,7 @@ describe('Modules Decorator', () => {
       class Module {
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       class Test {
         @RegisterModule(Module)
         async init() {

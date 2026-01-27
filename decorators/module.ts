@@ -1,9 +1,8 @@
-import { type Express, Router } from 'express';
-import { each, map } from 'lodash';
-import { type ExpressiveTeaModuleProps, type IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
-import DependencyInjection from '../services/DependencyInjection';
-import { interfaces } from 'inversify';
-import Newable = interfaces.Newable;
+import { type ExpressiveTeaModuleProps } from '@expressive-tea/commons/interfaces';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { type ModulizedExpressiveTeaModule } from '../types/core';
+import { Modulize } from '../mixins/module';
+
 /**
  * @typedef {Object} ExpressiveTeaModuleProps
  * @property {Object[]} controllers Controllers Assigned to Module
@@ -31,24 +30,8 @@ import Newable = interfaces.Newable;
  * class Example {}
  */
 export function Module(options: ExpressiveTeaModuleProps) {
-  return <T extends new (...args: any[]) => any>(Module: T) => {
-    return class ExpressiveTeaModule extends Module implements IExpressiveTeaModule{
-      readonly settings: ExpressiveTeaModuleProps;
-      readonly router: Router = Router();
-      readonly controllers: any[];
-
-      constructor(...args: any[]) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        super(...args);
-        this.settings = options;
-        each(this.settings.providers, (P: Newable<any>) => { DependencyInjection.setProvider(P); });
-        this.controllers = map(this.settings.controllers, C => new C());
-      }
-
-      __register(server: Express) {
-        each(this.controllers, c => c.__mount(this.router));
-        server.use(this.settings.mountpoint, this.router);
-      }
-    };
+  return (Module: any): ModulizedExpressiveTeaModule<typeof Module> => {
+    return Modulize<typeof Module>(Module, options);
   };
 }
+

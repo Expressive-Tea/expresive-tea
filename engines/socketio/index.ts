@@ -1,17 +1,19 @@
 import { Server } from 'socket.io';
+import { injectable, injectFromBase } from 'inversify';
 import ExpressiveTeaEngine from '../../classes/Engine';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { SOCKET_IO_INSTANCE_KEY, SOCKET_IO_SECURE_INSTANCE_KEY } from '../constants/constants';
-import type Boot from '../../classes/Boot';
-import type Settings from '../../classes/Settings';
 
+@injectable()
+@injectFromBase({ extendConstructorArguments: true })
 export default class SocketIOEngine extends ExpressiveTeaEngine {
   private io: Server;
   private ioSecure: Server;
 
-  async init(): Promise<void> {
+  init(): void {
     const commonConfig = {
       path: '/exp-tea/',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       transports: ['websocket', 'polling'] as any[]
     };
 
@@ -22,7 +24,7 @@ export default class SocketIOEngine extends ExpressiveTeaEngine {
     MetaData.set(SOCKET_IO_SECURE_INSTANCE_KEY, this.ioSecure, this.context);
   }
 
-  static canRegister(ctx?: Boot, settings?: Settings): boolean {
+  static canRegister(): boolean {
     return true;
   }
 };

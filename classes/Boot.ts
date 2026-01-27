@@ -13,7 +13,8 @@ import SocketIOEngine from '../engines/socketio/index';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import { type Container } from 'inversify';
+import { Container } from 'inversify';
+import { TYPES } from '../types/injection-types';
 
 /**
  * Expressive Tea Application interface is the response from an started application, contains the express application
@@ -52,7 +53,7 @@ abstract class Boot {
    */
   private readonly server: Express = express();
 
-  private readonly containerDI: Container = container.createChild();
+  private readonly containerDI: Container = new Container({ parent: container});
 
   constructor() {
     this.settings = Settings.getInstance(this);
@@ -95,9 +96,10 @@ abstract class Boot {
     this.initializeEngines(registeredEngines);
 
     // Resolve Engines
-    const readyEngines: ExpressiveTeaEngine[] = registeredEngines.map(Engine =>
-      this.containerDI.resolve(Engine)
-    );
+    const readyEngines: ExpressiveTeaEngine[] = registeredEngines.map(Engine => {
+      const instance = this.containerDI.get<ExpressiveTeaEngine>(Engine);
+      return instance;
+    });
 
     // Initialize Engines
     await ExpressiveTeaEngine.exec(readyEngines.reverse(), 'init');
@@ -112,26 +114,31 @@ abstract class Boot {
     }
   }
 
-  private initializeHttp(): [http.Server, https.Server | never] {
+  private initializeHttp(): [http.Server, https.Server | undefined] {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const privateKey: fs.PathOrFileDescriptor = this.settings.get('privateKey');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const certificate: fs.PathOrFileDescriptor = this.settings.get('certificate');
     const server: http.Server = http.createServer(this.server);
-    const secureServer: https.Server =
+    const secureServer: https.Server | undefined =
       privateKey &&
-      certificate &&
-      https.createServer({
-        cert: fs.readFileSync(certificate).toString('utf-8'),
-        key: fs.readFileSync(privateKey).toString('utf-8')
-      });
+      certificate
+        ? https.createServer({
+            cert: fs.readFileSync(certificate).toString('utf-8'),
+            key: fs.readFileSync(privateKey).toString('utf-8')
+          })
+        : undefined;
 
     return [server, secureServer];
   }
 
   private initializeContainer(server: http.Server, secureServer?: https.Server): void {
-    this.containerDI.bind<http.Server>('server').toConstantValue(server);
-    this.containerDI.bind<https.Server>('secureServer').toConstantValue(secureServer ?? undefined);
-    this.containerDI.bind<Boot>('context').toConstantValue(this);
-    this.containerDI.bind<Settings>('settings').toConstantValue(this.settings);
+    this.containerDI.bind<http.Server>(TYPES.Server).toConstantValue(server);
+    if (secureServer) {
+      this.containerDI.bind<https.Server>(TYPES.SecureServer).toConstantValue(secureServer);
+    }
+    this.containerDI.bind<Boot>(TYPES.Context).toConstantValue(this);
+    this.containerDI.bind<Settings>(TYPES.Settings).toConstantValue(this.settings);
   }
 }
 

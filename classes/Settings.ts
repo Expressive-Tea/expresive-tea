@@ -27,6 +27,7 @@ import { fileSettings } from '../helpers/server';
 @injectable()
 class Settings {
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isolatedContext:Map<any, Settings> = new Map<any, Settings>();
   /**
    * Reset Singleton instance to the default values, all changes will be erased is not recommendable to use it
@@ -51,13 +52,14 @@ class Settings {
    * @memberof Settings
    * @summary Get Singleton Instance.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance(ctx?: any): Settings {
     if (ctx) {
       const context = nameOfClass(ctx);
       if (!Settings.isolatedContext.has(context)) {
         Settings.isolatedContext.set(context, new Settings(null, true));
       }
-      return Settings.isolatedContext.get(context);
+      return Settings.isolatedContext.get(context) as Settings;
     }
 
     return Settings.instance || new Settings();
@@ -86,7 +88,9 @@ class Settings {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const settingsFile = fileSettings();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.options = Object.assign({}, { port: 3000, securePort: 4443 }, settingsFile, options);
     Settings.instance = this;
   }
@@ -112,6 +116,7 @@ class Settings {
    * @memberof Settings
    * @summary Retrieve an option
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(settingName: string): any {
     return _.get(this.options, settingName, null);
   }
@@ -125,6 +130,7 @@ class Settings {
    * @memberof Settings
    * @summary Initialize an option.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   set(settingName: string, value: any): void {
     _.set(this.options, settingName, value);
   }

@@ -1,4 +1,5 @@
 import MetaData from '@expressive-tea/commons/classes/Metadata';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { ROUTER_ANNOTATIONS_KEY } from '@expressive-tea/commons/constants';
 import { type ExpressiveTeaAnnotations } from '@expressive-tea/commons/interfaces';
 

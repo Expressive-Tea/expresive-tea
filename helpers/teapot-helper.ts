@@ -1,5 +1,6 @@
-import * as crypto from 'crypto';
-import { type KeyPairSyncResult, generateKeyPairSync } from 'crypto';
+import * as crypto from 'node:crypto';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+import { type KeyPairSyncResult, generateKeyPairSync } from 'node:crypto';
 import { type NextFunction, type Request, type Response } from 'express';
 import type ProxyRoute from '../classes/ProxyRoute';
 
@@ -46,7 +47,7 @@ export default class TeaGatewayHelper {
         key: publicKey
       },
       signature
-    )
+    );
   }
 
   static generateKeys(passphrase: string): KeyPairSyncResult<any, any> {

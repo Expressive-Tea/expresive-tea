@@ -1,4 +1,5 @@
 import { type Express } from 'express';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { isNil, orderBy } from 'lodash';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../classes/Settings';
@@ -108,7 +109,7 @@ function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
 export function Plug(
   stage: BOOT_STAGES,
   name: string,
-  method: (server?: Express | never, ...extraArgs: unknown[]) => Promise<any> | any,
+  method: (server?: Express, ...extraArgs: unknown[]) => Promise<void> | void,
   required: boolean = false
 ) {
   return (target: any): void => {
@@ -211,9 +212,8 @@ export function ExpressDirective(name: string, ...settings: any[]) {
  * All properties will contains the settings value or undefined if current settings is not founded.
  * @decorator {PropertyDecorator} Setting - Assign Server Settings to Property as default value.
  * @summary Automatically assign a settings declared on the Server Settings decorator to a class property.
- * @param {string} settingName The Setting name tha
  */
-export function Setting(settingName: string): (target: any, propertyName: string) => any {
+export function Setting(): (target: any, propertyName: string) => any {
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,
@@ -261,15 +261,12 @@ export function Proxies(proxyContainers: any[]) {
  * @param {Class} Module
  * @deprecated Use the new decorator Modules that allow add modules into registered modules.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function RegisterModule(Module) {
-  return (target, property: string | symbol) => {
-    if (property !== 'start') {
-      throw new Error('Register Module needs to decorate ONLY start method');
-    }
-
-    const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, property) || [];
-    registeredModules.push(Module);
-    MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
+   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return (_: any, __: any) => {
+    throw new Error('RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.');
   };
 }
 

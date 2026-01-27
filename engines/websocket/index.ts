@@ -1,18 +1,21 @@
 import WebsocketService from '../../services/WebsocketService';
 import * as WebSocket from 'ws';
-import { injectable } from 'inversify';
+import { injectable, injectFromBase } from 'inversify';
 import ExpressiveTeaEngine from '../../classes/Engine';
 import Boot from '../../classes/Boot';
 import Settings from '../../classes/Settings';
 
 @injectable()
+@injectFromBase({ extendConstructorArguments: true })
 export default class WebsocketEngine extends ExpressiveTeaEngine {
 
   canStart: boolean = false;
   isDetached: boolean = false;
 
-  async init(): Promise<void> {
+  init(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.canStart = this.settings.get('startWebsocket');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.isDetached = this.settings.get('detachWebsocket');
     if(this.canStart) {
       WebsocketService.init();
@@ -29,6 +32,7 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
   }
 
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return settings.get('startWebsocket');
   }
 }

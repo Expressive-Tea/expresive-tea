@@ -1,20 +1,17 @@
-import { Container, interfaces } from 'inversify';
+import { Container, Newable, ServiceIdentifier  } from 'inversify';
 import getDecorators from 'inversify-inject-decorators';
-import ServiceIdentifier = interfaces.ServiceIdentifier;
-import Newable = interfaces.Newable;
+import { LazyInversifyDecorator, LazyInversifyNamedDecorator, LazyInversifyTaggedDecorator } from '../types/inversify';
 
 interface InversifyDecorators {
-  lazyInject: (...args: any[]) => any;
-
-  lazyInjectNamed: (...args: any[]) => any;
-
-  lazyInjectTagged: (...args: any[]) => any;
-
-  lazyMultiInject: (...args: any[]) => any;
+  lazyInject: LazyInversifyDecorator;
+  lazyInjectNamed: LazyInversifyNamedDecorator;
+  lazyInjectTagged: LazyInversifyTaggedDecorator;
+  lazyMultiInject: LazyInversifyDecorator;
 }
 
+
 const rootContainer: Container = new Container({
-  autoBindInjectable: true
+  autobind: true
 });
 
 const lazyDecorators: InversifyDecorators = getDecorators(rootContainer);
@@ -44,10 +41,15 @@ class DependencyInjection {
    * or data flow.
    *
    * @param {Class} ProviderFactory - Assign the Class to serve as factory.
-   * @param {string | symbol |never } [providerName="ClassName"] - Provide the provider identification.
+   * @param {string | symbol} [providerName="ClassName"] - Provide the provider identification.
    * @summary Add Provider to Dependency Injection Providers
    */
-  static setProvider(ProviderFactory: Newable<any>, providerName?: ServiceIdentifier<string | symbol>): void {
+   
+  static setProvider(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ProviderFactory: Newable<any>,
+    providerName?: ServiceIdentifier<string | symbol>
+  ): void {
     if (!rootContainer.isBound(providerName ?? ProviderFactory.name)) {
       rootContainer.bind(providerName ?? ProviderFactory.name).to(ProviderFactory);
     }

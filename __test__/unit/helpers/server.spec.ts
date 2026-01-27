@@ -380,7 +380,7 @@ describe('Server Helper', () => {
       ${['text']}         | ${null}         | ${[['text']]} | ${' send array'}
       ${{ a: 'a' }}         | ${[{ type: 'view', arguments: ['test'] }]} | ${['test', { a: 'a' }]} | ${' render a view'}
     `('should response', ({ result, annotations, expected }) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+       
       autoResponse(request as any, response as any, annotations, result);
 
       if (annotations) {

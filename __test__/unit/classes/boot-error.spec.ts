@@ -3,7 +3,7 @@ import { Plugin } from '@expressive-tea/plugin';
 import { Stage } from '@expressive-tea/plugin/decorators';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { Pour, RegisterModule } from '../../../decorators/server';
+import { Modules, Pour } from '../../../decorators/server';
 import Module from '../../test-classes/module';
 import container from '../../../inversify.config';
 
@@ -33,12 +33,8 @@ class HardPlugin extends Plugin {
 
 describe('Boot Soft Errors Class', () => {
   @Pour(SoftPlugin)
-  class BootstrapSoftError extends Boot {
-    @RegisterModule(Module)
-    async start() {
-      return super.start();
-    }
-  }
+  @Modules([Module])
+  class BootstrapSoftError extends Boot {}
 
   beforeEach(() => {
     Settings.getInstance().set('certificate', undefined);
@@ -65,12 +61,8 @@ describe('Boot Soft Errors Class', () => {
 
 describe('Boot Hard Errors Class', () => {
   @Pour(HardPlugin)
-  class BootstrapHardError extends Boot {
-    @RegisterModule(Module)
-    async start() {
-      return super.start();
-    }
-  }
+  @Modules([Module])
+  class BootstrapHardError extends Boot {}
 
   beforeEach(() => {
     Settings.getInstance().set('certificate', undefined);

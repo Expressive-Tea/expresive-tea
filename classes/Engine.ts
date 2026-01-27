@@ -1,36 +1,31 @@
+
 import { inject, injectable, optional } from 'inversify';
 import Settings from './Settings';
 import Boot from './Boot';
-import http from 'http';
-import https from 'https';
+import {Server as HttpServer} from 'node:http';
+import {Server as HttpsServer} from 'node:https';
+import { TYPES } from '../types/injection-types';
 
 @injectable()
 export default class ExpressiveTeaEngine {
-  protected readonly settings: Settings;
-  protected readonly context: Boot;
-  protected readonly server: http.Server;
-  protected readonly serverSecure?: https.Server;
 
   constructor(
-    @inject('context') ctx,
-    @inject('server') server,
-    @inject('secureServer') @optional() serverSecure,
-    @inject('settings') settings
-  ) {
-    this.settings = settings;
-    this.context = ctx;
-    this.server = server;
-    this.serverSecure = serverSecure;
-  }
+    @inject(TYPES.Context) protected readonly  context: Boot,
+    @inject(TYPES.Server) protected readonly  server: HttpServer,
+    @inject(TYPES.SecureServer) @optional() protected readonly serverSecure: HttpsServer,
+    @inject(TYPES.Settings) protected readonly settings: Settings
+  ) {}
 
-  static exec(availableEngines: ExpressiveTeaEngine[], method: string): any {
+  static exec(availableEngines: ExpressiveTeaEngine[], method: string): Promise<unknown[]> {
     return Promise.all(availableEngines
-      .filter(engine => typeof engine[method] === 'function')
-      .map(engine => engine[method]())
+      .filter(engine => typeof (engine as unknown as Record<string, unknown>)[method] === 'function')
+      .map(engine => ((engine as unknown as Record<string, () => unknown>)[method])())
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
     return false;
   }
 }
+

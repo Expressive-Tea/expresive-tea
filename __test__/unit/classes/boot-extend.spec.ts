@@ -69,7 +69,7 @@ describe('Boot Class Extends', () => {
 
     const app = await instance.start();
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+     
     expect(app.application.set).toHaveBeenCalledWith('etag', true);
     app.server.close();
   });
@@ -83,7 +83,7 @@ describe('Boot Class Extends', () => {
 
     const app = await instance.start();
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
+     
     expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
     app.server.close();
   });

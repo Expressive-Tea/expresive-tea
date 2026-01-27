@@ -10,7 +10,7 @@ export default class WebsocketService {
   httpServer: http.Server;
   httpsServer: https.Server;
 
-  constructor(ws?: WebSocket.Server | never, wss?: WebSocket.Server | never) {
+  constructor(ws?: WebSocket.Server, wss?: WebSocket.Server) {
     if (WebsocketService.instance) {
       return WebsocketService.instance;
     }
