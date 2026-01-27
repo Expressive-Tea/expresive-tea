@@ -1,6 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type Constructor, type ExpressiveTeaRoute } from '../types/core';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
+
+import { type Constructor } from '../types/core';
 import type {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
@@ -16,16 +16,19 @@ import {
 } from '@expressive-tea/commons/constants';
 import type { ExpressMiddlewareHandler } from '@expressive-tea/commons/types';
 import { executeRequest } from '../helpers/server';
+import { injectable, injectFromBase } from 'inversify';
 
- 
+
 export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: string): any {
-  return class ExpressiveTeaRoute extends Route {
+  @injectable('Singleton')
+  @injectFromBase({ extendConstructorArguments: true })
+  class ExpressiveTeaRoute extends Route {
     readonly router: Router;
     readonly mountpoint: string;
 
     constructor(...args) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      super(...args);
+      super(...args)
       const handlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, this) ?? [];
 
       this.router = Router();
@@ -62,5 +65,7 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
         self: this
       });
     }
-  };
+  }
+
+  return ExpressiveTeaRoute;
 }

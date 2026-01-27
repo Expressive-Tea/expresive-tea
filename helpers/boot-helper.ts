@@ -16,6 +16,8 @@ import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressi
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
 import type Boot from '../classes/Boot';
 import { type ModulizedExpressiveTeaModule } from '../types/core';
+import { getInstanceOf } from '../services/DependencyInjection';
+import { Newable } from 'inversify';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
   try {
@@ -59,7 +61,7 @@ export function resolveProxy(ProxyContainer: any, server: Express): void {
 function resolveModules(instance: typeof Boot | Boot, server: Express): void {
   const registeredModules: ModulizedExpressiveTeaModule<any> = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
   for ( const Module of registeredModules ) {
-    const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = new Module();
+    const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = getInstanceOf<typeof Module>(Module as Newable);
     moduleInstance.__register(server);
   }
 }

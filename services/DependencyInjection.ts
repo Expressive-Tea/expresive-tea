@@ -1,4 +1,5 @@
 import { Container, Newable, ServiceIdentifier  } from 'inversify';
+import parentContainer from '../inversify.config';
 import getDecorators from 'inversify-inject-decorators';
 import { LazyInversifyDecorator, LazyInversifyNamedDecorator, LazyInversifyTaggedDecorator } from '../types/inversify';
 
@@ -11,7 +12,8 @@ interface InversifyDecorators {
 
 
 const rootContainer: Container = new Container({
-  autobind: true
+  autobind: true,
+  parent: parentContainer,
 });
 
 const lazyDecorators: InversifyDecorators = getDecorators(rootContainer);
@@ -44,7 +46,7 @@ class DependencyInjection {
    * @param {string | symbol} [providerName="ClassName"] - Provide the provider identification.
    * @summary Add Provider to Dependency Injection Providers
    */
-   
+
   static setProvider(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ProviderFactory: Newable<any>,
@@ -100,5 +102,13 @@ export const InjectTagged = lazyDecorators.lazyInjectTagged;
  * @function
  */
 export const MultiInject = lazyDecorators.lazyMultiInject;
+
+export function defineConstant<T>(name: string | symbol, value: T): void {
+  DependencyInjection.Container.bind<T>(name).toConstantValue(value);
+}
+
+export function getInstanceOf<T>(Target: Newable<T>): T {
+  return DependencyInjection.Container.get<T>(Target);
+}
 
 export default DependencyInjection;

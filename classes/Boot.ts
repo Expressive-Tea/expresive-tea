@@ -10,9 +10,9 @@ import TeacupEngine from '../engines/teacup';
 import ExpressiveTeaEngine from '../classes/Engine';
 import Settings from '../classes/Settings';
 import SocketIOEngine from '../engines/socketio/index';
-import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
+import * as fs from 'node:fs';
+import * as http from 'node:http';
+import * as https from 'node:https';
 import { Container } from 'inversify';
 import { TYPES } from '../types/injection-types';
 
@@ -102,10 +102,17 @@ abstract class Boot {
     });
 
     // Initialize Engines
-    await ExpressiveTeaEngine.exec(readyEngines.reverse(), 'init');
-    await ExpressiveTeaEngine.exec(readyEngines, 'start');
+    try {
+      await ExpressiveTeaEngine.exec(readyEngines.reverse(), 'init');
+      await ExpressiveTeaEngine.exec(readyEngines, 'start');
 
-    return ({ application: this.server, server, secureServer });
+      return ({ application: this.server, server, secureServer });
+    } catch (e) {
+      // If anything failed during engine initialization or start, ensure servers are closed to avoid leaking
+      server?.close();
+      secureServer?.close();
+      throw e;
+    }
   }
 
   private initializeEngines(registeredEngines: typeof ExpressiveTeaEngine[]): void {

@@ -1,5 +1,5 @@
-import { type Express } from 'express';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
+import { type Express } from 'express';
 import { isNil, orderBy } from 'lodash';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../classes/Settings';
@@ -18,6 +18,8 @@ import {
   type ExpressiveTeaServerProps,
   type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
 } from '@expressive-tea/commons/interfaces';
+import {Newable } from 'inversify';
+import DependencyInjection from '../services/DependencyInjection';
 
 /**
  * Define the Main Plugins Properties.
@@ -131,10 +133,13 @@ export function Plug(
  * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
-export function Pour(Plugin, ...pluginArgs: any[]) {
+export function Pour(Plugin: Newable<any>, ...pluginArgs: any[]) {
   return (target: any): void => {
     const stages = getStages(target);
-    const instance = new Plugin(...pluginArgs);
+    DependencyInjection.Container.bind<typeof Plugin>(Plugin)
+      .toDynamicValue(() => new Plugin(...pluginArgs))
+      .inSingletonScope();
+    const instance = DependencyInjection.Container.get<any>(Plugin);
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
       Settings.getInstance(target).getOptions(),
@@ -263,7 +268,7 @@ export function Proxies(proxyContainers: any[]) {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function RegisterModule(Module) {
-   
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return (_: any, __: any) => {
     throw new Error('RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.');

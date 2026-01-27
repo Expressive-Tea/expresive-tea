@@ -1,6 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Constructor, ExpressiveTeaProxy } from '../types/core';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+import { Constructor } from '../types/core';
 import type { IExpressiveTeaProxySettings } from '@expressive-tea/commons/interfaces';
 import type { Express, RequestHandler } from 'express';
 import * as httpProxy from 'express-http-proxy';
@@ -8,10 +7,13 @@ import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons/constants';
 import { isUndefined } from 'lodash';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { injectable, injectFromBase } from 'inversify';
 
- 
+
 export function Proxify<TBase extends Constructor>(Base: TBase, source: string, targetUrl: string): any {
-  return class ExpressiveTeaProxy extends Base {
+  @injectable('Singleton')
+  @injectFromBase({ extendConstructorArguments: true })
+  class ExpressiveTeaProxy extends Base {
     readonly source: string;
     readonly target: string;
     readonly proxyHandler: RequestHandler;
@@ -48,5 +50,6 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
       console.info(`[PROXY - ${proxyMetadata.name}] ${this.source} -> ${this.target}`);
       server.use(this.source, this.proxyHandler);
     }
-  };
+  }
+  return ExpressiveTeaProxy;
 }

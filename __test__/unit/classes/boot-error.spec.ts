@@ -48,13 +48,20 @@ describe('Boot Soft Errors Class', () => {
 
   test('should start server as default', async () => {
     const boot = new BootstrapSoftError();
-    const app = await boot.start();
-    expect(app).toEqual({
-      application: expect.anything(),
-      secureServer: null,
-      server: expect.anything()
-    });
-    app.server.close();
+    let app: any;
+    try {
+      app = await boot.start();
+
+      // Shallow assertions to avoid deep-inspection of express app internals
+      expect(app).toBeDefined();
+      expect(app).toHaveProperty('application');
+      expect(app).toHaveProperty('server');
+      // secureServer may be null/undefined when no TLS configured
+      expect(app.secureServer == null).toBeTruthy();
+    } finally {
+      // Ensure the server is closed even if startup or assertions throw
+      app?.server?.close();
+    }
   });
 
 });

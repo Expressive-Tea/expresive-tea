@@ -10,8 +10,8 @@ describe('Websocket integration', () => {
 
   afterEach(() => {
     container.unbindAll();
-    app.server.close();
-    app.secureServer?.close();
+    app?.server?.close();
+    app?.secureServer?.close();
   });
  test('should initialize websockets', async () => {
 

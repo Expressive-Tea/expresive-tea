@@ -19,6 +19,7 @@ import {
 import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
 import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
 import { Express } from 'express';
+import DependencyInjection from '../../../services/DependencyInjection';
 
 describe('ServerSettings Decorator', () => {
   test('should modify server settings', () => {
@@ -51,11 +52,13 @@ describe('ServerSettings Decorator', () => {
 describe('Pour Decorator', () => {
   let spyMetadataSet: jest.SpyInstance;
   beforeEach(() => {
+    DependencyInjection.Container.unbindAll();
     spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
     spyMetadataSet.mockRestore();
+    jest.clearAllMocks()
   });
 
   test('should attach plug to respective level', () => {
