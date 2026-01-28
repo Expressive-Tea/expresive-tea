@@ -33,6 +33,6 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
 
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return settings.get('startWebsocket');
+    return settings?.get('startWebsocket') ?? false;
   }
 }

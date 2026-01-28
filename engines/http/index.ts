@@ -27,11 +27,13 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
   }
 
   async start(): Promise<(http.Server | https.Server)[]> {
-    const listenerServers = [
+    const servers: (http.Server | https.Server | null)[] = [
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.listen(this.server, this.settings.get('port')),
       (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort') as number) as https.Server : null
     ];
+    
+    const listenerServers = servers.filter((server): server is http.Server | https.Server => server !== null);
 
     await this.resolveStages([BOOT_STAGES.START], ...listenerServers);
     return listenerServers;

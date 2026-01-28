@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2017",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictNullChecks": false,
-    "strict": false,
+    "strictNullChecks": true,
+    "strict": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -20,6 +20,7 @@
   },
   "exclude": [
     "node_modules",
-    "__test__"
+    "__test__",
+    "benchmark"
   ]
 }

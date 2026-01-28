@@ -1,12 +1,16 @@
 import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import initServer from './helpers/server-init';
 import container from '../../inversify.config';
+import Settings from '../../classes/Settings';
 
 describe('Webserver integration', () => {
   let app: ExpressiveTeaApplication;
   let request;
+  let portCounter = 5000;
 
   beforeEach(async () => {
+    Settings.reset();
+    Settings.getInstance().set('port', portCounter++);
     const testInit = await initServer();
     app = testInit.app;
     request = testInit.request;
@@ -14,7 +18,10 @@ describe('Webserver integration', () => {
 
   afterEach(() => {
     container.unbindAll();
-    app.server.close();
+    if (app?.server) {
+      app.server.close();
+    }
+    Settings.reset();
   });
 
   test('should response string correctly', async () => {

@@ -27,22 +27,36 @@ describe('Boot Class Secure Server', () => {
     jest.clearAllMocks();
      
     jest.spyOn(http, 'createServer').mockImplementation((...args: any[]) => originalCreateServer(...args));
-    jest.spyOn(https, 'createServer').mockImplementation((...args: any[]) => {
-       
-      return originalCreateSecureServer(...args);
+    jest.spyOn(https, 'createServer').mockImplementation((options: any, requestListener?: any) => {
+      // Handle both signatures: (options) and (options, requestListener)
+      if (requestListener && typeof requestListener === 'function') {
+        return originalCreateSecureServer(options, requestListener);
+      }
+      // If requestListener is an Express app (has a handle method), wrap it
+      if (requestListener && typeof requestListener.handle === 'function') {
+        return originalCreateSecureServer(options, (req: any, res: any) => {
+          requestListener.handle(req, res);
+        });
+      }
+      // If no request listener provided (old buggy behavior), create a dummy server
+      return originalCreateSecureServer(options, (_req, res) => {
+        res.writeHead(404);
+        res.end();
+      });
     });
-    jest.spyOn(fs, 'readFileSync').mockImplementation((fileName: string) => fileName === 'certificate.pem' ? cert : key);
+    jest.spyOn(fs, 'readFileSync').mockImplementation((fileName: fs.PathOrFileDescriptor) => fileName === 'certificate.pem' ? cert : key);
   });
 
   afterEach(() => {
     container.unbindAll();
+    Settings.reset();
   });
 
   test('should create instance correctly', () => {
     const boot = new Bootstrap();
 
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
   });
 
   test('should start server as default', async () => {
@@ -52,16 +66,17 @@ describe('Boot Class Secure Server', () => {
     const app = await boot.start();
 
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
     expect(app.server).toBeDefined();
     expect(app.secureServer).toBeDefined();
     expect(http.createServer).toHaveBeenCalled();
-    expect(https.createServer).toHaveBeenLastCalledWith(
-      { cert: cert.toString('utf-8'), key: key.toString('utf-8') }
+    expect(https.createServer).toHaveBeenCalledWith(
+      { cert: cert.toString('utf-8'), key: key.toString('utf-8') },
+      expect.anything() // Express app instance
     );
 
-    app.server.close();
-    app.secureServer.close();
+    if (app?.server) app.server.close();
+    if (app?.secureServer) app.secureServer.close();
   });
 
   test('should start an application', async () => {
@@ -71,17 +86,18 @@ describe('Boot Class Secure Server', () => {
     const app = await boot.start();
 
     expect(http.createServer).toHaveBeenCalled();
-    expect(https.createServer).toHaveBeenLastCalledWith(
-      { cert: cert.toString('utf-8'), key: key.toString('utf-8') }
+    expect(https.createServer).toHaveBeenCalledWith(
+      { cert: cert.toString('utf-8'), key: key.toString('utf-8') },
+      expect.anything() // Express app instance
     );
     expect(app.server).toBeDefined();
     expect(app.secureServer).toBeDefined();
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
     expect(registerMock).toHaveBeenCalled();
 
-    app.server.close();
-    app.secureServer.close();
+    if (app?.server) app.server.close();
+    if (app?.secureServer) app.secureServer.close();
   });
 
 });

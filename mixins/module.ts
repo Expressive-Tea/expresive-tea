@@ -5,8 +5,49 @@ import { type Express, Router } from 'express';
 import DependencyInjection, { getInstanceOf } from '../services/DependencyInjection';
 import { injectable, injectFromBase, Newable } from 'inversify';
 
+/**
+ * Type definition for a modulized class
+ * Represents a class that has been enhanced with Expressive Tea module capabilities
+ * @template TBase - The base constructor type being extended
+ * @since 2.0.0
+ */
+export type ModulizedClass<TBase extends Constructor> = TBase & (new (...args: any[]) => {
+  /** Module configuration and metadata */
+  readonly settings: ExpressiveTeaModuleProps;
+  /** Express router for this module */
+  readonly router: Router;
+  /** Instantiated controllers for this module */
+  readonly controllers: any[];
+  /** Register module routes with the Express application */
+  __register(server: Express): void;
+});
 
-export function Modulize<TBase extends Constructor>(Base: TBase, options: ExpressiveTeaModuleProps): any {
+/**
+ * Modulize mixin - Adds Expressive Tea module capabilities to a class
+ * 
+ * Transforms a regular class into an Expressive Tea module with:
+ * - Dependency injection support
+ * - Express router management
+ * - Controller instantiation and registration
+ * - Module mounting capabilities
+ * 
+ * @template TBase - The base constructor type to extend
+ * @param {TBase} Base - The base class to extend
+ * @param {ExpressiveTeaModuleProps} options - Module configuration options
+ * @returns {ModulizedClass<TBase>} The enhanced class with module capabilities
+ * 
+ * @example
+ * ```typescript
+ * class MyModule {}
+ * const ModulizedMyModule = Modulize(MyModule, {
+ *   mountpoint: '/api',
+ *   controllers: [UserController],
+ *   providers: [UserService]
+ * });
+ * ```
+ * @since 2.0.0
+ */
+export function Modulize<TBase extends Constructor>(Base: TBase, options: ExpressiveTeaModuleProps): ModulizedClass<TBase> {
   @injectable('Singleton')
   @injectFromBase({ extendConstructorArguments: true })
   class ExpressiveTeaModule extends Base {
@@ -32,5 +73,5 @@ export function Modulize<TBase extends Constructor>(Base: TBase, options: Expres
     }
   }
 
-  return ExpressiveTeaModule;
+  return ExpressiveTeaModule as ModulizedClass<TBase>;
 }

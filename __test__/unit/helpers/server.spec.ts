@@ -2,7 +2,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 import * as jestRequest from 'jest-express/lib/request';
 import * as jestResponse from 'jest-express/lib/response';
-import { autoResponse, extractParameters, mapArguments } from '../../../helpers/server';
+import { autoResponse, executeRequest, extractParameters, mapArguments } from '../../../helpers/server';
 import { ARGUMENT_TYPES } from '@expressive-tea/commons/constants';
 import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
 
@@ -388,6 +388,226 @@ describe('Server Helper', () => {
       } else {
         expect(response.send).toHaveBeenLastCalledWith(...expected as []);
       }
+    });
+  });
+
+  describe('Execute Request - Express 5 Async Compatibility (Phase 0.4)', () => {
+    let request: any;
+    let response: any;
+    let next: jest.Mock<NextFunction>;
+
+    beforeEach(() => {
+      request = new jestRequest.Request('/');
+      response = new jestResponse.Response();
+      next = jest.fn();
+    });
+
+    afterEach(() => {
+      request.resetMocked();
+      response.resetMocked();
+    });
+
+    test('should execute handler successfully', async () => {
+      const handler = jest.fn().mockResolvedValue({ success: true });
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(response.send).toHaveBeenCalledWith({ success: true });
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    test('should not send response if headers already sent', async () => {
+      const handler = jest.fn().mockResolvedValue({ success: true });
+      response.headersSent = true;
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(response.send).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    test('should handle next() being called', async () => {
+      const handler = jest.fn().mockImplementation(async (_req: any, _res: any, nextFn: NextFunction) => {
+        nextFn();
+      });
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [
+          { index: 0, key: 'req', type: ARGUMENT_TYPES.REQUEST },
+          { index: 1, key: 'res', type: ARGUMENT_TYPES.RESPONSE },
+          { index: 2, key: 'next', type: ARGUMENT_TYPES.NEXT }
+        ],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+      expect(response.send).not.toHaveBeenCalled();
+    });
+
+    test('should handle next(error) being called', async () => {
+      const error = new Error('Test error');
+      const handler = jest.fn().mockImplementation(async (_req: any, _res: any, nextFn: NextFunction) => {
+        nextFn(error);
+      });
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [
+          { index: 0, key: 'req', type: ARGUMENT_TYPES.REQUEST },
+          { index: 1, key: 'res', type: ARGUMENT_TYPES.RESPONSE },
+          { index: 2, key: 'next', type: ARGUMENT_TYPES.NEXT }
+        ],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(next).toHaveBeenCalledWith(error);
+      expect(response.send).not.toHaveBeenCalled();
+    });
+
+    test('should allow async errors to propagate (Express 5)', async () => {
+      const error = new Error('Async error');
+      const handler = jest.fn().mockRejectedValue(error);
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: []
+      };
+
+      // In Express 5, async rejections are automatically caught
+      // Our function should let them propagate
+      await expect(executeRequest.call(context, request, response, next)).rejects.toThrow('Async error');
+
+      expect(handler).toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    test('should handle synchronous errors by letting them propagate', async () => {
+      const error = new Error('Sync error');
+      const handler = jest.fn().mockImplementation(() => {
+        throw error;
+      });
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: []
+      };
+
+      await expect(executeRequest.call(context, request, response, next)).rejects.toThrow('Sync error');
+
+      expect(handler).toHaveBeenCalled();
+    });
+
+    test('should auto-response with result when handler returns data', async () => {
+      const result = { message: 'Success', data: [1, 2, 3] };
+      const handler = jest.fn().mockResolvedValue(result);
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(response.send).toHaveBeenCalledWith(result);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    test('should handle view rendering annotation', async () => {
+      const result = { title: 'Test Page', content: 'Hello' };
+      const handler = jest.fn().mockResolvedValue(result);
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: []
+        },
+        self: {},
+        decoratedArguments: [],
+        annotations: [{ type: 'view', arguments: ['test-view'] }]
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(response.render).toHaveBeenCalledWith('test-view', result);
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    test('should handle decorated arguments correctly', async () => {
+      request.setQuery({ id: '123' });
+      request.setBody({ name: 'Test' });
+      request.setParams({ userId: '456' });
+
+      const handler = jest.fn().mockImplementation((query, body, params) => {
+        expect(query).toEqual('123');
+        expect(body).toEqual('Test');
+        expect(params).toEqual('456');
+        return { processed: true };
+      });
+
+      const context = {
+        options: {
+          handler,
+          introspectedArgs: ['id', 'name', 'userId']
+        },
+        self: {},
+        decoratedArguments: [
+          { index: 0, key: 'id', type: ARGUMENT_TYPES.QUERY, arguments: 'id' },
+          { index: 1, key: 'name', type: ARGUMENT_TYPES.BODY, arguments: 'name' },
+          { index: 2, key: 'userId', type: ARGUMENT_TYPES.GET_PARAM, arguments: 'userId' }
+        ],
+        annotations: []
+      };
+
+      await executeRequest.call(context, request, response, next);
+
+      expect(handler).toHaveBeenCalled();
+      expect(response.send).toHaveBeenCalledWith({ processed: true });
     });
   });
 });

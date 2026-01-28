@@ -1,4 +1,4 @@
-import { last } from 'lodash';
+import { last } from '../../../libs/utilities';
 import Metadata from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../../../classes/Settings';
 import {
@@ -22,6 +22,14 @@ import { Express } from 'express';
 import DependencyInjection from '../../../services/DependencyInjection';
 
 describe('ServerSettings Decorator', () => {
+  beforeEach(() => {
+    Settings.reset();
+  });
+
+  afterEach(() => {
+    Settings.reset();
+  });
+
   test('should modify server settings', () => {
     @ServerSettings({
       port: 8080
@@ -32,7 +40,7 @@ describe('ServerSettings Decorator', () => {
     const test = new Test();
 
     expect(test).toBeDefined();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
+    expect(Settings.getInstance(Test).getOptions()).toEqual({ port: 8080, securePort: 4443 });
   });
 
   test('should modify server settings as default options', () => {
@@ -45,7 +53,7 @@ describe('ServerSettings Decorator', () => {
     const test = new Test();
 
     expect(test).toBeDefined();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
+    expect(Settings.getInstance(Test).getOptions()).toEqual({ port: 3000, securePort: 4443 });
   });
 });
 
@@ -135,7 +143,7 @@ describe('RegisterModule Decorator', () => {
       }
 
 
-      class Test {
+      class _Test {
         @RegisterModule(Module)
         async start() {
         }
@@ -149,7 +157,7 @@ describe('RegisterModule Decorator', () => {
       }
 
 
-      class Test {
+      class _Test {
         @RegisterModule(Module)
         async init() {
         }
@@ -214,7 +222,7 @@ describe('Static Decorator', () => {
       // @ts-expect-error Probe application error.
       @Static()
 
-      class Test {
+      class _Test {
       }
     }).toThrow();
   });
@@ -253,7 +261,7 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       @ExpressDirective('invalid', false)
 
-      class Test {
+      class _Test {
       }
     }).toThrow();
   });
@@ -263,7 +271,7 @@ describe('Express Directive Decorator', () => {
       // @ts-expect-error Probe application error.
       @ExpressDirective()
 
-      class Test {
+      class _Test {
       }
     }).toThrow();
   });
@@ -286,7 +294,7 @@ describe('Modules Decorator', () => {
       readonly router: Express;
       readonly settings: ExpressiveTeaModuleProps;
 
-      __register(server: Express): void {
+      __register(_server: Express): void {
       }
     }
 
@@ -310,7 +318,7 @@ describe('Modules Decorator', () => {
       }
 
 
-      class Test {
+      class _Test {
         @RegisterModule(Module)
         async init() {
         }

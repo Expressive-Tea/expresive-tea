@@ -83,7 +83,8 @@ async function bootloaderResolve(
   }
 }
 
-function selectLoaderType(loader, server: Express, ...args: unknown[]) {
+ 
+function selectLoaderType(loader: any, server: Express, ...args: unknown[]) {
   return loader.method(server, ...args);
 }
 
@@ -91,7 +92,8 @@ function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExcep
   return !(e instanceof BootLoaderSoftExceptions);
 }
 
-function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {
+ 
+function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader: any) {
   const failMessage = `Failed [${loader.name}]: ${e.message}`;
   if (!loader || loader.required) {
     throw new BootLoaderRequiredExceptions(failMessage);

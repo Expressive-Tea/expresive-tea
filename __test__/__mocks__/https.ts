@@ -1,5 +1,5 @@
 export const httpServerMock = {
-  listen: jest.fn().mockImplementation(port => {}),
+  listen: jest.fn().mockImplementation(_port => {}),
   on: jest.fn().mockImplementation((event, callback) => {
     if (event === 'error') {
       return false;

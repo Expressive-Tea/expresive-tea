@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { get, set } from '../libs/utilities';
 import { ExpressiveTeaServerProps } from '@expressive-tea/commons/interfaces';
 import { injectable } from 'inversify';
 import { nameOfClass } from '@expressive-tea/commons/helpers/object-helper';
@@ -36,11 +36,15 @@ class Settings {
    * one time at the application starts.
    *
    * @static
+   * @param {boolean} [resetIsolated=true] - If true, also reset all isolated contexts
    * @summary Reset Singleton instance
    * @memberof Settings
    */
-  static reset() {
-    delete Settings.instance;
+  static reset(resetIsolated: boolean = true): void {
+    Settings.instance = undefined;
+    if (resetIsolated) {
+      Settings.isolatedContext.clear();
+    }
   }
 
   /**
@@ -57,7 +61,7 @@ class Settings {
     if (ctx) {
       const context = nameOfClass(ctx);
       if (!Settings.isolatedContext.has(context)) {
-        Settings.isolatedContext.set(context, new Settings(null, true));
+        Settings.isolatedContext.set(context, new Settings(undefined, true));
       }
       return Settings.isolatedContext.get(context) as Settings;
     }
@@ -73,7 +77,7 @@ class Settings {
    * @type {Settings}
    * @memberof Settings
    */
-  private static instance: Settings;
+  private static instance: Settings | undefined;
 
   /**
    * Server configuration options.
@@ -82,7 +86,7 @@ class Settings {
    * @type {ExpressiveTeaServerProps}
    * @memberof Settings
    */
-  private options: ExpressiveTeaServerProps;
+  private options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 };
 
   constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }, isIsolated: boolean = false) {
     if (Settings.instance && !isIsolated) {
@@ -92,7 +96,9 @@ class Settings {
     const settingsFile = fileSettings();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.options = Object.assign({}, { port: 3000, securePort: 4443 }, settingsFile, options);
-    Settings.instance = this;
+    if (!isIsolated) {
+      Settings.instance = this;
+    }
   }
 
   /**
@@ -118,7 +124,7 @@ class Settings {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(settingName: string): any {
-    return _.get(this.options, settingName, null);
+    return get(this.options, settingName, null);
   }
 
   /**
@@ -132,7 +138,7 @@ class Settings {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   set(settingName: string, value: any): void {
-    _.set(this.options, settingName, value);
+    set(this.options, settingName, value);
   }
 
   /**

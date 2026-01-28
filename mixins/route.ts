@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call */
 
 import { type Constructor } from '../types/core';
 import type {
@@ -6,6 +6,7 @@ import type {
   ExpressiveTeaArgumentOptions,
   ExpressiveTeaHandlerOptions,
 } from '@expressive-tea/commons/interfaces';
+import type { ExpressiveTeaHandlerOptionsWithInstrospectedArgs } from '../interfaces';
 import { type RequestHandler, Router } from 'express';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import {
@@ -18,15 +19,59 @@ import type { ExpressMiddlewareHandler } from '@expressive-tea/commons/types';
 import { executeRequest } from '../helpers/server';
 import { injectable, injectFromBase } from 'inversify';
 
+/**
+ * Type definition for a routerized class
+ * Represents a class that has been enhanced with Expressive Tea route capabilities
+ * @template TBase - The base constructor type being extended
+ * @since 2.0.0
+ */
+export type RouterizedClass<TBase extends Constructor> = TBase & (new (...args: any[]) => {
+  /** Express router for this route controller */
+  readonly router: Router;
+  /** Mountpoint path for this controller */
+  readonly mountpoint: string;
+  /** Mount this controller's router on a parent router */
+  __mount(parent: Router): any;
+  /** Register a route handler with proper middleware and argument injection */
+  __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler;
+});
 
-export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: string): any {
+/**
+ * Routerize mixin - Adds Expressive Tea route capabilities to a controller class
+ * 
+ * Transforms a regular class into an Expressive Tea route controller with:
+ * - Express router management
+ * - Route handler registration
+ * - Middleware support
+ * - Automatic argument injection from decorators
+ * - Annotation processing
+ * 
+ * @template TBase - The base constructor type to extend
+ * @param {TBase} Route - The base controller class to extend
+ * @param {string} mountpoint - The path where this controller should be mounted
+ * @returns {RouterizedClass<TBase>} The enhanced class with route capabilities
+ * 
+ * @example
+ * ```typescript
+ * @Route('/users')
+ * class UserController {
+ *   @Get('/')
+ *   getUsers() {
+ *     return ['user1', 'user2'];
+ *   }
+ * }
+ * ```
+ * @since 2.0.0
+ */
+export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: string): RouterizedClass<TBase> {
   @injectable('Singleton')
   @injectFromBase({ extendConstructorArguments: true })
   class ExpressiveTeaRoute extends Route {
     readonly router: Router;
     readonly mountpoint: string;
 
-    constructor(...args) {
+     
+    constructor(...args: any[]) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       super(...args)
       const handlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, this) ?? [];
@@ -35,8 +80,13 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
       this.mountpoint = mountpoint;
 
       for (const handler of handlers) {
-        const middlewares = handler.handler.$middlewares ?? [];
-        this.router[handler.verb](handler.route, ...middlewares, this.__registerHandler(handler));
+        const middlewares: RequestHandler[] = (handler.handler as any).$middlewares ?? [];
+        const verb = handler.verb as keyof Router;
+        const routeMethod = this.router[verb];
+        if (typeof routeMethod === 'function') {
+          const allHandlers: RequestHandler[] = [...middlewares, this.__registerHandler(handler)];
+          (routeMethod as any).apply(this.router, [handler.route, ...allHandlers]);
+        }
       }
     }
 
@@ -58,14 +108,16 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
         options.propertyKey
       );
 
+      const optionsWithArgs: ExpressiveTeaHandlerOptionsWithInstrospectedArgs = options as ExpressiveTeaHandlerOptionsWithInstrospectedArgs;
+
       return executeRequest.bind({
-        options,
+        options: optionsWithArgs,
         decoratedArguments,
         annotations,
         self: this
-      });
+      }) as ExpressMiddlewareHandler;
     }
   }
 
-  return ExpressiveTeaRoute;
+  return ExpressiveTeaRoute as RouterizedClass<TBase>;
 }

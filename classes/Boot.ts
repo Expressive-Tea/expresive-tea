@@ -3,18 +3,14 @@ import container from '../inversify.config';
 import * as express from 'express';
 import { type Express } from 'express';
 import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import HTTPEngine from '../engines/http';
-import WebsocketEngine from '../engines/websocket';
-import TeapotEngine from '../engines/teapot/index';
-import TeacupEngine from '../engines/teacup';
 import ExpressiveTeaEngine from '../classes/Engine';
 import Settings from '../classes/Settings';
-import SocketIOEngine from '../engines/socketio/index';
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as https from 'node:https';
-import { Container } from 'inversify';
+import { Container, type Newable, type ServiceIdentifier } from 'inversify';
 import { TYPES } from '../types/injection-types';
+import EngineRegistry from './EngineRegistry';
 
 /**
  * Expressive Tea Application interface is the response from an started application, contains the express application
@@ -55,6 +51,14 @@ abstract class Boot {
 
   private readonly containerDI: Container = new Container({ parent: container});
 
+  /**
+   * Engine instances for cleanup during shutdown
+   * @type {ExpressiveTeaEngine[]}
+   * @private
+   * @since 2.0.0
+   */
+  private engines: ExpressiveTeaEngine[] = [];
+
   constructor() {
     this.settings = Settings.getInstance(this);
   }
@@ -65,6 +69,78 @@ abstract class Boot {
    */
   getApplication(): Express {
     return this.server;
+  }
+
+  /**
+   * Get the Dependency Injection container for this application instance.
+   * This container is scoped to the application and inherits from the global container.
+   *
+   * @returns {Container} The application's DI container
+   * @since 2.0.0
+   * @summary Get application DI container
+   *
+   * @example
+   * class MyApp extends Boot {
+   *   async start() {
+   *     const container = this.getContainer();
+   *     container.bind(MyService).toSelf();
+   *     return super.start();
+   *   }
+   * }
+   */
+  getContainer(): Container {
+    return this.containerDI;
+  }
+
+  /**
+   * Register a provider in the application's DI container.
+   * Providers registered here are available to all modules and engines in this application.
+   *
+   * @template T
+   * @param {ServiceIdentifier<T>} identifier - The service identifier (class or token)
+   * @param {Newable<T>} provider - The provider class to bind
+   * @returns {void}
+   * @since 2.0.0
+   * @summary Register a DI provider
+   *
+   * @example
+   * class MyApp extends Boot {
+   *   constructor() {
+   *     super();
+   *     this.registerProvider(DatabaseService, DatabaseService);
+   *     this.registerProvider('API_KEY', ApiKeyProvider);
+   *   }
+   * }
+   */
+  registerProvider<T>(identifier: ServiceIdentifier<T>, provider: Newable<T>): void {
+    if (!this.containerDI.isBound(identifier)) {
+      this.containerDI.bind<T>(identifier).to(provider);
+    }
+  }
+
+  /**
+   * Register a constant value in the application's DI container.
+   *
+   * @template T
+   * @param {ServiceIdentifier<T>} identifier - The service identifier (usually a string or symbol)
+   * @param {T} value - The constant value to bind
+   * @returns {void}
+   * @since 2.0.0
+   * @summary Register a constant value
+   *
+   * @example
+   * class MyApp extends Boot {
+   *   constructor() {
+   *     super();
+   *     this.registerConstant('DATABASE_URL', process.env.DATABASE_URL);
+   *     this.registerConstant('MAX_CONNECTIONS', 100);
+   *   }
+   * }
+   */
+  registerConstant<T>(identifier: ServiceIdentifier<T>, value: T): void {
+    if (!this.containerDI.isBound(identifier)) {
+      this.containerDI.bind<T>(identifier).toConstantValue(value);
+    }
   }
 
   /**
@@ -81,17 +157,14 @@ abstract class Boot {
     // Injectables
     this.initializeContainer(server, secureServer);
 
+    // Lazy load engines to avoid circular dependency
+    // This ensures engines are only loaded when needed
+    if (EngineRegistry.getAllEngines().length === 0) {
+      await import('../engines');
+    }
 
-    // Initialize Engines
-    const availableEngines: typeof ExpressiveTeaEngine[] = [
-      HTTPEngine,
-      SocketIOEngine,
-      WebsocketEngine,
-      TeapotEngine,
-      TeacupEngine
-    ];
-
-    const registeredEngines: typeof ExpressiveTeaEngine[] = availableEngines.filter(Engine => Engine.canRegister(this, this.settings));
+    // Get registered engines from EngineRegistry (automatically filtered and sorted by dependencies)
+    const registeredEngines = EngineRegistry.getRegisteredEngines(this, this.settings);
 
     this.initializeEngines(registeredEngines);
 
@@ -100,6 +173,9 @@ abstract class Boot {
       const instance = this.containerDI.get<ExpressiveTeaEngine>(Engine);
       return instance;
     });
+
+    // Store engine instances for cleanup
+    this.engines = readyEngines;
 
     // Initialize Engines
     try {
@@ -113,6 +189,37 @@ abstract class Boot {
       secureServer?.close();
       throw e;
     }
+  }
+
+  /**
+   * Gracefully stop the application and all engines
+   * 
+   * Calls the stop() lifecycle method on all registered engines in reverse order
+   * (opposite of initialization order) to ensure proper cleanup.
+   * 
+   * @returns {Promise<void>} Promise that resolves when all engines have stopped
+   * @since 2.0.0
+   * @summary Graceful shutdown
+   * 
+   * @example
+   * ```typescript
+   * const app = new MyApp();
+   * await app.start();
+   * 
+   * // Later, during shutdown
+   * await app.stop();
+   * ```
+   */
+  async stop(): Promise<void> {
+    if (this.engines.length === 0) {
+      return;
+    }
+
+    // Stop engines in reverse order (opposite of initialization)
+    await ExpressiveTeaEngine.exec([...this.engines].reverse(), 'stop');
+    
+    // Clear engine references
+    this.engines = [];
   }
 
   private initializeEngines(registeredEngines: typeof ExpressiveTeaEngine[]): void {
@@ -133,7 +240,7 @@ abstract class Boot {
         ? https.createServer({
             cert: fs.readFileSync(certificate).toString('utf-8'),
             key: fs.readFileSync(privateKey).toString('utf-8')
-          })
+          }, this.server)
         : undefined;
 
     return [server, secureServer];

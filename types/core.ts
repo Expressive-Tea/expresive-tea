@@ -15,6 +15,11 @@ export type ExpressiveTeaModule = MixinConstructor<IExpressiveTeaModule>;
 export type ExpressiveTeaRoute = MixinConstructor<IExpressiveTeaRoute>;
 export type ExpressiveTeaProxy = MixinConstructor<IExpressiveTeaProxy>;
 
+/**
+ * Legacy type aliases - kept for backward compatibility
+ * @deprecated Use the typed versions from mixins instead
+ */
 export type ModulizedExpressiveTeaModule<TBase> = IExpressiveTeaModule & TBase;
 export type RouterizedExpressiveTeaRoute<TBase> = IExpressiveTeaRoute & TBase;
 export type ProxifyExpressiveTeaRoute<TBase> = IExpressiveTeaProxy & TBase;
+

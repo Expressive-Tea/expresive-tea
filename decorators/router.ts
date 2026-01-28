@@ -9,8 +9,8 @@ import {
   type ClassDecorator,
   type MethodDecorator
 } from '@expressive-tea/commons/types';
-import { Routerize } from '../mixins/route';
-import { type RouterizedExpressiveTeaRoute, TFunction } from '../types/core';
+import { Routerize, type RouterizedClass } from '../mixins/route';
+import { type Constructor, TFunction } from '../types/core';
 import { type RequestHandler } from 'express';
 
 /**
@@ -23,15 +23,23 @@ import { type RequestHandler } from 'express';
  * to allow Expressive Tea Setting up the Controller as part of a Module.
  *
  * @decorator {ClassDecorator} Route - Assign a route to controller endpoints.
+ * @template TBase - The base constructor type being decorated
+ * @param {string} mountpoint - Register the url part to mount the Controller (default: '/')
+ * @returns {(target: TBase) => RouterizedClass<TBase>} Decorator function that returns a routerized class
  * @summary Generate a Placeholder endpoint root for controller routes.
- * @param {string} mountpoint Register the url part to mount the Controller.
+ * 
  * @example
- * {REPLACE-AT}Route('/)
- * class Example {}
+ * {REPLACE-AT}Route('/users')
+ * class UserController {
+ *   {REPLACE-AT}Get('/')
+ *   getUsers() { return ['user1', 'user2']; }
+ * }
+ * 
+ * @since 1.0.0
  */
-export function Route(mountpoint = '/') {
-  return (RouterClass: any): RouterizedExpressiveTeaRoute<typeof RouterClass> => {
-    return Routerize<typeof RouterClass>(RouterClass, mountpoint);
+export function Route<TBase extends Constructor = Constructor>(mountpoint = '/') {
+  return (RouterClass: TBase): RouterizedClass<TBase> => {
+    return Routerize<TBase>(RouterClass, mountpoint);
   };
 }
 

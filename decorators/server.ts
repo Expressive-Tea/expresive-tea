@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { type Express } from 'express';
-import { isNil, orderBy } from 'lodash';
+import { isNil, orderBy } from '../libs/utilities';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import Settings from '../classes/Settings';
 import {
@@ -66,15 +66,18 @@ import DependencyInjection from '../services/DependencyInjection';
  * @module Decorators/Server
  */
 
-function getStages(target) {
+ 
+function getStages(target: any) {
   return MetaData.get(BOOT_STAGES_KEY, target) || {};
 }
 
-function getRegisteredPlugins(target) {
+ 
+function getRegisteredPlugins(target: any) {
   return MetaData.get(PLUGINS_KEY, target) || [];
 }
 
-function getStage(stage, target) {
+ 
+function getStage(stage: BOOT_STAGES, target: any) {
   const stages = getStages(target);
   if (!stages[stage]) {
     stages[stage] = [];
@@ -83,13 +86,15 @@ function getStage(stage, target) {
   return stages[stage];
 }
 
-function setStage(stage, value, target) {
+ 
+function setStage(stage: BOOT_STAGES, value: any, target: any) {
   const stages = getStages(target);
   stages[stage] = value;
   MetaData.set(BOOT_STAGES_KEY, stages, target);
 }
 
-function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
+ 
+function setPlugins(plugins: ExpressiveTeaPluginProps[], target: any) {
   MetaData.set(PLUGINS_KEY, plugins, target);
 }
 
@@ -162,7 +167,8 @@ export function Pour(Plugin: Newable<any>, ...pluginArgs: any[]) {
  * @param {ExpressiveTeaModuleProps} options
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
-  return target => {
+   
+  return (target: any) => {
     Settings.getInstance(target).merge(options);
     return target;
   };
@@ -182,7 +188,8 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
  * with virtual path if defined.
  */
 export function Static(root: string, virtual: string | null = null, options: ExpressiveTeaStaticFileServer = {}) {
-  return target => {
+   
+  return (target: any) => {
     if (isNil(root)) {
       throw new Error('Root must be defined');
     }
@@ -201,8 +208,10 @@ export function Static(root: string, virtual: string | null = null, options: Exp
  * @param {*} settings - Setting Arguments
  * @decorator {ClassDecorator} ExpressDirective - Set a Express App Setting.
  */
+ 
 export function ExpressDirective(name: string, ...settings: any[]) {
-  return target => {
+   
+  return (target: any) => {
     if (!EXPRESS_DIRECTIVES.includes(name)) {
       throw new Error(`Directive Name ${name} is not valid express behavior setting`);
     }
@@ -234,8 +243,10 @@ export function Setting(): (target: any, propertyName: string) => any {
  * @summary This register the Module Classes created by the user.
  * @param Modules
  */
+ 
 export function Modules(Modules: any[]) {
-  return target => {
+   
+  return (target: any) => {
 
     for (const Module of Modules) {
       const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
@@ -246,8 +257,10 @@ export function Modules(Modules: any[]) {
   };
 }
 
+ 
 export function Proxies(proxyContainers: any[]) {
-  return target => {
+   
+  return (target: any) => {
 
     for (const proxyContainer of proxyContainers) {
       const registeredProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, target) || [];
@@ -267,9 +280,9 @@ export function Proxies(proxyContainers: any[]) {
  * @deprecated Use the new decorator Modules that allow add modules into registered modules.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function RegisterModule(Module) {
+export function RegisterModule(Module: any) {
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   return (_: any, __: any) => {
     throw new Error('RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.');
   };

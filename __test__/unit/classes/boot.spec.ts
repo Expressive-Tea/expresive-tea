@@ -27,6 +27,7 @@ describe('Boot Class', () => {
 
   afterEach(() => {
     container.unbindAll();
+    Settings.reset();
   });
 
   test('should start server as default', async () => {

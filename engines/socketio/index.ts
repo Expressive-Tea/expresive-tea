@@ -7,8 +7,8 @@ import { SOCKET_IO_INSTANCE_KEY, SOCKET_IO_SECURE_INSTANCE_KEY } from '../consta
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
 export default class SocketIOEngine extends ExpressiveTeaEngine {
-  private io: Server;
-  private ioSecure: Server;
+  private io!: Server;
+  private ioSecure!: Server;
 
   init(): void {
     const commonConfig = {

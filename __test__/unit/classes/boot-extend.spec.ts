@@ -7,8 +7,11 @@ import Settings from '../../../classes/Settings';
 jest.mock('express', () => require('jest-express'));
 
 describe('Boot Class Extends', () => {
+  let portCounter = 4000;
 
   beforeEach(() => {
+    Settings.reset();
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();
@@ -16,6 +19,7 @@ describe('Boot Class Extends', () => {
 
   afterEach(() => {
     container.unbindAll();
+    Settings.reset();
   });
 
   test('should register a new static', async () => {
@@ -29,7 +33,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith(undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
-    app.server.close();
+    if (app?.server) app.server.close();
   });
 
   test('should register a new static with virtual', async () => {
@@ -43,7 +47,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
-    app.server.close();
+    if (app?.server) app.server.close();
   });
 
   test('should register a new static with virtual and change options', async () => {
@@ -57,7 +61,7 @@ describe('Boot Class Extends', () => {
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
-    app.server.close();
+    if (app?.server) app.server.close();
   });
 
   test('should set a new directive setting value', async () => {
@@ -71,7 +75,7 @@ describe('Boot Class Extends', () => {
 
      
     expect(app.application.set).toHaveBeenCalledWith('etag', true);
-    app.server.close();
+    if (app?.server) app.server.close();
   });
 
   test('should set a new directive setting value and pass multiple arguments', async () => {
@@ -85,6 +89,6 @@ describe('Boot Class Extends', () => {
 
      
     expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
-    app.server.close();
+    if (app?.server) app.server.close();
   });
 });
