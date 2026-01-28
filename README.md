@@ -378,6 +378,80 @@ yarn install
 yarn test
 ```
 
+### 🤖 AI-Assisted Development & Vibe Coding
+
+**We welcome AI-assisted contributions!** Whether you're using GitHub Copilot, Cursor, Claude, or other AI coding assistants, we embrace the future of collaborative development.
+
+**⚠️ IMPORTANT: AI-Generated Code Requirements**
+
+If you're using AI tools for code generation, you **MUST**:
+
+1. **📖 Follow Repository Guidelines**
+   - ✅ Read and strictly adhere to [`AGENTS.md`](AGENTS.md) - Agent-specific coding rules
+   - ✅ Read and strictly adhere to [`.claude/CLAUDE.md`](.claude/CLAUDE.md) - Claude AI guidelines
+   - ✅ These files contain critical project conventions, style guides, and quality standards
+
+2. **👨‍💻 Human Review is MANDATORY**
+   - ✅ **All AI-generated code MUST be reviewed by a human developer** before creating a pull request
+   - ✅ Understand the code completely—don't submit code you can't explain
+   - ✅ Test thoroughly (aim for 95%+ coverage)
+   - ✅ Verify the code follows our architectural patterns and best practices
+
+3. **✅ Quality Standards**
+   - ✅ All tests must pass (`yarn test`)
+   - ✅ Linting must pass (`yarn linter:ci`)
+   - ✅ TypeScript must compile without errors (`yarn build`)
+   - ✅ Code must match our existing patterns and conventions
+   - ✅ Documentation must be updated (JSDoc, README, CHANGELOG)
+
+4. **📝 PR Transparency**
+   - ✅ Disclose AI assistance in your pull request description
+   - ✅ Example: "This PR was developed with assistance from Claude/Copilot/Cursor"
+   - ✅ Highlight any sections that were fully AI-generated for extra review
+
+**Why These Rules?**
+
+- 🛡️ **Quality Assurance** - AI can make subtle mistakes humans catch
+- 🎯 **Consistency** - Ensures code matches our architectural vision
+- 📚 **Knowledge Transfer** - Reviewers understand your contribution
+- 🔒 **Security** - Prevents AI from introducing vulnerabilities
+- 🤝 **Collaboration** - Maintains clear communication in the codebase
+
+**Vibe Coding Best Practices:**
+
+```typescript
+// ✅ GOOD: AI-generated, reviewed, and refined by human
+@Route('/api/users')
+class UserController {
+  @Get('/:id')
+  async getUser(@Param('id') id: string): Promise<User> {
+    // Human: Added validation per AGENTS.md security guidelines
+    if (!id || !validator.isUUID(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+    return this.userService.findById(id);
+  }
+}
+
+// ❌ BAD: AI-generated, unreviewed, missing error handling
+@Route('/api/users')
+class UserController {
+  @Get('/:id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id); // What if id is invalid?
+  }
+}
+```
+
+**📚 Required Reading for AI-Assisted Development:**
+- [`AGENTS.md`](AGENTS.md) - Repository-specific rules for AI agents
+- [`.claude/CLAUDE.md`](.claude/CLAUDE.md) - Claude AI coding guidelines
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - General contribution guide
+- [`.prettierrc`](.prettierrc) - Code formatting rules
+- [`eslint.config.js`](eslint.config.js) - Linting configuration
+
+**Questions?** Ask in [GitHub Discussions](https://github.com/Expressive-Tea/expresive-tea/discussions) before submitting AI-generated code.
+
 ---
 
 ## 💬 Community & Support

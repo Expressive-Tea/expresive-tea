@@ -95,6 +95,12 @@ Closes #
 - [ ] My commit messages follow the [conventional commits](https://www.conventionalcommits.org/) format
 - [ ] I have rebased my branch on the latest `main`/`develop` branch
 
+### 🤖 AI-Assisted Development (if applicable)
+- [ ] **If using AI tools (Copilot/Claude/Cursor):** I have read and followed [AGENTS.md](../AGENTS.md) and [.claude/CLAUDE.md](../.claude/CLAUDE.md)
+- [ ] **If using AI tools:** All AI-generated code has been thoroughly reviewed by a human developer
+- [ ] **If using AI tools:** I fully understand all code and can explain its functionality
+- [ ] **If using AI tools:** I have disclosed AI assistance in the PR description above
+
 ## 🚀 Performance Impact
 
 <!-- Does this PR impact performance? If yes, describe the impact and any benchmarks -->
