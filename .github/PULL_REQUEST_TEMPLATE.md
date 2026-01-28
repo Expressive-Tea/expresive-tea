@@ -96,7 +96,7 @@ Closes #
 - [ ] I have rebased my branch on the latest `main`/`develop` branch
 
 ### 🤖 AI-Assisted Development (if applicable)
-- [ ] **If using AI tools (Copilot/Claude/Cursor):** I have read and followed [AGENTS.md](../AGENTS.md) and [.claude/CLAUDE.md](../.claude/CLAUDE.md)
+- [ ] **If using AI tools (Copilot/Claude/Cursor):** I have read and followed [AGENTS.md](../AGENTS.md) and [CLAUDE.md](../CLAUDE.md)
 - [ ] **If using AI tools:** All AI-generated code has been thoroughly reviewed by a human developer
 - [ ] **If using AI tools:** I fully understand all code and can explain its functionality
 - [ ] **If using AI tools:** I have disclosed AI assistance in the PR description above

@@ -388,7 +388,7 @@ If you're using AI tools for code generation, you **MUST**:
 
 1. **📖 Follow Repository Guidelines**
    - ✅ Read and strictly adhere to [`AGENTS.md`](AGENTS.md) - Agent-specific coding rules
-   - ✅ Read and strictly adhere to [`.claude/CLAUDE.md`](.claude/CLAUDE.md) - Claude AI guidelines
+   - ✅ Read and strictly adhere to [`CLAUDE.md`](CLAUDE.md) - Claude AI guidelines
    - ✅ These files contain critical project conventions, style guides, and quality standards
 
 2. **👨‍💻 Human Review is MANDATORY**
@@ -445,7 +445,7 @@ class UserController {
 
 **📚 Required Reading for AI-Assisted Development:**
 - [`AGENTS.md`](AGENTS.md) - Repository-specific rules for AI agents
-- [`.claude/CLAUDE.md`](.claude/CLAUDE.md) - Claude AI coding guidelines
+- [`CLAUDE.md`](CLAUDE.md) - Claude AI coding guidelines
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) - General contribution guide
 - [`.prettierrc`](.prettierrc) - Code formatting rules
 - [`eslint.config.js`](eslint.config.js) - Linting configuration
