@@ -1,44 +1,154 @@
-<!--- Provide a general summary of your changes in the Title above -->
+<!-- 
+Thank you for contributing to Expressive Tea! 🍵
+Please fill out this template to help us review your PR effectively.
+-->
 
-## Description
+## 📋 Description
 
-<!--- Describe your changes in detail -->
+<!-- Provide a clear and concise description of your changes -->
 
-## Related Issue
+### What does this PR do?
 
-<!--- This project only accepts pull requests related to open issues -->
-<!--- If suggesting a new feature or change, please discuss it in an issue first -->
-<!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
-<!--- Please link to the issue here: -->
+<!-- Explain what problem this solves or what feature it adds -->
 
-## Motivation and Context
+### Related Issue(s)
 
-<!--- Why is this change required? What problem does it solve? -->
+<!-- Link to related issues. Use "Closes #123" to auto-close issues when PR is merged -->
 
-## How Has This Been Tested?
+Closes #
 
-<!--- Please describe in detail how you tested your changes. -->
-<!--- Include details of your testing environment, and the tests you ran to -->
-<!--- see how your change affects other areas of the code, etc. -->
+## 🔍 Type of Change
 
-## Types of changes
+<!-- Put an 'x' in all boxes that apply -->
 
-<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+- [ ] 📝 **Documentation update** (non-breaking change, improves docs)
+- [ ] 🧹 **Code cleanup/refactor** (non-breaking change, no functionality change)
+- [ ] ✅ **Test improvement** (adds or improves tests)
+- [ ] 🐛 **Bug fix** (non-breaking change which fixes an issue)
+- [ ] ✨ **New feature** (non-breaking change which adds functionality)
+- [ ] ⚠️ **Breaking change** (fix or feature that would cause existing functionality to change)
+- [ ] 🔒 **Security fix** (addresses a security vulnerability)
 
-- [ ] Updated docs / Refactor code / Added a tests case (non-breaking change)
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to change)
+## 🧪 Testing
 
-## Checklist:
+<!-- Describe how you tested your changes -->
 
-<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
-<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+### Test Coverage
 
-- [ ] My code follows the code style of this project.
-- [ ] My change requires a change to the documentation.
-- [ ] I have updated the documentation accordingly.
-- [ ] I have read the **CONTRIBUTING** document.
-- [ ] I have added tests to cover my changes.
-- [ ] All new and existing tests passed.
-- [ ] I have updated the changelog.
+- [ ] ✅ All new and existing tests pass (`yarn test`)
+- [ ] ✅ Code coverage maintained or improved
+- [ ] ✅ Added tests for new functionality
+- [ ] ✅ Manual testing performed
+
+### How to Test
+
+<!-- Provide step-by-step instructions for reviewers to test your changes -->
+
+1. 
+2. 
+3. 
+
+### Test Environment
+
+- **Node version:** <!-- e.g., 18.x, 20.x -->
+- **OS:** <!-- e.g., macOS, Ubuntu, Windows -->
+- **Package version:** <!-- e.g., 2.0.0 -->
+
+## 📸 Screenshots/Code Examples
+
+<!-- If applicable, add screenshots or code examples showing the changes -->
+
+**Before:**
+```typescript
+// Old code/behavior
+```
+
+**After:**
+```typescript
+// New code/behavior
+```
+
+## ✅ Pre-Submission Checklist
+
+<!-- Go over all the following points, and put an `x` in all boxes that apply -->
+
+### Code Quality
+- [ ] My code follows the project's code style (`yarn linter` passes)
+- [ ] I have performed a self-review of my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] My changes generate no new warnings or errors
+
+### Testing
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes (`yarn test`)
+- [ ] I have tested on Node.js 18+ (minimum supported version)
+
+### Documentation
+- [ ] I have updated the documentation (README, guides, JSDoc) if needed
+- [ ] I have updated the CHANGELOG.md with my changes
+- [ ] I have added/updated code examples if needed
+- [ ] I have checked that documentation links work
+
+### Project Requirements
+- [ ] I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines
+- [ ] I have read the [CODE_OF_CONDUCT](../CODE_OF_CONDUCT.md)
+- [ ] My commit messages follow the [conventional commits](https://www.conventionalcommits.org/) format
+- [ ] I have rebased my branch on the latest `main`/`develop` branch
+
+## 🚀 Performance Impact
+
+<!-- Does this PR impact performance? If yes, describe the impact and any benchmarks -->
+
+- [ ] No performance impact
+- [ ] Performance improvement (describe below)
+- [ ] Potential performance regression (describe and justify below)
+
+<!-- If applicable, add benchmark results -->
+
+## 🔄 Migration Guide
+
+<!-- If this is a breaking change, provide migration instructions for users -->
+
+**Is this a breaking change?**
+- [ ] No
+- [ ] Yes (migration guide below)
+
+<!-- If yes, provide migration steps -->
+
+## 📦 Dependencies
+
+<!-- List any new dependencies added or removed -->
+
+- [ ] No new dependencies
+- [ ] Dependencies added (list below with justification)
+- [ ] Dependencies removed (list below)
+
+**New/Modified Dependencies:**
+<!-- 
+- package-name@version - Why it's needed
+-->
+
+## 🔐 Security Considerations
+
+<!-- Have you considered security implications of this change? -->
+
+- [ ] This PR has no security implications
+- [ ] I have considered security best practices
+- [ ] Security review required (please explain)
+
+## 📝 Additional Notes
+
+<!-- Any additional information that reviewers should know -->
+
+## 🙏 Reviewers
+
+<!-- Tag specific people or teams if needed -->
+
+<!-- /cc @maintainer-username -->
+
+---
+
+**By submitting this PR, I confirm that:**
+- My contribution is made under the Apache-2.0 license
+- I have the right to submit this code
+- I understand this will be publicly available
