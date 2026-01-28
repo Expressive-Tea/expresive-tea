@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
-  <img alt="npm version" src="https://img.shields.io/npm/v/@zerooneit/expressive-tea?style=flat-square">
+  <a href="https://www.npmjs.com/package/@expressive-tea/core">
+  <img alt="npm version" src="https://img.shields.io/npm/v/@expressive-tea/core?style=flat-square">
   </a>
-  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
-  <img alt="downloads" src="https://img.shields.io/npm/dw/@zerooneit/expressive-tea?style=flat-square">
+  <a href="https://www.npmjs.com/package/@expressive-tea/core">
+  <img alt="downloads" src="https://img.shields.io/npm/dw/@expressive-tea/core?style=flat-square">
   </a>
   <a href="https://snyk.io//test/github/Expressive-Tea/expresive-tea?targetFile=package.json">
   <img alt="vulnerabilities" src="https://img.shields.io/snyk/vulnerabilities/github/expressive-tea/expresive-tea?style=flat-square">
@@ -16,6 +16,9 @@
   </a>
   <a href="https://github.com/Expressive-Tea/expresive-tea/stargazers">
   <img alt="stars" src="https://img.shields.io/github/stars/Expressive-Tea/expresive-tea?style=flat-square">
+  </a>
+  <a href="https://github.com/Expressive-Tea/expresive-tea/blob/main/LICENSE">
+  <img alt="license" src="https://img.shields.io/github/license/Expressive-Tea/expresive-tea?style=flat-square">
   </a>
 </p>
 
@@ -45,6 +48,30 @@
 
 ---
 
+> [!IMPORTANT]
+> ### 📦 Package Renamed: `@expressive-tea/core`
+> 
+> **Expressive Tea has a new home on npm!** Starting with v2.0.0, install using:
+> 
+> ```bash
+> npm install @expressive-tea/core
+> ```
+> 
+> **Legacy package `@zerooneit/expressive-tea` will be maintained until April 30, 2026** for security patches only. Please migrate to `@expressive-tea/core` as soon as possible.
+> 
+> **Why the change?**
+> - ✨ Better namespace organization (`@expressive-tea/*`)
+> - 🌍 Community-focused ownership
+> - 🚀 Clearer project identity
+> 
+> **Migration is simple:** Just update your `package.json` and imports remain the same!
+> ```diff
+> - "dependencies": { "@zerooneit/expressive-tea": "^1.2.0" }
+> + "dependencies": { "@expressive-tea/core": "^2.0.0" }
+> ```
+
+---
+
 > [!CAUTION]
 > ### ⚠️ CRITICAL: v1.x Security Notice
 > 
@@ -62,11 +89,15 @@
 ## ⚡ Quick Start
 
 ```bash
-npm install @zerooneit/expressive-tea
+# Install the new package
+npm install @expressive-tea/core
+
+# Or with yarn
+yarn add @expressive-tea/core
 ```
 
 ```typescript
-import { ServerSettings, Route, Get, Boot } from '@zerooneit/expressive-tea';
+import { ServerSettings, Route, Get, Boot } from '@expressive-tea/core';
 
 @ServerSettings({ port: 3000 })
 class App extends Boot {}
@@ -260,10 +291,10 @@ class App extends Boot {}
 
 ```bash
 # npm
-npm install @zerooneit/expressive-tea reflect-metadata
+npm install @expressive-tea/core reflect-metadata
 
 # yarn
-yarn add @zerooneit/expressive-tea reflect-metadata
+yarn add @expressive-tea/core reflect-metadata
 ```
 
 ### Your First App
@@ -272,7 +303,7 @@ yarn add @zerooneit/expressive-tea reflect-metadata
 ```typescript
 // server.ts
 import 'reflect-metadata';
-import { ServerSettings, Boot } from '@zerooneit/expressive-tea';
+import { ServerSettings, Boot } from '@expressive-tea/core';
 
 @ServerSettings({
   port: 3000,
@@ -286,7 +317,7 @@ export default MyApp;
 **2. Add a controller:**
 ```typescript
 // controllers/hello.controller.ts
-import { Route, Get } from '@zerooneit/expressive-tea';
+import { Route, Get } from '@expressive-tea/core';
 
 @Route('/hello')
 export class HelloController {
@@ -397,8 +428,8 @@ Building Expressive Tea takes time and dedication. If this project helps you, co
 Apache-2.0 License - see [LICENSE](LICENSE) file for details
 
 <p align="center">
-  <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large">
-    <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large" />
+  <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FExpressive-Tea%2Fexpresive-tea?ref=badge_large">
+    <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FExpressive-Tea%2Fexpresive-tea.svg?type=large" />
   </a>
 </p>
 

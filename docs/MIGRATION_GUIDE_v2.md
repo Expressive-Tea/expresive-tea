@@ -1,5 +1,21 @@
 # Migration Guide: v1.x to v2.0.0
 
+> [!IMPORTANT]
+> ## 📦 Package Renamed: `@expressive-tea/core`
+> 
+> **Starting with v2.0.0, Expressive Tea has moved to a new npm package:**
+> 
+> ```diff
+> - npm install @zerooneit/expressive-tea
+> + npm install @expressive-tea/core
+> ```
+> 
+> **Legacy Support:** The old package `@zerooneit/expressive-tea` will receive security patches only until **April 30, 2026**.
+> 
+> **Your code remains unchanged** - only the package name in `package.json` needs updating!
+
+---
+
 > [!CAUTION]
 > **⚠️ VERSIONS 1.x ARE DEPRECATED - IMMEDIATE ACTION REQUIRED**
 > 
@@ -57,6 +73,37 @@ Expressive Tea v2.0.0 is a major release focused on:
 
 ## Breaking Changes
 
+### 0. Package Name Change (ACTION REQUIRED)
+
+**Impact:** MEDIUM - Simple package.json update
+
+**What Changed:**
+- Package renamed from `@zerooneit/expressive-tea` to `@expressive-tea/core`
+- Repository moved to `https://github.com/Expressive-Tea/expresive-tea`
+
+**Action Required:**
+```diff
+// package.json
+{
+  "dependencies": {
+-   "@zerooneit/expressive-tea": "^1.2.0"
++   "@expressive-tea/core": "^2.0.0"
+  }
+}
+```
+
+**No code changes needed!** All imports remain the same:
+```typescript
+// Still works exactly the same
+import { Boot, Route, Get } from '@expressive-tea/core';
+```
+
+**Timeline:**
+- `@zerooneit/expressive-tea` - Security patches only until April 30, 2026
+- `@expressive-tea/core` - Actively maintained, all new features
+
+---
+
 ### 1. Cryptography Module (CRITICAL)
 
 **Impact:** HIGH - Data encrypted with v1.x cannot be decrypted in v2.0.0
@@ -77,6 +124,7 @@ const newData = encryptV2(oldData);
 
 **Migration Script Example:**
 ```typescript
+// Use the OLD package to decrypt
 import { decrypt as decryptV1 } from '@zerooneit/expressive-tea@1.3.0-beta.6';
 import { encrypt as encryptV2 } from '@zerooneit/expressive-tea@2.0.0';
 

@@ -3,6 +3,22 @@
 
 > 2026-01-27
 
+> [!IMPORTANT]
+> **📦 PACKAGE RENAMED: `@expressive-tea/core`**
+> 
+> Starting with v2.0.0, install using:
+> ```bash
+> npm install @expressive-tea/core
+> ```
+> 
+> **Legacy package `@zerooneit/expressive-tea` will be maintained until April 30, 2026** for security patches only.
+> 
+> **Repository:** https://github.com/Expressive-Tea/expresive-tea
+> 
+> See migration guide for details: [MIGRATION_GUIDE_v2.md](docs/MIGRATION_GUIDE_v2.md)
+
+---
+
 > [!CAUTION]
 > **⚠️ ALL VERSIONS BEFORE 2.0.0 ARE NOW DEPRECATED**
 > 
