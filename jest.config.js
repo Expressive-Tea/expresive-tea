@@ -9,6 +9,9 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleDirectories: ['node_modules', '<rootDir>'],
   extensionsToTreatAsEsm: [],
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
   verbose: false,
   displayName: 'EXP-TEA:CORE',
   testTimeout: 30000,

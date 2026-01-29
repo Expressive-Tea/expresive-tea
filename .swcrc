@@ -53,7 +53,7 @@
     "lazy": false,
     "noInterop": false,
     "importInterop": "swc",
-    "ignoreDynamic": true
+    "ignoreDynamic": false
   },
   "sourceMaps": true,
   "inlineSourcesContent": true

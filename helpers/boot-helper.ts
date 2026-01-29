@@ -8,8 +8,7 @@ import {
   REGISTERED_STATIC_KEY,
   STAGES_INIT
 } from '@expressive-tea/commons';
-import * as express from 'express';
-import { type Express } from 'express';
+import express, { type Express } from 'express';
 import { Metadata } from '@expressive-tea/metadata';
 import { getClass } from '@expressive-tea/commons';
 import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons';
