@@ -3,8 +3,8 @@
  * Tests for engine registration, dependency resolution, and circular dependency detection
  * @since 2.0.0
  */
-import EngineRegistry from '../../../classes/EngineRegistry';
-import ExpressiveTeaEngine from '../../../classes/Engine';
+import EngineRegistry from '@classes/EngineRegistry';
+import ExpressiveTeaEngine from '@classes/Engine';
 import { injectable } from 'inversify';
 
 describe('EngineRegistry (Phase 2)', () => {

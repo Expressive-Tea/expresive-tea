@@ -1,4 +1,4 @@
-import ExpressiveTeaEngine from './Engine';
+import ExpressiveTeaEngine from '@classes/Engine';
 
 /**
  * Engine constructor type with static canRegister method

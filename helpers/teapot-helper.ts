@@ -2,7 +2,7 @@ import * as crypto from 'node:crypto';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
 import { type KeyPairSyncResult, generateKeyPairSync } from 'node:crypto';
 import { type NextFunction, type Request, type Response } from 'express';
-import type ProxyRoute from '../classes/ProxyRoute';
+import type ProxyRoute from '@classes/ProxyRoute';
 
 export interface EncryptedMessage {
   iv: string;

@@ -2,7 +2,7 @@
 import type { Constructor } from '../types/core';
 import type { ExpressiveTeaModuleProps } from '@expressive-tea/commons/interfaces';
 import { type Express, Router } from 'express';
-import DependencyInjection, { getInstanceOf } from '../services/DependencyInjection';
+import DependencyInjection, { getInstanceOf } from '@services/DependencyInjection';
 import { injectable, injectFromBase, Newable } from 'inversify';
 
 /**

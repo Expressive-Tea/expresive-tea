@@ -1,6 +1,6 @@
 import { injectable, injectFromBase } from 'inversify';
 import { type Request, type Response } from 'express';
-import ExpressiveTeaEngine from '../../classes/Engine';
+import ExpressiveTeaEngine from '@classes/Engine';
 
 /**
  * Health check status

@@ -2,7 +2,7 @@ import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interface
 import initTeapot from './helpers/teapot-init';
 import container from '../../inversify.config';
 import { createHttpTerminator } from 'http-terminator';
-import { delay } from '../../helpers/promise-helper';
+import { delay } from '@helpers/promise-helper';
 
 describe('Teapot/Teacup integration', () => {
   let appTeapot: ExpressiveTeaApplication;

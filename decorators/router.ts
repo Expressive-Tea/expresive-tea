@@ -1,7 +1,7 @@
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
-import { addAnnotation } from '../helpers/decorators';
-import { generateRoute, router } from '../helpers/server';
+import { addAnnotation } from '@helpers/decorators';
+import { generateRoute, router } from '@helpers/server';
 import {
   ROUTER_MIDDLEWARES_KEY
 } from '@expressive-tea/commons/constants';
@@ -9,7 +9,7 @@ import {
   type ClassDecorator,
   type MethodDecorator
 } from '@expressive-tea/commons/types';
-import { Routerize, type RouterizedClass } from '../mixins/route';
+import { Routerize, type RouterizedClass } from '@mixins/route';
 import { type Constructor, TFunction } from '../types/core';
 import { type RequestHandler } from 'express';
 

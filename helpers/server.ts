@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
-import { chain, find, get, has, isNumber, pick, size } from '../libs/utilities';
+import { chain, find, get, has, isNumber, pick, size } from '@libs/utilities';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
 import {
@@ -11,7 +11,7 @@ import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-help
 import * as fs from 'node:fs';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
-} from '../interfaces';
+} from '@interfaces';
 import { TFunction } from '../types/core';
 
 interface ExecuteRequestContext {

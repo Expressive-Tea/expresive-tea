@@ -1,7 +1,7 @@
 import { type ExpressiveTeaModuleProps } from '@expressive-tea/commons/interfaces';
  
 import { type Constructor } from '../types/core';
-import { Modulize, type ModulizedClass } from '../mixins/module';
+import { Modulize, type ModulizedClass } from '@mixins/module';
 
 /**
  * @typedef {Object} ExpressiveTeaModuleProps

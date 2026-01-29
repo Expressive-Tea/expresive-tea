@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import Settings from '../../../classes/Settings';
+import Settings from '@classes/Settings';
 
 interface SettingsOptionsProps {
   options: Record<string, any>;

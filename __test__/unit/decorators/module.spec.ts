@@ -1,4 +1,4 @@
-import { Module } from '../../../decorators/module';
+import { Module } from '@decorators/module';
 
 describe('Module Decorator', () => {
   let Controller;

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Modulize = Modulize;
 const tslib_1 = require("tslib");
 const express_1 = require("express");
-const DependencyInjection_1 = require("../services/DependencyInjection");
+const DependencyInjection_1 = require("@services/DependencyInjection");
 const inversify_1 = require("inversify");
 /**
  * Modulize mixin - Adds Expressive Tea module capabilities to a class

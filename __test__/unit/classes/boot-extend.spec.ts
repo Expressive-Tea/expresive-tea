@@ -1,8 +1,8 @@
 import * as express from 'express';
-import Boot from '../../../classes/Boot';
-import { ExpressDirective, Static } from '../../../decorators/server';
+import Boot from '@classes/Boot';
+import { ExpressDirective, Static } from '@decorators/server';
 import container from '../../../inversify.config';
-import Settings from '../../../classes/Settings';
+import Settings from '@classes/Settings';
 
 jest.mock('express', () => require('jest-express'));
 

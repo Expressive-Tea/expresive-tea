@@ -3,14 +3,14 @@ import container from '../inversify.config';
 import * as express from 'express';
 import { type Express } from 'express';
 import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
-import ExpressiveTeaEngine from '../classes/Engine';
-import Settings from '../classes/Settings';
+import ExpressiveTeaEngine from '@classes/Engine';
+import Settings from '@classes/Settings';
 import * as fs from 'node:fs';
 import * as http from 'node:http';
 import * as https from 'node:https';
 import { Container, type Newable, type ServiceIdentifier } from 'inversify';
 import { TYPES } from '../types/injection-types';
-import EngineRegistry from './EngineRegistry';
+import EngineRegistry from '@classes/EngineRegistry';
 
 /**
  * Expressive Tea Application interface is the response from an started application, contains the express application

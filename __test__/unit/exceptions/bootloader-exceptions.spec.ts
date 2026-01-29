@@ -1,4 +1,4 @@
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../../../exceptions/BootLoaderExceptions';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@exceptions/BootLoaderExceptions';
 
 describe('Bootloader Exceptions', () => {
   test('should instance required exception', () => {

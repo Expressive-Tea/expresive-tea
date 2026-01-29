@@ -1,10 +1,10 @@
 import { BOOT_STAGES } from '@expressive-tea/commons/constants';
 import { Plugin } from '@expressive-tea/plugin';
 import { Stage } from '@expressive-tea/plugin/decorators';
-import Boot from '../../../classes/Boot';
-import Settings from '../../../classes/Settings';
-import { Modules, Pour } from '../../../decorators/server';
-import Module from '../../test-classes/module';
+import Boot from '@classes/Boot';
+import Settings from '@classes/Settings';
+import { Modules, Pour } from '@decorators/server';
+import Module from '@test-classes/module';
 import container from '../../../inversify.config';
 
 

@@ -22,7 +22,7 @@
  * @since 2.0.0
  */
 
-import EngineRegistry from '../classes/EngineRegistry';
+import EngineRegistry from '@classes/EngineRegistry';
 import HTTPEngine from './http';
 import HealthCheckEngine from './health';
 import SocketIOEngine from './socketio';

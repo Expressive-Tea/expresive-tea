@@ -1,5 +1,5 @@
 import Metadata from '@expressive-tea/commons/classes/Metadata';
-import type { HealthCheck as HealthCheckConfig } from '../engines/health';
+import type { HealthCheck as HealthCheckConfig } from '@engines/health';
 
 /**
  * Health check decorator metadata key

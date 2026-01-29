@@ -13,10 +13,10 @@ import { type Express } from 'express';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import type Boot from '../classes/Boot';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@exceptions/BootLoaderExceptions';
+import type Boot from '@classes/Boot';
 import { type ModulizedExpressiveTeaModule } from '../types/core';
-import { getInstanceOf } from '../services/DependencyInjection';
+import { getInstanceOf } from '@services/DependencyInjection';
 import { Newable } from 'inversify';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { type Express } from 'express';
-import { isNil, orderBy } from '../libs/utilities';
+import { isNil, orderBy } from '@libs/utilities';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
-import Settings from '../classes/Settings';
+import Settings from '@classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
   ASSIGN_TEAPOT_KEY, type BOOT_STAGES,
@@ -19,7 +19,7 @@ import {
   type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
 } from '@expressive-tea/commons/interfaces';
 import {Newable } from 'inversify';
-import DependencyInjection from '../services/DependencyInjection';
+import DependencyInjection from '@services/DependencyInjection';
 
 /**
  * Define the Main Plugins Properties.

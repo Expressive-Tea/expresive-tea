@@ -6,7 +6,7 @@ import type {
   ExpressiveTeaArgumentOptions,
   ExpressiveTeaHandlerOptions,
 } from '@expressive-tea/commons/interfaces';
-import type { ExpressiveTeaHandlerOptionsWithInstrospectedArgs } from '../interfaces';
+import type { ExpressiveTeaHandlerOptionsWithInstrospectedArgs } from '@interfaces';
 import { type RequestHandler, Router } from 'express';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import {

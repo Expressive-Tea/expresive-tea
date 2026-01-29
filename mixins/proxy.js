@@ -5,7 +5,7 @@ const tslib_1 = require("tslib");
 const httpProxy = require("express-http-proxy");
 const Metadata_1 = require("@expressive-tea/commons/classes/Metadata");
 const constants_1 = require("@expressive-tea/commons/constants");
-const utilities_1 = require("../libs/utilities");
+const utilities_1 = require("@libs/utilities");
 const object_helper_1 = require("@expressive-tea/commons/helpers/object-helper");
 const inversify_1 = require("inversify");
 /**

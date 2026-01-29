@@ -6,10 +6,10 @@ import { injectable, injectFromBase } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
-import TeaGatewayHelper from '../../helpers/teapot-helper';
+import TeaGatewayHelper from '@helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import ExpressiveTeaEngine from '../../classes/Engine';
-import Boot from '../../classes/Boot';
+import ExpressiveTeaEngine from '@classes/Engine';
+import Boot from '@classes/Boot';
 
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })

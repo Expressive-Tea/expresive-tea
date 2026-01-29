@@ -5,7 +5,7 @@ import type { Express, RequestHandler } from 'express';
 import * as httpProxy from 'express-http-proxy';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
 import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons/constants';
-import { isUndefined } from '../libs/utilities';
+import { isUndefined } from '@libs/utilities';
 import { getClass } from '@expressive-tea/commons/helpers/object-helper';
 import { injectable, injectFromBase } from 'inversify';
 

@@ -1,7 +1,7 @@
-import WebsocketService from '../services/WebsocketService';
+import WebsocketService from '@services/WebsocketService';
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as WebSocket from 'ws';
-import Settings from '../classes/Settings';
+import Settings from '@classes/Settings';
 import type * as http from 'http';
 import type * as https from 'https';
 

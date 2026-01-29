@@ -2,11 +2,11 @@ import MetaData from '@expressive-tea/commons/classes/Metadata';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
 import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons/types';
 import { isAsyncFunction } from '@expressive-tea/commons/helpers/object-helper';
-import { GenericRequestException } from '../exceptions/RequestExceptions';
+import { GenericRequestException } from '@exceptions/RequestExceptions';
 
 import { PROXY_SETTING_KEY } from '@expressive-tea/commons/constants';
 import { type IExpressiveTeaProxySettings } from '@expressive-tea/commons/interfaces';
-import { Proxify, type ProxifiedClass } from '../mixins/proxy';
+import { Proxify, type ProxifiedClass } from '@mixins/proxy';
 import { type Constructor } from '../types/core';
 
 const NON_ASYNC_METHODS = new Set(['host']);

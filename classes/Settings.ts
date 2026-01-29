@@ -1,8 +1,8 @@
-import { get, set } from '../libs/utilities';
+import { get, set } from '@libs/utilities';
 import { ExpressiveTeaServerProps } from '@expressive-tea/commons/interfaces';
 import { injectable } from 'inversify';
 import { nameOfClass } from '@expressive-tea/commons/helpers/object-helper';
-import { fileSettings } from '../helpers/server';
+import { fileSettings } from '@helpers/server';
 
 
 /**

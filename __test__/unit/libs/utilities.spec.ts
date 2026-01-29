@@ -22,7 +22,7 @@ import {
   last,
   inRange,
   chain
-} from '../../../libs/utilities';
+} from '@libs/utilities';
 
 describe('Utility Functions', () => {
   describe('get()', () => {

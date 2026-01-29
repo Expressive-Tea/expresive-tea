@@ -1,8 +1,8 @@
 import { Server } from 'socket.io';
 import { injectable, injectFromBase } from 'inversify';
-import ExpressiveTeaEngine from '../../classes/Engine';
+import ExpressiveTeaEngine from '@classes/Engine';
 import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { SOCKET_IO_INSTANCE_KEY, SOCKET_IO_SECURE_INSTANCE_KEY } from '../constants/constants';
+import { SOCKET_IO_INSTANCE_KEY, SOCKET_IO_SECURE_INSTANCE_KEY } from '@engines/constants/constants';
 
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
