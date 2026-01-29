@@ -1,4 +1,4 @@
-import supertest from 'supertest';
+import * as supertest from 'supertest';
 import Boot from '../../../classes/Boot';
 import { Modules, ServerSettings, Teacup, Teapot } from '../../../decorators/server';
 import TeapotModule from './modules/teapot/RootModule';

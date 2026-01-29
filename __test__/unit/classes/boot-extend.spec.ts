@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import Boot from '../../../classes/Boot';
 import { ExpressDirective, Static } from '../../../decorators/server';
 import container from '../../../inversify.config';

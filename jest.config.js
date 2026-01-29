@@ -2,8 +2,19 @@ module.exports = {
   roots: [
     '<rootDir>/'
   ],
-  transform: {
-    '^.+\\.(t|j)sx?$': ['@swc/jest']
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+      tsconfig: {
+        strict: false,
+        noImplicitAny: false,
+        strictNullChecks: false,
+        strictPropertyInitialization: false,
+        skipLibCheck: true
+      }
+    }
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
