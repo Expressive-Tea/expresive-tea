@@ -56,7 +56,7 @@ describe('Boot Class', () => {
     appInstances.push(app);
 
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
     // Avoid deep-equality on express app (inspecting functions can trigger host errors).
     expect(app).toBeDefined();
     expect(app.application).toBeDefined();
@@ -69,7 +69,7 @@ describe('Boot Class', () => {
     const boot = new Bootstrap();
 
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
   });
 
   test('should start an application', async () => {
@@ -78,7 +78,7 @@ describe('Boot Class', () => {
     appInstances.push(app);
 
     expect(boot.settings).toBeInstanceOf(Settings);
-    expect(boot.settings).toEqual(Settings.getInstance());
+    expect(boot.settings).toEqual(Settings.getInstance(boot));
   });
 
   test('should not fail if soft plugin fails', async () => {

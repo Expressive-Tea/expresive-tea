@@ -75,8 +75,11 @@ describe('Boot Class Secure Server', () => {
       expect.anything() // Express app instance
     );
 
-    if (app?.server) app.server.close();
-    if (app?.secureServer) app.secureServer.close();
+    // Properly close servers
+    await Promise.all([
+      new Promise<void>((resolve) => app.server?.close(() => resolve())),
+      new Promise<void>((resolve) => app.secureServer?.close(() => resolve()))
+    ]);
   });
 
   test('should start an application', async () => {
@@ -96,8 +99,11 @@ describe('Boot Class Secure Server', () => {
     expect(boot.settings).toEqual(Settings.getInstance(boot));
     expect(registerMock).toHaveBeenCalled();
 
-    if (app?.server) app.server.close();
-    if (app?.secureServer) app.secureServer.close();
+    // Properly close servers
+    await Promise.all([
+      new Promise<void>((resolve) => app.server?.close(() => resolve())),
+      new Promise<void>((resolve) => app.secureServer?.close(() => resolve()))
+    ]);
   });
 
 });
