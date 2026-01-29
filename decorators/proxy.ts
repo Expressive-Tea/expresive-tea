@@ -1,11 +1,11 @@
-import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/metadata';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
-import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons/types';
-import { isAsyncFunction } from '@expressive-tea/commons/helpers/object-helper';
+import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons';
+import { isAsyncFunction } from '@expressive-tea/commons';
 import { GenericRequestException } from '@exceptions/RequestExceptions';
 
-import { PROXY_SETTING_KEY } from '@expressive-tea/commons/constants';
-import { type IExpressiveTeaProxySettings } from '@expressive-tea/commons/interfaces';
+import { PROXY_SETTING_KEY } from '@expressive-tea/commons';
+import { type IExpressiveTeaProxySettings } from '@expressive-tea/commons';
 import { Proxify, type ProxifiedClass } from '@mixins/proxy';
 import { type Constructor } from '../types/core';
 
@@ -42,7 +42,7 @@ export function ProxyContainer<TBase extends Constructor = Constructor>(source: 
       name: ProxyContainerClass.name
     };
 
-    MetaData.set(PROXY_SETTING_KEY, settings, ProxyContainerClass);
+    Metadata.set(PROXY_SETTING_KEY, settings, ProxyContainerClass);
     return Proxify<TBase>(ProxyContainerClass, source, targetUrl);
   };
 }
@@ -50,18 +50,18 @@ export function ProxyContainer<TBase extends Constructor = Constructor>(source: 
 export function ProxyOption(option: ExpressiveTeaProxyOptions): MethodDecorator {
   return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+     
     if (NON_ASYNC_METHODS.has(option) && isAsyncFunction(descriptor.value)){
       throw new GenericRequestException(`${String(propertyKey)} must not be declared as Async Function.`);
     }
 
-    MetaData.set(PROXY_SETTING_KEY, descriptor, target, option);
+    Metadata.set(PROXY_SETTING_KEY, descriptor, target, option);
   };
 }
 
 export function ProxyProperty(option: ExpressiveTeaProxyProperty, value: any): PropertyDecorator {
   return (target: object, propertyKey: string | symbol) => {
-    MetaData.set(PROXY_SETTING_KEY, propertyKey, target, option);
+    Metadata.set(PROXY_SETTING_KEY, propertyKey, target, option);
     Object.defineProperty(target, propertyKey, {
       get: () => value,
     });

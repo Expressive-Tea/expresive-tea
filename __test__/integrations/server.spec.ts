@@ -1,4 +1,4 @@
-import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
+import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 import initServer from './helpers/server-init';
 import container from '../../inversify.config';
 import Settings from '@classes/Settings';
@@ -16,10 +16,12 @@ describe('Webserver integration', () => {
     request = testInit.request;
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     container.unbindAll();
     if (app?.server) {
-      app.server.close();
+      await new Promise<void>((resolve) => {
+        app.server.close(() => resolve());
+      });
     }
     Settings.reset();
   });

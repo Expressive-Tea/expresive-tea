@@ -3,11 +3,11 @@ import * as chalk from 'chalk';
 import {URL} from 'url';
 import { io, Socket } from 'socket.io-client';
 import { injectable, injectFromBase } from 'inversify';
-import { ExpressiveTeaCupSettings } from '@expressive-tea/commons/interfaces';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons/constants';
+import { ExpressiveTeaCupSettings } from '@expressive-tea/commons';
+import { Metadata } from '@expressive-tea/metadata';
+import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons';
 import TeaGatewayHelper from '@helpers/teapot-helper';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { getClass } from '@expressive-tea/commons';
 import ExpressiveTeaEngine from '@classes/Engine';
 import Boot from '@classes/Boot';
 
@@ -82,7 +82,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async start(): Promise<void> {
-    this.teacupSettings = MetaData.get(ASSIGN_TEACUP_KEY, getClass(this.context));
+    this.teacupSettings = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this.context));
     const scheme = new URL(this.teacupSettings.serverUrl);
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
     const protocol = TeaGatewayHelper.httpSchema(scheme.protocol);
@@ -108,7 +108,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   static canRegister(ctx?: Boot): boolean {
-    return MetaData.get(ASSIGN_TEACUP_KEY, getClass(ctx), 'isTeacupActive');
+    return Metadata.get(ASSIGN_TEACUP_KEY, getClass(ctx), 'isTeacupActive');
   }
 
 }

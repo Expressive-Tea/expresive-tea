@@ -297,6 +297,48 @@ npm install @expressive-tea/core reflect-metadata
 yarn add @expressive-tea/core reflect-metadata
 ```
 
+---
+
+## Local staging with Verdaccio
+
+If you want to test publishing locally before pushing to the public registry, use a local Verdaccio instance as a staging registry.
+
+Quick steps:
+
+1. Start Verdaccio (Docker):
+
+```bash
+docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 verdaccio/verdaccio:latest
+```
+
+2. Point npm to local registry and publish:
+
+```bash
+# point npm to local registry
+npm set registry http://localhost:4873
+
+# publish (from package root)
+npm publish --registry http://localhost:4873
+
+# restore default registry
+npm set registry https://registry.npmjs.org/
+```
+
+3. Optional: Use the repo-provided Verdaccio config for deterministic behavior:
+
+```bash
+docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 \
+  -v $(pwd)/.docs/verdaccio/config.yaml:/verdaccio/conf/config.yaml \
+  verdaccio/verdaccio:latest
+```
+
+Notes:
+- Default URL: http://localhost:4873
+- Container name: verdaccio-expressive-tea (the agent checks for this name before starting a new container)
+- Anonymous publishing is enabled in the example config (local only). Do not expose to public networks.
+- The config permits overwriting the same package version for easy iterative testing.
+
+
 ### Your First App
 
 **1. Create your server:**

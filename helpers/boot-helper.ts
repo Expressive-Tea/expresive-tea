@@ -7,12 +7,12 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   STAGES_INIT
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import * as express from 'express';
 import { type Express } from 'express';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
+import { Metadata } from '@expressive-tea/metadata';
+import { getClass } from '@expressive-tea/commons';
+import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@exceptions/BootLoaderExceptions';
 import type Boot from '@classes/Boot';
 import { type ModulizedExpressiveTeaModule } from '../types/core';
@@ -33,7 +33,7 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
 }
 
 export function resolveDirectives(instance: typeof Boot | Boot, server: Express): void {
-  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
+  const registeredDirectives = Metadata.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
   registeredDirectives.forEach((options: ExpressiveTeaDirective) => {
     // @ts-expect-error Settings can be any parameter
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -42,7 +42,7 @@ export function resolveDirectives(instance: typeof Boot | Boot, server: Express)
 }
 
 export function resolveStatic(instance: typeof Boot | Boot, server: Express): void {
-  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
+  const registeredStatic = Metadata.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
   registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
     if (staticOptions.virtual) {
       server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
@@ -59,7 +59,7 @@ export function resolveProxy(ProxyContainer: any, server: Express): void {
 }
 
 function resolveModules(instance: typeof Boot | Boot, server: Express): void {
-  const registeredModules: ModulizedExpressiveTeaModule<any> = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
+  const registeredModules: ModulizedExpressiveTeaModule<any> = Metadata.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
   for ( const Module of registeredModules ) {
     const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = getInstanceOf<typeof Module>(Module as Newable);
     moduleInstance.__register(server);
@@ -72,7 +72,7 @@ async function bootloaderResolve(
   instance: typeof Boot | Boot,
   ...args: unknown[]): Promise<void> {
 
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
+  const bootLoader = Metadata.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
 
   for (const loader of bootLoader[STAGE] || []) {
     try {

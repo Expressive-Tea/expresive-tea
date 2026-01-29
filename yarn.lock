@@ -492,7 +492,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^3.3.1":
+"@eslint/eslintrc@npm:3.3.1, @eslint/eslintrc@npm:^3.3.1":
   version: 3.3.1
   resolution: "@eslint/eslintrc@npm:3.3.1"
   dependencies:
@@ -509,7 +509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:9.39.1, @eslint/js@npm:^9.39.1":
+"@eslint/js@npm:9.39.1":
   version: 9.39.1
   resolution: "@eslint/js@npm:9.39.1"
   checksum: 10c0/6f7f26f8cdb7ad6327bbf9741973b6278eb946f18f70e35406e88194b0d5c522d0547a34a02f2a208eec95c5d1388cdf7ccb20039efd2e4cb6655615247a50f1
@@ -533,10 +533,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expressive-tea/commons@npm:1.0.1, @expressive-tea/commons@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@expressive-tea/commons@npm:1.0.1"
-  checksum: 10c0/89a2458d9006a013a742448adfbff3ac45c2c0f503f839ed59a02fb0063b513d7337f920fefba11beec3925471a77602fdfb1ff89007335c708b32f96c9e27ee
+"@expressive-tea/commons@npm:2026.1.1, @expressive-tea/commons@npm:~2026.1.1":
+  version: 2026.1.1
+  resolution: "@expressive-tea/commons@npm:2026.1.1"
+  dependencies:
+    "@expressive-tea/metadata": "npm:^2026.1.1"
+    reflect-metadata: "npm:^0.2.0"
+  peerDependencies:
+    "@expressive-tea/core": ">=2.0.0"
+  peerDependenciesMeta:
+    "@expressive-tea/core":
+      optional: true
+  checksum: 10c0/3e6112a5d6056b6f3f617ed133da5ca0d537813d2849bb15ce6ce0e73c96bef5ab1efa507fffe2ce0c90ab1777202535476e00dfa5822a29f2187e680b12c1b2
   languageName: node
   linkType: hard
 
@@ -544,11 +552,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@expressive-tea/core@workspace:."
   dependencies:
-    "@eslint/eslintrc": "npm:^3.3.1"
-    "@eslint/js": "npm:^9.39.1"
-    "@expressive-tea/commons": "npm:1.0.1"
-    "@expressive-tea/plugin": "npm:1.0.3"
-    "@types/express": "npm:^5.0.0"
+    "@eslint/eslintrc": "npm:3.3.1"
+    "@eslint/js": "npm:9.39.1"
+    "@expressive-tea/commons": "npm:2026.1.1"
+    "@expressive-tea/plugin": "npm:2026.1.3"
+    "@types/express": "npm:5.0.0"
     "@types/express-http-proxy": "npm:1.6.7"
     "@types/express-serve-static-core": "npm:4.19.7"
     "@types/jest": "npm:29.5.14"
@@ -569,7 +577,7 @@ __metadata:
     eslint-plugin-promise: "npm:7.2.1"
     express: "npm:5.2.1"
     express-http-proxy: "npm:2.1.2"
-    globals: "npm:^16.5.0"
+    globals: "npm:16.5.0"
     http-terminator: "npm:3.2.0"
     inversify: "npm:7.11.0"
     inversify-inject-decorators: "npm:3.1.0"
@@ -585,9 +593,9 @@ __metadata:
     toast-jsdoc: "npm:1.0.2"
     trash-cli: "npm:7.0.0"
     ts-jest: "npm:29.4.5"
-    ts-jest-resolver: "npm:^2.0.1"
+    ts-jest-resolver: "npm:2.0.1"
     ts-node: "npm:10.9.2"
-    tsconfig-paths: "npm:^4.2.0"
+    tsconfig-paths: "npm:4.2.0"
     tslib: "npm:2.8.1"
     typescript: "npm:5.9.3"
     url-scheme: "npm:1.0.5"
@@ -601,12 +609,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@expressive-tea/plugin@npm:1.0.3":
-  version: 1.0.3
-  resolution: "@expressive-tea/plugin@npm:1.0.3"
+"@expressive-tea/metadata@npm:^2026.1.1, @expressive-tea/metadata@npm:~2026.1.1":
+  version: 2026.1.1
+  resolution: "@expressive-tea/metadata@npm:2026.1.1"
   dependencies:
-    "@expressive-tea/commons": "npm:^1.0.1"
-  checksum: 10c0/1a5c0dc2b747219e5738663fac32e09f2cc8be937777247d7c4aa021da7ab21de6eeda10a89e709c2a15faff231912dde1bfb59e3ce58af37b835ed7e61ad0d2
+    reflect-metadata: "npm:^0.2.0"
+  checksum: 10c0/fc4b277a042983fe227350787b339b8612202ee38844d72536a8ef3b95fe8b27f0e06431d45f80771cac78cb057e3bae5688bc5c06291469a294d42d5acb59af
+  languageName: node
+  linkType: hard
+
+"@expressive-tea/plugin@npm:2026.1.3":
+  version: 2026.1.3
+  resolution: "@expressive-tea/plugin@npm:2026.1.3"
+  dependencies:
+    "@expressive-tea/commons": "npm:~2026.1.1"
+    "@expressive-tea/metadata": "npm:~2026.1.1"
+    reflect-metadata: "npm:~0.2.0"
+  peerDependencies:
+    "@expressive-tea/core": ">=2.0.0"
+  peerDependenciesMeta:
+    "@expressive-tea/core":
+      optional: true
+  checksum: 10c0/3b64afabfc22b08fd66b61a53e55b4d017047611372b5a49e721e335e43b9517f42f467b9d585f44c215a153381f3006f2b6fbb92d1f87c248d87884c6a40c6c
   languageName: node
   linkType: hard
 
@@ -1461,14 +1485,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:^5.0.0":
-  version: 5.0.6
-  resolution: "@types/express@npm:5.0.6"
+"@types/express@npm:5.0.0":
+  version: 5.0.0
+  resolution: "@types/express@npm:5.0.0"
   dependencies:
     "@types/body-parser": "npm:*"
     "@types/express-serve-static-core": "npm:^5.0.0"
-    "@types/serve-static": "npm:^2"
-  checksum: 10c0/f1071e3389a955d4f9a38aae38634121c7cd9b3171ba4201ec9b56bd534aba07866839d278adc0dda05b942b05a901a02fd174201c3b1f70ce22b10b6c68f24b
+    "@types/qs": "npm:*"
+    "@types/serve-static": "npm:*"
+  checksum: 10c0/0d74b53aefa69c3b3817ee9b5145fd50d7dbac52a8986afc2d7500085c446656d0b6dc13158c04e2d9f18f4324d4d93b0452337c5ff73dd086dca3e4ff11f47b
   languageName: node
   linkType: hard
 
@@ -1591,6 +1616,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/serve-static@npm:*":
+  version: 2.2.0
+  resolution: "@types/serve-static@npm:2.2.0"
+  dependencies:
+    "@types/http-errors": "npm:*"
+    "@types/node": "npm:*"
+  checksum: 10c0/a3c6126bdbf9685e6c7dc03ad34639666eff32754e912adeed9643bf3dd3aa0ff043002a7f69039306e310d233eb8e160c59308f95b0a619f32366bbc48ee094
+  languageName: node
+  linkType: hard
+
 "@types/serve-static@npm:^1":
   version: 1.15.10
   resolution: "@types/serve-static@npm:1.15.10"
@@ -1599,16 +1634,6 @@ __metadata:
     "@types/node": "npm:*"
     "@types/send": "npm:<1"
   checksum: 10c0/842fca14c9e80468f89b6cea361773f2dcd685d4616a9f59013b55e1e83f536e4c93d6d8e3ba5072d40c4e7e64085210edd6646b15d538ded94512940a23021f
-  languageName: node
-  linkType: hard
-
-"@types/serve-static@npm:^2":
-  version: 2.2.0
-  resolution: "@types/serve-static@npm:2.2.0"
-  dependencies:
-    "@types/http-errors": "npm:*"
-    "@types/node": "npm:*"
-  checksum: 10c0/a3c6126bdbf9685e6c7dc03ad34639666eff32754e912adeed9643bf3dd3aa0ff043002a7f69039306e310d233eb8e160c59308f95b0a619f32366bbc48ee094
   languageName: node
   linkType: hard
 
@@ -4156,6 +4181,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"globals@npm:16.5.0":
+  version: 16.5.0
+  resolution: "globals@npm:16.5.0"
+  checksum: 10c0/615241dae7851c8012f5aa0223005b1ed6607713d6813de0741768bd4ddc39353117648f1a7086b4b0fa45eae733f1c0a0fe369aa4e543bb63f8de8990178ea9
+  languageName: node
+  linkType: hard
+
 "globals@npm:^14.0.0":
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
@@ -4167,13 +4199,6 @@ __metadata:
   version: 15.15.0
   resolution: "globals@npm:15.15.0"
   checksum: 10c0/f9ae80996392ca71316495a39bec88ac43ae3525a438b5626cd9d5ce9d5500d0a98a266409605f8cd7241c7acf57c354a48111ea02a767ba4f374b806d6861fe
-  languageName: node
-  linkType: hard
-
-"globals@npm:^16.5.0":
-  version: 16.5.0
-  resolution: "globals@npm:16.5.0"
-  checksum: 10c0/615241dae7851c8012f5aa0223005b1ed6607713d6813de0741768bd4ddc39353117648f1a7086b4b0fa45eae733f1c0a0fe369aa4e543bb63f8de8990178ea9
   languageName: node
   linkType: hard
 
@@ -6671,7 +6696,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:0.2.2":
+"reflect-metadata@npm:0.2.2, reflect-metadata@npm:^0.2.0, reflect-metadata@npm:~0.2.0":
   version: 0.2.2
   resolution: "reflect-metadata@npm:0.2.2"
   checksum: 10c0/1cd93a15ea291e420204955544637c264c216e7aac527470e393d54b4bb075f10a17e60d8168ec96600c7e0b9fcc0cb0bb6e91c3fbf5b0d8c9056f04e6ac1ec2
@@ -7562,7 +7587,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest-resolver@npm:^2.0.1":
+"ts-jest-resolver@npm:2.0.1":
   version: 2.0.1
   resolution: "ts-jest-resolver@npm:2.0.1"
   dependencies:
@@ -7649,6 +7674,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsconfig-paths@npm:4.2.0":
+  version: 4.2.0
+  resolution: "tsconfig-paths@npm:4.2.0"
+  dependencies:
+    json5: "npm:^2.2.2"
+    minimist: "npm:^1.2.6"
+    strip-bom: "npm:^3.0.0"
+  checksum: 10c0/09a5877402d082bb1134930c10249edeebc0211f36150c35e1c542e5b91f1047b1ccf7da1e59babca1ef1f014c525510f4f870de7c9bda470c73bb4e2721b3ea
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.15.0":
   version: 3.15.0
   resolution: "tsconfig-paths@npm:3.15.0"
@@ -7658,17 +7694,6 @@ __metadata:
     minimist: "npm:^1.2.6"
     strip-bom: "npm:^3.0.0"
   checksum: 10c0/5b4f301a2b7a3766a986baf8fc0e177eb80bdba6e396792ff92dc23b5bca8bb279fc96517dcaaef63a3b49bebc6c4c833653ec58155780bc906bdbcf7dda0ef5
-  languageName: node
-  linkType: hard
-
-"tsconfig-paths@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "tsconfig-paths@npm:4.2.0"
-  dependencies:
-    json5: "npm:^2.2.2"
-    minimist: "npm:^1.2.6"
-    strip-bom: "npm:^3.0.0"
-  checksum: 10c0/09a5877402d082bb1134930c10249edeebc0211f36150c35e1c542e5b91f1047b1ccf7da1e59babca1ef1f014c525510f4f870de7c9bda470c73bb4e2721b3ea
   languageName: node
   linkType: hard
 

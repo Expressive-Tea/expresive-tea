@@ -2,7 +2,7 @@ import {
   type IExpressiveTeaModule,
   IExpressiveTeaProxy,
   type IExpressiveTeaRoute
-} from '@expressive-tea/commons/interfaces';
+} from '@expressive-tea/commons';
 
 // Generic utility types - any is required for maximum flexibility
 /* eslint-disable @typescript-eslint/no-explicit-any */

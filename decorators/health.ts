@@ -1,4 +1,4 @@
-import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/commons';
 import type { HealthCheck as HealthCheckConfig } from '@engines/health';
 
 /**

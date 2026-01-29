@@ -4,11 +4,11 @@ import { Server, Socket } from 'socket.io';
  
 import { injectable, injectFromBase } from 'inversify';
  
-import { ExpressiveTeaPotSettings } from '@expressive-tea/commons/interfaces';
+import { ExpressiveTeaPotSettings } from '@expressive-tea/commons';
  
-import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/commons';
  
-import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons/constants';
+import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons';
  
 import ProxyRoute from '@classes/ProxyRoute';
  
@@ -20,7 +20,7 @@ import { SOCKET_IO_INSTANCE_KEY } from '@engines/constants/constants';
  
 import Boot from '@classes/Boot';
  
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { getClass } from '@expressive-tea/commons';
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 
 interface ClientMetadata {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { type Express } from 'express';
 import { isNil, orderBy } from '@libs/utilities';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/commons';
 import Settings from '@classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
@@ -11,13 +11,13 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   ROUTER_PROXIES_KEY
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import {
   type ExpressiveTeaPotSettings,
   type ExpressiveTeaPluginProps,
   type ExpressiveTeaServerProps,
   type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
-} from '@expressive-tea/commons/interfaces';
+} from '@expressive-tea/commons';
 import {Newable } from 'inversify';
 import DependencyInjection from '@services/DependencyInjection';
 
@@ -68,12 +68,12 @@ import DependencyInjection from '@services/DependencyInjection';
 
  
 function getStages(target: any) {
-  return MetaData.get(BOOT_STAGES_KEY, target) || {};
+  return Metadata.get(BOOT_STAGES_KEY, target) || {};
 }
 
  
 function getRegisteredPlugins(target: any) {
-  return MetaData.get(PLUGINS_KEY, target) || [];
+  return Metadata.get(PLUGINS_KEY, target) || [];
 }
 
  
@@ -90,12 +90,12 @@ function getStage(stage: BOOT_STAGES, target: any) {
 function setStage(stage: BOOT_STAGES, value: any, target: any) {
   const stages = getStages(target);
   stages[stage] = value;
-  MetaData.set(BOOT_STAGES_KEY, stages, target);
+  Metadata.set(BOOT_STAGES_KEY, stages, target);
 }
 
  
 function setPlugins(plugins: ExpressiveTeaPluginProps[], target: any) {
-  MetaData.set(PLUGINS_KEY, plugins, target);
+  Metadata.set(PLUGINS_KEY, plugins, target);
 }
 
 /**
@@ -193,9 +193,9 @@ export function Static(root: string, virtual: string | null = null, options: Exp
     if (isNil(root)) {
       throw new Error('Root must be defined');
     }
-    const registeredStatics = MetaData.get(REGISTERED_STATIC_KEY, target) || [];
+    const registeredStatics = Metadata.get(REGISTERED_STATIC_KEY, target) || [];
     registeredStatics.unshift({ root, options, virtual });
-    MetaData.set(REGISTERED_STATIC_KEY, registeredStatics, target);
+    Metadata.set(REGISTERED_STATIC_KEY, registeredStatics, target);
   };
 }
 
@@ -215,9 +215,9 @@ export function ExpressDirective(name: string, ...settings: any[]) {
     if (!EXPRESS_DIRECTIVES.includes(name)) {
       throw new Error(`Directive Name ${name} is not valid express behavior setting`);
     }
-    const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, target) || [];
+    const registeredDirectives = Metadata.get(REGISTERED_DIRECTIVES_KEY, target) || [];
     registeredDirectives.unshift({ name, settings });
-    MetaData.set(REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
+    Metadata.set(REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
   };
 }
 
@@ -249,9 +249,9 @@ export function Modules(Modules: any[]) {
   return (target: any) => {
 
     for (const Module of Modules) {
-      const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+      const registeredModules = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
       registeredModules.unshift(Module);
-      MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
+      Metadata.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
     }
 
   };
@@ -263,9 +263,9 @@ export function Proxies(proxyContainers: any[]) {
   return (target: any) => {
 
     for (const proxyContainer of proxyContainers) {
-      const registeredProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, target) || [];
+      const registeredProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, target) || [];
       registeredProxyContainers.unshift(proxyContainer);
-      MetaData.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
+      Metadata.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
     }
 
   };
@@ -290,14 +290,14 @@ export function RegisterModule(Module: any) {
 
 export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
   return (target: object) => {
-    MetaData.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
-    MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
+    Metadata.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
+    Metadata.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
   };
 }
 
 export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
   return (target: object) => {
-    MetaData.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
-    MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
+    Metadata.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
+    Metadata.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
   };
 }

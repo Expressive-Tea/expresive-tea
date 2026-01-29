@@ -1,4 +1,4 @@
-import { type ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
+import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 import initTeapot from './helpers/teapot-init';
 import container from '../../inversify.config';
 import { createHttpTerminator } from 'http-terminator';
@@ -20,11 +20,30 @@ describe('Teapot/Teacup integration', () => {
     request = testInit.request;
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     container.unbindAll();
-    appTeapot.server.close();
-    appTeacup.server.close();
-    extraTeacups.forEach(a => a.server.close());
+    
+    if (appTeapot?.server) {
+      await new Promise<void>((resolve) => {
+        appTeapot.server.close(() => resolve());
+      });
+    }
+    
+    if (appTeacup?.server) {
+      await new Promise<void>((resolve) => {
+        appTeacup.server.close(() => resolve());
+      });
+    }
+    
+    if (extraTeacups) {
+      for (const teacup of extraTeacups) {
+        if (teacup?.server) {
+          await new Promise<void>((resolve) => {
+            teacup.server.close(() => resolve());
+          });
+        }
+      }
+    }
   });
 
   test('should initialize Teapot Service', async () => {

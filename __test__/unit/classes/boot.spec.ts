@@ -2,7 +2,7 @@ import Boot from '@classes/Boot';
 import Settings from '@classes/Settings';
 import { Modules, Plug } from '@decorators/server';
 import container from '../../../inversify.config';
-import { BOOT_STAGES } from '@expressive-tea/commons/constants';
+import { BOOT_STAGES } from '@expressive-tea/commons';
 import Module from '@test-classes/module';
 
 const softPluginMock = jest.fn();
@@ -19,13 +19,16 @@ class DefaultBootstrap extends Boot {
 }
 
 describe('Boot Class', () => {
+  let portCounter = 6000;
+  
   beforeEach(() => {
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     container.unbindAll();
     Settings.reset();
   });
@@ -43,7 +46,9 @@ describe('Boot Class', () => {
     // secureServer may be null or undefined depending on environment
     expect(app.secureServer == null).toBeTruthy();
     if (app && app.server && typeof app.server.close === 'function') {
-      app.server.close();
+      await new Promise<void>((resolve) => {
+        app.server.close(() => resolve());
+      });
     }
   });
 
@@ -62,7 +67,9 @@ describe('Boot Class', () => {
     expect(boot.settings).toEqual(Settings.getInstance());
 
     if (app && app.server && typeof app.server.close === 'function') {
-      app.server.close();
+      await new Promise<void>((resolve) => {
+        app.server.close(() => resolve());
+      });
     }
   });
 
@@ -78,7 +85,9 @@ describe('Boot Class', () => {
     expect(app.secureServer == null).toBeTruthy();
 
     if (app && app.server && typeof app.server.close === 'function') {
-      app.server.close();
+      await new Promise<void>((resolve) => {
+        app.server.close(() => resolve());
+      });
     }
   });
 

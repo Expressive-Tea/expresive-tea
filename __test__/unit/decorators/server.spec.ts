@@ -1,5 +1,5 @@
 import { last } from '@libs/utilities';
-import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/commons';
 import Settings from '@classes/Settings';
 import {
   ExpressDirective,
@@ -15,9 +15,9 @@ import {
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import Plugin, { mockPluginArguments } from '@test-mocks/plugin';
-import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons';
 import { Express } from 'express';
 import DependencyInjection from '@services/DependencyInjection';
 

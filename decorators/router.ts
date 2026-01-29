@@ -1,14 +1,14 @@
-import MetaData from '@expressive-tea/commons/classes/Metadata';
+import { Metadata } from '@expressive-tea/commons';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import { addAnnotation } from '@helpers/decorators';
 import { generateRoute, router } from '@helpers/server';
 import {
   ROUTER_MIDDLEWARES_KEY
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import {
   type ClassDecorator,
   type MethodDecorator
-} from '@expressive-tea/commons/types';
+} from '@expressive-tea/commons';
 import { Routerize, type RouterizedClass } from '@mixins/route';
 import { type Constructor, TFunction } from '../types/core';
 import { type RequestHandler } from 'express';
@@ -248,9 +248,9 @@ export function View(viewName: string, route?: string): MethodDecorator {
 }
 
 function rootMiddleware(target: any, middleware: RequestHandler): void {
-  const existedRoutesHandlers: RequestHandler[] = MetaData.get(ROUTER_MIDDLEWARES_KEY, target) || [];
+  const existedRoutesHandlers: RequestHandler[] = Metadata.get(ROUTER_MIDDLEWARES_KEY, target) || [];
   existedRoutesHandlers.unshift(middleware);
-  MetaData.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
+  Metadata.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
 }
 
 function routeMiddleware(_: any, descriptor: any, middleware: RequestHandler) {

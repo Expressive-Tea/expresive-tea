@@ -2,6 +2,11 @@ export const httpServerMock = {
   listen: jest.fn(),
   listeners: jest.fn().mockImplementation(() => []),
   removeAllListeners: jest.fn().mockImplementation(() => ({url: ''})),
+  close: jest.fn().mockImplementation((callback?: () => void) => {
+    if (callback) {
+      callback();
+    }
+  }),
   on: jest.fn().mockImplementation((event, callback) => {
     if (event === 'error') {
       return false;

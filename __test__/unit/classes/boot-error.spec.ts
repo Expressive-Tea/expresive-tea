@@ -1,6 +1,6 @@
-import { BOOT_STAGES } from '@expressive-tea/commons/constants';
+import { BOOT_STAGES } from '@expressive-tea/commons';
 import { Plugin } from '@expressive-tea/plugin';
-import { Stage } from '@expressive-tea/plugin/decorators';
+import { Stage } from '@expressive-tea/plugin';
 import Boot from '@classes/Boot';
 import Settings from '@classes/Settings';
 import { Modules, Pour } from '@decorators/server';
@@ -32,11 +32,14 @@ class HardPlugin extends Plugin {
 }
 
 describe('Boot Soft Errors Class', () => {
+  let portCounter = 7000;
+  
   @Pour(SoftPlugin)
   @Modules([Module])
   class BootstrapSoftError extends Boot {}
 
   beforeEach(() => {
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();
@@ -67,11 +70,14 @@ describe('Boot Soft Errors Class', () => {
 });
 
 describe('Boot Hard Errors Class', () => {
+  let portCounter = 7100;
+  
   @Pour(HardPlugin)
   @Modules([Module])
   class BootstrapHardError extends Boot {}
 
   beforeEach(() => {
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();

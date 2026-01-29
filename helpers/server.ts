@@ -1,13 +1,13 @@
 import { type NextFunction, type Request, type Response } from 'express';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
 import { chain, find, get, has, isNumber, pick, size } from '@libs/utilities';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
+import { Metadata } from '@expressive-tea/metadata';
+import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons';
 import {
   type ExpressiveTeaAnnotations,
   type ExpressiveTeaArgumentOptions
-} from '@expressive-tea/commons/interfaces';
-import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
+} from '@expressive-tea/commons';
+import { getOwnArgumentNames } from '@expressive-tea/commons';
 import * as fs from 'node:fs';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
@@ -132,9 +132,9 @@ export function router(
   settings?: any
 ) {
   const introspectedArgs = getOwnArgumentNames(handler);
-  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
+  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = Metadata.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings, introspectedArgs });
-  MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
+  Metadata.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
 
 export function fileSettings() {

@@ -3,8 +3,8 @@ import { type NextFunction, type Request, type Response } from 'express';
 import * as jestRequest from 'jest-express/lib/request';
 import * as jestResponse from 'jest-express/lib/response';
 import { autoResponse, executeRequest, extractParameters, mapArguments } from '../../../helpers/server';
-import { ARGUMENT_TYPES } from '@expressive-tea/commons/constants';
-import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
+import { ARGUMENT_TYPES } from '@expressive-tea/commons';
+import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons';
 
 describe('Server Helper', () => {
 

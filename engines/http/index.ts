@@ -2,9 +2,9 @@ import * as http from 'node:http';
 import * as https from 'node:https';
 import { injectable, injectFromBase } from 'inversify';
 import { resolveDirectives, resolveStage, resolveStatic, resolveProxy } from '@helpers/boot-helper';
-import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/commons/constants';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/commons';
+import { getClass } from '@expressive-tea/commons';
+import { Metadata } from '@expressive-tea/metadata';
 import ExpressiveTeaEngine from '@classes/Engine';
 
 @injectable()

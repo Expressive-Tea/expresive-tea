@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import { Constructor } from '../types/core';
-import type { IExpressiveTeaProxySettings } from '@expressive-tea/commons/interfaces';
+import type { IExpressiveTeaProxySettings } from '@expressive-tea/commons';
 import type { Express, RequestHandler } from 'express';
 import * as httpProxy from 'express-http-proxy';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons/constants';
+import { Metadata } from '@expressive-tea/metadata';
+import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons';
 import { isUndefined } from '@libs/utilities';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
+import { getClass } from '@expressive-tea/commons';
 import { injectable, injectFromBase } from 'inversify';
 
 /**
@@ -68,16 +68,16 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
       this.target = targetUrl;
 
       const options:httpProxy.ProxyOptions = {};
-      const host:PropertyDescriptor = MetaData.get(PROXY_SETTING_KEY, this, PROXY_METHODS.HOST);
+      const host:PropertyDescriptor = Metadata.get(PROXY_SETTING_KEY, this, PROXY_METHODS.HOST);
 
       for (const value of Object.values(PROXY_METHODS)) {
         if (value !== PROXY_METHODS.HOST) {
-          options[value] = MetaData.get(PROXY_SETTING_KEY, this, value);
+          options[value] = Metadata.get(PROXY_SETTING_KEY, this, value);
         }
       }
 
       for (const value of Object.values(PROXY_PROPERTIES)) {
-        const key: string = MetaData.get(PROXY_SETTING_KEY, this, value);
+        const key: string = Metadata.get(PROXY_SETTING_KEY, this, value);
         if (!isUndefined(key)) {
            
           (options as any)[value] = (this as any)[key];
@@ -89,7 +89,7 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
     }
 
     __register(server: Express): void {
-      const proxyMetadata: IExpressiveTeaProxySettings  = MetaData.get(PROXY_SETTING_KEY, getClass(this));
+      const proxyMetadata: IExpressiveTeaProxySettings  = Metadata.get(PROXY_SETTING_KEY, getClass(this));
       console.info(`[PROXY - ${proxyMetadata.name}] ${this.source} -> ${this.target}`);
       server.use(this.source, this.proxyHandler);
     }
