@@ -1,7 +1,7 @@
 
 import { inject, injectable, optional } from 'inversify';
 import Settings from '@classes/Settings';
-import Boot from '@classes/Boot';
+import type Boot from '@classes/Boot';
 import {Server as HttpServer} from 'node:http';
 import {Server as HttpsServer} from 'node:https';
 import { TYPES } from '../types/injection-types';

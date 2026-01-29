@@ -3,12 +3,12 @@ module.exports = {
     '<rootDir>/'
   ],
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: 'tsconfig.spec.json'
-    }]
+    '^.+\\.(t|j)sx?$': ['@swc/jest']
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  moduleDirectories: ['node_modules', '<rootDir>'],
+  extensionsToTreatAsEsm: [],
   verbose: false,
   displayName: 'EXP-TEA:CORE',
   testTimeout: 30000,
