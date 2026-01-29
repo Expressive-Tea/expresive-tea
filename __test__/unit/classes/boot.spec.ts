@@ -4,6 +4,7 @@ import { Modules, Plug } from '../../../decorators/server';
 import container from '../../../inversify.config';
 import { BOOT_STAGES } from '@expressive-tea/commons';
 import Module from '../../test-classes/module';
+import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();
@@ -20,8 +21,10 @@ class DefaultBootstrap extends Boot {
 
 describe('Boot Class', () => {
   let portCounter = 6000;
+  let appInstances: ExpressiveTeaApplication[] = [];
   
   beforeEach(() => {
+    appInstances = [];
     Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
@@ -29,6 +32,20 @@ describe('Boot Class', () => {
   });
 
   afterEach(async () => {
+    // Close all app instances that were created
+    for (const app of appInstances) {
+      if (app?.server) {
+        await new Promise<void>((resolve) => {
+          app.server.close(() => resolve());
+        });
+      }
+      if (app?.secureServer) {
+        await new Promise<void>((resolve) => {
+          app.secureServer.close(() => resolve());
+        });
+      }
+    }
+    appInstances = [];
     container.unbindAll();
     Settings.reset();
   });
@@ -36,6 +53,7 @@ describe('Boot Class', () => {
   test('should start server as default', async () => {
     const boot = new DefaultBootstrap();
     const app = await boot.start();
+    appInstances.push(app);
 
     expect(boot.settings).toBeInstanceOf(Settings);
     expect(boot.settings).toEqual(Settings.getInstance());
@@ -45,11 +63,6 @@ describe('Boot Class', () => {
     expect(app.server).toBeDefined();
     // secureServer may be null or undefined depending on environment
     expect(app.secureServer == null).toBeTruthy();
-    if (app && app.server && typeof app.server.close === 'function') {
-      await new Promise<void>((resolve) => {
-        app.server.close(() => resolve());
-      });
-    }
   });
 
   test('should create instance correctly', () => {
@@ -62,15 +75,10 @@ describe('Boot Class', () => {
   test('should start an application', async () => {
     const boot = new Bootstrap();
     const app = await boot.start();
+    appInstances.push(app);
 
     expect(boot.settings).toBeInstanceOf(Settings);
     expect(boot.settings).toEqual(Settings.getInstance());
-
-    if (app && app.server && typeof app.server.close === 'function') {
-      await new Promise<void>((resolve) => {
-        app.server.close(() => resolve());
-      });
-    }
   });
 
   test('should not fail if soft plugin fails', async () => {
@@ -79,16 +87,12 @@ describe('Boot Class', () => {
     });
     const boot = new Bootstrap();
     const app = await boot.start();
+    appInstances.push(app);
+    
     expect(app).toBeDefined();
     expect(app.application).toBeDefined();
     expect(app.server).toBeDefined();
     expect(app.secureServer == null).toBeTruthy();
-
-    if (app && app.server && typeof app.server.close === 'function') {
-      await new Promise<void>((resolve) => {
-        app.server.close(() => resolve());
-      });
-    }
   });
 
   test('should fail if hard plugin fails', async () => {
@@ -97,7 +101,6 @@ describe('Boot Class', () => {
     hardPluginMock.mockImplementationOnce(() => {
       throw errorMessage;
     });
-
     const boot = new Bootstrap();
     void expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
