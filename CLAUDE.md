@@ -32,11 +32,14 @@ yarn format             # Format code with Prettier
 
 ### Running Individual Tests
 ```bash
-# Run a single test file
-npx jest __test__/unit/classes/boot.spec.ts
+# Run a single test file by path (recommended for fast feedback)
+yarn jest __test__/unit/classes/boot-extend.spec.ts --runTestsByPath
 
-# Run tests matching a pattern
-npx jest --testNamePattern="should initialize"
+# Or using explicit path with node_modules binary
+./node_modules/.bin/jest __test__/unit/classes/boot-extend.spec.ts --runTestsByPath
+
+# Run a single test case by name (regex)
+yarn jest -t "should initialize" --runInBand
 
 # Run with watch mode
 npx jest --watch __test__/unit/decorators/
@@ -266,6 +269,15 @@ The codebase uses:
 - ES2017 target
 - Decorator metadata emission is critical
 
+## Environment and Tooling
+
+- **Node engine**: `node >= 18.0.0` (see `package.json` "engines")
+- **Package manager**: `yarn@4.x` (project `packageManager`). Use `yarn` commands unless otherwise noted
+- **Jest configuration**: `jest.config.js` (ts-jest transformer, 30s timeout, coverage reporters configured)
+- **Linting**: `eslint.config.js` and `tsconfig.linter.json` drive TypeScript lint rules used by ESLint/TypeScript parser
+- **Formatting**: `.prettierrc` defines formatting preferences (120 cols, single quotes, semicolons enabled)
+- **ESLint history**: The repo includes `tslint.json` (legacy) but the active linter is ESLint with `@typescript-eslint` (`eslint.config.js`). Rely on ESLint for new rules and fixes
+
 ## Testing Notes
 
 - Framework uses Jest with ts-jest
@@ -276,6 +288,11 @@ The codebase uses:
 - JUnit reports: `./reports/junit.xml`
 
 **Test pattern**: Tests validate decorator metadata storage, mixin transformations, DI bindings, boot stage execution, and request lifecycle.
+
+**Useful test helpers**:
+- `yarn test:clear` clears Jest cache
+- `yarn test:dev` runs tests without coverage to speed iteration
+- For CI: `yarn test:ci` (linter strict + jest --ci)
 
 ## Common Patterns
 
@@ -341,13 +358,61 @@ Response handling:
 Exceptions: caught and passed to Express error handler
 ```
 
-## Code Style
+## Code Style and Conventions
 
+### Formatting & General Style
+- Use Prettier baseline rules defined in `.prettierrc` (120 char print width, tabWidth 2, `singleQuote: true`, `semi: true`)
+- Run `yarn format` for large changes; `yarn linter` will also auto-fix many issues
 - Uses ESLint v9 flat config (eslint.config.js)
 - Extends eslint-config-love (TypeScript strict rules)
-- Prettier for formatting
 - No implicit any allowed for core code
+
+### Imports and Modules
+- Prefer ES module style `import X from '...'` or named imports `import { foo } from '...'` where appropriate
+- Avoid duplicate imports — ESLint enforces `no-duplicate-imports`
+- Group imports by: 1) external packages, 2) internal packages (`@expressive-tea/*`), 3) local files — each group separated by a single blank line
+- Use relative paths for local modules (e.g. `../helpers/promise-helper`) and absolute package-scoped imports for shared packages
+
+### TypeScript Typing
+- Prefer explicit types for exported contracts (interfaces, types, public APIs). Files like `types/core.ts` show project conventions
+- `any` is permitted sparingly for tests and places where typing is impractical but prefer `unknown` + narrowing when possible
+- `Constructor<T>` and `TFunction` utility types are used in the codebase; match those patterns for consistency (`types/core.ts`)
+- Keep `emitDecoratorMetadata` and `experimentalDecorators` usage (they're enabled in `tsconfig.json`). When using decorators, annotate injected types where possible
+
+### Naming Conventions
+- Classes and React-like constructs: PascalCase (e.g. `Boot`, `Settings`, `HTTPEngine`)
+- Types and interfaces: PascalCase with `I` prefix for external interfaces (project uses interfaces from `@expressive-tea/commons/interfaces`)
+- Functions and variables: camelCase
+- Constants: UPPER_SNAKE_CASE only for true compile-time constants; otherwise use camelCase exported names (few constants exist in `engines/constants/constants.ts`)
+
+### Files & Directories
+- Keep one exported class/type per file unless tightly-coupled small helpers
+- Test files live in `__test__/` following the pattern `*.spec.ts` or `*.test.ts`
+
+### Error Handling
+- Use typed, domain-specific Error classes located in `exceptions/` (e.g. `BootLoaderExceptions.ts`, `RequestExceptions.ts`) for predictable error handling
+- Throw explicit Error subclasses rather than raw strings
+- Propagate errors up; prefer centralized handling in engine/startup code. Unit tests should assert thrown subclass types where practical
+
+### Dependency Injection & Decorators
+- The project uses `inversify` and `reflect-metadata`. Follow existing patterns in `inversify.config.ts`, `services/DependencyInjection.ts`, and class constructors
+- When binding to the DI container, use the class or named identifier consistently (see `classes/Boot.ts` and `Boot.initializeContainer`)
+- Decorators are used in `decorators/` — match the existing decorator contract and document new decorators with JSDoc
 - Decorator usage is pervasive - always check metadata storage/retrieval patterns
+
+### Tests and Mocks
+- Put unit tests under `__test__/unit/` and integration tests under `__test__/integrations/`
+- Use the project mocks in `__test__/__mocks__/` when available; jest will pick them up automatically
+- Prefer `--runInBand` when running flaky or environment-sensitive tests locally
+- Use `jest-express`, `supertest`, and `ts-jest` as the codebase already relies on them
+
+### Documentation & JSDoc
+- Keep exported APIs documented using JSDoc comments (the repo uses `eslint-plugin-jsdoc` and `jsdoc.json` / `jsdocs.json` tools)
+- For public-facing changes update `README.md` and `CHANGELOG.md` and ensure your PR follows `.github/PULL_REQUEST_TEMPLATE.md` checklist
+
+### CI / PR Expectations
+- All PRs must pass `yarn test` (linter + tests) before merge — enforced by `prepublishOnly` and CI workflows
+- Provide at least two reviewers or one reviewer + maintainer merge per `CONTRIBUTING.md`
 
 ## Important Implementation Notes
 
@@ -372,6 +437,17 @@ Exceptions: caught and passed to Express error handler
 **Plugin packages** (peer dependencies):
 - `@expressive-tea/commons` - Shared constants, metadata utilities
 - `@expressive-tea/plugin` - Plugin base class
+- `@expressive-tea/metadata` - Metadata utilities
+
+## Monorepo Structure
+
+This project is part of a monorepo structure. The following packages are located in `/Users/chrnx/projects/expressive-tea/packages` with **full Read/Write access**:
+
+- **`@expressive-tea/plugin`** - Plugin base class and utilities
+- **`@expressive-tea/commons`** - Shared constants and metadata utilities
+- **`@expressive-tea/metadata`** - Metadata handling and utilities
+
+You have permission to edit and apply changes to these packages as needed when working on the framework.
 
 ## Package Management
 
@@ -383,3 +459,95 @@ This project uses **Yarn v4** (Berry):
 ## Main Branch
 
 The main development branch is **`develop`**, not `master`. Create PRs targeting `develop`.
+
+## Staging Registry (Verdaccio)
+
+Use a local Verdaccio instance as a staging npm registry to test publishing without touching the public registry.
+
+- **Image**: `verdaccio/verdaccio:latest` (official)
+- **Container name**: `verdaccio-expressive-tea`
+- **Default URL**: http://localhost:4873
+- **Anonymous publishing**: enabled (local only)
+- **Allow same-version uploads**: aim to permit overwrites
+- **Persistence**: not required. It's OK to run without volumes (ephemeral storage)
+
+### Quick Commands
+
+Start (Docker):
+```bash
+docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 verdaccio/verdaccio:latest
+```
+
+Start (Podman):
+```bash
+podman run -d --rm --name verdaccio-expressive-tea -p 4873:4873 docker.io/verdaccio/verdaccio:latest
+```
+
+Check if running (returns container id if up):
+```bash
+docker ps -q -f name=verdaccio-expressive-tea
+```
+
+Publish to local Verdaccio (example):
+```bash
+# point npm to local registry
+npm set registry http://localhost:4873
+
+# publish (from package root)
+npm publish --registry http://localhost:4873
+
+# restore default registry
+npm set registry https://registry.npmjs.org/
+```
+
+### Notes & Recommendations
+
+- The repo includes a minimal Verdaccio config under `.docs/verdaccio/config.yaml`. It configures anonymous access and allows publishing. Run the container with that config if you need deterministic behavior:
+
+  ```bash
+  docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 \
+    -v $(pwd)/.docs/verdaccio/config.yaml:/verdaccio/conf/config.yaml \
+    verdaccio/verdaccio:latest
+  ```
+
+- We prefer anonymous publishing for local staging. Do not expose this registry to the public network
+- If Verdaccio rejects a same-version publish, you can either:
+  - publish with `npm publish --force --registry http://localhost:4873`, or
+  - delete the package version from Verdaccio UI/storage and re-publish
+- Check container by name (`verdaccio-expressive-tea`) before starting a new one; start only if not running
+
+Add this staging step to your local publish workflow to validate builds and packages before public publish.
+
+## Agent Memory & Preferences
+
+### Summary Behavior
+- Keep summaries short and concise by default. Avoid long comprehensive summaries unless requested
+
+### Verdaccio Staging Preferences (Persisted)
+- Use official image: `verdaccio/verdaccio:latest`
+- Container name: `verdaccio-expressive-tea`
+- Default URL: http://localhost:4873
+- Runtime: Docker or Podman (either is acceptable)
+- Config: use `.docs/verdaccio/config.yaml` (provided) for deterministic behavior
+- Anonymous publishing: enabled for local staging (do not expose externally)
+- Allow same-version overwrite: enabled for staging
+- Persistence: running without persistent volumes is acceptable
+- Start behavior: check for a running container named `verdaccio-expressive-tea` and only start if not present
+
+### Publishing Workflow Rule
+- **Always test publishes against local Verdaccio before publishing to the public registry**
+
+### Git Rules (Persisted)
+- **NEVER commit directly to `main` or `develop`**. If on those branches, create a new feature branch first (default prefix: `feature/`)
+- Follow GitFlow standards (feature/release/hotfix branches and flow)
+
+### Automation Behavior
+- These preferences are persisted in agent memory and should be applied automatically before any publish attempts performed by the agent
+
+## Quick References
+
+- **package.json**: `package.json` (scripts and engines)
+- **lint config**: `eslint.config.js`, `tsconfig.linter.json`
+- **prettier config**: `.prettierrc`
+- **types**: `types/core.ts`
+- **tests**: `jest.config.js`, `__test__`

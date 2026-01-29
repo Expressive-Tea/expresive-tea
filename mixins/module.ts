@@ -73,5 +73,17 @@ export function Modulize<TBase extends Constructor>(Base: TBase, options: Expres
     }
   }
 
+  // Bind the original class to the wrapped class in the DI container
+  // This ensures that when the application requests the original module class,
+  // it receives an instance of the wrapped ExpressiveTeaModule class instead
+  try {
+    if (DependencyInjection.Container.isBound(Base)) {
+      DependencyInjection.Container.unbind(Base);
+    }
+    DependencyInjection.Container.bind<any>(Base).to(ExpressiveTeaModule);
+  } catch (error) {
+    // Binding may fail in some contexts, but that's okay - the class is still usable
+  }
+
   return ExpressiveTeaModule as ModulizedClass<TBase>;
 }

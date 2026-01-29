@@ -1,4 +1,4 @@
-import { Metadata } from '@expressive-tea/metadata';
+import { Metadata } from '@expressive-tea/commons';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
 import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons';
 import { isAsyncFunction } from '@expressive-tea/commons';

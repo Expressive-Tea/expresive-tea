@@ -245,15 +245,13 @@ export function Setting(): (target: any, propertyName: string) => any {
  */
  
 export function Modules(Modules: any[]) {
-   
-  return (target: any) => {
 
+  return (target: any) => {
     for (const Module of Modules) {
       const registeredModules = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
       registeredModules.unshift(Module);
       Metadata.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
     }
-
   };
 }
 

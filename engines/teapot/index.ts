@@ -153,7 +153,8 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async init(): Promise<void> {
-    this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, this.context);
+    // Metadata is stored on the class by decorators, not on instances
+    this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this.context));
 
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
     this.publicKey = publicKey;
@@ -163,6 +164,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   async start(): Promise<void> {
+    // Socket.IO instance is stored on the Boot instance at runtime (not on the class)
     this.socketServer = Metadata.get(SOCKET_IO_INSTANCE_KEY, this.context).of('/teapot');
     TeapotEngine.header(this.teapotSettings);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

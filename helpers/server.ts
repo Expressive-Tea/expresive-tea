@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
 import { chain, find, get, has, isNumber, pick, size } from '@libs/utilities';
-import { Metadata } from '@expressive-tea/metadata';
+import { Metadata } from '@expressive-tea/commons';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons';
 import {
   type ExpressiveTeaAnnotations,

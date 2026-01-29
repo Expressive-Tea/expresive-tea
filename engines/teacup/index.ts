@@ -4,7 +4,7 @@ import {URL} from 'url';
 import { io, Socket } from 'socket.io-client';
 import { injectable, injectFromBase } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons';
-import { Metadata } from '@expressive-tea/metadata';
+import { Metadata } from '@expressive-tea/commons';
 import { ASSIGN_TEACUP_KEY } from '@expressive-tea/commons';
 import TeaGatewayHelper from '@helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons';

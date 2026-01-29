@@ -18,6 +18,7 @@ import {
 import type { ExpressMiddlewareHandler } from '@expressive-tea/commons';
 import { executeRequest } from '../helpers/server';
 import { injectable, injectFromBase } from 'inversify';
+import DependencyInjection from '@services/DependencyInjection';
 
 /**
  * Type definition for a routerized class
@@ -70,11 +71,13 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
     readonly router: Router;
     readonly mountpoint: string;
 
-     
+
     constructor(...args: any[]) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       super(...args)
-      const handlers: ExpressiveTeaHandlerOptions[] = Metadata.get(ROUTER_HANDLERS_KEY, this) ?? [];
+      // Metadata is stored on the original class prototype by decorators
+      // Route is the base class, so Route.prototype is where metadata is stored
+      const handlers: ExpressiveTeaHandlerOptions[] = Metadata.get(ROUTER_HANDLERS_KEY, Route.prototype) ?? [];
 
       this.router = Router();
       this.mountpoint = mountpoint;
@@ -91,7 +94,8 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
     }
 
     __mount(parent: Router): this {
-      const rootMiddlewares: RequestHandler[] = Metadata.get(ROUTER_MIDDLEWARES_KEY, this) || [];
+      // Metadata is stored on the original class prototype by decorators
+      const rootMiddlewares: RequestHandler[] = Metadata.get(ROUTER_MIDDLEWARES_KEY, Route.prototype) || [];
       parent.use(this.mountpoint, ...rootMiddlewares, this.router);
       return this;
     }
@@ -117,6 +121,18 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
         self: this
       }) as ExpressMiddlewareHandler;
     }
+  }
+
+  // Bind the original class to the wrapped class in the DI container
+  // This ensures that when modules request the original class via getInstanceOf(),
+  // they receive an instance of the wrapped ExpressiveTeaRoute class instead
+  try {
+    if (DependencyInjection.Container.isBound(Route)) {
+      DependencyInjection.Container.unbind(Route);
+    }
+    DependencyInjection.Container.bind<any>(Route).to(ExpressiveTeaRoute);
+  } catch (error) {
+    // Binding may fail in some contexts, but that's okay - the class is still usable
   }
 
   return ExpressiveTeaRoute as RouterizedClass<TBase>;

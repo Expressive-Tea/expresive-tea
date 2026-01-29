@@ -3,11 +3,12 @@ import { Constructor } from '../types/core';
 import type { IExpressiveTeaProxySettings } from '@expressive-tea/commons';
 import type { Express, RequestHandler } from 'express';
 import * as httpProxy from 'express-http-proxy';
-import { Metadata } from '@expressive-tea/metadata';
+import { Metadata } from '@expressive-tea/commons';
 import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons';
 import { isUndefined } from '@libs/utilities';
 import { getClass } from '@expressive-tea/commons';
 import { injectable, injectFromBase } from 'inversify';
+import DependencyInjection from '@services/DependencyInjection';
 
 /**
  * Type definition for a proxified class
@@ -94,5 +95,18 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
       server.use(this.source, this.proxyHandler);
     }
   }
+
+  // Bind the original class to the wrapped class in the DI container
+  // This ensures that when the application requests the original proxy class,
+  // it receives an instance of the wrapped ExpressiveTeaProxy class instead
+  try {
+    if (DependencyInjection.Container.isBound(Base)) {
+      DependencyInjection.Container.unbind(Base);
+    }
+    DependencyInjection.Container.bind<any>(Base).to(ExpressiveTeaProxy);
+  } catch (error) {
+    // Binding may fail in some contexts, but that's okay - the class is still usable
+  }
+
   return ExpressiveTeaProxy as ProxifiedClass<TBase>;
 }

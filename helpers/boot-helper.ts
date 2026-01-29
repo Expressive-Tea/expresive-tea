@@ -10,7 +10,7 @@ import {
 } from '@expressive-tea/commons';
 import * as express from 'express';
 import { type Express } from 'express';
-import { Metadata } from '@expressive-tea/metadata';
+import { Metadata } from '@expressive-tea/commons';
 import { getClass } from '@expressive-tea/commons';
 import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons';
 import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@exceptions/BootLoaderExceptions';
@@ -59,7 +59,11 @@ export function resolveProxy(ProxyContainer: any, server: Express): void {
 }
 
 function resolveModules(instance: typeof Boot | Boot, server: Express): void {
-  const registeredModules: ModulizedExpressiveTeaModule<any> = Metadata.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
+  // Metadata is stored on the class by decorators, so we need to get the constructor
+  // If instance is already a class (typeof === 'function'), use it directly
+  // If instance is an object, get its constructor
+  const target = typeof instance === 'function' ? instance : instance.constructor;
+  const registeredModules: ModulizedExpressiveTeaModule<any> = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
   for ( const Module of registeredModules ) {
     const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = getInstanceOf<typeof Module>(Module as Newable);
     moduleInstance.__register(server);
