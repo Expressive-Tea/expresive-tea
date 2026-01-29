@@ -1,5 +1,5 @@
-import { inRange } from '@libs/utilities';
-import LoadBalancer from '@classes/LoadBalancer';
+import { inRange } from '../../../libs/utilities';
+import LoadBalancer from '../../../classes/LoadBalancer';
 
 describe('Load Balancer', () => {
 

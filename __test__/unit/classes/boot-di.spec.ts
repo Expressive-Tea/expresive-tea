@@ -3,8 +3,8 @@
  * Tests for getContainer(), registerProvider(), and registerConstant() methods
  * @since 2.0.0
  */
-import Boot from '@classes/Boot';
-import Settings from '@classes/Settings';
+import Boot from '../../../classes/Boot';
+import Settings from '../../../classes/Settings';
 import { injectable } from 'inversify';
 import container from '../../../inversify.config';
 

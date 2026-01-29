@@ -49,9 +49,10 @@
   "module": {
     "type": "commonjs",
     "strict": false,
-    "strictMode": false,
+    "strictMode": true,
     "lazy": false,
     "noInterop": false,
+    "importInterop": "swc",
     "ignoreDynamic": true
   },
   "sourceMaps": true,

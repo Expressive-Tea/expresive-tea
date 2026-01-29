@@ -1,7 +1,7 @@
 import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 import initServer from './helpers/server-init';
 import container from '../../inversify.config';
-import Settings from '@classes/Settings';
+import Settings from '../../classes/Settings';
 
 describe('Webserver integration', () => {
   let app: ExpressiveTeaApplication;

@@ -1,10 +1,10 @@
 import * as supertest from 'supertest';
-import Boot from '@classes/Boot';
-import { Modules, ServerSettings, Teacup, Teapot } from '@decorators/server';
+import Boot from '../../../classes/Boot';
+import { Modules, ServerSettings, Teacup, Teapot } from '../../../decorators/server';
 import TeapotModule from './modules/teapot/RootModule';
 import TeacupModule1 from './modules/teacup1/RootModule';
 import TeacupModule2 from './modules/teacup2/RootModule';
-import { delay } from '@helpers/promise-helper';
+import { delay } from '../../../helpers/promise-helper';
 
 const teapotPort = 8080;
 

@@ -1,9 +1,9 @@
 import * as path from 'path';
-import Boot from '@classes/Boot';
-import { ServerSettings } from '@decorators/server';
+import Boot from '../../classes/Boot';
+import { ServerSettings } from '../../decorators/server';
 import { ExpressiveTeaApplication } from '@expressive-tea/commons';
 import container from '../../inversify.config';
-import Settings from '@classes/Settings';
+import Settings from '../../classes/Settings';
 
 
 describe('Websocket integration', () => {

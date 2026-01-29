@@ -1,5 +1,5 @@
 import { Container, injectable } from 'inversify';
-import DependencyInjection from '@services/DependencyInjection';
+import DependencyInjection from '../../../services/DependencyInjection';
 
 describe('Dependency Injection Service', () => {
   let containerBindSpy;

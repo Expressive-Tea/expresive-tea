@@ -1,5 +1,5 @@
-import { Get, Middleware, Post, Route } from '@decorators/router';
-import { body } from '@decorators/annotations';
+import { Get, Middleware, Post, Route } from '../../../../../../decorators/router';
+import { body } from '../../../../../../decorators/annotations';
 
 @Route('/')
 export default class RootController {

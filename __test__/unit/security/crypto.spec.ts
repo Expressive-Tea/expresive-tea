@@ -4,7 +4,7 @@
  * @since 2.0.0
  */
 import * as crypto from 'node:crypto';
-import TeaGatewayHelper, { type EncryptedMessage, type TeaGatewayMessage } from '@helpers/teapot-helper';
+import TeaGatewayHelper, { type EncryptedMessage, type TeaGatewayMessage } from '../../../helpers/teapot-helper';
 
 describe('TeaGatewayHelper Crypto Security', () => {
   let testSignature: Buffer;

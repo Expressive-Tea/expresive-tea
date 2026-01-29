@@ -1,6 +1,6 @@
-import { last } from '@libs/utilities';
+import { last } from '../../../libs/utilities';
 import { Metadata } from '@expressive-tea/commons';
-import Settings from '@classes/Settings';
+import Settings from '../../../classes/Settings';
 import {
   ExpressDirective,
   Pour,
@@ -9,17 +9,17 @@ import {
   Setting,
   Static,
   Modules
-} from '@decorators/server';
+} from '../../../decorators/server';
 import {
   PLUGINS_KEY,
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
 } from '@expressive-tea/commons';
-import Plugin, { mockPluginArguments } from '@test-mocks/plugin';
+import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
 import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons';
 import { Express } from 'express';
-import DependencyInjection from '@services/DependencyInjection';
+import DependencyInjection from '../../../services/DependencyInjection';
 
 describe('ServerSettings Decorator', () => {
   beforeEach(() => {

@@ -2,11 +2,11 @@ import * as http from 'http';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
-import Boot from '@classes/Boot';
-import Settings from '@classes/Settings';
-import Module, { registerMock } from '@test-classes/module';
+import Boot from '../../../classes/Boot';
+import Settings from '../../../classes/Settings';
+import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
-import { Modules } from '@decorators/server';
+import { Modules } from '../../../decorators/server';
 
 
 const originalCreateServer = http.createServer;

@@ -1,7 +1,7 @@
-import { Get, Middleware, Post, Route } from '@decorators/router';
-import { body, next, request, response, param, query } from '@decorators/annotations';
+import { Get, Middleware, Post, Route } from '../../../../../../decorators/router';
+import { body, next, request, response, param, query } from '../../../../../../decorators/annotations';
 import { Response, Request } from 'express';
-import { BadRequestException } from '@exceptions/RequestExceptions';
+import { BadRequestException } from '../../../../../../exceptions/RequestExceptions';
 
 @Route('/')
 export default class RootController {
