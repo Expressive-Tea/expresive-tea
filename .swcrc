@@ -8,7 +8,8 @@
     },
     "transform": {
       "legacyDecorator": true,
-      "decoratorMetadata": true
+      "decoratorMetadata": true,
+      "useDefineForClassFields": false
     },
     "target": "es2020",
     "keepClassNames": true,
