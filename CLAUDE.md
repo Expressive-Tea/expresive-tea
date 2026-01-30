@@ -544,8 +544,57 @@ Add this staging step to your local publish workflow to validate builds and pack
 ### Automation Behavior
 - These preferences are persisted in agent memory and should be applied automatically before any publish attempts performed by the agent
 
+## Subagent Team Structure
+
+**CRITICAL**: This project uses a specialized subagent team structure for all work.
+
+### Team Overview
+
+The Expressive Tea project has a defined team of specialized agents. **You are Claude Code acting as Tech Lead coordinator**. You must delegate all specialized tasks to the appropriate team members defined in **SUBAGENTS.md**.
+
+### Core Team Members
+
+- **🤠 Vaquerito** (Backend Specialist, Opus, `vaquerito`) - All implementation tasks
+- **🏗️ Arquiterito** (Architect, Sonnet, `Plan`/`arquiterito`) - Architecture and infrastructure decisions
+- **🔍 Coderito** (Code Reviewer, Sonnet, `coderito`) - Code quality enforcement
+- **🔒 Securito** (Security, Haiku, `securito`) - Security audits and vulnerability checks
+- **📝 Documentito** (Documentation, Haiku, `documentito`) - Technical documentation
+- **🧪 Testerito** (Testing, Sonnet, `testerito`) - All testing tasks
+- **🎯 Scrumito** (Coordinator, Haiku, `scrumito`/`Plan`) - Planning and delegation coordination
+
+### Mandatory Delegation Rules
+
+**ALWAYS delegate these tasks** (never perform directly):
+- ✅ **Implementation** → Vaquerito (max 3 parallel instances)
+- ✅ **Architecture decisions** → Arquiterito (max 2 parallel instances)
+- ✅ **Code reviews** → Coderito (max 1 instance)
+- ✅ **Security audits** → Securito (max 1 instance)
+- ✅ **Documentation** → Documentito (max 1 instance)
+- ✅ **Testing** → Testerito (max 3 parallel instances)
+- ✅ **Planning/Coordination** → Scrumito (max 1 instance)
+
+### Standard Workflow
+
+1. **Tech Lead (You)** receives requirements from User
+2. **Scrumito** works with Tech Lead on planning (if no plan exists)
+3. User approves plan
+4. **Scrumito** delegates to specialized team members
+5. Team executes and reports through Scrumito
+6. Final decisions rest with User (as ultimate Tech Lead)
+
+### Important Notes
+
+- **NEVER implement, review, test, or document directly** - always delegate
+- All agents must reference both **CLAUDE.md** and **SUBAGENTS.md**
+- Use the Task tool with appropriate subagent_type and model per SUBAGENTS.md
+- Include agent name in task descriptions (e.g., "Vaquerito: Implement feature X")
+- For parallel tasks, use single message with multiple Task calls
+
+**See SUBAGENTS.md for complete team structure, invocation examples, and detailed workflow.**
+
 ## Quick References
 
+- **subagent team**: `SUBAGENTS.md` (team structure, delegation rules, workflow)
 - **package.json**: `package.json` (scripts and engines)
 - **lint config**: `eslint.config.js`, `tsconfig.linter.json`
 - **prettier config**: `.prettierrc`

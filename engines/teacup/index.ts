@@ -21,6 +21,7 @@ export default class TeacupEngine extends ExpressiveTeaEngine {
   private serverSignature!: Buffer;
   private clientSignature!: Buffer;
   private client!: Socket;
+  private isStopping = false;
 
   private header() {
     console.log(chalk.white.bold('Teacup Engine is initializing...'));
@@ -111,4 +112,44 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     return Metadata.get(ASSIGN_TEACUP_KEY, getClass(ctx), 'isTeacupActive');
   }
 
+  /**
+   * Graceful shutdown for TeacupEngine
+   *
+   * Disconnects the socket.io-client connection and prevents automatic reconnection.
+   * This method is idempotent and safe to call multiple times.
+   *
+   * @returns {Promise<void>} Promise that resolves when cleanup is complete
+   * @since 2.0.0
+   */
+  async stop(): Promise<void> {
+    // Prevent multiple stop calls from racing
+    if (this.isStopping) {
+      return;
+    }
+    this.isStopping = true;
+
+    if (this.client) {
+      try {
+        // Disable reconnection before disconnecting to prevent automatic reconnect attempts
+        this.client.io.opts.reconnection = false;
+
+        // Remove all listeners to prevent any callbacks during shutdown
+        this.client.removeAllListeners();
+
+        // Disconnect the socket
+        if (this.client.connected) {
+          this.client.disconnect();
+        }
+
+        // Close the underlying manager to release all resources
+        this.client.close();
+
+        console.log('[TEACUP] - Socket connection closed gracefully');
+      } catch (e) {
+        // Log but don't throw - we want shutdown to complete even if cleanup has issues
+        const error = e as Error;
+        console.error(`[TEACUP] - Error during shutdown: ${error.message}`);
+      }
+    }
+  }
 }

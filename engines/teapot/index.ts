@@ -1,6 +1,6 @@
 import * as chalk from 'chalk';
  
-import { Server, Socket } from 'socket.io';
+import { Namespace, Socket } from 'socket.io';
  
 import { injectable, injectFromBase } from 'inversify';
  
@@ -41,7 +41,8 @@ export default class TeapotEngine extends ExpressiveTeaEngine {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private privateKey: any;
   private serverSignature!: Buffer;
-  private socketServer!: Server;
+  private socketServer!: Namespace;
+  private isStopped: boolean = false;
 
   private static header(teapotSettings: ExpressiveTeaPotSettings) {
     console.log(chalk.white.bold('Teapot Engine is initializing...'));
@@ -169,6 +170,44 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     TeapotEngine.header(this.teapotSettings);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.socketServer.on('connection', this.registerTeacup.bind(this));
+  }
+
+  /**
+   * Graceful shutdown for the Teapot engine.
+   *
+   * Disconnects all connected Teacup clients, closes the Socket.IO namespace,
+   * and clears internal state. This method is idempotent and safe to call multiple times.
+   *
+   * @returns {Promise<void>} Promise that resolves when cleanup is complete
+   * @since 2.0.0
+   */
+  async stop(): Promise<void> {
+    // Idempotent: skip if already stopped or never started
+    if (this.isStopped || !this.socketServer) {
+      return;
+    }
+
+    this.isStopped = true;
+
+    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Initiating graceful shutdown...');
+
+    // Disconnect all connected clients gracefully
+    const connectedSockets = await this.socketServer.fetchSockets();
+    for (const socket of connectedSockets) {
+      const routes = this.findClientInRoutes(socket.id);
+      this.removeFromRoutes(routes, socket.id);
+      socket.disconnect(true);
+      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${socket.id}}]: {yellow.bold Disconnected for shutdown}`);
+    }
+
+    // Remove all listeners from the namespace
+    this.socketServer.removeAllListeners();
+
+    // Clear internal state
+    this.clients.clear();
+    this.registeredRoute.clear();
+
+    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Graceful shutdown complete.');
   }
 
   static canRegister(ctx?: Boot): boolean {

@@ -85,7 +85,12 @@ export default async function initTeapot() {
   await delay(5000);
 
   return {
-    appTeapot, appTeacup, extraTeacups, request
+    appTeapot,
+    appTeacup,
+    extraTeacups,
+    request,
+    teapotInstance: teapot,
+    teacupInstances: [teacup1, teacup2, teacup3, teacup4]
   };
 }
 
