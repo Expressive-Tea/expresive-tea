@@ -1,12 +1,14 @@
-import { readFileSync, existsSync } from 'fs';
+import { existsSync } from 'fs';
 import { resolve } from 'path';
+import * as dotenv from 'dotenv';
 
 /**
- * Environment variable loading options
+ * Environment variable loading options with optional transformation
  * @interface EnvOptions
+ * @template T - Type of transformed environment variables
  * @since 2.0.0
  */
-export interface EnvOptions {
+export interface EnvOptions<T = Record<string, string>> {
   /**
    * Path to the .env file (relative to project root)
    * @default '.env'
@@ -29,108 +31,98 @@ export interface EnvOptions {
    * @default false
    */
   silent?: boolean;
+
+  /**
+   * Optional transformation function for type-safe environment variables.
+   * Receives parsed env vars and returns transformed result.
+   * Use with validation libraries like Zod for runtime type safety.
+   * 
+   * @param env - Parsed environment variables
+   * @returns Transformed and validated environment variables
+   * @since 2.0.1
+   * 
+   * @example
+   * import { z } from 'zod';
+   * const EnvSchema = z.object({
+   *   PORT: z.string().transform(Number),
+   *   DATABASE_URL: z.string().url()
+   * });
+   * 
+   * @Env({
+   *   transform: (env) => EnvSchema.parse(env),
+   *   onTransformError: 'throw'
+   * })
+   */
+  transform?: (env: Record<string, string>) => T;
+
+  /**
+   * Behavior when transform function throws an error
+   * - 'throw': Re-throw error immediately (fail-fast, recommended for production)
+   * - 'warn': Log warning and continue with unvalidated env
+   * - 'ignore': Silent failure, continue without transform
+   * 
+   * @default 'throw'
+   * @since 2.0.1
+   */
+  onTransformError?: 'throw' | 'warn' | 'ignore';
 }
 
 /**
- * Parse a .env file content into key-value pairs
- * 
- * Supports:
- * - Basic KEY=VALUE format
- * - Comments (lines starting with #)
- * - Quoted values (single and double quotes)
- * - Multiline values (quoted)
- * - Escape sequences in quoted strings
- * 
- * @param content - Raw .env file content
- * @returns Parsed environment variables
- * @since 2.0.0
+ * Global storage for transformed environment variables.
+ * Set by @Env decorator when transform option is provided.
  * @private
  */
-function parseEnvFile(content: string): Record<string, string> {
-  const result: Record<string, string> = {};
-  const lines = content.split('\n');
-  let currentKey: string | null = null;
-  let currentValue = '';
-  let inQuote: '\'' | '"' | null = null;
+let transformedEnv: any = null;
 
-  for (let line of lines) {
-    // Trim whitespace
-    line = line.trim();
-
-    // Skip empty lines and comments (only if not in a multiline value)
-    if (!inQuote && (line === '' || line.startsWith('#'))) {
-      continue;
-    }
-
-    // If we're continuing a multiline value
-    if (inQuote) {
-      const quoteIndex = line.indexOf(inQuote);
-      if (quoteIndex >= 0) {
-        // End of multiline value
-        currentValue += '\n' + line.substring(0, quoteIndex);
-        if (currentKey) {
-          result[currentKey] = currentValue;
-        }
-        currentKey = null;
-        currentValue = '';
-        inQuote = null;
-      } else {
-        // Continue multiline value
-        currentValue += '\n' + line;
-      }
-      continue;
-    }
-
-    // Parse KEY=VALUE
-    const equalIndex = line.indexOf('=');
-    if (equalIndex === -1) {
-      continue;
-    }
-
-    const key = line.substring(0, equalIndex).trim();
-    let value = line.substring(equalIndex + 1).trim();
-
-    // Handle quoted values
-    if (value.startsWith('"') || value.startsWith('\'')) {
-      const quote = value[0] as '\'' | '"';
-      value = value.substring(1);
-
-      const endQuoteIndex = value.indexOf(quote);
-      if (endQuoteIndex >= 0) {
-        // Single-line quoted value
-        value = value.substring(0, endQuoteIndex);
-        // Unescape special characters
-        value = value.replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\t/g, '\t');
-        result[key] = value;
-      } else {
-        // Start of multiline quoted value
-        currentKey = key;
-        currentValue = value;
-        inQuote = quote;
-      }
-    } else {
-      // Unquoted value
-      result[key] = value;
-    }
-  }
-
-  return result;
+/**
+ * Store transformed environment variables in global storage.
+ * Used internally by @Env decorator.
+ * 
+ * @template T - Type of transformed environment variables
+ * @param env - Transformed environment variables
+ * @private
+ * @since 2.0.1
+ */
+function storeTransformedEnv<T>(env: T): void {
+  transformedEnv = env;
 }
 
 /**
- * Load environment variables from a .env file
+ * Retrieve transformed environment variables from global storage.
+ * Returns null if no transform was applied.
  * 
+ * @template T - Type of transformed environment variables
+ * @returns Transformed environment variables or null
+ * @since 2.0.1
+ * 
+ * @example
+ * const env = getTransformedEnv<MyEnvType>();
+ * if (env) {
+ *   console.log(env.PORT); // Type-safe access
+ * }
+ */
+export function getTransformedEnv<T>(): T | null {
+  return transformedEnv as T | null;
+}
+
+/**
+ * Load environment variables from a .env file using dotenv.
+ * Supports transformation and validation via optional transform function.
+ * 
+ * @template T - Type of transformed environment variables
  * @param options - Environment loading options
- * @throws {Error} If required variables are missing or file is not found (when not silent)
+ * @throws {Error} If required variables are missing, file is not found (when not silent), or transform fails (when onTransformError='throw')
  * @since 2.0.0
  * @private
  */
-function loadEnvFile(options: EnvOptions): void {
+function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
   const {
     path: envPath = '.env',
     override = false,
     required = [],
     silent = false,
+    transform,
+    onTransformError = 'throw'
   } = options;
 
   const fullPath = resolve(process.cwd(), envPath);
@@ -140,18 +132,17 @@ function loadEnvFile(options: EnvOptions): void {
     if (!silent) {
       throw new Error(`Environment file not found: ${fullPath}`);
     }
-    return;
+    return undefined;
   }
 
-  // Read and parse file
-  const content = readFileSync(fullPath, 'utf-8');
-  const parsed = parseEnvFile(content);
+  // Load with dotenv
+  const result = dotenv.config({
+    path: fullPath,
+    override
+  });
 
-  // Set environment variables
-  for (const [key, value] of Object.entries(parsed)) {
-    if (override || process.env[key] === undefined) {
-      process.env[key] = value;
-    }
+  if (result.error && !silent) {
+    throw new Error(`Failed to load ${fullPath}: ${result.error.message}`);
   }
 
   // Validate required variables
@@ -159,6 +150,33 @@ function loadEnvFile(options: EnvOptions): void {
   if (missing.length > 0) {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
+
+  // Apply transform if provided
+  if (transform) {
+    try {
+      const envVars = result.parsed || {};
+      const transformed = transform(envVars);
+      
+      // Store transformed result globally
+      storeTransformedEnv(transformed);
+      
+      return transformed;
+    } catch (error: any) {
+      const errorMsg = `Environment transformation failed: ${error.message}`;
+      
+      if (onTransformError === 'throw') {
+        throw new Error(errorMsg);
+      } else if (onTransformError === 'warn') {
+        console.warn(`[Expressive Tea] ${errorMsg}`);
+        if (error.stack) {
+          console.warn(error.stack);
+        }
+      }
+      // 'ignore' - do nothing, return undefined
+    }
+  }
+
+  return undefined;
 }
 
 /**
@@ -170,11 +188,14 @@ function loadEnvFile(options: EnvOptions): void {
  * Environment variables are loaded BEFORE the Settings singleton is initialized,
  * ensuring they're available during the entire application lifecycle.
  * 
+ * **New in v2.0.1:** Optional type-safe transformation with validation libraries like Zod.
+ * 
  * @decorator {ClassDecorator} Env - Load environment variables from .env file
+ * @template T - Type of transformed environment variables
  * @param options - Environment loading options
  * @returns Class decorator function
  * @since 2.0.0
- * @summary Load environment variables from .env files
+ * @summary Load environment variables from .env files with optional type-safe transformation
  * 
  * @example
  * // Basic usage - load from .env
@@ -196,14 +217,39 @@ function loadEnvFile(options: EnvOptions): void {
  * class MyApp extends Boot {}
  * 
  * @example
+ * // Type-safe transformation with Zod
+ * import { z } from 'zod';
+ * 
+ * const EnvSchema = z.object({
+ *   PORT: z.string().transform(Number),
+ *   DATABASE_URL: z.string().url(),
+ *   API_KEY: z.string().min(32)
+ * });
+ * 
+ * type Env = z.infer<typeof EnvSchema>;
+ * 
+ * @Env<Env>({
+ *   path: '.env',
+ *   required: ['DATABASE_URL', 'API_KEY'],
+ *   transform: (env) => EnvSchema.parse(env),
+ *   onTransformError: 'throw' // Fail fast on invalid env
+ * })
+ * class MyApp extends Boot {
+ *   constructor() {
+ *     super();
+ *     // Access type-safe env
+ *     const env = Settings.getInstance().getEnv<Env>();
+ *     console.log(env.PORT); // Type: number
+ *   }
+ * }
+ * 
+ * @example
  * // In your .env file:
  * // DATABASE_URL=postgres://localhost:5432/mydb
  * // API_KEY="secret-key-with-special-chars"
- * // MULTI_LINE="Line 1
- * // Line 2
- * // Line 3"
+ * // PORT=3000
  */
-export function Env(options: EnvOptions = {}): ClassDecorator {
+export function Env<T = Record<string, string>>(options: EnvOptions<T> = {}): ClassDecorator {
   return (target: any) => {
     // Load env file immediately when decorator is applied
     loadEnvFile(options);

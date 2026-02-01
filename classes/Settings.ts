@@ -1,8 +1,8 @@
 import { get, set } from '@libs/utilities';
-import { ExpressiveTeaServerProps } from '@expressive-tea/commons';
+import { ExpressiveTeaServerProps, nameOfClass } from '@expressive-tea/commons';
 import { injectable } from 'inversify';
-import { nameOfClass } from '@expressive-tea/commons';
 import { fileSettings } from '@helpers/server';
+import { getTransformedEnv } from '@decorators/env';
 
 
 /**
@@ -88,14 +88,15 @@ class Settings {
    */
   private options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 };
 
-  constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }, isIsolated: boolean = false) {
+  constructor(options: ExpressiveTeaServerProps = {}, isIsolated: boolean = false) {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const settingsFile = fileSettings();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    this.options = Object.assign({}, { port: 3000, securePort: 4443 }, settingsFile, options);
+    this.options = {
+      ...this.options, ...settingsFile.config, ...options
+    } as ExpressiveTeaServerProps;
+
     if (!isIsolated) {
       Settings.instance = this;
     }
@@ -150,6 +151,41 @@ class Settings {
    */
   merge(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }) {
     this.options = Object.assign(this.options, options);
+  }
+
+  /**
+   * Get environment variables with optional type safety.
+   *
+   * Returns transformed environment variables if a transform function was provided
+   * to the @Env decorator, otherwise returns process.env.
+   *
+   * Use this method for type-safe access to environment variables when using
+   * the @Env decorator with a transform function (e.g., Zod validation).
+   *
+   * @template T - Type of environment variables (defaults to NodeJS.ProcessEnv)
+   * @returns Typed environment variables
+   * @since 2.0.1
+   * @summary Get type-safe environment variables
+   *
+   * @example
+   * // Basic usage (returns process.env)
+   * const env = Settings.getInstance().getEnv();
+   * console.log(env.NODE_ENV);
+   *
+   * @example
+   * // With type-safe transform from @Env decorator
+   * type Env = { PORT: number; DATABASE_URL: string };
+   *
+   * const env = Settings.getInstance().getEnv<Env>();
+   * console.log(env.PORT); // Type: number (transformed)
+   * console.log(env.DATABASE_URL); // Type: string (validated)
+   */
+  getEnv<T = Record<string,string>>(): T {
+    const transformed = getTransformedEnv<T>();
+    if (transformed !== null) {
+      return transformed;
+    }
+    return process.env as T;
   }
 }
 

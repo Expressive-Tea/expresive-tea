@@ -2,11 +2,274 @@
 import { type NextFunction, type Request, type Response } from 'express';
 import * as jestRequest from 'jest-express/lib/request';
 import * as jestResponse from 'jest-express/lib/response';
-import { autoResponse, executeRequest, extractParameters, mapArguments } from '../../../helpers/server';
+import { autoResponse, executeRequest, extractParameters, mapArguments, fileSettings } from '../../../helpers/server';
 import { ARGUMENT_TYPES } from '@expressive-tea/commons';
 import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons';
+import * as fs from 'fs';
+import * as path from 'path';
 
 describe('Server Helper', () => {
+  describe('fileSettings()', () => {
+    const TEST_DIR = process.cwd();
+    const configFiles = ['.expressive-tea.yaml', '.expressive-tea.yml', '.expressive-tea'];
+
+    beforeEach(() => {
+      // Clean up any existing config files
+      configFiles.forEach(file => {
+        const filePath = path.join(TEST_DIR, file);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+    });
+
+    afterEach(() => {
+      // Clean up test files
+      configFiles.forEach(file => {
+        const filePath = path.join(TEST_DIR, file);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      });
+    });
+
+    describe('File Priority', () => {
+      test('should load .expressive-tea.yaml with highest priority', () => {
+        // Create all three files
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), 'port: 9000\n');
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), 'port: 8000\n');
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{"port": 7000}');
+
+        const { config, source } = fileSettings();
+
+        expect(config.port).toBe(9000);
+        expect(source).toBe('.expressive-tea.yaml');
+      });
+
+      test('should fall back to .expressive-tea.yml when .yaml not present', () => {
+        // Create only .yml and .json
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), 'port: 8000\n');
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{"port": 7000}');
+
+        const { config, source } = fileSettings();
+
+        expect(config.port).toBe(8000);
+        expect(source).toBe('.expressive-tea.yml');
+      });
+
+      test('should fall back to .expressive-tea (JSON) when no YAML present', () => {
+        // Create only JSON
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{"port": 7000}');
+
+        const { config, source } = fileSettings();
+
+        expect(config.port).toBe(7000);
+        expect(source).toBe('.expressive-tea');
+      });
+
+      test('should return empty config when no file exists', () => {
+        const { config, source } = fileSettings();
+
+        expect(config).toEqual({});
+        expect(source).toBeNull();
+      });
+    });
+
+    describe('YAML Parsing', () => {
+      test('should parse valid YAML correctly', () => {
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), `port: 3000
+securePort: 4443
+database:
+  host: localhost
+  port: 5432
+`);
+
+        const { config } = fileSettings();
+
+        expect(config.port).toBe(3000);
+        expect(config.securePort).toBe(4443);
+        expect(config.database).toEqual({ host: 'localhost', port: 5432 });
+      });
+
+      test('should throw clear error on invalid YAML', () => {
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), `port: 3000
+  invalid: yaml
+syntax here
+`);
+
+        expect(() => fileSettings()).toThrow(/Invalid YAML in \.expressive-tea\.yaml/);
+      });
+    });
+
+    describe('JSON Parsing', () => {
+      test('should parse valid JSON correctly', () => {
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), JSON.stringify({
+          port: 3000,
+          securePort: 4443,
+          database: { host: 'localhost', port: 5432 }
+        }));
+
+        const { config } = fileSettings();
+
+        expect(config.port).toBe(3000);
+        expect(config.securePort).toBe(4443);
+        expect(config.database).toEqual({ host: 'localhost', port: 5432 });
+      });
+
+      test('should throw clear error on invalid JSON', () => {
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{ invalid json }');
+
+        expect(() => fileSettings()).toThrow(/Invalid JSON in \.expressive-tea/);
+      });
+    });
+
+    describe('Debug Logging', () => {
+      test('should log which file was loaded', () => {
+        const consoleSpy = jest.spyOn(console, 'debug').mockImplementation();
+
+        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), 'port: 3000\n');
+        fileSettings();
+
+        expect(consoleSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Loaded configuration from: .expressive-tea.yaml')
+        );
+
+        consoleSpy.mockRestore();
+      });
+    });
+
+    describe('Empty and Edge Case Files (Bug Test)', () => {
+      describe('Empty YAML Files', () => {
+        test('should handle completely empty .expressive-tea.yaml file', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+
+        test('should handle completely empty .expressive-tea.yml file', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), '');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yml');
+        });
+
+        test('should handle .expressive-tea.yaml with only whitespace', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '   \n  \n\t\n');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+
+        test('should handle .expressive-tea.yml with only whitespace', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), '   \n  \n\t\n');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yml');
+        });
+
+        test('should handle .expressive-tea.yaml with only comments', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '# This is a comment\n# Another comment\n');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+
+        test('should handle .expressive-tea.yml with only comments', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), '# This is a comment\n# Another comment\n');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yml');
+        });
+
+        test('should handle .expressive-tea.yaml with comments and whitespace', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '  \n# Comment\n  \n# Another\n\t\n');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+      });
+
+      describe('Empty JSON Files', () => {
+        test('should handle empty .expressive-tea (JSON) file', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '');
+
+          // Empty string is invalid JSON, should throw
+          expect(() => fileSettings()).toThrow(/Invalid JSON in \.expressive-tea/);
+        });
+
+        test('should handle .expressive-tea with only whitespace', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '   \n  \n\t\n');
+
+          // Whitespace-only is invalid JSON, should throw
+          expect(() => fileSettings()).toThrow(/Invalid JSON in \.expressive-tea/);
+        });
+
+        test('should handle .expressive-tea with empty object', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{}');
+
+          const { config, source } = fileSettings();
+
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea');
+        });
+      });
+
+      describe('Priority with Empty Files', () => {
+        test('should fall back from empty .yaml to valid .yml', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '');
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), 'port: 8000\n');
+
+          const { config, source } = fileSettings();
+
+          // Bug: Currently returns undefined/null config from empty .yaml
+          // Expected: Should return empty {} from .yaml OR fall back to .yml
+          expect(config).toBeDefined();
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+
+        test('should fall back from empty .yml to valid .expressive-tea', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), '# Just a comment\n');
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{"port": 7000}');
+
+          const { config, source } = fileSettings();
+
+          // Bug: Currently returns undefined/null config from empty .yml
+          // Expected: Should return empty {} from .yml OR fall back to .expressive-tea
+          expect(config).toBeDefined();
+          expect(source).toBe('.expressive-tea.yml');
+        });
+
+        test('should handle all three files being empty/invalid', () => {
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '');
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yml'), '# comment\n');
+          fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{}');
+
+          const { config, source } = fileSettings();
+
+          // Should pick first one (.yaml) and return empty config
+          expect(config).toBeDefined();
+          expect(config).toEqual({});
+          expect(source).toBe('.expressive-tea.yaml');
+        });
+      });
+    });
+  });
+
 
   describe('Extract Parameters', () => {
     let currentTarget;

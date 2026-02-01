@@ -32,6 +32,7 @@ coverage
 reports
 .nyc_output
 .idea
+.docs
 tasks
 gulpfile.js
 jest.config.js
@@ -39,3 +40,10 @@ jsdocs.json
 tools
 .yarn
 .circleci
+.claude
+CLAUDE.md
+AGENTS.md
+tsconfig.linter.json
+tsconfig.spec.json
+tsconfig.json
+tsconfig.strict-test.json

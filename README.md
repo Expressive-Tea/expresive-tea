@@ -259,6 +259,49 @@ class App extends Boot {}
 // API_KEY="secret-key"
 ```
 
+### 🎯 Type-Safe Environment Variables (v2.0.1+)
+```typescript
+import { z } from 'zod';
+
+const EnvSchema = z.object({
+  PORT: z.string().transform(Number),
+  DATABASE_URL: z.string().url(),
+  API_KEY: z.string().min(32)
+});
+
+type Env = z.infer<typeof EnvSchema>;
+
+@Env<Env>({
+  transform: (env) => EnvSchema.parse(env),
+  onTransformError: 'throw' // Fail fast on invalid env
+})
+class App extends Boot {
+  constructor() {
+    super();
+    const env = Settings.getInstance().getEnv<Env>();
+    console.log(env.PORT); // Type: number (validated!)
+  }
+}
+```
+
+### 📄 Configuration Files (v2.0.1+)
+```yaml
+# .expressive-tea.yaml (YAML support!)
+port: 3000
+securePort: 4443
+
+database:
+  host: localhost
+  port: 5432
+
+# Comments supported!
+cache:
+  enabled: true
+  ttl: 3600
+```
+
+**File Priority**: `.expressive-tea.yaml` > `.expressive-tea.yml` > `.expressive-tea` (JSON)
+
 ---
 
 ## 📦 Installation & Setup
@@ -391,6 +434,10 @@ app.start().then(() => {
 - [Complete Guide](https://zero-oneit.github.io/expresive-tea/) - Full documentation
 - [API Reference](https://zero-oneit.github.io/expresive-tea/api/) - Complete API docs
 - [Examples](https://github.com/Expressive-Tea/expressive-tea-sandbox) - Sample projects
+
+### 🆕 v2.0.1 Features
+- [Configuration Files Guide](docs/configuration-files.md) - YAML/JSON config support
+- [Environment Variables Guide](docs/env-decorator.md) - Type-safe env with Zod
 
 ### 🔄 Migration & Upgrading
 - [Migration Guide v1 → v2](docs/MIGRATION_GUIDE_v2.md) - Step-by-step upgrade

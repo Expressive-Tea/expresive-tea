@@ -9,16 +9,24 @@ import {
 } from '@expressive-tea/commons';
 import { getOwnArgumentNames } from '@expressive-tea/commons';
 import * as fs from 'node:fs';
+import * as yaml from 'js-yaml';
+import * as path from 'node:path';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
 } from '@interfaces';
 import { TFunction } from '../types/core';
+import { type ExpressiveTeaServerProps } from '@expressive-tea/commons';
 
 interface ExecuteRequestContext {
   options: ExpressiveTeaHandlerOptionsWithInstrospectedArgs;
   decoratedArguments: ExpressiveTeaArgumentOptions[];
   annotations: ExpressiveTeaAnnotations[];
   self: any;
+}
+
+export interface FileSettingsResult {
+  config: ExpressiveTeaServerProps;
+  source: string | null;
 }
 
 export function autoResponse(
@@ -137,13 +145,59 @@ export function router(
   Metadata.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
 
-export function fileSettings() {
-  try {
-    if (fs.existsSync('.expressive-tea')) {
-      const configString = fs.readFileSync('.expressive-tea');
-      return JSON.parse(configString.toString());
+/**
+ * Load configuration from .expressive-tea files.
+ *
+ * Supports YAML (.yaml, .yml) and JSON formats with priority order:
+ * 1. .expressive-tea.yaml (highest)
+ * 2. .expressive-tea.yml
+ * 3. .expressive-tea (JSON, lowest)
+ *
+ * @returns Configuration object and source file path
+ * @throws {Error} If config file is invalid (JSON/YAML parse error)
+ * @since 2.0.1
+ */
+export function fileSettings(): FileSettingsResult {
+  const cwd = process.cwd();
+
+  // Priority order: YAML > YML > JSON
+  const configFiles = [
+    { path: '.expressive-tea.yaml', type: 'yaml' as const },
+    { path: '.expressive-tea.yml', type: 'yaml' as const },
+    { path: '.expressive-tea', type: 'json' as const }
+  ];
+
+  for (const file of configFiles) {
+    const filePath = path.join(cwd, file.path);
+
+    if (fs.existsSync(filePath)) {
+      try {
+        const content = fs.readFileSync(filePath, 'utf-8');
+
+        let config: ExpressiveTeaServerProps;
+        if (file.type === 'yaml') {
+          const parsed = yaml.load(content);
+          // yaml.load returns undefined for empty strings and null for whitespace/comments
+          // Treat empty YAML files as empty configuration objects
+          config = (parsed ?? {}) as ExpressiveTeaServerProps;
+        } else {
+          config = JSON.parse(content);
+        }
+
+        // Debug log which file was loaded
+        console.debug(`[Expressive Tea] Loaded configuration from: ${file.path}`);
+
+        return { config, source: file.path };
+      } catch (error: any) {
+        const errorMsg = file.type === 'yaml'
+          ? `Invalid YAML in ${file.path}: ${error.message}`
+          : `Invalid JSON in ${file.path}: ${error.message}`;
+
+        throw new Error(errorMsg);
+      }
     }
-  } catch {
-    return {};
   }
+
+  // No config file found
+  return { config: {}, source: null };
 }
