@@ -1,5 +1,7 @@
-export const httpServerMock = {
-  listen: jest.fn().mockImplementation(_port => {}),
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call */
+
+export const httpServerMock: any = {
+  listen: jest.fn().mockImplementation((_port?: number) => {}),
   close: jest.fn().mockImplementation((callback?: () => void) => {
     if (callback) {
       callback();

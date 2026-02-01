@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+
 export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   registeredPlugins.push({
     name: 'Mocked',
@@ -6,7 +8,7 @@ export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   return registeredPlugins;
 });
 export const mockGetRegisteredStage = jest.fn(() => []);
-export let mockPluginArguments = [];
+export let mockPluginArguments: unknown[] = [];
 
 const PluginMock = jest.fn()
   .mockName('Plugin');
