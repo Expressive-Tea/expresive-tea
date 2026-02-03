@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call */
+ 
 
 export const httpServerMock: any = {
   listen: jest.fn(),

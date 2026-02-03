@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+ 
 
 export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   registeredPlugins.push({
