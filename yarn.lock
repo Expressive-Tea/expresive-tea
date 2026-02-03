@@ -554,7 +554,7 @@ __metadata:
   peerDependenciesMeta:
     "@expressive-tea/core":
       optional: true
-  checksum: 10c0/d357112763ae88c476793c5b6abff060d5a8605fdb7e89a26728c06ca98e47922c29f7173ea7e73626727f96308742c7df5fed7fcbfa79e560d076cfbfa68d0d
+  checksum: 10c0/2c34b376e5ac8d874ca54e1b8f25a2a98fbc2c5959c336bfd79fa25780793d01e381b891c4648cf215c24d33edbecbc0d32e829a8bc2084044e6a8ede1aecaed
   languageName: node
   linkType: hard
 
@@ -629,7 +629,7 @@ __metadata:
   resolution: "@expressive-tea/metadata@npm:2026.1.1"
   dependencies:
     reflect-metadata: "npm:^0.2.0"
-  checksum: 10c0/fc4b277a042983fe227350787b339b8612202ee38844d72536a8ef3b95fe8b27f0e06431d45f80771cac78cb057e3bae5688bc5c06291469a294d42d5acb59af
+  checksum: 10c0/bee44ce151d683c43a24b120a6d16107b297f3a24fb937be8343138c5d22bbca6173a93be36c70efef6be9ba2cf53649e3009becab9014352bd1356af7195213
   languageName: node
   linkType: hard
 
@@ -645,7 +645,7 @@ __metadata:
   peerDependenciesMeta:
     "@expressive-tea/core":
       optional: true
-  checksum: 10c0/93feaa3699ce1dcdcb520585d5a80f8d54683efec02106e8d53e971b1919f743d7938b15bff7ab82bbac7dc1dd71f57b0e4756c4c7a1d2477d51577df2ce29c9
+  checksum: 10c0/289a3b6cfee7083f545c3fdbb3bfe3b727dd73693442830df9ed53d109ed35020e35385aee0ec0231940f936b76d185cc69fd1b3ef6acfb824cdac3fed86e92b
   languageName: node
   linkType: hard
 
