@@ -4,7 +4,7 @@
   "description": "A modern TypeScript-first framework for building scalable Node.js applications with clean architecture, dependency injection, and decorator-driven development",
   "main": "classes/Boot.js",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
     "test": "yarn linter && jest --maxWorkers=4 --coverage --detectOpenHandles --forceExit --silent",
