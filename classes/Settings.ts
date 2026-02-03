@@ -1,8 +1,8 @@
-import * as _ from 'lodash';
-import { ExpressiveTeaServerProps } from '@expressive-tea/commons/interfaces';
+import { get, set } from '@libs/utilities';
+import { ExpressiveTeaServerProps, nameOfClass } from '@expressive-tea/commons';
 import { injectable } from 'inversify';
-import { nameOfClass } from '@expressive-tea/commons/helpers/object-helper';
-import { fileSettings } from '../helpers/server';
+import { fileSettings } from '@helpers/server';
+import { getTransformedEnv } from '@decorators/env';
 
 
 /**
@@ -27,6 +27,7 @@ import { fileSettings } from '../helpers/server';
 @injectable()
 class Settings {
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static isolatedContext:Map<any, Settings> = new Map<any, Settings>();
   /**
    * Reset Singleton instance to the default values, all changes will be erased is not recommendable to use it
@@ -35,11 +36,15 @@ class Settings {
    * one time at the application starts.
    *
    * @static
+   * @param {boolean} [resetIsolated=true] - If true, also reset all isolated contexts
    * @summary Reset Singleton instance
    * @memberof Settings
    */
-  static reset() {
-    delete Settings.instance;
+  static reset(resetIsolated: boolean = true): void {
+    Settings.instance = undefined;
+    if (resetIsolated) {
+      Settings.isolatedContext.clear();
+    }
   }
 
   /**
@@ -51,13 +56,14 @@ class Settings {
    * @memberof Settings
    * @summary Get Singleton Instance.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static getInstance(ctx?: any): Settings {
     if (ctx) {
       const context = nameOfClass(ctx);
       if (!Settings.isolatedContext.has(context)) {
-        Settings.isolatedContext.set(context, new Settings(null, true));
+        Settings.isolatedContext.set(context, new Settings(undefined, true));
       }
-      return Settings.isolatedContext.get(context);
+      return Settings.isolatedContext.get(context) as Settings;
     }
 
     return Settings.instance || new Settings();
@@ -71,7 +77,7 @@ class Settings {
    * @type {Settings}
    * @memberof Settings
    */
-  private static instance: Settings;
+  private static instance: Settings | undefined;
 
   /**
    * Server configuration options.
@@ -80,15 +86,20 @@ class Settings {
    * @type {ExpressiveTeaServerProps}
    * @memberof Settings
    */
-  private options: ExpressiveTeaServerProps;
+  private options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 };
 
-  constructor(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }, isIsolated: boolean = false) {
+  constructor(options: ExpressiveTeaServerProps = {}, isIsolated: boolean = false) {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
     const settingsFile = fileSettings();
-    this.options = Object.assign({}, { port: 3000, securePort: 4443 }, settingsFile, options);
-    Settings.instance = this;
+    this.options = {
+      ...this.options, ...settingsFile.config, ...options
+    } as ExpressiveTeaServerProps;
+
+    if (!isIsolated) {
+      Settings.instance = this;
+    }
   }
 
   /**
@@ -112,8 +123,9 @@ class Settings {
    * @memberof Settings
    * @summary Retrieve an option
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(settingName: string): any {
-    return _.get(this.options, settingName, null);
+    return get(this.options, settingName, null);
   }
 
   /**
@@ -125,8 +137,9 @@ class Settings {
    * @memberof Settings
    * @summary Initialize an option.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   set(settingName: string, value: any): void {
-    _.set(this.options, settingName, value);
+    set(this.options, settingName, value);
   }
 
   /**
@@ -138,6 +151,41 @@ class Settings {
    */
   merge(options: ExpressiveTeaServerProps = { port: 3000, securePort: 4443 }) {
     this.options = Object.assign(this.options, options);
+  }
+
+  /**
+   * Get environment variables with optional type safety.
+   *
+   * Returns transformed environment variables if a transform function was provided
+   * to the @Env decorator, otherwise returns process.env.
+   *
+   * Use this method for type-safe access to environment variables when using
+   * the @Env decorator with a transform function (e.g., Zod validation).
+   *
+   * @template T - Type of environment variables (defaults to NodeJS.ProcessEnv)
+   * @returns Typed environment variables
+   * @since 2.0.1
+   * @summary Get type-safe environment variables
+   *
+   * @example
+   * // Basic usage (returns process.env)
+   * const env = Settings.getInstance().getEnv();
+   * console.log(env.NODE_ENV);
+   *
+   * @example
+   * // With type-safe transform from @Env decorator
+   * type Env = { PORT: number; DATABASE_URL: string };
+   *
+   * const env = Settings.getInstance().getEnv<Env>();
+   * console.log(env.PORT); // Type: number (transformed)
+   * console.log(env.DATABASE_URL); // Type: string (validated)
+   */
+  getEnv<T = Record<string,string>>(): T {
+    const transformed = getTransformedEnv<T>();
+    if (transformed !== null) {
+      return transformed;
+    }
+    return process.env as T;
   }
 }
 

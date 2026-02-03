@@ -1,237 +1,627 @@
 <p align="center">
-  <!-- Npm Version -->
-  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
-  <img alt="npm (scoped)" src="https://img.shields.io/npm/v/@zerooneit/expressive-tea?style=flat-square">
+  <a href="https://www.npmjs.com/package/@expressive-tea/core">
+  <img alt="npm version" src="https://img.shields.io/npm/v/@expressive-tea/core?style=flat-square">
   </a>
-  
-  <!-- Downloads -->
-  <a href="https://www.npmjs.com/package/@zerooneit/expressive-tea">
-  <img alt="npm" src="https://img.shields.io/npm/dw/@zerooneit/expressive-tea?style=flat-square">
+  <a href="https://www.npmjs.com/package/@expressive-tea/core">
+  <img alt="downloads" src="https://img.shields.io/npm/dw/@expressive-tea/core?style=flat-square">
   </a>
-  
-  <!-- Dependencies 
-  <a href="https://libraries.io/npm/@zerooneit%2Fexpressive-tea">
-  <img alt="Libraries.io dependency status for latest release, scoped npm package" src="https://img.shields.io/librariesio/release/npm/@zerooneit/expressive-tea?style=flat-square">
-  </a>
-  -->
-
-  <!-- License 
-  <a href="https://github.com/Expressive-Tea/expresive-tea/blob/develop/LICENSE">
-  <img alt="NPM" src="https://img.shields.io/npm/l/@zerooneit/expressive-tea?style=flat-square">
-  </a>
-  -->
-  
-  <!-- Vulnerabilities -->
   <a href="https://snyk.io//test/github/Expressive-Tea/expresive-tea?targetFile=package.json">
-  <img alt="Snyk Vulnerabilities for npm package" src="https://img.shields.io/snyk/vulnerabilities/github/expressive-tea/expresive-tea?style=flat-square">
+  <img alt="vulnerabilities" src="https://img.shields.io/snyk/vulnerabilities/github/expressive-tea/expresive-tea?style=flat-square">
   </a>
-  
-  <!-- Last Commit 
-  <a href="https://github.com/Expressive-Tea/expresive-tea">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Expressive-Tea/expresive-tea?style=flat-square">
-  </a>    
-  -->
-  <!-- Stars -->
-  <a href="https://github.com/Expressive-Tea/expresive-tea/stargazers">
-  <img alt="GitHub stars" src="https://img.shields.io/github/stars/Expressive-Tea/expresive-tea?style=flat-square">
-  </a>
-  
-  <!-- Source Rank 
-  <a href="https://libraries.io/npm/@zerooneit%2Fexpressive-tea/sourcerank">
-  <img alt="Libraries.io SourceRank, scoped npm package" src="https://img.shields.io/librariesio/sourcerank/npm/@zerooneit/expressive-tea?style=flat-square">
-  </a>
-  -->
-  <!-- Rating 
-  <a href="https://pkgreview.dev/npm/@zerooneit%2Fexpressive-tea">
-  <img alt="pkgreview.dev Package Ratings" src="https://img.shields.io/pkgreview/rating/npm/@zerooneit/expressive-tea?style=flat-square">
-  </a>
-  -->
-  <!-- Issues 
-  <a href="https://github.com/Expressive-Tea/expresive-tea/issues">
-  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/Zero-Oneit/expresive-tea?style=flat-square">
-  </a>
-  -->
-  <!-- Gitter                            
-  <a href="https://gitter.im/Expressive-Tea/expresive-tea">
-  <img alt="Gitter" src="https://img.shields.io/gitter/room/zero-oneit/expresive-tea?style=flat-square">
-  </a>
-   -->      
-  <!-- Test Coverage --> 
   <a href="https://codecov.io/gh/Expressive-Tea/expresive-tea">
-  <img alt="Codecov" src="https://img.shields.io/codecov/c/github/expressive-tea/expresive-tea?label=Test%20coverage&style=flat-square">
+  <img alt="coverage" src="https://img.shields.io/codecov/c/github/expressive-tea/expresive-tea?label=coverage&style=flat-square">
   </a>
-  
-  <!-- Build -->
   <a href="https://travis-ci.org/Expressive-Tea/expresive-tea">
-  <img alt="Travis (.org) branch" src="https://ci.zero-oneit.systems/buildStatus/icon?job=Expressive+Tea&style=flat-square">
+  <img alt="build" src="https://ci.zero-oneit.systems/buildStatus/icon?job=Expressive+Tea&style=flat-square">
+  </a>
+  <a href="https://github.com/Expressive-Tea/expresive-tea/stargazers">
+  <img alt="stars" src="https://img.shields.io/github/stars/Expressive-Tea/expresive-tea?style=flat-square">
+  </a>
+  <a href="https://github.com/Expressive-Tea/expresive-tea/blob/main/LICENSE">
+  <img alt="license" src="https://img.shields.io/github/license/Expressive-Tea/expresive-tea?style=flat-square">
   </a>
 </p>
 
-<!-- PROJECT LOGO -->
 <br />
 <p align="center">
   <a href="https://github.com/Expressive-Tea/expresive-tea">
     <img src="images/logo.png" alt="Logo" width="160" />
   </a>
 
-  <h3 align="center">Expressive Tea</h3>
+  <h1 align="center">Expressive Tea</h1>
 
   <p align="center">
-    A Clean, simple, modulable, extendable ExpressJS over Typescript framework.
+    <strong>A modern, TypeScript-first framework for building scalable Node.js applications</strong>
     <br />
-    <a href="https://zero-oneit.github.io/expresive-tea/"><strong>Explore the docs »</strong></a>
+    <em>Clean architecture • Dependency Injection • Decorator-driven • Express-powered</em>
     <br />
     <br />
-    <a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&theme=dark">View Demo</a>
+    <a href="https://zero-oneit.github.io/expresive-tea/"><strong>📚 Documentation</strong></a>
     ·
-    <a href="https://github.com/Expressive-Tea/expresive-tea/issues">Report Bug</a>
+    <a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&theme=dark"><strong>🚀 Live Demo</strong></a>
     ·
-    <a href="https://github.com/Expressive-Tea/expresive-tea/issues">Request Feature</a>
+    <a href="https://github.com/Expressive-Tea/expresive-tea/issues"><strong>🐛 Report Bug</strong></a>
+    ·
+    <a href="https://github.com/Expressive-Tea/expresive-tea/issues"><strong>💡 Request Feature</strong></a>
   </p>
 </p>
 
-<!-- TABLE OF CONTENTS -->
-## Table of Contents
+---
 
-* [About the Project](#about-the-project)
-  * [Motivation](#motivation)
-  * [Features](#features)  
-  * [Built With](#built-with)
-* [Getting Started](#getting-started)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-  * [Setting Up Typescript](#setting-up-typescript)
-  * [Examples](#examples)
-* [Contributing](#contributing)
-* [Versioning](#versioning)
-* [Contributors](#contributors)
-* [Support](#support)
-  * [Principal Sponsors](#principal-sponsors)  
-* [Stay on touch](#stay-on-touch)
-* [License](#license)
-* [Disclamers](#disclaimers)
+> [!IMPORTANT]
+> ### 📦 Package Renamed: `@expressive-tea/core`
+> 
+> **Expressive Tea has a new home on npm!** Starting with v2.0.0, install using:
+> 
+> ```bash
+> npm install @expressive-tea/core
+> ```
+> 
+> **Legacy package `@zerooneit/expressive-tea` will be maintained until April 30, 2026** for security patches only. Please migrate to `@expressive-tea/core` as soon as possible.
+> 
+> **Why the change?**
+> - ✨ Better namespace organization (`@expressive-tea/*`)
+> - 🌍 Community-focused ownership
+> - 🚀 Clearer project identity
+> 
+> **Migration is simple:** Just update your `package.json` and imports remain the same!
+> ```diff
+> - "dependencies": { "@zerooneit/expressive-tea": "^1.2.0" }
+> + "dependencies": { "@expressive-tea/core": "^2.0.0" }
+> ```
 
+---
 
-## About the project  
-Expressive Tea is framework to help build server-side applications in [NodeJS](https://nodejs.org/) and use modern Javascript powered by 
-[Typescript](https://www.typescriptlang.org/). As Expressive Tea is using [express](https://expressjs.com/) is compatible with all the middlewares and modules and provide 
-an easy migration from express applications.
+> [!CAUTION]
+> ### ⚠️ CRITICAL: v1.x Security Notice
+> 
+> **All versions 1.x are DEPRECATED and UNSUPPORTED** as of January 27, 2026.
+> 
+> **v1.3.x Beta** - 🔴 **CRITICAL SECURITY VULNERABILITY** - DO NOT USE  
+> Contains critical cryptography flaws in Teapot/Teacup gateway. If you're using this, **STOP IMMEDIATELY** and upgrade to v2.0.0.
+> 
+> **v1.2.x Production** - 🟡 No crypto issues, but **deprecated** (InversifyJS v6 EOL)
+> 
+> **👉 Upgrade to v2.0.0 NOW** - See [Migration Guide](docs/MIGRATION_GUIDE_v2.md)
 
-Expressive Tea is a flexible framework but also giving freedom to the developer to build their own architectures 
-by providing descriptive decorators, a plugin engine, shareable modules and moder Javascript.
+---
 
-### Motivation
-Server-side applications it contains awesome tools, helpers, and libraries to improve productivity but at same time it
-haves a large downside, **architecture**. Expressive Tea main motivation is relief the stress of the architecture by 
-providing a shareable/pluggable projects, you can write a plugin to setting up express middlewares, databases settings,
-or websockets to name some; and you can share them through your next projects or the community.
+## ⚡ Quick Start
 
-Main goal is making uncomplicaded creation of server-side applications, modulables, plugables, free and efortless 
-architecture.
-   
-### Features
-* Easy Setting up and start up of webserver.
-* Extends and configuration with plugins and well-defined boot stages.
-* Modules are not hard dependencies and can be shareable between projects.
-* Declare Server Middlewares configuration as hard or soft dependency at server level.
-* Dependency Injection is available for controllers as providers declared in modules using InversifyJs.
-* Declarative Router on Controllers.
-* Declarative Verbs and Middlewares under module and verb level.
-* Declarative Exceptions for a better Error Handling.
+```bash
+# Install the new package
+npm install @expressive-tea/core
 
-### Built With
+# Or with yarn
+yarn add @expressive-tea/core
+```
 
-* [Express](https://github.com/expressjs/express) - The web framework used
-* [Typescript](https://www.typescriptlang.org/) - Main Language
-* [Inversify](https://github.com/inversify/InversifyJS/) - Used for dependency Injection
-* [Reflect Metadata](https://github.com/rbuckton/reflect-metadata) - Used to get code metadata.
-* [YARN](https://yarnpkg.com/) - Used to build and dependencies.
+```typescript
+import { ServerSettings, Route, Get, Boot } from '@expressive-tea/core';
 
-## Getting Started
+@ServerSettings({ port: 3000 })
+class App extends Boot {}
+
+@Route('/hello')
+class HelloController {
+  @Get('/')
+  sayHello() {
+    return { message: 'Hello, World! 🍵' };
+  }
+}
+
+new App().start();
+// 🎉 Server running on http://localhost:3000
+```
+
+**[Try it live on CodeSandbox →](https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&theme=dark)**
+
+---
+
+## 🎯 Why Expressive Tea?
+
+### The Problem
+Building Node.js applications is powerful, but messy. You get a blank canvas with Express—no structure, no conventions, just middleware chaos. Sound familiar?
+
+### The Solution
+**Expressive Tea** brings the elegance of modern frameworks to Node.js, without the bloat. Think NestJS simplicity meets Express flexibility.
+
+### 🌟 What Makes It Special
+
+| Feature | What You Get |
+|---------|-------------|
+| 🎨 **Clean Architecture** | Decorators organize your code beautifully—no more spaghetti routes |
+| 🔌 **Plugin Everything** | Share database configs, auth, websockets across projects |
+| 💉 **Smart DI** | Singleton, Transient, Scoped services—InversifyJS under the hood |
+| 🛡️ **Type-Safe** | Full TypeScript strict mode—catch bugs before they ship |
+| 🔒 **Secure by Default** | AES-256-GCM + HKDF crypto, built-in security best practices |
+| ⚡ **Production Ready** | 92%+ test coverage, battle-tested in real applications |
+| 🎯 **Express Compatible** | Use ANY Express middleware—gradual migration friendly |
+| 📦 **Zero Lock-in** | BYOA (Bring Your Own Architecture)—we don't force opinions |
+
+---
+
+## 🚀 What's New in v2.0
+
+**Major security and architecture improvements!**
+
+```diff
++ ✅ Security: Fixed critical crypto vulnerabilities (AES-256-GCM + HKDF)
++ ✅ Type Safety: Full TypeScript strict mode support
++ ✅ DI: Scoped dependency injection (Singleton/Transient/Scoped)
++ ✅ Health Checks: Built-in health endpoints for Kubernetes/monitoring
++ ✅ Environment: .env file support with @Env decorator
++ ✅ Performance: Native utilities, removed lodash dependencies
++ ✅ ESLint: Migrated to ESLint v9 flat config
++ ✅ Quality: 95%+ coverage, all tests passing
+```
+
+**⚠️ Breaking Changes:**
+- Cryptography format changed (must re-encrypt data)
+- TypeScript strict mode enabled
+- **Node.js 20+ required** (Node.js 18 reached EOL April 2025)
+- Express 5.x required
+- ESLint v9 (flat config)
+
+**[📖 Full Changelog](CHANGELOG.md)** • **[🔄 Migration Guide](docs/MIGRATION_GUIDE_v2.md)**
+
+---
+
+## 💡 Features That'll Make You Smile
+
+### 🎨 Decorator-Driven Development
+```typescript
+@Route('/api/users')
+class UserController {
+  @Get('/:id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
+
+  @Post('/')
+  async createUser(@Body() data: CreateUserDto) {
+    return this.userService.create(data);
+  }
+}
+```
+
+### 🔌 Pluggable Architecture
+```typescript
+import { AuthPlugin } from '@my-org/auth-plugin';
+import { DatabasePlugin } from '@my-org/db-plugin';
+
+@ServerSettings({
+  port: 3000,
+  plugins: [AuthPlugin, DatabasePlugin]
+})
+class App extends Boot {}
+```
+
+### 💉 Dependency Injection
+```typescript
+@injectable()
+class UserService {
+  constructor(
+    @inject(TYPES.Database) private db: Database,
+    @inject(TYPES.Logger) private logger: Logger
+  ) {}
+}
+```
+
+### 🎯 Type-Safe Everything
+```typescript
+// Generics everywhere
+class ApiResponse<T> {
+  constructor(
+    public data: T,
+    public status: number
+  ) {}
+}
+
+@Get('/users')
+getUsers(): ApiResponse<User[]> {
+  return new ApiResponse(users, 200);
+}
+```
+
+### 🏥 Built-in Health Checks
+```typescript
+@HealthCheck({
+  checks: [
+    {
+      name: 'database',
+      check: async () => {
+        const isConnected = await db.ping();
+        return { status: isConnected ? 'pass' : 'fail' };
+      },
+      critical: true, // Blocks readiness probe if fails
+      timeout: 5000
+    }
+  ]
+})
+class App extends Boot {}
+
+// Endpoints:
+// GET /health       - Detailed health status
+// GET /health/live  - Liveness probe (K8s)
+// GET /health/ready - Readiness probe (K8s)
+```
+
+### 🌍 Environment Variable Support
+```typescript
+// Load from .env files
+@Env({ path: '.env', required: ['DATABASE_URL', 'API_KEY'] })
+@Env({ path: '.env.local', override: true, silent: true })
+class App extends Boot {}
+
+// In your .env:
+// DATABASE_URL=postgres://localhost:5432/mydb
+// API_KEY="secret-key"
+```
+
+### 🎯 Type-Safe Environment Variables (v2.0.1+)
+```typescript
+import { z } from 'zod';
+
+const EnvSchema = z.object({
+  PORT: z.string().transform(Number),
+  DATABASE_URL: z.string().url(),
+  API_KEY: z.string().min(32)
+});
+
+type Env = z.infer<typeof EnvSchema>;
+
+@Env<Env>({
+  transform: (env) => EnvSchema.parse(env),
+  onTransformError: 'throw' // Fail fast on invalid env
+})
+class App extends Boot {
+  constructor() {
+    super();
+    const env = Settings.getInstance().getEnv<Env>();
+    console.log(env.PORT); // Type: number (validated!)
+  }
+}
+```
+
+### 📄 Configuration Files (v2.0.1+)
+```yaml
+# .expressive-tea.yaml (YAML support!)
+port: 3000
+securePort: 4443
+
+database:
+  host: localhost
+  port: 5432
+
+# Comments supported!
+cache:
+  enabled: true
+  ttl: 3600
+```
+
+**File Priority**: `.expressive-tea.yaml` > `.expressive-tea.yml` > `.expressive-tea` (JSON)
+
+---
+
+## 📦 Installation & Setup
 
 ### Prerequisites
 
-**Important!** Expressive Tea requires Node >= 6, Express >= 4, TypeScript >= 2.0 and the `experimentalDecorators`, 
-`lib` compilation options in your `tsconfig.json` with the next configuration.
+- **Node.js** ≥ 20.0.0
+- **TypeScript** ≥ 5.0.0
+- **Express** ≥ 5.0.0
 
-Expressive Tea is not having any configuration of any Express Plugin or any database connection beside is built it 
-on Express it is woking as **Bring Your Own Architecture**.
+> **Note:** Node.js 18 support was dropped in v2.0.0 as it reached End-of-Life in April 2025. We recommend using Node.js 20 LTS or Node.js 22 for the best experience and security updates.
 
-### Installation
-```bash
-npm i --save @zerooneit/expressive-tea
-```
-
-### Setting up Typescript
+### Configure TypeScript
 
 ```json
 {
   "compilerOptions": {
-    "baseUrl": ".",
-    "sourceMap": true,
-    "noEmit": true,
-    "noImplicitAny": true,
-    "target": "es6",
-    "lib": ["es6", "dom"],
+    "target": "ES2017",
     "module": "commonjs",
-    "moduleResolution": "node",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    
+    // Recommended for maximum safety
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true
   }
 }
 ```
-### Examples
-You can looking into our simple example [here](https://github.com/Expressive-Tea/expressive-tea-sandbox), or edit or see how is working on our live preview using th button below.
+
+### Install
+
+```bash
+# npm
+npm install @expressive-tea/core reflect-metadata
+
+# yarn
+yarn add @expressive-tea/core reflect-metadata
+```
+
+---
+
+## Local staging with Verdaccio
+
+If you want to test publishing locally before pushing to the public registry, use a local Verdaccio instance as a staging registry.
+
+Quick steps:
+
+1. Start Verdaccio (Docker):
+
+```bash
+docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 verdaccio/verdaccio:latest
+```
+
+2. Point npm to local registry and publish:
+
+```bash
+# point npm to local registry
+npm set registry http://localhost:4873
+
+# publish (from package root)
+npm publish --registry http://localhost:4873
+
+# restore default registry
+npm set registry https://registry.npmjs.org/
+```
+
+3. Optional: Use the repo-provided Verdaccio config for deterministic behavior:
+
+```bash
+docker run -d --rm --name verdaccio-expressive-tea -p 4873:4873 \
+  -v $(pwd)/.docs/verdaccio/config.yaml:/verdaccio/conf/config.yaml \
+  verdaccio/verdaccio:latest
+```
+
+Notes:
+- Default URL: http://localhost:4873
+- Container name: verdaccio-expressive-tea (the agent checks for this name before starting a new container)
+- Anonymous publishing is enabled in the example config (local only). Do not expose to public networks.
+- The config permits overwriting the same package version for easy iterative testing.
+
+
+### Your First App
+
+**1. Create your server:**
+```typescript
+// server.ts
+import 'reflect-metadata';
+import { ServerSettings, Boot } from '@expressive-tea/core';
+
+@ServerSettings({
+  port: 3000,
+  controllers: [HelloController]
+})
+class MyApp extends Boot {}
+
+export default MyApp;
+```
+
+**2. Add a controller:**
+```typescript
+// controllers/hello.controller.ts
+import { Route, Get } from '@expressive-tea/core';
+
+@Route('/hello')
+export class HelloController {
+  @Get('/')
+  sayHello() {
+    return { message: 'Hello, Expressive Tea! 🍵' };
+  }
+}
+```
+
+**3. Start it up:**
+```typescript
+// main.ts
+import MyApp from './server';
+
+const app = new MyApp();
+app.start().then(() => {
+  console.log('🚀 Server is running!');
+});
+```
+
+**[📚 Full Tutorial →](https://zero-oneit.github.io/expresive-tea/)**
+
+---
+
+## 🎓 Learn More
+
+### 📖 Documentation
+- [Complete Guide](https://zero-oneit.github.io/expresive-tea/) - Full documentation
+- [API Reference](https://zero-oneit.github.io/expresive-tea/api/) - Complete API docs
+- [Examples](https://github.com/Expressive-Tea/expressive-tea-sandbox) - Sample projects
+
+### 🆕 v2.0.1 Features
+- [Configuration Files Guide](docs/configuration-files.md) - YAML/JSON config support
+- [Environment Variables Guide](docs/env-decorator.md) - Type-safe env with Zod
+
+### 🔄 Migration & Upgrading
+- [Migration Guide v1 → v2](docs/MIGRATION_GUIDE_v2.md) - Step-by-step upgrade
+- [Release Notes v2.0](docs/RELEASE_NOTES_v2.0.0.md) - What's new
+- [Deprecation Notice](docs/DEPRECATION_NOTICE.md) - v1.x timeline
+
+### 🛡️ Security
+- [Security Policy](SECURITY.md) - Vulnerability reporting
+- [Changelog](CHANGELOG.md) - Version history
+
+---
+
+## 🤝 Contributing
+
+We love contributions! Whether it's bug fixes, features, or docs.
+
+**Quick links:**
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
+- [Code of Conduct](CODE_OF_CONDUCT.md) - Community guidelines
+- [Issues](https://github.com/Expressive-Tea/expresive-tea/issues) - Report bugs or request features
+
+```bash
+# Get started
+git clone https://github.com/Expressive-Tea/expresive-tea.git
+cd expresive-tea
+yarn install
+yarn test
+```
+
+### 🤖 AI-Assisted Development & Vibe Coding
+
+**We welcome AI-assisted contributions!** Whether you're using GitHub Copilot, Cursor, Claude, or other AI coding assistants, we embrace the future of collaborative development.
+
+**⚠️ IMPORTANT: AI-Generated Code Requirements**
+
+If you're using AI tools for code generation, you **MUST**:
+
+1. **📖 Follow Repository Guidelines**
+   - ✅ Read and strictly adhere to [`AGENTS.md`](AGENTS.md) - Agent-specific coding rules
+   - ✅ Read and strictly adhere to [`CLAUDE.md`](CLAUDE.md) - Claude AI guidelines
+   - ✅ These files contain critical project conventions, style guides, and quality standards
+
+2. **👨‍💻 Human Review is MANDATORY**
+   - ✅ **All AI-generated code MUST be reviewed by a human developer** before creating a pull request
+   - ✅ Understand the code completely—don't submit code you can't explain
+   - ✅ Test thoroughly (aim for 95%+ coverage)
+   - ✅ Verify the code follows our architectural patterns and best practices
+
+3. **✅ Quality Standards**
+   - ✅ All tests must pass (`yarn test`)
+   - ✅ Linting must pass (`yarn linter:ci`)
+   - ✅ TypeScript must compile without errors (`yarn build`)
+   - ✅ Code must match our existing patterns and conventions
+   - ✅ Documentation must be updated (JSDoc, README, CHANGELOG)
+
+4. **📝 PR Transparency**
+   - ✅ Disclose AI assistance in your pull request description
+   - ✅ Example: "This PR was developed with assistance from Claude/Copilot/Cursor"
+   - ✅ Highlight any sections that were fully AI-generated for extra review
+
+**Why These Rules?**
+
+- 🛡️ **Quality Assurance** - AI can make subtle mistakes humans catch
+- 🎯 **Consistency** - Ensures code matches our architectural vision
+- 📚 **Knowledge Transfer** - Reviewers understand your contribution
+- 🔒 **Security** - Prevents AI from introducing vulnerabilities
+- 🤝 **Collaboration** - Maintains clear communication in the codebase
+
+**Vibe Coding Best Practices:**
+
+```typescript
+// ✅ GOOD: AI-generated, reviewed, and refined by human
+@Route('/api/users')
+class UserController {
+  @Get('/:id')
+  async getUser(@Param('id') id: string): Promise<User> {
+    // Human: Added validation per AGENTS.md security guidelines
+    if (!id || !validator.isUUID(id)) {
+      throw new BadRequestException('Invalid user ID');
+    }
+    return this.userService.findById(id);
+  }
+}
+
+// ❌ BAD: AI-generated, unreviewed, missing error handling
+@Route('/api/users')
+class UserController {
+  @Get('/:id')
+  async getUser(@Param('id') id: string) {
+    return this.userService.findById(id); // What if id is invalid?
+  }
+}
+```
+
+**📚 Required Reading for AI-Assisted Development:**
+- [`AGENTS.md`](AGENTS.md) - Repository-specific rules for AI agents
+- [`CLAUDE.md`](CLAUDE.md) - Claude AI coding guidelines
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - General contribution guide
+- [`.prettierrc`](.prettierrc) - Code formatting rules
+- [`eslint.config.js`](eslint.config.js) - Linting configuration
+
+**Questions?** Ask in [GitHub Discussions](https://github.com/Expressive-Tea/expresive-tea/discussions) before submitting AI-generated code.
+
+---
+
+## 💬 Community & Support
+
+### Get Help
+- 📖 [Documentation](https://zero-oneit.github.io/expresive-tea/)
+- 💬 [Gitter Chat](https://gitter.im/Expressive-Tea/expresive-tea)
+- 📧 [Email Support](mailto:support@expressive-tea.io)
+- 🐛 [GitHub Issues](https://github.com/Expressive-Tea/expresive-tea/issues)
+- 🔖 [Stack Overflow](https://stackoverflow.com/questions/tagged/expressive-tea) - Use tag `expressive-tea`
+
+### Stay Connected
+- 🐦 Twitter: [@expressive_tea](https://twitter.com/expressive_tea)
+- 📧 Email: [support@expressive-tea.io](mailto:support@expressive-tea.io)
+- 👨‍💻 Author: [Diego Resendez](https://twitter.com/diegoresendez)
+
+---
+
+## 🌟 Built With
+
+| Technology | Purpose |
+|------------|---------|
+| [Express](https://expressjs.com/) | Fast, unopinionated web framework |
+| [TypeScript](https://www.typescriptlang.org/) | Type-safe JavaScript |
+| [InversifyJS](https://inversify.io/) | Powerful dependency injection |
+| [Reflect Metadata](https://github.com/rbuckton/reflect-metadata) | Decorator metadata support |
+
+---
+
+## 🏆 Sponsors
+
+Building Expressive Tea takes time and dedication. If this project helps you, consider sponsoring!
+
+**Principal Sponsor:**
 
 <p align="center">
-<br/>
-<a href="https://codesandbox.io/s/expressive-tea-2kmg7?fontsize=14&hidenavigation=1&module=%2Fmain.ts&theme=dark">
-<img src="https://codesandbox.io/static/img/play-codesandbox.svg">
-</a>
+  <a href="https://zerooneit.com" target="_blank">
+    <img src="images/zero-oneit.png" width="180" alt="Zero-OneIT" />
+  </a>
 </p>
 
-## Contributing
+**Interested in sponsoring?** Contact [projects@zero-oneit.com](mailto:projects@zero-oneit.com)
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+---
 
-## Versioning
+## 📄 License
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/Expressive-Tea/expresive-tea/tags). 
-
-## Contributors
-
-* **Diego Resendez** - *Lead Developer / Author* - [zerooneit](https://github.com/zerooneit)
-
-See also the list of [contributors](https://github.com/Expressive-Tea/expresive-tea/contributors) who participated in this project.
-
-## Support
-If you are experience any kind of issues we will be happy to help. You can report an issue using the [issues page](https://github.com/Expressive-Tea/expresive-tea/issues) or the [chat](https://gitter.im/Expressive-Tea/expresive-tea). You can also ask questions at [Stack overflow](http://stackoverflow.com/tags/expressive-tea) using the `expressive-tea` tag.
-
-If you want to share your thoughts with the development team or join us you will be able to do so using the [official the mailing list](https://groups.google.com/forum/#!forum/expressive-tea/). You can check out the
-[wiki](https://github.com/Expressive-Tea/expresive-tea/blob/develop/README.md) to learn more about Expressive Tea internals or check our [documentation](https://docs.expressive-tea.io).
-
-Expressive Tea is an open source project, our goal is create an awesome framework that helps to build marvelous server side applications. If you like to join as Sponsor or backer to continue grow, please you can contact us on [projects@zero-oneit.com](mailto:projects@zero-oneit.com)
-#### Principal Sponsors
-
-<table style="text-align:center;"><tr><td>
-<a href="https://zerooneit.com" target="_blank"><img src="images/zero-oneit.png" width="180" valign="middle" /></a></td><td>
-</tr></table>
-
-
-## Stay on Touch
-
-* Author - [Diego Resendez](https://twitter.com/diegoresendez)
-* Twitter - [@expressive_tea](https://twitter.com/expressive_tea)
-* Email - [support@expressive-tea.io](support@expressive-tea.io)
-
-## License
-This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details
+Apache-2.0 License - see [LICENSE](LICENSE) file for details
 
 <p align="center">
-<a href="https://app.fossa.io/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea?ref=badge_large">
-<img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FZero-OneiT%2Fexpresive-tea.svg?type=large" />
-</a>
+  <a href="https://app.fossa.io/projects/git%2Bgithub.com%2FExpressive-Tea%2Fexpresive-tea?ref=badge_large">
+    <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2FExpressive-Tea%2Fexpresive-tea.svg?type=large" />
+  </a>
 </p>
 
-## Disclaimers
-The banner and the logo is a derivate work [Designed by Freepik](http://www.freepik.com)
+---
+
+## 📌 Versioning
+
+We use [Semantic Versioning](http://semver.org/) (SemVer). See [tags](https://github.com/Expressive-Tea/expresive-tea/tags) for available versions.
+
+---
+
+## 👥 Contributors
+
+**Lead Developer:** [Diego Resendez](https://github.com/zerooneit)
+
+See all [contributors](https://github.com/Expressive-Tea/expresive-tea/contributors) who've helped shape Expressive Tea.
+
+---
+
+## ❤️ Credits
+
+Logo and banner designed by [Freepik](http://www.freepik.com)
+
+---
+
+<p align="center">
+  Made with ☕ and 🍵 by the Expressive Tea Team
+  <br />
+  <sub>Start brewing better Node.js apps today!</sub>
+</p>

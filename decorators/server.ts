@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import { type Express } from 'express';
-import { isNil, orderBy } from 'lodash';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import Settings from '../classes/Settings';
+import { isNil, orderBy } from '@libs/utilities';
+import { Metadata } from '@expressive-tea/commons';
+import Settings from '@classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
   ASSIGN_TEAPOT_KEY, type BOOT_STAGES,
@@ -10,13 +11,15 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   ROUTER_PROXIES_KEY
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import {
   type ExpressiveTeaPotSettings,
   type ExpressiveTeaPluginProps,
   type ExpressiveTeaServerProps,
   type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
-} from '@expressive-tea/commons/interfaces';
+} from '@expressive-tea/commons';
+import {Newable } from 'inversify';
+import DependencyInjection from '@services/DependencyInjection';
 
 /**
  * Define the Main Plugins Properties.
@@ -63,15 +66,18 @@ import {
  * @module Decorators/Server
  */
 
-function getStages(target) {
-  return MetaData.get(BOOT_STAGES_KEY, target) || {};
+ 
+function getStages(target: any) {
+  return Metadata.get(BOOT_STAGES_KEY, target) || {};
 }
 
-function getRegisteredPlugins(target) {
-  return MetaData.get(PLUGINS_KEY, target) || [];
+ 
+function getRegisteredPlugins(target: any) {
+  return Metadata.get(PLUGINS_KEY, target) || [];
 }
 
-function getStage(stage, target) {
+ 
+function getStage(stage: BOOT_STAGES, target: any) {
   const stages = getStages(target);
   if (!stages[stage]) {
     stages[stage] = [];
@@ -80,14 +86,16 @@ function getStage(stage, target) {
   return stages[stage];
 }
 
-function setStage(stage, value, target) {
+ 
+function setStage(stage: BOOT_STAGES, value: any, target: any) {
   const stages = getStages(target);
   stages[stage] = value;
-  MetaData.set(BOOT_STAGES_KEY, stages, target);
+  Metadata.set(BOOT_STAGES_KEY, stages, target);
 }
 
-function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
-  MetaData.set(PLUGINS_KEY, plugins, target);
+ 
+function setPlugins(plugins: ExpressiveTeaPluginProps[], target: any) {
+  Metadata.set(PLUGINS_KEY, plugins, target);
 }
 
 /**
@@ -108,7 +116,7 @@ function setPlugins(plugins: ExpressiveTeaPluginProps[], target) {
 export function Plug(
   stage: BOOT_STAGES,
   name: string,
-  method: (server?: Express | never, ...extraArgs: unknown[]) => Promise<any> | any,
+  method: (server?: Express, ...extraArgs: unknown[]) => Promise<void> | void,
   required: boolean = false
 ) {
   return (target: any): void => {
@@ -130,10 +138,13 @@ export function Plug(
  * @version 1.1.0
  * @link https://www.npmjs.com/package/@expressive-tea/plugin Expressive Tea Plugin
  */
-export function Pour(Plugin, ...pluginArgs: any[]) {
+export function Pour(Plugin: Newable<any>, ...pluginArgs: any[]) {
   return (target: any): void => {
     const stages = getStages(target);
-    const instance = new Plugin(...pluginArgs);
+    DependencyInjection.Container.bind<typeof Plugin>(Plugin)
+      .toDynamicValue(() => new Plugin(...pluginArgs))
+      .inSingletonScope();
+    const instance = DependencyInjection.Container.get<any>(Plugin);
 
     const plugins: ExpressiveTeaPluginProps[] = instance.register(
       Settings.getInstance(target).getOptions(),
@@ -156,7 +167,8 @@ export function Pour(Plugin, ...pluginArgs: any[]) {
  * @param {ExpressiveTeaModuleProps} options
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
-  return target => {
+   
+  return (target: any) => {
     Settings.getInstance(target).merge(options);
     return target;
   };
@@ -176,13 +188,14 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
  * with virtual path if defined.
  */
 export function Static(root: string, virtual: string | null = null, options: ExpressiveTeaStaticFileServer = {}) {
-  return target => {
+   
+  return (target: any) => {
     if (isNil(root)) {
       throw new Error('Root must be defined');
     }
-    const registeredStatics = MetaData.get(REGISTERED_STATIC_KEY, target) || [];
+    const registeredStatics = Metadata.get(REGISTERED_STATIC_KEY, target) || [];
     registeredStatics.unshift({ root, options, virtual });
-    MetaData.set(REGISTERED_STATIC_KEY, registeredStatics, target);
+    Metadata.set(REGISTERED_STATIC_KEY, registeredStatics, target);
   };
 }
 
@@ -195,14 +208,16 @@ export function Static(root: string, virtual: string | null = null, options: Exp
  * @param {*} settings - Setting Arguments
  * @decorator {ClassDecorator} ExpressDirective - Set a Express App Setting.
  */
+ 
 export function ExpressDirective(name: string, ...settings: any[]) {
-  return target => {
+   
+  return (target: any) => {
     if (!EXPRESS_DIRECTIVES.includes(name)) {
       throw new Error(`Directive Name ${name} is not valid express behavior setting`);
     }
-    const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, target) || [];
+    const registeredDirectives = Metadata.get(REGISTERED_DIRECTIVES_KEY, target) || [];
     registeredDirectives.unshift({ name, settings });
-    MetaData.set(REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
+    Metadata.set(REGISTERED_DIRECTIVES_KEY, registeredDirectives, target);
   };
 }
 
@@ -211,9 +226,8 @@ export function ExpressDirective(name: string, ...settings: any[]) {
  * All properties will contains the settings value or undefined if current settings is not founded.
  * @decorator {PropertyDecorator} Setting - Assign Server Settings to Property as default value.
  * @summary Automatically assign a settings declared on the Server Settings decorator to a class property.
- * @param {string} settingName The Setting name tha
  */
-export function Setting(settingName: string): (target: any, propertyName: string) => any {
+export function Setting(): (target: any, propertyName: string) => any {
   return (target, propertyName) => {
     Object.defineProperty(target, propertyName, {
       configurable: false,
@@ -229,25 +243,27 @@ export function Setting(settingName: string): (target: any, propertyName: string
  * @summary This register the Module Classes created by the user.
  * @param Modules
  */
+ 
 export function Modules(Modules: any[]) {
-  return target => {
 
+  return (target: any) => {
     for (const Module of Modules) {
-      const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+      const registeredModules = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
       registeredModules.unshift(Module);
-      MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
+      Metadata.set(REGISTERED_MODULE_KEY, registeredModules, target, 'start');
     }
-
   };
 }
 
+ 
 export function Proxies(proxyContainers: any[]) {
-  return target => {
+   
+  return (target: any) => {
 
     for (const proxyContainer of proxyContainers) {
-      const registeredProxyContainers = MetaData.get(ROUTER_PROXIES_KEY, target) || [];
+      const registeredProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, target) || [];
       registeredProxyContainers.unshift(proxyContainer);
-      MetaData.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
+      Metadata.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
     }
 
   };
@@ -261,28 +277,25 @@ export function Proxies(proxyContainers: any[]) {
  * @param {Class} Module
  * @deprecated Use the new decorator Modules that allow add modules into registered modules.
  */
-export function RegisterModule(Module) {
-  return (target, property: string | symbol) => {
-    if (property !== 'start') {
-      throw new Error('Register Module needs to decorate ONLY start method');
-    }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function RegisterModule(Module: any) {
 
-    const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, target, property) || [];
-    registeredModules.push(Module);
-    MetaData.set(REGISTERED_MODULE_KEY, registeredModules, target, property);
+   
+  return (_: any, __: any) => {
+    throw new Error('RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.');
   };
 }
 
 export function Teapot(teapotSettings: ExpressiveTeaPotSettings) {
   return (target: object) => {
-    MetaData.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
-    MetaData.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
+    Metadata.set(ASSIGN_TEAPOT_KEY, true, target, 'isTeapotActive');
+    Metadata.set(ASSIGN_TEAPOT_KEY, teapotSettings, target);
   };
 }
 
 export function Teacup(teacupSettings: ExpressiveTeaCupSettings) {
   return (target: object) => {
-    MetaData.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
-    MetaData.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
+    Metadata.set(ASSIGN_TEACUP_KEY, true, target, 'isTeacupActive');
+    Metadata.set(ASSIGN_TEACUP_KEY, teacupSettings, target);
   };
 }

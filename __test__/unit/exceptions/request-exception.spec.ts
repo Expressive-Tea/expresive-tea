@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   GenericRequestException,
-  UnauthorizedException } from '../../../exceptions/RequestExceptions';
+  UnauthorizedException } from '@exceptions/RequestExceptions';
 
 describe('Bootloader Exceptions', () => {
   test('should instance required exception', () => {

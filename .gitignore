@@ -78,15 +78,25 @@ build/*
 examples/
 
 .data
+.tmp/
 
+# AI
+.claude/
+.opencode/
+
+# TypeScript compiled files
 *.d.ts
 *.js.map
+
 benchmark/*.js
 classes/*.js
-decorators/*.js
+decorators/**/*.js
 exceptions/*.js
 helpers/*.js
 libs/*.js
 services/*.js
 engines/**/*.js
 inversify.config.js
+mixins/**/*.js
+types/**/*.js
+interfaces/**/*.js

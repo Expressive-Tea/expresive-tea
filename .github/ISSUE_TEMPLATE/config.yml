@@ -1,0 +1,25 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://expressive-tea.io/docs
+    about: Browse the official Expressive Tea documentation for guides, API reference, and examples.
+  
+  - name: 💬 GitHub Discussions
+    url: https://github.com/Expressive-Tea/expresive-tea/discussions
+    about: Ask questions, share ideas, and discuss with the community.
+  
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/Expressive-Tea/expresive-tea/security/advisories/new
+    about: Report security vulnerabilities privately through GitHub Security Advisories.
+  
+  - name: 💡 Feature Ideas & Discussions
+    url: https://github.com/Expressive-Tea/expresive-tea/discussions/categories/ideas
+    about: Share and discuss feature ideas with the community before creating a formal feature request.
+  
+  - name: ❓ Questions & Support
+    url: https://github.com/Expressive-Tea/expresive-tea/discussions/categories/q-a
+    about: Get help with usage questions, troubleshooting, and best practices.
+  
+  - name: 🐦 Twitter / X
+    url: https://twitter.com/ExpressiveTea
+    about: Follow us on Twitter/X for announcements and updates.

@@ -1,9 +1,8 @@
-import { type Express, Router } from 'express';
-import { each, map } from 'lodash';
-import { type ExpressiveTeaModuleProps, type IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
-import DependencyInjection from '../services/DependencyInjection';
-import { interfaces } from 'inversify';
-import Newable = interfaces.Newable;
+import { type ExpressiveTeaModuleProps } from '@expressive-tea/commons';
+ 
+import { type Constructor } from '../types/core';
+import { Modulize, type ModulizedClass } from '@mixins/module';
+
 /**
  * @typedef {Object} ExpressiveTeaModuleProps
  * @property {Object[]} controllers Controllers Assigned to Module
@@ -19,36 +18,28 @@ import Newable = interfaces.Newable;
  * Module Decorator is a Class Decorator which is help to register a Module into Expressive Tea. A module is a
  * placeholder over a mountpoint. We can considerate a module like a container which provide isolation and modularity
  * for our project. This module can be mounted in different applications and will move all the controller routes too.
+ * 
  * @decorator {ClassDecorator} Module - Module Class Register Decorator
- * @param {ExpressiveTeaModuleProps} options
+ * @template TBase - The base constructor type being decorated
+ * @param {ExpressiveTeaModuleProps} options - Module configuration options
+ * @returns {(target: TBase) => ModulizedClass<TBase>} Decorator function that returns a modulized class
  * @summary Module Decorator
+ * 
  * @example
  * {REPLACE-AT}Module({
- *   controllers: [],
- *   providers: [],
- *   mountpoint: '/'
+ *   controllers: [UserController],
+ *   providers: [UserService],
+ *   mountpoint: '/api'
  * })
- * class Example {}
+ * class ApiModule {}
+ * 
+ * @since 1.0.0
  */
-export function Module(options: ExpressiveTeaModuleProps) {
-  return <T extends new (...args: any[]) => any>(Module: T) => {
-    return class ExpressiveTeaModule extends Module implements IExpressiveTeaModule{
-      readonly settings: ExpressiveTeaModuleProps;
-      readonly router: Router = Router();
-      readonly controllers: any[];
-
-      constructor(...args: any[]) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        super(...args);
-        this.settings = options;
-        each(this.settings.providers, (P: Newable<any>) => { DependencyInjection.setProvider(P); });
-        this.controllers = map(this.settings.controllers, C => new C());
-      }
-
-      __register(server: Express) {
-        each(this.controllers, c => c.__mount(this.router));
-        server.use(this.settings.mountpoint, this.router);
-      }
-    };
+export function Module<TBase extends Constructor = Constructor>(
+  options: ExpressiveTeaModuleProps
+): (target: TBase) => ModulizedClass<TBase> {
+  return (Module: TBase): ModulizedClass<TBase> => {
+    return Modulize<TBase>(Module, options);
   };
 }
+

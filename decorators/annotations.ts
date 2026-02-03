@@ -1,7 +1,8 @@
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { ARGUMENT_TYPES, ARGUMENTS_KEY } from '@expressive-tea/commons/constants';
-import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons/interfaces';
-import { type ParameterDecorator } from '@expressive-tea/commons/types';
+import { Metadata } from '@expressive-tea/commons';
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { ARGUMENT_TYPES, ARGUMENTS_KEY } from '@expressive-tea/commons';
+import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons';
+import { type ParameterDecorator } from '@expressive-tea/commons';
 
 /**
  * @module Decorators/Annotations
@@ -13,14 +14,14 @@ function addToArguments(
   parameterIndex: number,
   type: symbol,
   args?: string | string[]) {
-  const decoratedParameters: ExpressiveTeaArgumentOptions[] = MetaData.get(ARGUMENTS_KEY, target, propertyKey) || [];
+  const decoratedParameters: ExpressiveTeaArgumentOptions[] = Metadata.get(ARGUMENTS_KEY, target, propertyKey) || [];
   decoratedParameters.unshift({
     arguments: args,
     index: parameterIndex,
     key: propertyKey,
     type
   });
-  MetaData.set(ARGUMENTS_KEY, decoratedParameters, target, propertyKey);
+  Metadata.set(ARGUMENTS_KEY, decoratedParameters, target, propertyKey);
 }
 
 /**

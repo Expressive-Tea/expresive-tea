@@ -1,10 +1,9 @@
 import * as supertest from 'supertest';
 import Boot from '../../../classes/Boot';
-import { RegisterModule, ServerSettings, Teacup, Teapot } from '../../../decorators/server';
+import { Modules, ServerSettings, Teacup, Teapot } from '../../../decorators/server';
 import TeapotModule from './modules/teapot/RootModule';
 import TeacupModule1 from './modules/teacup1/RootModule';
 import TeacupModule2 from './modules/teacup2/RootModule';
-import { ExpressiveTeaApplication } from '@expressive-tea/commons/interfaces';
 import { delay } from '../../../helpers/promise-helper';
 
 const teapotPort = 8080;
@@ -16,12 +15,8 @@ const teapotPort = 8080;
   serverKey: 'test',
   clientKey: 'testKey'
 })
-class TeapotTest extends Boot {
-  @RegisterModule(TeapotModule)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
-}
+@Modules([TeapotModule])
+class TeapotTest extends Boot {}
 
 @ServerSettings({
   port: 8081
@@ -32,12 +27,8 @@ class TeapotTest extends Boot {
   address: 'http://127.0.0.1:8081',
   mountTo: '/teacup-1'
 })
-class TeacupTest extends Boot {
-  @RegisterModule(TeacupModule1)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
-}
+@Modules([TeacupModule1])
+class TeacupTest extends Boot {}
 
 @ServerSettings({
   port: 8082
@@ -48,12 +39,8 @@ class TeacupTest extends Boot {
   address: 'http://127.0.0.1:8082',
   mountTo: '/teacup-2'
 })
-class TeacupTest2 extends Boot {
-  @RegisterModule(TeacupModule2)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
-}
+@Modules([TeacupModule2])
+class TeacupTest2 extends Boot {}
 
 @ServerSettings({
   port: 8084
@@ -64,12 +51,8 @@ class TeacupTest2 extends Boot {
   address: 'http://127.0.0.1:8084',
   mountTo: '/teacup-1'
 })
-class TeacupTest4 extends Boot {
-  @RegisterModule(TeacupModule1)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
-}
+@Modules([TeacupModule1])
+class TeacupTest4 extends Boot {}
 
 @ServerSettings({
   port: 8083
@@ -80,12 +63,8 @@ class TeacupTest4 extends Boot {
   address: 'http://127.0.0.1:8083',
   mountTo: '/teacup-3'
 })
-class TeacupTest3 extends Boot {
-  @RegisterModule(TeacupModule1)
-  async start(): Promise<ExpressiveTeaApplication> {
-    return super.start();
-  }
-}
+@Modules([TeacupModule1])
+class TeacupTest3 extends Boot {}
 
 export default async function initTeapot() {
   const teapot = new TeapotTest();
@@ -106,7 +85,12 @@ export default async function initTeapot() {
   await delay(5000);
 
   return {
-    appTeapot, appTeacup, extraTeacups, request
+    appTeapot,
+    appTeacup,
+    extraTeacups,
+    request,
+    teapotInstance: teapot,
+    teacupInstances: [teacup1, teacup2, teacup3, teacup4]
   };
 }
 

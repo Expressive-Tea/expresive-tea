@@ -1,7 +1,14 @@
-export const httpServerMock = {
+ 
+
+export const httpServerMock: any = {
   listen: jest.fn(),
   listeners: jest.fn().mockImplementation(() => []),
-  removeAllListeners: jest.fn().mockImplementation(() => ({url: ''})),
+  removeAllListeners: jest.fn().mockImplementation(() => ({ url: '' })),
+  close: jest.fn().mockImplementation((callback?: () => void) => {
+    if (callback) {
+      callback();
+    }
+  }),
   on: jest.fn().mockImplementation((event, callback) => {
     if (event === 'error') {
       return false;
@@ -12,6 +19,8 @@ export const httpServerMock = {
 };
 
 export const createServer = jest.fn().mockImplementation(() => {
+  // keep a lightweight console for debugging test runs
+   
   console.log('Mocking HTTP Server');
   return httpServerMock;
 });

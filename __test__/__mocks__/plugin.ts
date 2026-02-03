@@ -1,3 +1,5 @@
+ 
+
 export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   registeredPlugins.push({
     name: 'Mocked',
@@ -6,9 +8,13 @@ export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   return registeredPlugins;
 });
 export const mockGetRegisteredStage = jest.fn(() => []);
-export let mockPluginArguments = [];
+export let mockPluginArguments: unknown[] = [];
 
-const Plugin = jest.fn().mockImplementation(function (...pluginArgs) {
+const PluginMock = jest.fn()
+  .mockName('Plugin');
+
+
+const Plugin = PluginMock.mockImplementation(function (...pluginArgs) {
   this.priority = 999;
   mockPluginArguments = pluginArgs;
   return {
@@ -17,4 +23,4 @@ const Plugin = jest.fn().mockImplementation(function (...pluginArgs) {
   };
 });
 
-export default Plugin as any;
+export default Plugin.mockName('XD') as any;

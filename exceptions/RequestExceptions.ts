@@ -26,7 +26,7 @@ export class GenericRequestException extends Error {
   statusCode: number = 500;
   message: string = 'Server Error';
 
-  constructor(message: string | never, statusCode = 500) {
+  constructor(message: string, statusCode = 500) {
     super(message);
     this.statusCode = statusCode;
     this.message = message;
@@ -54,7 +54,7 @@ export class GenericRequestException extends Error {
  * }
  */
 export class BadRequestException extends GenericRequestException {
-  constructor(message: string | never = 'Bad Request') {
+  constructor(message: string = 'Bad Request') {
     super(message, 400);
   }
 }
@@ -80,7 +80,7 @@ export class BadRequestException extends GenericRequestException {
  * }
  */
 export class UnauthorizedException extends GenericRequestException {
-  constructor(message: string | never = 'Unauthorized Request') {
+  constructor(message: string = 'Unauthorized Request') {
     super(message, 401);
   }
 }

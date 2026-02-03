@@ -1,0 +1,61 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": true,
+      "dynamicImport": true
+    },
+    "transform": {
+      "legacyDecorator": true,
+      "decoratorMetadata": true,
+      "useDefineForClassFields": false
+    },
+    "target": "es2020",
+    "keepClassNames": true,
+    "loose": false,
+    "externalHelpers": false,
+    "baseUrl": ".",
+    "paths": {
+      "@classes": ["classes"],
+      "@classes/*": ["classes/*"],
+      "@decorators": ["decorators"],
+      "@decorators/*": ["decorators/*"],
+      "@engines": ["engines"],
+      "@engines/*": ["engines/*"],
+      "@exceptions": ["exceptions"],
+      "@exceptions/*": ["exceptions/*"],
+      "@helpers": ["helpers"],
+      "@helpers/*": ["helpers/*"],
+      "@interfaces": ["interfaces"],
+      "@interfaces/*": ["interfaces/*"],
+      "@libs": ["libs"],
+      "@libs/*": ["libs/*"],
+      "@services": ["services"],
+      "@services/*": ["services/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"],
+      "@mixins": ["mixins"],
+      "@mixins/*": ["mixins/*"],
+      "@config": ["config"],
+      "@config/*": ["config/*"],
+      "@test-mocks": ["__test__/__mocks__"],
+      "@test-mocks/*": ["__test__/__mocks__/*"],
+      "@test-classes": ["__test__/test-classes"],
+      "@test-classes/*": ["__test__/test-classes/*"],
+      "@test-helpers": ["__test__/integrations/helpers"],
+      "@test-helpers/*": ["__test__/integrations/helpers/*"]
+    }
+  },
+  "module": {
+    "type": "commonjs",
+    "strict": false,
+    "strictMode": true,
+    "lazy": false,
+    "noInterop": false,
+    "importInterop": "swc",
+    "ignoreDynamic": false
+  },
+  "sourceMaps": true,
+  "inlineSourcesContent": true
+}

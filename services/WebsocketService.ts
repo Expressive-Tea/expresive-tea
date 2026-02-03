@@ -3,20 +3,20 @@ import type * as http from 'http';
 import * as https from 'https';
 
 export default class WebsocketService {
-  static instance: WebsocketService;
+  static instance: WebsocketService | undefined;
 
-  private  ws: WebSocket.Server;
-  private  wss: WebSocket.Server;
-  httpServer: http.Server;
-  httpsServer: https.Server;
+  private  ws!: WebSocket.Server;
+  private  wss!: WebSocket.Server;
+  httpServer!: http.Server;
+  httpsServer!: https.Server;
 
-  constructor(ws?: WebSocket.Server | never, wss?: WebSocket.Server | never) {
+  constructor(ws?: WebSocket.Server, wss?: WebSocket.Server) {
     if (WebsocketService.instance) {
       return WebsocketService.instance;
     }
 
-    this.ws = ws;
-    this.wss = wss;
+    if (ws) this.ws = ws;
+    if (wss) this.wss = wss;
     WebsocketService.instance = this;
   }
 
@@ -55,6 +55,6 @@ export default class WebsocketService {
   }
 
   static clear(): void {
-    delete WebsocketService.instance;
+    WebsocketService.instance = undefined;
   }
 }

@@ -1,26 +1,17 @@
-import { Router } from 'express';
-import { each } from 'lodash';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { addAnnotation } from '../helpers/decorators';
-import { executeRequest, generateRoute, router } from '../helpers/server';
+import { Metadata } from '@expressive-tea/commons';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+import { addAnnotation } from '@helpers/decorators';
+import { generateRoute, router } from '@helpers/server';
 import {
-  ARGUMENTS_KEY,
-  ROUTER_ANNOTATIONS_KEY,
-  ROUTER_HANDLERS_KEY,
   ROUTER_MIDDLEWARES_KEY
-} from '@expressive-tea/commons/constants';
-import {
-  type ExpressiveTeaAnnotations,
-  type ExpressiveTeaArgumentOptions,
-  type ExpressiveTeaHandlerOptions,
-  type IExpressiveTeaRoute
-} from '@expressive-tea/commons/interfaces';
+} from '@expressive-tea/commons';
 import {
   type ClassDecorator,
-  type ExpressiveTeaMiddleware,
-  type ExpressMiddlewareHandler,
   type MethodDecorator
-} from '@expressive-tea/commons/types';
+} from '@expressive-tea/commons';
+import { Routerize, type RouterizedClass } from '@mixins/route';
+import { type Constructor, TFunction } from '../types/core';
+import { type RequestHandler } from 'express';
 
 /**
  * @module Decorators/Router
@@ -32,59 +23,23 @@ import {
  * to allow Expressive Tea Setting up the Controller as part of a Module.
  *
  * @decorator {ClassDecorator} Route - Assign a route to controller endpoints.
+ * @template TBase - The base constructor type being decorated
+ * @param {string} mountpoint - Register the url part to mount the Controller (default: '/')
+ * @returns {(target: TBase) => RouterizedClass<TBase>} Decorator function that returns a routerized class
  * @summary Generate a Placeholder endpoint root for controller routes.
- * @param {string} mountpoint Register the url part to mount the Controller.
+ * 
  * @example
- * {REPLACE-AT}Route('/)
- * class Example {}
+ * {REPLACE-AT}Route('/users')
+ * class UserController {
+ *   {REPLACE-AT}Get('/')
+ *   getUsers() { return ['user1', 'user2']; }
+ * }
+ * 
+ * @since 1.0.0
  */
-export function Route(mountpoint = '/') {
-  return <T extends new (...args: any[]) => any>(RouterClass: T) => {
-    return class ExpressiveTeaRoute extends RouterClass implements IExpressiveTeaRoute {
-      readonly router: Router;
-      readonly mountpoint: string;
-
-      constructor(...args) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        super(...args);
-        const handlers: ExpressiveTeaHandlerOptions[] = MetaData.get(ROUTER_HANDLERS_KEY, this) || [];
-
-        this.router = Router();
-        this.mountpoint = mountpoint;
-
-        each(handlers, h => {
-          const middlewares = h.handler.$middlewares ?? [];
-          this.router[h.verb](h.route, ...middlewares, this.__registerHandler(h));
-        });
-      }
-
-      __mount(parent: Router): this {
-        const rootMiddlewares = MetaData.get(ROUTER_MIDDLEWARES_KEY, this) || [];
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        parent.use(this.mountpoint, ...rootMiddlewares, this.router);
-        return this;
-      }
-
-      __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler {
-        const decoratedArguments: ExpressiveTeaArgumentOptions[] = MetaData.get(
-          ARGUMENTS_KEY,
-          options.target,
-          options.propertyKey
-        );
-        const annotations: ExpressiveTeaAnnotations[] = MetaData.get(
-          ROUTER_ANNOTATIONS_KEY,
-          options.target,
-          options.propertyKey
-        );
-
-        return executeRequest.bind({
-          options,
-          decoratedArguments,
-          annotations,
-          self: this
-        });
-      }
-    };
+export function Route<TBase extends Constructor = Constructor>(mountpoint = '/') {
+  return (RouterClass: TBase): RouterizedClass<TBase> => {
+    return Routerize<TBase>(RouterClass, mountpoint);
   };
 }
 
@@ -147,7 +102,7 @@ export function Post(route = '*') {
  * }
  *
  */
-export function Put(route = '*') {
+export function Put(route: string = '*') {
   return generateRoute(route, 'put');
 }
 
@@ -168,7 +123,7 @@ export function Put(route = '*') {
  * }
  *
  */
-export function Patch(route = '*') {
+export function Patch(route: string = '*') {
   return generateRoute(route, 'patch');
 }
 
@@ -258,12 +213,12 @@ export function Param(route = '*') {
  *
  * @param {Function} middleware Register a middleware over router.
  */
-export function Middleware(middleware:  (...args: any[]) => any): ClassDecorator & MethodDecorator {
-  return (target, property?, descriptor?) => {
-    if (!property) {
-      rootMiddleware(target, middleware);
-    } else {
+export function Middleware(middleware: RequestHandler | TFunction<RequestHandler>): ClassDecorator & MethodDecorator {
+  return (target: any, property?: string | symbol, descriptor?: PropertyDescriptor) => {
+    if (property) {
       routeMiddleware(target, descriptor, middleware);
+    } else {
+      rootMiddleware(target, middleware);
     }
   };
 }
@@ -288,17 +243,17 @@ export function View(viewName: string, route?: string): MethodDecorator {
   route = route ?? `/${viewName}`;
   return (target, propertyKey, descriptor) => {
     addAnnotation('view', target, propertyKey, viewName);
-    router('get', route, target, descriptor.value as  (...args: any[]) => any, propertyKey);
+    router('get', route, target, descriptor.value as TFunction, propertyKey);
   };
 }
 
-function rootMiddleware(target: any, middleware: (...args: any[]) => any | Promise<any>): void {
-  const existedRoutesHandlers = MetaData.get(ROUTER_MIDDLEWARES_KEY, target) || [];
+function rootMiddleware(target: any, middleware: RequestHandler): void {
+  const existedRoutesHandlers: RequestHandler[] = Metadata.get(ROUTER_MIDDLEWARES_KEY, target) || [];
   existedRoutesHandlers.unshift(middleware);
-  MetaData.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
+  Metadata.set(ROUTER_MIDDLEWARES_KEY, existedRoutesHandlers, target);
 }
 
-function routeMiddleware(target: any, descriptor: any, middleware: ExpressiveTeaMiddleware) {
+function routeMiddleware(_: any, descriptor: any, middleware: RequestHandler) {
   descriptor.value.$middlewares = descriptor.value.$middlewares || [];
   descriptor.value.$middlewares.unshift(middleware);
 }

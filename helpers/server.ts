@@ -1,57 +1,75 @@
 import { type NextFunction, type Request, type Response } from 'express';
-import { chain, find, get, has, isNumber, pick, size } from 'lodash';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons/constants';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return */
+import { chain, find, get, has, isNumber, pick, size } from '@libs/utilities';
+import { Metadata } from '@expressive-tea/commons';
+import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons';
 import {
   type ExpressiveTeaAnnotations,
   type ExpressiveTeaArgumentOptions
-} from '@expressive-tea/commons/interfaces';
-import { GenericRequestException } from '../exceptions/RequestExceptions';
-import { getOwnArgumentNames } from '@expressive-tea/commons/helpers/object-helper';
-import * as fs from 'fs';
+} from '@expressive-tea/commons';
+import { getOwnArgumentNames } from '@expressive-tea/commons';
+import * as fs from 'node:fs';
+import * as yaml from 'js-yaml';
+import * as path from 'node:path';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
-} from '../interfaces';
+} from '@interfaces';
+import { TFunction } from '../types/core';
+import { type ExpressiveTeaServerProps } from '@expressive-tea/commons';
+
+interface ExecuteRequestContext {
+  options: ExpressiveTeaHandlerOptionsWithInstrospectedArgs;
+  decoratedArguments: ExpressiveTeaArgumentOptions[];
+  annotations: ExpressiveTeaAnnotations[];
+  self: any;
+}
+
+export interface FileSettingsResult {
+  config: ExpressiveTeaServerProps;
+  source: string | null;
+}
 
 export function autoResponse(
-  request: Request,
+  _: any,
   response: Response,
   annotations: ExpressiveTeaAnnotations[],
   responseResult?: any
 ): void {
-  const view: ExpressiveTeaAnnotations = find(annotations, { type: 'view' });
-  if (view) {
-    response.render(view.arguments[0] as string, responseResult as object); return;
+  const view = find(annotations, { type: 'view' });
+  if (view && view.arguments) {
+    response.render(view.arguments[0] as string, responseResult as object);
+    return;
   }
 
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
 }
 
-export async function executeRequest(request: Request, response: Response, next: NextFunction): Promise<void> {
-  try {
-    let isNextUsed = false;
-    const nextWrapper = () => (error: unknown) => {
-      next(error);
+export async function executeRequest(this: ExecuteRequestContext, request: Request, response: Response, next: NextFunction): Promise<void> {
+  let isNextUsed = false;
+  const nextWrapper = (error?: unknown) => {
+    if (error) {
       isNextUsed = true;
-    };
+      return next(error);
+    }
+    isNextUsed = true;
+    next();
+  };
 
-    const result = await this.options.handler.apply(this.self, mapArguments(
-      this.decoratedArguments as ExpressiveTeaArgumentOptions[],
+  const result = await this.options.handler.apply(
+    this.self,
+    mapArguments(
+      this.decoratedArguments,
       request,
       response,
-      nextWrapper(),
-      this.options.introspectedArgs as string[]));
+      nextWrapper,
+      this.options.introspectedArgs
+    )
+  );
 
-
-    if (!response.headersSent && !isNextUsed) {
-      autoResponse(request, response, this.annotations as ExpressiveTeaAnnotations[], result as object);
-    }
-  } catch (e) {
-    if (e instanceof GenericRequestException) {
-      next(e); return;
-    }
-    next(new GenericRequestException((e as Error).message || 'System Error'));
+  if (!response.headersSent && !isNextUsed) {
+    autoResponse(request, response, this.annotations, result as object);
   }
+  // Express 5 handles async rejections automatically
 }
 
 export function mapArguments(
@@ -88,7 +106,7 @@ export function extractParameters(target: unknown, args?: string | string[], pro
     return;
   }
 
-  if (size(args)) {
+  if (args && size(args)) {
 
     if (Array.isArray(args)) {
       return pick(target, args);
@@ -97,7 +115,7 @@ export function extractParameters(target: unknown, args?: string | string[], pro
     return get(target, args);
   }
 
-  if (has(target, propertyName)) {
+  if (propertyName && has(target, propertyName)) {
     return get(target, propertyName);
   }
 
@@ -108,30 +126,78 @@ export function generateRoute(route: string, verb: string, ...settings: any): (
   target: object,
   propertyKey: string | symbol,
   descriptor: PropertyDescriptor) => void {
-  return (target, propertyKey, descriptor) => { router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings); };
+  return (target, propertyKey, descriptor) => {
+    router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings);
+  };
 }
 
 export function router(
   verb: string,
   route: string,
   target: any,
-  handler: (...args: any[]) => never | any | Promise<any>,
+  handler: TFunction,
   propertyKey: string | symbol,
   settings?: any
 ) {
   const introspectedArgs = getOwnArgumentNames(handler);
-  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = MetaData.get(ROUTER_HANDLERS_KEY, target) || [];
+  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = Metadata.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings, introspectedArgs });
-  MetaData.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
+  Metadata.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
 
-export function fileSettings() {
-  try {
-    if (fs.existsSync('.expressive-tea')) {
-      const configString = fs.readFileSync('.expressive-tea');
-      return JSON.parse(configString.toString());
+/**
+ * Load configuration from .expressive-tea files.
+ *
+ * Supports YAML (.yaml, .yml) and JSON formats with priority order:
+ * 1. .expressive-tea.yaml (highest)
+ * 2. .expressive-tea.yml
+ * 3. .expressive-tea (JSON, lowest)
+ *
+ * @returns Configuration object and source file path
+ * @throws {Error} If config file is invalid (JSON/YAML parse error)
+ * @since 2.0.1
+ */
+export function fileSettings(): FileSettingsResult {
+  const cwd = process.cwd();
+
+  // Priority order: YAML > YML > JSON
+  const configFiles = [
+    { path: '.expressive-tea.yaml', type: 'yaml' as const },
+    { path: '.expressive-tea.yml', type: 'yaml' as const },
+    { path: '.expressive-tea', type: 'json' as const }
+  ];
+
+  for (const file of configFiles) {
+    const filePath = path.join(cwd, file.path);
+
+    if (fs.existsSync(filePath)) {
+      try {
+        const content = fs.readFileSync(filePath, 'utf-8');
+
+        let config: ExpressiveTeaServerProps;
+        if (file.type === 'yaml') {
+          const parsed = yaml.load(content);
+          // yaml.load returns undefined for empty strings and null for whitespace/comments
+          // Treat empty YAML files as empty configuration objects
+          config = (parsed ?? {}) as ExpressiveTeaServerProps;
+        } else {
+          config = JSON.parse(content);
+        }
+
+        // Debug log which file was loaded
+        console.debug(`[Expressive Tea] Loaded configuration from: ${file.path}`);
+
+        return { config, source: file.path };
+      } catch (error: any) {
+        const errorMsg = file.type === 'yaml'
+          ? `Invalid YAML in ${file.path}: ${error.message}`
+          : `Invalid JSON in ${file.path}: ${error.message}`;
+
+        throw new Error(errorMsg);
+      }
     }
-  } catch (e) {
-    return {};
   }
+
+  // No config file found
+  return { config: {}, source: null };
 }

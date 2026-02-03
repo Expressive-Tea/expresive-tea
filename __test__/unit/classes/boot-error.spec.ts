@@ -1,9 +1,9 @@
-import { BOOT_STAGES } from '@expressive-tea/commons/constants';
+import { BOOT_STAGES } from '@expressive-tea/commons';
 import { Plugin } from '@expressive-tea/plugin';
-import { Stage } from '@expressive-tea/plugin/decorators';
+import { Stage } from '@expressive-tea/plugin';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
-import { Pour, RegisterModule } from '../../../decorators/server';
+import { Modules, Pour } from '../../../decorators/server';
 import Module from '../../test-classes/module';
 import container from '../../../inversify.config';
 
@@ -32,15 +32,14 @@ class HardPlugin extends Plugin {
 }
 
 describe('Boot Soft Errors Class', () => {
+  let portCounter = 7000;
+  
   @Pour(SoftPlugin)
-  class BootstrapSoftError extends Boot {
-    @RegisterModule(Module)
-    async start() {
-      return super.start();
-    }
-  }
+  @Modules([Module])
+  class BootstrapSoftError extends Boot {}
 
   beforeEach(() => {
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();
@@ -52,27 +51,33 @@ describe('Boot Soft Errors Class', () => {
 
   test('should start server as default', async () => {
     const boot = new BootstrapSoftError();
-    const app = await boot.start();
-    expect(app).toEqual({
-      application: expect.anything(),
-      secureServer: null,
-      server: expect.anything()
-    });
-    app.server.close();
+    let app: any;
+    try {
+      app = await boot.start();
+
+      // Shallow assertions to avoid deep-inspection of express app internals
+      expect(app).toBeDefined();
+      expect(app).toHaveProperty('application');
+      expect(app).toHaveProperty('server');
+      // secureServer may be null/undefined when no TLS configured
+      expect(app.secureServer == null).toBeTruthy();
+    } finally {
+      // Ensure the server is closed even if startup or assertions throw
+      app?.server?.close();
+    }
   });
 
 });
 
 describe('Boot Hard Errors Class', () => {
+  let portCounter = 7100;
+  
   @Pour(HardPlugin)
-  class BootstrapHardError extends Boot {
-    @RegisterModule(Module)
-    async start() {
-      return super.start();
-    }
-  }
+  @Modules([Module])
+  class BootstrapHardError extends Boot {}
 
   beforeEach(() => {
+    Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
     jest.clearAllMocks();

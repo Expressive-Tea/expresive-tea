@@ -5,12 +5,8 @@ export default class LoadBalancer {
    * @offset should be used for unit testing and nothing else.
    */
   constructor(count: number, offset = 0) {
-    this.bins = [];
-
-    // Initializes the elements of the array to zero.
-    for (let i = 0; i < this.bins.length; i++) {
-      this.bins[i] = offset;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    this.bins = new Array(count).fill(offset);
   }
 
   pick() {

@@ -1,91 +1,69 @@
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons/types';
-import * as httpProxy from 'express-http-proxy';
-import { type Express, type RequestHandler } from 'express';
-import { getClass, isAsyncFunction } from '@expressive-tea/commons/helpers/object-helper';
-import { isUndefined } from 'lodash';
-import { GenericRequestException } from '../exceptions/RequestExceptions';
+import { Metadata } from '@expressive-tea/commons';
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
+import {  type ExpressiveTeaProxyOptions, type ExpressiveTeaProxyProperty, type MethodDecorator } from '@expressive-tea/commons';
+import { isAsyncFunction } from '@expressive-tea/commons';
+import { GenericRequestException } from '@exceptions/RequestExceptions';
 
-import { PROXY_SETTING_KEY, PROXY_METHODS, PROXY_PROPERTIES } from '@expressive-tea/commons/constants';
-import { type IExpressiveTeaProxySettings, type IExpressiveTeaProxy } from '@expressive-tea/commons/interfaces';
+import { PROXY_SETTING_KEY } from '@expressive-tea/commons';
+import { type IExpressiveTeaProxySettings } from '@expressive-tea/commons';
+import { Proxify, type ProxifiedClass } from '@mixins/proxy';
+import { type Constructor } from '../types/core';
 
-const NON_ASYNC_METHODS = ['host'];
+const NON_ASYNC_METHODS = new Set(['host']);
 
-export function ProxyContainer(source: string, targetUrl: string) {
+/**
+ * ProxyContainer decorator - Creates an HTTP proxy for a microservice
+ * 
+ * Transforms a class into an HTTP proxy that forwards requests from a source path
+ * to a target URL. Supports custom request/response transformations and options.
+ * 
+ * @template TBase - The base constructor type being decorated
+ * @param {string} source - The source path to proxy from (e.g., '/api')
+ * @param {string} targetUrl - The target URL to proxy to (e.g., 'http://api.example.com')
+ * @returns {(target: TBase) => ProxifiedClass<TBase>} Decorator function that returns a proxified class
+ * 
+ * @example
+ * {REPLACE-AT}ProxyContainer('/api', 'http://api.example.com')
+ * class ApiProxy {
+ *   {REPLACE-AT}ProxyOption('host')
+ *   getHost() {
+ *     return 'http://api.example.com';
+ *   }
+ * }
+ * 
+ * @since 1.0.0
+ */
+export function ProxyContainer<TBase extends Constructor = Constructor>(source: string, targetUrl: string) {
 
-  return <T extends new (...args: any[]) => any>(ProxyContainerClass: T) => {
-
-    class ExpressiveTeaProxy extends ProxyContainerClass implements IExpressiveTeaProxy {
-      readonly source: string;
-      readonly target: string;
-      readonly proxyHandler: RequestHandler;
-
-      constructor(...args: any[]) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        super(...args);
-        this.source = source;
-        this.target = targetUrl;
-
-        const options:httpProxy.ProxyOptions = {};
-        const host:PropertyDescriptor = MetaData.get(PROXY_SETTING_KEY, this, PROXY_METHODS.HOST);
-
-        for (const value of Object.values(PROXY_METHODS)) {
-          if (value !== PROXY_METHODS.HOST) {
-            options[value] = MetaData.get(PROXY_SETTING_KEY, this, value);
-          }
-        }
-
-        for (const value of Object.values(PROXY_PROPERTIES)) {
-          const key: string = MetaData.get(PROXY_SETTING_KEY, this, value);
-          if (!isUndefined(key)) {
-            // @ts-expect-error:next-line
-            options[value] = this[key];
-          }
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        this.proxyHandler = httpProxy(host ? host.value.bind(this) : this.target)
-      }
-
-      __register(server: Express): void {
-        const proxyMetadata: IExpressiveTeaProxySettings  = MetaData.get(PROXY_SETTING_KEY, getClass(this));
-        console.info(`[PROXY - ${proxyMetadata.name}] ${this.source} -> ${this.target}`);
-        server.use(this.source, this.proxyHandler);
-      }
-    };
-
+  return (ProxyContainerClass: TBase): ProxifiedClass<TBase> => {
     const settings: IExpressiveTeaProxySettings = {
       source,
       targetUrl,
       name: ProxyContainerClass.name
     };
 
-    MetaData.set(PROXY_SETTING_KEY, settings, ProxyContainerClass);
-    return ExpressiveTeaProxy;
+    Metadata.set(PROXY_SETTING_KEY, settings, ProxyContainerClass);
+    return Proxify<TBase>(ProxyContainerClass, source, targetUrl);
   };
 }
 
 export function ProxyOption(option: ExpressiveTeaProxyOptions): MethodDecorator {
   return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    if (NON_ASYNC_METHODS.includes(option) && isAsyncFunction(descriptor.value)){
+     
+    if (NON_ASYNC_METHODS.has(option) && isAsyncFunction(descriptor.value)){
       throw new GenericRequestException(`${String(propertyKey)} must not be declared as Async Function.`);
     }
 
-    MetaData.set(PROXY_SETTING_KEY, descriptor, target, option);
-  }
+    Metadata.set(PROXY_SETTING_KEY, descriptor, target, option);
+  };
 }
 
 export function ProxyProperty(option: ExpressiveTeaProxyProperty, value: any): PropertyDecorator {
   return (target: object, propertyKey: string | symbol) => {
-    MetaData.set(PROXY_SETTING_KEY, propertyKey, target, option);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let currentValue = target[propertyKey];
-
+    Metadata.set(PROXY_SETTING_KEY, propertyKey, target, option);
     Object.defineProperty(target, propertyKey, {
       get: () => value,
-      set: () => {  currentValue = value}
     });
-  }
+  };
 }

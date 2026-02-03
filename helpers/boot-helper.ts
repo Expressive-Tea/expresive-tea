@@ -1,4 +1,5 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import {
   BOOT_STAGES,
   BOOT_STAGES_KEY,
@@ -6,20 +7,23 @@ import {
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   STAGES_INIT
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import * as express from 'express';
 import { type Express } from 'express';
-import MetaData from '@expressive-tea/commons/classes/Metadata';
-import { getClass } from '@expressive-tea/commons/helpers/object-helper';
-import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons/interfaces';
-import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '../exceptions/BootLoaderExceptions';
-import type Boot from '../classes/Boot';
+import { Metadata } from '@expressive-tea/commons';
+import { getClass } from '@expressive-tea/commons';
+import { type ExpressiveTeaDirective, type ExpressiveTeaStatic } from '@expressive-tea/commons';
+import { BootLoaderRequiredExceptions, BootLoaderSoftExceptions } from '@exceptions/BootLoaderExceptions';
+import type Boot from '@classes/Boot';
+import { type ModulizedExpressiveTeaModule } from '../types/core';
+import { getInstanceOf } from '@services/DependencyInjection';
+import { Newable } from 'inversify';
 
 export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
   try {
     await bootloaderResolve(stage, server, ctx, ...extraArgs);
     if (stage === BOOT_STAGES.APPLICATION) {
-      await resolveModules(ctx, server);
+      resolveModules(ctx, server);
     }
   } catch (e) {
     if (checkIfStageFails(e as Error)) {
@@ -28,8 +32,8 @@ export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Expres
   }
 }
 
-export async function resolveDirectives(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredDirectives = MetaData.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
+export function resolveDirectives(instance: typeof Boot | Boot, server: Express): void {
+  const registeredDirectives = Metadata.get(REGISTERED_DIRECTIVES_KEY, getClass(instance)) || [];
   registeredDirectives.forEach((options: ExpressiveTeaDirective) => {
     // @ts-expect-error Settings can be any parameter
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -37,8 +41,8 @@ export async function resolveDirectives(instance: typeof Boot | Boot, server: Ex
   });
 }
 
-export async function resolveStatic(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredStatic = MetaData.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
+export function resolveStatic(instance: typeof Boot | Boot, server: Express): void {
+  const registeredStatic = Metadata.get(REGISTERED_STATIC_KEY, getClass(instance)) || [];
   registeredStatic.forEach((staticOptions: ExpressiveTeaStatic) => {
     if (staticOptions.virtual) {
       server.use(staticOptions.virtual, express.static(staticOptions.root, staticOptions.options));
@@ -49,17 +53,21 @@ export async function resolveStatic(instance: typeof Boot | Boot, server: Expres
   });
 }
 
-export async function resolveProxy(ProxyContainer: any, server: Express): Promise<void> {
+export function resolveProxy(ProxyContainer: any, server: Express): void {
   const proxyContainer = new ProxyContainer();
   proxyContainer.__register(server);
 }
 
-async function resolveModules(instance: typeof Boot | Boot, server: Express): Promise<void> {
-  const registeredModules = MetaData.get(REGISTERED_MODULE_KEY, instance, 'start') || [];
-  registeredModules.forEach(Module => {
-    const moduleInstance = new Module();
+function resolveModules(instance: typeof Boot | Boot, server: Express): void {
+  // Metadata is stored on the class by decorators, so we need to get the constructor
+  // If instance is already a class (typeof === 'function'), use it directly
+  // If instance is an object, get its constructor
+  const target = typeof instance === 'function' ? instance : instance.constructor;
+  const registeredModules: ModulizedExpressiveTeaModule<any> = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+  for ( const Module of registeredModules ) {
+    const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = getInstanceOf<typeof Module>(Module as Newable);
     moduleInstance.__register(server);
-  });
+  }
 }
 
 async function bootloaderResolve(
@@ -68,7 +76,7 @@ async function bootloaderResolve(
   instance: typeof Boot | Boot,
   ...args: unknown[]): Promise<void> {
 
-  const bootLoader = MetaData.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
+  const bootLoader = Metadata.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
 
   for (const loader of bootLoader[STAGE] || []) {
     try {
@@ -79,15 +87,17 @@ async function bootloaderResolve(
   }
 }
 
-async function selectLoaderType(loader, server: Express, ...args: unknown[]) {
+ 
+function selectLoaderType(loader: any, server: Express, ...args: unknown[]) {
   return loader.method(server, ...args);
 }
 
 function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error) {
-  return !(e instanceof BootLoaderSoftExceptions)
+  return !(e instanceof BootLoaderSoftExceptions);
 }
 
-function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader) {
+ 
+function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader: any) {
   const failMessage = `Failed [${loader.name}]: ${e.message}`;
   if (!loader || loader.required) {
     throw new BootLoaderRequiredExceptions(failMessage);

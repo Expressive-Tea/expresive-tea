@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2017",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictNullChecks": false,
-    "strict": false,
+    "strictNullChecks": true,
+    "strict": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
@@ -16,10 +16,35 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@classes": ["classes"],
+      "@classes/*": ["classes/*"],
+      "@decorators": ["decorators"],
+      "@decorators/*": ["decorators/*"],
+      "@engines": ["engines"],
+      "@engines/*": ["engines/*"],
+      "@exceptions": ["exceptions"],
+      "@exceptions/*": ["exceptions/*"],
+      "@helpers": ["helpers"],
+      "@helpers/*": ["helpers/*"],
+      "@interfaces": ["interfaces"],
+      "@interfaces/*": ["interfaces/*"],
+      "@libs": ["libs"],
+      "@libs/*": ["libs/*"],
+      "@services": ["services"],
+      "@services/*": ["services/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"],
+      "@mixins": ["mixins"],
+      "@mixins/*": ["mixins/*"],
+      "@config": ["config"],
+      "@config/*": ["config/*"]
+    }
   },
   "exclude": [
     "node_modules",
-    "__test__"
+    "__test__",
+    "benchmark"
   ]
 }

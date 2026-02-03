@@ -54,4 +54,4 @@ exports.build = function(title, params){
             ${buildTableHeader(columnInfo)}
             ${paramTableEntries.join('')}
           </table>`;
-}
+};

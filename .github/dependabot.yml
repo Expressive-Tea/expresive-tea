@@ -1,13 +1,63 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# Dependabot configuration for Expressive Tea
+# Automatically checks for outdated dependencies and creates PRs to update them
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Maintain npm dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
       day: "sunday"
+      time: "03:00"
+      timezone: "America/Chicago"
     target-branch: "develop"
+    open-pull-requests-limit: 10
+    # Use conventional commits for consistency
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    reviewers:
+      - "Expressive-Tea/maintainers"
+    # Group minor and patch updates together to reduce PR noise
+    groups:
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+    # Ignore specific packages if needed (add as necessary)
+    ignore:
+      # Ignore major version updates for critical dependencies (review manually)
+      - dependency-name: "express"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "inversify"
+        update-types: ["version-update:semver-major"]
+
+  # Maintain GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "03:00"
+      timezone: "America/Chicago"
+    target-branch: "develop"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    reviewers:
+      - "Expressive-Tea/maintainers"

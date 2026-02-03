@@ -1,20 +1,23 @@
 import * as proxy from 'express-http-proxy';
 import LoadBalancer from './LoadBalancer';
-import {indexOf, includes, size } from 'lodash';
+import { indexOf, includes, size } from '../libs/utilities';
 import { type RequestHandler } from 'express';
 
+interface ServerEntry {
+  teacupId: string;
+  address: string;
+}
+
 export default class ProxyRoute {
-  readonly registeredOn: string;
-  private balancer: LoadBalancer;
-  private readonly servers: any[] = [];
+  private balancer!: LoadBalancer;
+  private readonly servers: ServerEntry[] = [];
   private readonly clients: string[] = [];
   private lastServerSelected: number = 0;
 
-  constructor(registeredOn: string) {
-    this.registeredOn = registeredOn;
-  }
+   
+  constructor(public readonly registeredOn: string) {}
 
-  hasClients() {
+  hasClients(): boolean {
     return size(this.clients) > 0;
   }
 
@@ -43,6 +46,6 @@ export default class ProxyRoute {
       return server.address;
     }, {
       memoizeHost: false
-    })
+    }) as unknown as RequestHandler;
   }
 }

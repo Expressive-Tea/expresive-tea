@@ -1,5 +1,5 @@
-import { last } from 'lodash';
-import Metadata from '@expressive-tea/commons/classes/Metadata';
+import { last } from '../../../libs/utilities';
+import { Metadata } from '@expressive-tea/commons';
 import Settings from '../../../classes/Settings';
 import {
   ExpressDirective,
@@ -15,12 +15,21 @@ import {
   REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY
-} from '@expressive-tea/commons/constants';
+} from '@expressive-tea/commons';
 import Plugin, { mockPluginArguments } from '../../__mocks__/plugin';
-import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons/interfaces';
+import { ExpressiveTeaModuleProps, IExpressiveTeaModule } from '@expressive-tea/commons';
 import { Express } from 'express';
+import DependencyInjection from '../../../services/DependencyInjection';
 
 describe('ServerSettings Decorator', () => {
+  beforeEach(() => {
+    Settings.reset();
+  });
+
+  afterEach(() => {
+    Settings.reset();
+  });
+
   test('should modify server settings', () => {
     @ServerSettings({
       port: 8080
@@ -31,7 +40,7 @@ describe('ServerSettings Decorator', () => {
     const test = new Test();
 
     expect(test).toBeDefined();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 8080, securePort: 4443 });
+    expect(Settings.getInstance(Test).getOptions()).toEqual({ port: 8080, securePort: 4443 });
   });
 
   test('should modify server settings as default options', () => {
@@ -44,18 +53,20 @@ describe('ServerSettings Decorator', () => {
     const test = new Test();
 
     expect(test).toBeDefined();
-    expect(Settings.getInstance().getOptions()).toEqual({ port: 3000, securePort: 4443 });
+    expect(Settings.getInstance(Test).getOptions()).toEqual({ port: 3000, securePort: 4443 });
   });
 });
 
 describe('Pour Decorator', () => {
   let spyMetadataSet: jest.SpyInstance;
   beforeEach(() => {
+    DependencyInjection.Container.unbindAll();
     spyMetadataSet = jest.spyOn(Metadata, 'set');
   });
 
   afterEach(() => {
     spyMetadataSet.mockRestore();
+    jest.clearAllMocks()
   });
 
   test('should attach plug to respective level', () => {
@@ -108,7 +119,7 @@ describe('Setting Decorator', () => {
       test: 'this is a test string'
     })
     class Test {
-      @Setting('test')
+      @Setting()
       test: string;
     }
 
@@ -126,32 +137,18 @@ describe('Setting Decorator', () => {
 });
 
 describe('RegisterModule Decorator', () => {
-  let spyMetadataSet;
-
-  beforeEach(() => {
-    spyMetadataSet = jest.spyOn(Metadata, 'set');
-  });
-
-  afterEach(() => {
-    spyMetadataSet.mockRestore();
-  });
-
-  test('should register a module', () => {
-    class Module {
-    }
-
-    class Test {
-      @RegisterModule(Module)
-      async start() {
+  test('should fail register a module', () => {
+    expect(() => {
+      class Module {
       }
-    }
 
-    const testInstance = new Test();
-    const args = spyMetadataSet.mock.calls[0];
 
-    expect(testInstance).toBeDefined();
-    expect(args[0]).toEqual(REGISTERED_MODULE_KEY);
-    expect(args[1]).toEqual([Module]);
+      class _Test {
+        @RegisterModule(Module)
+        async start() {
+        }
+      }
+    }).toThrow();
   });
 
   test('should fail if use different method to register a module', () => {
@@ -159,8 +156,8 @@ describe('RegisterModule Decorator', () => {
       class Module {
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {
+
+      class _Test {
         @RegisterModule(Module)
         async init() {
         }
@@ -224,8 +221,8 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @Static()
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {
+
+      class _Test {
       }
     }).toThrow();
   });
@@ -263,8 +260,8 @@ describe('Express Directive Decorator', () => {
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
       @ExpressDirective('invalid', false)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {
+
+      class _Test {
       }
     }).toThrow();
   });
@@ -273,8 +270,8 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @ExpressDirective()
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {
+
+      class _Test {
       }
     }).toThrow();
   });
@@ -297,7 +294,7 @@ describe('Modules Decorator', () => {
       readonly router: Express;
       readonly settings: ExpressiveTeaModuleProps;
 
-      __register(server: Express): void {
+      __register(_server: Express): void {
       }
     }
 
@@ -320,8 +317,8 @@ describe('Modules Decorator', () => {
       class Module {
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      class Test {
+
+      class _Test {
         @RegisterModule(Module)
         async init() {
         }
