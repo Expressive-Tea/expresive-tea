@@ -110,18 +110,25 @@ jobs:
 
       - name: 📦 Check build artifacts
         run: |
-          if [ ! -d "lib" ]; then
-            echo "❌ Build failed: lib directory not found"
+          if [ ! -f "classes/Boot.js" ]; then
+            echo "❌ Build failed: build artifacts not found"
             exit 1
           fi
-          echo "✅ Build artifacts found in lib/"
-          ls -la lib/
+          echo "✅ Build artifacts found"
+          ls -la classes/*.js | head -5
+          ls -la decorators/*.js | head -5
 
       - name: 💾 Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: lib/
+          path: |
+            **/*.js
+            **/*.d.ts
+            !node_modules/**
+            !__test__/**
+            !benchmark/**
+            !coverage/**
           retention-days: 7
 
   type-check:

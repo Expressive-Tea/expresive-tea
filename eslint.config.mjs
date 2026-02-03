@@ -4,6 +4,11 @@ import tseslintPlugin from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import jsdoc from 'eslint-plugin-jsdoc';
 import globals from 'globals';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default [
   // Global ignores (applies to all configs)
@@ -35,7 +40,7 @@ export default [
       parser: tsparser,
       parserOptions: {
         project: './tsconfig.linter.json',
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: __dirname,
       },
       globals: {
         ...globals.browser,
