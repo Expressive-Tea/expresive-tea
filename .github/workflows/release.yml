@@ -1,14 +1,17 @@
 # Automated release workflow for Expressive Tea
 # Publishes package to npm and creates GitHub releases when version tags are pushed
 #
-# Usage: Push a tag like v2.0.0 to trigger a release
+# DISABLED: Manual npm publishing is preferred
+# To re-enable: uncomment the 'on:' trigger below
 
 name: Release
 
+# Workflow disabled - manual npm publishing
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_dispatch: # Manual trigger only
+  # push:
+  #   tags:
+  #     - 'v*.*.*'
 
 permissions:
   contents: write
