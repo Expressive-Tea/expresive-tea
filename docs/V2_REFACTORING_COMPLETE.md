@@ -409,7 +409,7 @@ cloneDeep, sortBy, uniq
 ### 3. Node.js/Express Versions (MEDIUM)
 - **Impact:** Minimum versions increased
 - **Reason:** Modern features, security
-- **Action:** Update Node to 18+, Express to 5+
+- **Action:** Update Node to 20+, Express to 5+
 - **Guide:** MIGRATION_GUIDE_v2.md Section 2
 
 ### 4. DI API (LOW)

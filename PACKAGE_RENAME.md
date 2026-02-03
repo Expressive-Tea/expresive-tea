@@ -98,7 +98,7 @@ npm install
 v2.0.0 has breaking changes beyond the package rename. See the [full migration guide](docs/MIGRATION_GUIDE_v2.md) for:
 - Cryptography changes (CRITICAL if you use encryption)
 - TypeScript strict mode
-- Node.js 18+ requirement
+- Node.js 20+ requirement
 - Express 5.x upgrade
 
 ### For Plugin Developers

@@ -61,7 +61,7 @@ Paste error message or stack trace here
 
 - **Package:** `@expressive-tea/core` (or `@zerooneit/expressive-tea`)
 - **Version:** <!-- e.g., 2.0.0 - run `npm list @expressive-tea/core` -->
-- **Node.js Version:** <!-- e.g., 18.19.0 - run `node --version` -->
+- **Node.js Version:** <!-- e.g., 20.11.0 - run `node --version` -->
 - **npm/yarn Version:** <!-- e.g., npm 10.2.3 - run `npm --version` -->
 - **TypeScript Version:** <!-- e.g., 5.3.3 - run `npx tsc --version` -->
 - **Operating System:** <!-- e.g., macOS 14.1, Ubuntu 22.04, Windows 11 -->

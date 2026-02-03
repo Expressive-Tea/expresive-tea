@@ -95,7 +95,7 @@
    - Noted performance enhancements
 
 3. **Updated Prerequisites**
-   - Node.js >= 18.0.0
+   - Node.js >= 20.0.0
    - Express >= 5.0.0
    - TypeScript >= 5.0.0
    - Recommended strict mode config
@@ -251,7 +251,7 @@
 ```markdown
 ✅ Prominent v2.0.0 release banner
 ✅ Updated features with v2.0.0 improvements
-✅ Modern prerequisites (Node 18, Express 5, TS 5)
+✅ Modern prerequisites (Node 20, Express 5, TS 5)
 ✅ Quick start example
 ✅ Migration guide section with checklist
 ```

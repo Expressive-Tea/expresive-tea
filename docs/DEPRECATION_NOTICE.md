@@ -329,7 +329,7 @@ Full support available for v2.0.0:
 | **Security Patches** | ❌ None | ✅ Ongoing |
 | **Bug Fixes** | ❌ None | ✅ Ongoing |
 | **Support** | ❌ None | ✅ Full |
-| **Node.js** | 6+ (EOL) | 18+ (LTS) |
+| **Node.js** | 6+ (EOL) | 20+ (LTS) |
 | **Express** | 4.x | 5.x |
 | **Bundle Size** | +540 KB | Native (0 KB extra) |
 | **Performance** | Baseline | 3.5x faster |

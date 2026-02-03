@@ -32,7 +32,7 @@ yarn jest -t "should initialize" --runInBand
   - For CI: `yarn test:ci` (linter strict + jest --ci).
 
 Environment / Tooling notes
-- Node engine: `node >= 18.0.0` (see `package.json` "engines").
+- Node engine: `node >= 20.0.0` (see `package.json` "engines").
 - Package manager: `yarn@4.x` (project `packageManager`). Use `yarn` commands unless otherwise noted.
 - Jest configuration: `jest.config.js` (ts-jest transformer, 30s timeout, coverage reporters configured).
 - Linting: `eslint.config.js` and `tsconfig.linter.json` drive TypeScript lint rules used by ESLint/TypeScript parser.

@@ -50,7 +50,7 @@ Closes #
 
 ### Test Environment
 
-- **Node version:** <!-- e.g., 18.x, 20.x -->
+- **Node version:** <!-- e.g., 20.x, 22.x -->
 - **OS:** <!-- e.g., macOS, Ubuntu, Windows -->
 - **Package version:** <!-- e.g., 2.0.0 -->
 
@@ -81,7 +81,7 @@ Closes #
 ### Testing
 - [ ] I have added tests that prove my fix is effective or that my feature works
 - [ ] New and existing unit tests pass locally with my changes (`yarn test`)
-- [ ] I have tested on Node.js 18+ (minimum supported version)
+- [ ] I have tested on Node.js 20+ (minimum supported version)
 
 ### Documentation
 - [ ] I have updated the documentation (README, guides, JSDoc) if needed

@@ -395,7 +395,7 @@ function handler(req: Request, res: Response) { ... }
 
 | Dependency | v1.x | v2.0.0 |
 |------------|------|--------|
-| Node.js | >= 6.0.0 | >= 18.0.0 |
+| Node.js | >= 6.0.0 | >= 20.0.0 |
 | Express | >= 4.0.0 | >= 5.0.0 |
 | TypeScript | >= 2.0.0 | >= 5.0.0 |
 
@@ -410,7 +410,7 @@ nvm use 18
 # Update package.json
 {
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "express": "^5.0.0",

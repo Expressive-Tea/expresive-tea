@@ -159,7 +159,7 @@ Building Node.js applications is powerful, but messy. You get a blank canvas wit
 **⚠️ Breaking Changes:**
 - Cryptography format changed (must re-encrypt data)
 - TypeScript strict mode enabled
-- Node.js 18+ required
+- **Node.js 20+ required** (Node.js 18 reached EOL April 2025)
 - Express 5.x required
 - ESLint v9 (flat config)
 
@@ -308,9 +308,11 @@ cache:
 
 ### Prerequisites
 
-- **Node.js** ≥ 18.0.0
+- **Node.js** ≥ 20.0.0
 - **TypeScript** ≥ 5.0.0
 - **Express** ≥ 5.0.0
+
+> **Note:** Node.js 18 support was dropped in v2.0.0 as it reached End-of-Life in April 2025. We recommend using Node.js 20 LTS or Node.js 22 for the best experience and security updates.
 
 ### Configure TypeScript
 
