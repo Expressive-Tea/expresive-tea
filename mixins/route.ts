@@ -131,7 +131,7 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
       DependencyInjection.Container.unbind(Route);
     }
     DependencyInjection.Container.bind<any>(Route).to(ExpressiveTeaRoute);
-  } catch (error) {
+  } catch {
     // Binding may fail in some contexts, but that's okay - the class is still usable
   }
 

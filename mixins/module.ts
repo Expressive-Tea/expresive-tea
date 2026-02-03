@@ -81,7 +81,7 @@ export function Modulize<TBase extends Constructor>(Base: TBase, options: Expres
       DependencyInjection.Container.unbind(Base);
     }
     DependencyInjection.Container.bind<any>(Base).to(ExpressiveTeaModule);
-  } catch (error) {
+  } catch {
     // Binding may fail in some contexts, but that's okay - the class is still usable
   }
 

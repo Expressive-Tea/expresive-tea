@@ -56,7 +56,7 @@ export default class TeaGatewayHelper {
     try {
       const decrypted: Buffer = Buffer.concat([decipher.update(message), decipher.final()]);
       return JSON.parse(decrypted.toString());
-    } catch (error) {
+    } catch {
       throw new Error('Decryption failed: message tampered or wrong key');
     }
   }

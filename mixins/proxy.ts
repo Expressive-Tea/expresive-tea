@@ -104,7 +104,7 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
       DependencyInjection.Container.unbind(Base);
     }
     DependencyInjection.Container.bind<any>(Base).to(ExpressiveTeaProxy);
-  } catch (error) {
+  } catch {
     // Binding may fail in some contexts, but that's okay - the class is still usable
   }
 

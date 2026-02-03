@@ -73,7 +73,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
       try {
         this.client.close();
        
-      } catch (_) {
+      } catch {
         // Intentionally empty - ignore close errors
       }
     };
