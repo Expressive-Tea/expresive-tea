@@ -15,32 +15,45 @@ jobs:
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
     docker:
-      - image: cimg/node:16.14
+      - image: cimg/node:22.14
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
     steps:
       # Checkout the code as the first step.
       - checkout
-      # Next, the node orb's install-packages step will install the dependencies from a package.json.
-      # The orb install-packages step will also automatically cache them for faster future runs.
+      # Enable Corepack for Yarn modern (Berry)
+      - run:
+          name: Enable Corepack
+          command: corepack enable
+      # Next, restore cache and install dependencies using Yarn
       - restore_cache:
           keys:
-            - expressive-tea-{{ checksum "package.json" }}
-            - expressive-tea-
+            - expressive-tea-v2-{{ checksum "yarn.lock" }}
+            - expressive-tea-v2-
       - run:
           name: Install Packages
-          command: |
-            npm install
+          command: yarn install --immutable
       - save_cache:
           paths:
-            - node_modules
-          key: expressive-tea-{{ checksum "package.json" }}
+            - .yarn/cache
+            - .yarn/install-state.gz
+          key: expressive-tea-v2-{{ checksum "yarn.lock" }}
       - run:
-          name: Expressive Tea Tests
-          command: npm test
+          name: Run Linter
+          command: yarn linter:ci
+      - run:
+          name: Run Type Check
+          command: yarn tsc --noEmit
+      - run:
+          name: Run Tests
+          command: yarn test
           environment:
             JEST_JUNIT_OUTPUT_DIR: "./reports"
             JUNIT_REPORT_NAME: "junit.xml"
+            NODE_ENV: test
+      - run:
+          name: Build TypeScript
+          command: yarn build
       - store_test_results:
           path: ./reports
       - store_artifacts:
