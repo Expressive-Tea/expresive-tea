@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { Env, getTransformedEnv } from '../../../decorators/env';
 import * as fs from 'fs';
 import * as path from 'path';
+import logger from '../../../helpers/logger';
 
 describe('@Env Decorator', () => {
   const TEST_DIR = process.cwd();
@@ -150,7 +151,7 @@ describe('@Env Decorator', () => {
     test('should warn on transform error when onTransformError="warn"', () => {
       fs.writeFileSync(path.join(TEST_DIR, '.env'), 'PORT=invalid\n');
 
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => logger);
 
       expect(() => {
         @Env({
@@ -174,7 +175,7 @@ describe('@Env Decorator', () => {
     test('should ignore transform error when onTransformError="ignore"', () => {
       fs.writeFileSync(path.join(TEST_DIR, '.env'), 'PORT=invalid\n');
 
-      const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(() => logger);
 
       expect(() => {
         @Env({

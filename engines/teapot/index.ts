@@ -21,6 +21,7 @@ import { SOCKET_IO_INSTANCE_KEY } from '@engines/constants/constants';
 import Boot from '@classes/Boot';
  
 import { getClass } from '@expressive-tea/commons';
+import logger from '@helpers/logger';
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 
 interface ClientMetadata {
@@ -45,8 +46,8 @@ export default class TeapotEngine extends ExpressiveTeaEngine {
   private isStopped: boolean = false;
 
   private static header(teapotSettings: ExpressiveTeaPotSettings) {
-    console.log(chalk.white.bold('Teapot Engine is initializing...'));
-    console.log(chalk`
+    logger.info(chalk.white.bold('Teapot Engine is initializing...'));
+    logger.info(chalk`
              {white.bold ;,'}
      {green _o_}    {white.bold ;:;'}
  {blue.bold ,-.}{green '---\`}{blue.bold .__} {white.bold ; }
@@ -65,7 +66,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   private registerTeacup(teacup: Socket) {
-    console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {grey.bold Connected}`);
+    logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {grey.bold Connected}`);
 
     teacup.emit('handshake', Buffer.from(this.publicKey as string), this.serverSignature, Boolean(this.serverSecure), this.clientVerification.bind(this, teacup));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -89,17 +90,17 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   }
 
   private clientVerification(teacup: Socket, userPublicKey: Buffer, userSignature: Buffer) {
-    console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {yellow.bold Client Verification Started}`);
+    logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {yellow.bold Client Verification Started}`);
     try {
       // Validate PEM format before attempting verification to provide clear error messages
       const publicKeyStr = userPublicKey.toString('ascii');
       if (!TeapotEngine.isValidPemKey(publicKeyStr)) {
-        console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Invalid PEM key format received`);
+        logger.info(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Invalid PEM key format received`);
         return teacup.disconnect();
       }
 
       if (!TeaGatewayHelper.verify(this.teapotSettings.clientKey, publicKeyStr, userSignature)) {
-        console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed to verify and will be disconnected...`);
+        logger.info(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed to verify and will be disconnected...`);
         return teacup.disconnect();
       }
 
@@ -110,11 +111,11 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
       teacup.emit('accepted', this.registered.bind(this, teacup));
 
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {green.bold Client Verified}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {green.bold Client Verified}`);
 
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed wiht next message: ${error.message}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed wiht next message: ${error.message}`);
       teacup.disconnect();
     }
   }
@@ -138,10 +139,10 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         this.context.getApplication().use(message.mountTo as string, TeaGatewayHelper.proxyResponse.bind(this, proxyRoute));
       }
 
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}] {blue.bold <${message.address}>} <--> {white.bold ${message.mountTo}}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}] {blue.bold <${message.address}>} <--> {white.bold ${message.mountTo}}`);
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
     }
   }
 
@@ -169,10 +170,10 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     try {
       const routes: string[] = this.findClientInRoutes(teacup.id);
       this.removeFromRoutes(routes, teacup.id);
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: Got disconnected by ${reason}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: Got disconnected by ${reason}`);
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
     }
   }
 
@@ -220,7 +221,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
     this.isStopped = true;
 
-    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Initiating graceful shutdown...');
+    logger.info(chalk.cyan.bold('[TEAPOT]') + ' - Initiating graceful shutdown...');
 
     // Disconnect all connected clients gracefully
     const connectedSockets = await this.socketServer.fetchSockets();
@@ -228,7 +229,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
       const routes = this.findClientInRoutes(socket.id);
       this.removeFromRoutes(routes, socket.id);
       socket.disconnect(true);
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${socket.id}}]: {yellow.bold Disconnected for shutdown}`);
+      logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${socket.id}}]: {yellow.bold Disconnected for shutdown}`);
     }
 
     // Remove all listeners from the namespace
@@ -238,7 +239,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.clients.clear();
     this.registeredRoute.clear();
 
-    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Graceful shutdown complete.');
+    logger.info(chalk.cyan.bold('[TEAPOT]') + ' - Graceful shutdown complete.');
   }
 
   static canRegister(ctx?: Boot): boolean {

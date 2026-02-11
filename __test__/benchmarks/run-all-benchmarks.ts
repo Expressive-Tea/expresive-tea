@@ -4,9 +4,6 @@
  * Executes all benchmarks and generates consolidated report
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-
 interface BenchmarkResult {
   name: string;
   status: 'pass' | 'fail' | 'skip';

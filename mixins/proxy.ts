@@ -9,6 +9,7 @@ import { isUndefined } from '@libs/utilities';
 import { getClass } from '@expressive-tea/commons';
 import { injectable, injectFromBase } from 'inversify';
 import DependencyInjection from '@services/DependencyInjection';
+import logger from '@helpers/logger';
 
 /**
  * Type definition for a proxified class
@@ -91,7 +92,7 @@ export function Proxify<TBase extends Constructor>(Base: TBase, source: string, 
 
     __register(server: Express): void {
       const proxyMetadata: IExpressiveTeaProxySettings  = Metadata.get(PROXY_SETTING_KEY, getClass(this));
-      console.info(`[PROXY - ${proxyMetadata.name}] ${this.source} -> ${this.target}`);
+      logger.info(`[PROXY - ${proxyMetadata.name}] ${this.source} -> ${this.target}`);
       server.use(this.source, this.proxyHandler);
     }
   }

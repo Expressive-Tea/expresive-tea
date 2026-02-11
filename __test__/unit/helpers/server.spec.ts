@@ -7,6 +7,7 @@ import { ARGUMENT_TYPES } from '@expressive-tea/commons';
 import { type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons';
 import * as fs from 'fs';
 import * as path from 'path';
+import logger from '../../../helpers/logger';
 
 describe('Server Helper', () => {
   describe('fileSettings()', () => {
@@ -125,16 +126,16 @@ syntax here
 
     describe('Debug Logging', () => {
       test('should log which file was loaded', () => {
-        const consoleSpy = jest.spyOn(console, 'debug').mockImplementation();
+        const loggerSpy = jest.spyOn(logger, 'debug').mockImplementation(() => logger);
 
         fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), 'port: 3000\n');
         fileSettings();
 
-        expect(consoleSpy).toHaveBeenCalledWith(
+        expect(loggerSpy).toHaveBeenCalledWith(
           expect.stringContaining('Loaded configuration from: .expressive-tea.yaml')
         );
 
-        consoleSpy.mockRestore();
+        loggerSpy.mockRestore();
       });
     });
 

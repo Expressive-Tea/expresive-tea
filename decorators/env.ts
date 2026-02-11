@@ -1,6 +1,7 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import * as dotenv from 'dotenv';
+import logger from '@helpers/logger';
 
 /**
  * Environment variable loading options with optional transformation
@@ -167,9 +168,9 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
       if (onTransformError === 'throw') {
         throw new Error(errorMsg);
       } else if (onTransformError === 'warn') {
-        console.warn(`[Expressive Tea] ${errorMsg}`);
+        logger.warn(`[Expressive Tea] ${errorMsg}`);
         if (error instanceof Error && error.stack) {
-          console.warn(error.stack);
+          logger.warn(error.stack);
         }
       }
       // 'ignore' - do nothing, return undefined

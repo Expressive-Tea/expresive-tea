@@ -1,6 +1,7 @@
 import ExpressiveTeaEngine from '@classes/Engine';
 import type Boot from '@classes/Boot';
 import type Settings from '@classes/Settings';
+import logger from '@helpers/logger';
 
 /**
  * Engine constructor type with static canRegister method
@@ -154,7 +155,7 @@ export default class EngineRegistry {
         try {
           return metadata.engine.canRegister(context, settings);
         } catch (error) {
-          console.warn(`[EngineRegistry] Engine "${metadata.name}" canRegister() threw an error:`, error);
+          logger.warn(`[EngineRegistry] Engine "${metadata.name}" canRegister() threw an error: ${String(error)}`);
           return false;
         }
       });

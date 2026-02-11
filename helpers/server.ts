@@ -11,6 +11,7 @@ import { getOwnArgumentNames } from '@expressive-tea/commons';
 import * as fs from 'node:fs';
 import * as yaml from 'js-yaml';
 import * as path from 'node:path';
+import logger from '@helpers/logger';
 import {
   type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
 } from '@interfaces';
@@ -185,7 +186,7 @@ export function fileSettings(): FileSettingsResult {
         }
 
         // Debug log which file was loaded
-        console.debug(`[Expressive Tea] Loaded configuration from: ${file.path}`);
+        logger.debug(`[Expressive Tea] Loaded configuration from: ${file.path}`);
 
         return { config, source: file.path };
       } catch (error: any) {

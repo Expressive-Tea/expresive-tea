@@ -83,6 +83,7 @@
     "socket.io": "4.8.1",
     "socket.io-client": "4.8.1",
     "url-scheme": "1.0.5",
+    "winston": "^3.19.0",
     "ws": "8.18.3"
   },
   "repository": {

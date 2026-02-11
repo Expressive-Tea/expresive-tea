@@ -6,6 +6,7 @@ import { BOOT_ORDER, BOOT_STAGES, ROUTER_PROXIES_KEY } from '@expressive-tea/com
 import { getClass } from '@expressive-tea/commons';
 import { Metadata } from '@expressive-tea/commons';
 import ExpressiveTeaEngine from '@classes/Engine';
+import logger from '@helpers/logger';
 
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
@@ -20,7 +21,7 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
       });
 
       server.on('listening', () => {
-        console.log(`Running HTTP Server on [${port}]`);
+        logger.info(`Running HTTP Server on [${port}]`);
         resolve(server);
       });
     });

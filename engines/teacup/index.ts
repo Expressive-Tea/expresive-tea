@@ -10,6 +10,7 @@ import TeaGatewayHelper from '@helpers/teapot-helper';
 import { getClass } from '@expressive-tea/commons';
 import ExpressiveTeaEngine from '@classes/Engine';
 import Boot from '@classes/Boot';
+import logger from '@helpers/logger';
 
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
@@ -24,8 +25,8 @@ export default class TeacupEngine extends ExpressiveTeaEngine {
   private isStopping = false;
 
   private header() {
-    console.log(chalk.white.bold('Teacup Engine is initializing...'));
-    console.log(chalk`
+    logger.info(chalk.white.bold('Teacup Engine is initializing...'));
+    logger.info(chalk`
    {grey ( (}
     {white.bold ) )}
   {magenta.bold ........}
@@ -41,26 +42,26 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handshaked(key: Buffer, signature: Buffer, isSecure: boolean, cb: any) {
     try {
-      console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Server Verification Started}`);
+      logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Server Verification Started}`);
       if (!TeaGatewayHelper.verify(this.teacupSettings.clientKey, key.toString('ascii'), signature)) {
         throw new Error('Fail to Verify Client on Teapod.');
       }
 
-      console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Server Has Been Verified}`);
+      logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Server Has Been Verified}`);
       this.publicServerKey = key;
       this.serverSignature = signature;
 
       cb(Buffer.from(this.publicKey), this.clientSignature);
     } catch (e) {
       const error = e as Error;
-      console.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${error.message}`);
+      logger.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${error.message}`);
       this.client.disconnect();
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private accepted(cb: any) {
-    console.log(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Registered} - {blue.bold <${this.teacupSettings.serverUrl}>} <-> {white.bold ${this.teacupSettings.mountTo}}`);
+    logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Registered} - {blue.bold <${this.teacupSettings.serverUrl}>} <-> {white.bold ${this.teacupSettings.mountTo}}`);
 
     const encryptedMessage = TeaGatewayHelper.encrypt({
       mountTo: this.teacupSettings.mountTo,
@@ -103,7 +104,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.client.on('handshake', this.handshaked.bind(this));
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this.client.on('accepted', this.accepted.bind(this));
-    this.client.on('error', console.log);
+    this.client.on('error', (err: unknown) => logger.error('[TEACUP] - Socket error', { error: String(err) }));
 
     this.client.connect();
   }
@@ -144,11 +145,11 @@ All Communication are encrypted to ensure intruder can not connected, however, p
         // Close the underlying manager to release all resources
         this.client.close();
 
-        console.log('[TEACUP] - Socket connection closed gracefully');
+        logger.info('[TEACUP] - Socket connection closed gracefully');
       } catch (e) {
         // Log but don't throw - we want shutdown to complete even if cleanup has issues
         const error = e as Error;
-        console.error(`[TEACUP] - Error during shutdown: ${error.message}`);
+        logger.error(`[TEACUP] - Error during shutdown: ${error.message}`);
       }
     }
   }

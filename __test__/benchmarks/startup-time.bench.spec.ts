@@ -13,8 +13,7 @@ import {
   calculateStats,
   printStats,
   formatTime,
-  calculateVariance,
-  type BenchmarkStats
+  calculateVariance
 } from './utils/benchmark-helpers';
 
 describe('Startup Time Benchmark', () => {
