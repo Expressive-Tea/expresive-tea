@@ -3,6 +3,12 @@
 - Location: root of repo; reference configs in `package.json`, `.prettierrc`, `eslint.config.js`, `tsconfig.*`, and `jest.config.js`.
 - Keep changes small, well-tested, and follow PR checklist in `.github/PULL_REQUEST_TEMPLATE.md`.
 
+**Documentation Organization Rules**
+- `docs/` = User documentation (tracked in git) - guides, API docs, examples
+- `specs/` = AI agent memory (NEVER in git) - audits, plans, findings, benchmarks
+- Root files (CLAUDE.md, AGENTS.md) = Tracked in git
+- **Rule:** Agent-generated reports/plans go in `specs/`, user docs go in `docs/`
+
 Build / Lint / Test Commands
 - Full test (used in CI): `yarn test` — runs linter then `jest` with coverage. See `package.json` scripts.
 - Run linter (fixing): `yarn linter` — runs `eslint --ext .ts . --fix` using `eslint.config.js`.

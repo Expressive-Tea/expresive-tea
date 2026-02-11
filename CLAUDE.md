@@ -6,6 +6,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Expressive Tea is a decorator-driven TypeScript framework built on Express.js with dependency injection (InversifyJS). It provides a modular, plugin-based architecture with well-defined boot stages for building server-side applications.
 
+## Documentation Organization
+
+**CRITICAL: Follow these rules for all documentation:**
+
+### `docs/` - User Documentation (Tracked in Git)
+- Public-facing documentation for framework users
+- API references, guides, tutorials
+- README files, migration guides
+- Examples and code samples
+- **Always commit to git**
+
+### `specs/` - AI Agent Memory & Planning (NEVER in Git)
+- Audit reports, findings, assessments
+- Implementation plans and technical specs
+- Agent coordination notes
+- Breaking changes roadmaps
+- Performance benchmarks results
+- **NEVER add to git** (should be in .gitignore)
+
+### Root Files
+- `CLAUDE.md` - This file (tracked in git)
+- `AGENTS.md` - Agent team structure (tracked in git)
+- Other project documentation as needed
+
+**Rule:** If it's for AI agents (audits, plans, findings, internal notes), put it in `specs/`. If it's for users (guides, API docs, examples), put it in `docs/`.
+
 ## Essential Commands
 
 ### Development
