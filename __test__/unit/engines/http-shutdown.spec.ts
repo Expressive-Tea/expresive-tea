@@ -10,8 +10,8 @@ import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
 import { ServerSettings } from '../../../decorators/server';
 import container from '../../../inversify.config';
-import * as http from 'node:http';
-import * as https from 'node:https';
+import * as _http from 'node:http';
+import * as _https from 'node:https';
 
 @ServerSettings({ port: 8200 })
 class HTTPBoot extends Boot {}
@@ -49,7 +49,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
       // Track if close callback was invoked
       let closeCallbackInvoked = false;
-      const originalClose = server.close.bind(server);
+      const _originalClose = server.close.bind(server);
       server.close = jest.fn((callback?: (err?: Error) => void) => {
         setTimeout(() => {
           closeCallbackInvoked = true;
@@ -101,7 +101,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
     test('should call stop() on all registered engines', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       const engines = (boot as any).engines;
       const stopSpies = engines.map((engine: any) => jest.spyOn(engine, 'stop'));
@@ -137,7 +137,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
       for (let i = 0; i < cycles; i++) {
         const boot = new HTTPBoot();
-        const app = await boot.start();
+        const _app = await boot.start();
 
         await boot.stop();
         // Server already closed by stop()
@@ -149,7 +149,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
     test('should handle graceful request completion before shutdown', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       // server.close() waits for active connections to complete
       // This is the default behavior we're testing
@@ -164,7 +164,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
   describe('Edge Cases', () => {
     test('should handle stop() being called multiple times', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       await boot.stop();
       // Second call should not throw (engines already stopped)
@@ -178,7 +178,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
       const server = app.server;
 
       // Mock close to reject with error
-      const originalClose = server.close.bind(server);
+      const _originalClose = server.close.bind(server);
       server.close = jest.fn((callback?: (err?: Error) => void) => {
         if (callback) callback(new Error('Close error'));
         return server;
@@ -190,7 +190,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
     test('should not throw if server is null', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       // Artificially set server to null
       (boot as any).server = null;
@@ -221,7 +221,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
   describe('Integration with Boot.stop()', () => {
     test('should execute engines in reverse order during stop', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       const engines = (boot as any).engines;
       const stopCalls: string[] = [];
@@ -243,13 +243,13 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
 
     test('should handle engine stop failures', async () => {
       const boot = new HTTPBoot();
-      const app = await boot.start();
+      const _app = await boot.start();
 
       const engines = (boot as any).engines;
 
       // Make first engine throw during stop
       if (engines.length > 0) {
-        const originalStop = engines[0].stop.bind(engines[0]);
+        const _originalStop = engines[0].stop.bind(engines[0]);
         engines[0].stop = jest.fn(async () => {
           throw new Error('Engine stop failed');
         });

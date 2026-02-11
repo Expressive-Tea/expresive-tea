@@ -36,14 +36,14 @@ class ValidTeapotBoot extends Boot {}
   clientKey: 'test-client-key',
   serverKey: 'INVALID_KEY_FORMAT'
 })
-class InvalidTeapotBoot extends Boot {}
+class _InvalidTeapotBoot extends Boot {}
 
 @ServerSettings({ port: 8302 })
 @Teapot({
   clientKey: 'test-client-key',
   serverKey: ''
 })
-class EmptyKeyTeapotBoot extends Boot {}
+class _EmptyKeyTeapotBoot extends Boot {}
 
 describe('Teapot Key Validation - HIGH-005', () => {
   beforeEach(() => {

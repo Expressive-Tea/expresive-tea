@@ -31,7 +31,7 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
     await Promise.all(activeBoots.map(async (boot) => {
       try {
         await boot.stop();
-      } catch (e) {
+      } catch {
         // Ignore errors during cleanup
       }
     }));

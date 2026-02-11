@@ -68,7 +68,7 @@ abstract class Boot {
   private engines: ExpressiveTeaEngine[] = [];
 
   constructor() {
-    this.settings = Settings.getInstance(this);
+    this.settings = Settings.getInstance(this) as Settings;
   }
 
   /**
@@ -177,7 +177,7 @@ abstract class Boot {
     }
 
     // Get registered engines from EngineRegistry (automatically filtered and sorted by dependencies)
-    const registeredEngines = EngineRegistry.getRegisteredEngines(this, this.settings);
+    const registeredEngines: typeof ExpressiveTeaEngine[] = EngineRegistry.getRegisteredEngines(this, this.settings);
 
     this.initializeEngines(registeredEngines);
 

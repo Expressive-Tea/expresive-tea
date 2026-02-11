@@ -17,8 +17,8 @@ export default class SocketIOEngine extends ExpressiveTeaEngine {
       transports: ['websocket', 'polling'] as any[]
     };
 
-    this.io = this.server && new Server(this.server, { ...commonConfig });
-    this.ioSecure = this.serverSecure && new Server(this.serverSecure, { ...commonConfig });
+    this.io = this.server ? new Server(this.server, { ...commonConfig }) : undefined as any;
+    this.ioSecure = this.serverSecure ? new Server(this.serverSecure, { ...commonConfig }) : undefined as any;
 
     Metadata.set(SOCKET_IO_INSTANCE_KEY, this.io, this.context);
     Metadata.set(SOCKET_IO_SECURE_INSTANCE_KEY, this.ioSecure, this.context);

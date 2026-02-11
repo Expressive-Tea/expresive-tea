@@ -72,7 +72,7 @@ export interface EnvOptions<T = Record<string, string>> {
  * Set by @Env decorator when transform option is provided.
  * @private
  */
-let transformedEnv: any = null;
+let transformedEnv: unknown = null;
 
 /**
  * Store transformed environment variables in global storage.
@@ -161,14 +161,14 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
       storeTransformedEnv(transformed);
       
       return transformed;
-    } catch (error: any) {
-      const errorMsg = `Environment transformation failed: ${error.message}`;
+    } catch (error: unknown) {
+      const errorMsg = `Environment transformation failed: ${error instanceof Error ? error.message : String(error)}`;
       
       if (onTransformError === 'throw') {
         throw new Error(errorMsg);
       } else if (onTransformError === 'warn') {
         console.warn(`[Expressive Tea] ${errorMsg}`);
-        if (error.stack) {
+        if (error instanceof Error && error.stack) {
           console.warn(error.stack);
         }
       }
@@ -250,7 +250,7 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
  * // PORT=3000
  */
 export function Env<T = Record<string, string>>(options: EnvOptions<T> = {}): ClassDecorator {
-  return (target: any) => {
+  return (target) => {
     // Load env file immediately when decorator is applied
     loadEnvFile(options);
     return target;

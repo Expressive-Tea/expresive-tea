@@ -240,7 +240,7 @@ describe('WebsocketEngine Graceful Shutdown - HIGH-001', () => {
       const ws = wsService.getWebsocket(app.server);
 
       // Mock close to throw error
-      const originalClose = ws!.close.bind(ws);
+      const _originalClose = ws!.close.bind(ws);
       ws!.close = jest.fn((callback?: () => void) => {
         // Simulate error but still call callback
         if (callback) callback();

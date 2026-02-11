@@ -114,7 +114,7 @@ export interface HealthCheckOptions {
  * //       periodSeconds: 5
  */
 export function HealthCheck(options: HealthCheckOptions): ClassDecorator {
-  return (target: any) => {
+  return (target) => {
     // Store health checks in metadata
     Metadata.set(HEALTH_CHECKS_KEY, options.checks, target);
     return target;

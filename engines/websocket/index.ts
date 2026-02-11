@@ -13,10 +13,10 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
   isDetached: boolean = false;
 
   init(): void {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    this.canStart = this.settings.get('startWebsocket');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    this.isDetached = this.settings.get('detachWebsocket');
+     
+    this.canStart = Boolean(this.settings.get('startWebsocket'));
+     
+    this.isDetached = Boolean(this.settings.get('detachWebsocket'));
     if(this.canStart) {
       WebsocketService.init();
       WebsocketService.getInstance().setWebSocket(new WebSocket.Server(this.isDetached ? {noServer: true} : {server: this.server}));
@@ -70,7 +70,7 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
   }
 
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return settings?.get('startWebsocket') ?? false;
+     
+    return Boolean(settings?.get('startWebsocket'));
   }
 }

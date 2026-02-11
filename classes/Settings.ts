@@ -1,7 +1,7 @@
 import { get, set } from '@libs/utilities';
 import { ExpressiveTeaServerProps, nameOfClass } from '@expressive-tea/commons';
 import { injectable } from 'inversify';
-import { fileSettings } from '@helpers/server';
+import { type FileSettingsResult, fileSettings } from '@helpers/server';
 import { getTransformedEnv } from '@decorators/env';
 
 
@@ -92,7 +92,7 @@ class Settings {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
-    const settingsFile = fileSettings();
+    const settingsFile: FileSettingsResult = fileSettings();
     this.options = {
       ...this.options, ...settingsFile.config, ...options
     } as ExpressiveTeaServerProps;
@@ -123,7 +123,7 @@ class Settings {
    * @memberof Settings
    * @summary Retrieve an option
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   get(settingName: string): any {
     return get(this.options, settingName, null);
   }
@@ -137,7 +137,7 @@ class Settings {
    * @memberof Settings
    * @summary Initialize an option.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   set(settingName: string, value: any): void {
     set(this.options, settingName, value);
   }
@@ -181,7 +181,7 @@ class Settings {
    * console.log(env.DATABASE_URL); // Type: string (validated)
    */
   getEnv<T = Record<string,string>>(): T {
-    const transformed = getTransformedEnv<T>();
+    const transformed: T | null = getTransformedEnv<T>();
     if (transformed !== null) {
       return transformed;
     }

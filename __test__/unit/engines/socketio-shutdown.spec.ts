@@ -55,7 +55,7 @@ describe('SocketIOEngine Graceful Shutdown - HIGH-002', () => {
 
       // Track if close callback was invoked
       let closeCallbackInvoked = false;
-      const originalClose = io.close.bind(io);
+      const _originalClose = io.close.bind(io);
       io.close = jest.fn((callback?: () => void) => {
         setTimeout(() => {
           closeCallbackInvoked = true;
@@ -206,7 +206,7 @@ describe('SocketIOEngine Graceful Shutdown - HIGH-002', () => {
       const io = Metadata.get(SOCKET_IO_INSTANCE_KEY, boot) as Server;
 
       // Mock close to throw error but still call callback
-      const originalClose = io.close.bind(io);
+      const _originalClose = io.close.bind(io);
       io.close = jest.fn((callback?: () => void) => {
         // Simulate error but still resolve
         if (callback) callback();

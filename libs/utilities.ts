@@ -5,11 +5,27 @@
  * These utilities provide common object, array, and type manipulation functions
  * without external dependencies.
  * 
+ * ## Type Safety Notes
+ * 
+ * This module intentionally uses `any` types for maximum flexibility with dynamic data.
+ * The functions perform runtime type checks and safe property access patterns.
+ * 
+ * ESLint warnings for unsafe `any` operations are suppressed because:
+ * - These are utility functions designed to work with unknown data structures
+ * - Runtime validation is performed where appropriate
+ * - The API contract is clearly documented via JSDoc
+ * - Backward compatibility must be maintained
+ * 
  * @module libs/utilities
  * @since 2.0.0
  */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+ 
+
 
 /**
  * Get a value from an object using a path string or number

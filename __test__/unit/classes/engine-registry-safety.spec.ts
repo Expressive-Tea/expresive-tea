@@ -97,7 +97,9 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
       @injectable()
       class ReferenceErrorEngine extends ExpressiveTeaEngine {
         static canRegister(): boolean {
-          // Force a ReferenceError
+          // Force a ReferenceError by accessing undefined variable
+          // @ts-expect-error - Intentionally testing ReferenceError
+          // eslint-disable-next-line no-undef
           return (undefinedVariable as any).value;
         }
       }
@@ -157,7 +159,7 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       @injectable()
       class ContextEngine extends ExpressiveTeaEngine {
-        static canRegister(context?: Boot, settings?: Settings): boolean {
+        static canRegister(context?: Boot, _settings?: Settings): boolean {
           receivedContext = context;
           return true;
         }
@@ -182,8 +184,8 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       @injectable()
       class SettingsEngine extends ExpressiveTeaEngine {
-        static canRegister(context?: Boot, settings?: Settings): boolean {
-          receivedSettings = settings;
+        static canRegister(context?: Boot, _settings?: Settings): boolean {
+          receivedSettings = _settings;
           return true;
         }
       }
@@ -208,9 +210,9 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       @injectable()
       class BothEngine extends ExpressiveTeaEngine {
-        static canRegister(context?: Boot, settings?: Settings): boolean {
+        static canRegister(context?: Boot, _settings?: Settings): boolean {
           receivedContext = context;
-          receivedSettings = settings;
+          receivedSettings = _settings;
           return true;
         }
       }
