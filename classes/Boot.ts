@@ -31,6 +31,14 @@ import EngineRegistry from '@classes/EngineRegistry';
  */
 abstract class Boot {
   /**
+   * Mutex for engine loading to prevent race conditions when multiple Boot instances
+   * are created concurrently. Ensures the lazy import of engines is atomic.
+   * @private
+   * @static
+   * @since 2.0.0
+   */
+  private static engineLoadPromise: Promise<void> | null = null;
+  /**
    * Maintain a reference to Singleton instance of Settings, if settings still does not initialized it will created
    * automatically when extended class create a new instance.
    *
@@ -157,10 +165,15 @@ abstract class Boot {
     // Injectables
     this.initializeContainer(server, secureServer);
 
-    // Lazy load engines to avoid circular dependency
-    // This ensures engines are only loaded when needed
+    // Lazy load engines to avoid circular dependency.
+    // Uses a mutex to prevent race conditions when multiple Boot instances
+    // are created concurrently (e.g., in parallel tests or microservice setups).
     if (EngineRegistry.getAllEngines().length === 0) {
-      await import('../engines');
+      if (!Boot.engineLoadPromise) {
+        Boot.engineLoadPromise = import('../engines').then(() => { /* loaded */ });
+      }
+      await Boot.engineLoadPromise;
+      Boot.engineLoadPromise = null;
     }
 
     // Get registered engines from EngineRegistry (automatically filtered and sorted by dependencies)
@@ -217,9 +230,14 @@ abstract class Boot {
 
     // Stop engines in reverse order (opposite of initialization)
     await ExpressiveTeaEngine.exec([...this.engines].reverse(), 'stop');
-    
+
     // Clear engine references
     this.engines = [];
+
+    // Clean up DI container to prevent memory leaks from parent-child references.
+    // Without this, the parent container retains references to child containers,
+    // preventing garbage collection of Boot instances.
+    this.containerDI.unbindAll();
   }
 
   private initializeEngines(registeredEngines: typeof ExpressiveTeaEngine[]): void {

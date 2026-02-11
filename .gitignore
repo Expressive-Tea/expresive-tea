@@ -83,6 +83,7 @@ examples/
 # AI
 .claude/
 .opencode/
+specs/
 
 # TypeScript compiled files
 *.d.ts

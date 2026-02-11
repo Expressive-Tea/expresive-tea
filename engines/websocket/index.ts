@@ -31,6 +31,44 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
     }
   }
 
+  /**
+   * Graceful shutdown for WebsocketEngine.
+   *
+   * Closes all WebSocket servers and clears the singleton service to prevent
+   * resource leaks and dangling connections during application shutdown.
+   *
+   * @returns {Promise<void>} Promise that resolves when all WebSocket servers are closed
+   * @since 2.0.0
+   */
+  async stop(): Promise<void> {
+    if (!this.canStart) {
+      return;
+    }
+
+    const wsService = WebsocketService.getInstance();
+
+    // Close the primary WebSocket server
+    const ws = wsService.getWebsocket(this.server);
+    if (ws) {
+      await new Promise<void>((resolve) => {
+        ws.close(() => resolve());
+      });
+    }
+
+    // Close the secure WebSocket server if present
+    if (this.serverSecure) {
+      const wss = wsService.getWebsocket(this.serverSecure);
+      if (wss) {
+        await new Promise<void>((resolve) => {
+          wss.close(() => resolve());
+        });
+      }
+    }
+
+    // Clear the singleton service to prevent stale references
+    WebsocketService.clear();
+  }
+
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return settings?.get('startWebsocket') ?? false;

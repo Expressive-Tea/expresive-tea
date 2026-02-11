@@ -1,4 +1,6 @@
 import ExpressiveTeaEngine from '@classes/Engine';
+import type Boot from '@classes/Boot';
+import type Settings from '@classes/Settings';
 
 /**
  * Engine constructor type with static canRegister method
@@ -145,10 +147,17 @@ export default class EngineRegistry {
    * // Returns: [HTTPEngine, SocketIOEngine, TeapotEngine] in dependency order
    * ```
    */
-  static getRegisteredEngines(context?: unknown, settings?: unknown): EngineConstructor[] {
-    // Filter engines by canRegister()
+  static getRegisteredEngines(context?: Boot, settings?: Settings): EngineConstructor[] {
+    // Filter engines by canRegister() with proper type-safe arguments
     const availableEngines = Array.from(this.engines.values())
-      .filter(metadata => metadata.engine.canRegister(context as never, settings as never));
+      .filter(metadata => {
+        try {
+          return metadata.engine.canRegister(context, settings);
+        } catch (error) {
+          console.warn(`[EngineRegistry] Engine "${metadata.name}" canRegister() threw an error:`, error);
+          return false;
+        }
+      });
 
     // Validate dependencies
     this.validateDependencies(availableEngines);

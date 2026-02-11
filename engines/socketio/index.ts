@@ -24,7 +24,36 @@ export default class SocketIOEngine extends ExpressiveTeaEngine {
     Metadata.set(SOCKET_IO_SECURE_INSTANCE_KEY, this.ioSecure, this.context);
   }
 
+  /**
+   * Graceful shutdown for SocketIOEngine.
+   *
+   * Closes all Socket.IO server instances and clears metadata references
+   * to prevent memory leaks and lingering client connections.
+   *
+   * @returns {Promise<void>} Promise that resolves when all Socket.IO servers are closed
+   * @since 2.0.0
+   */
+  async stop(): Promise<void> {
+    // Close primary Socket.IO server
+    if (this.io) {
+      await new Promise<void>((resolve) => {
+        this.io.close(() => resolve());
+      });
+    }
+
+    // Close secure Socket.IO server if present
+    if (this.ioSecure) {
+      await new Promise<void>((resolve) => {
+        this.ioSecure.close(() => resolve());
+      });
+    }
+
+    // Clear metadata references to allow garbage collection
+    Metadata.set(SOCKET_IO_INSTANCE_KEY, null, this.context);
+    Metadata.set(SOCKET_IO_SECURE_INSTANCE_KEY, null, this.context);
+  }
+
   static canRegister(): boolean {
     return true;
   }
-};
+}

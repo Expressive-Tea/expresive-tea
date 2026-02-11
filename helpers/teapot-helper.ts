@@ -79,9 +79,18 @@ export default class TeaGatewayHelper {
     );
   }
 
-  static generateKeys(passphrase: string): KeyPairSyncResult<any, any> {
-    return  generateKeyPairSync('ed25519', {
-      modulusLength: 2048,
+  /**
+   * Generate an Ed25519 key pair for Teapot/Teacup authentication.
+   *
+   * Ed25519 keys have a fixed size (256-bit / 32-byte) and do not require
+   * a modulusLength parameter. The key format is deterministic and provides
+   * high security with compact key sizes.
+   *
+   * @param {string} passphrase - Passphrase to encrypt the private key
+   * @returns {KeyPairSyncResult} Generated public and private key pair in PEM format
+   */
+  static generateKeys(passphrase: string): KeyPairSyncResult<string, string> {
+    return generateKeyPairSync('ed25519', {
       publicKeyEncoding: {
         type: 'spki',
         format: 'pem'

@@ -72,10 +72,33 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     teacup.on('disconnect', this.disconnected.bind(this, teacup));
   }
 
+  /**
+   * Validate that a key string is in PEM format.
+   * PEM keys must begin with '-----BEGIN' and end with '-----'.
+   *
+   * @param {string} key - The key string to validate
+   * @returns {boolean} True if the key is in valid PEM format
+   * @private
+   */
+  private static isValidPemKey(key: string): boolean {
+    if (!key || typeof key !== 'string') {
+      return false;
+    }
+    const trimmed = key.trim();
+    return trimmed.startsWith('-----BEGIN ') && trimmed.endsWith('-----');
+  }
+
   private clientVerification(teacup: Socket, userPublicKey: Buffer, userSignature: Buffer) {
     console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {yellow.bold Client Verification Started}`);
     try {
-      if (!TeaGatewayHelper.verify(this.teapotSettings.clientKey, userPublicKey.toString('ascii'), userSignature)) {
+      // Validate PEM format before attempting verification to provide clear error messages
+      const publicKeyStr = userPublicKey.toString('ascii');
+      if (!TeapotEngine.isValidPemKey(publicKeyStr)) {
+        console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Invalid PEM key format received`);
+        return teacup.disconnect();
+      }
+
+      if (!TeaGatewayHelper.verify(this.teapotSettings.clientKey, publicKeyStr, userSignature)) {
         console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed to verify and will be disconnected...`);
         return teacup.disconnect();
       }
@@ -156,6 +179,14 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   async init(): Promise<void> {
     // Metadata is stored on the class by decorators, not on instances
     this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this.context));
+
+    // Validate required keys before proceeding with key generation
+    if (!this.teapotSettings.serverKey || typeof this.teapotSettings.serverKey !== 'string' || this.teapotSettings.serverKey.trim().length === 0) {
+      throw new Error('[TEAPOT] serverKey is required and must be a non-empty string');
+    }
+    if (!this.teapotSettings.clientKey || typeof this.teapotSettings.clientKey !== 'string' || this.teapotSettings.clientKey.trim().length === 0) {
+      throw new Error('[TEAPOT] clientKey is required and must be a non-empty string');
+    }
 
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
     this.publicKey = publicKey;

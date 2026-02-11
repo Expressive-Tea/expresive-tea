@@ -48,8 +48,10 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
     await this.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], this.server, this.serverSecure);
   }
 
-  async resolveStages(stages: BOOT_STAGES[], ...extraArgs: unknown[]): Promise<unknown[]> {
-    return Promise.all(stages.map(async s => resolveStage(s, this.context, this.context.getApplication(), ...extraArgs)));
+  async resolveStages(stages: BOOT_STAGES[], ...extraArgs: unknown[]): Promise<void> {
+    for (const stage of stages) {
+      await resolveStage(stage, this.context, this.context.getApplication(), ...extraArgs);
+    }
   }
 
   resolveProxyContainers(): void {
@@ -58,6 +60,33 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
      
     for (const Container of ProxyContainers) {
       resolveProxy(Container, this.context.getApplication());
+    }
+  }
+
+  /**
+   * Graceful shutdown for HTTPEngine.
+   *
+   * Closes the HTTP and HTTPS servers, removing event listeners to prevent
+   * memory leaks from accumulated listeners across application restarts.
+   *
+   * @returns {Promise<void>} Promise that resolves when all servers are closed
+   * @since 2.0.0
+   */
+  async stop(): Promise<void> {
+    // Close HTTP server
+    if (this.server) {
+      this.server.removeAllListeners();
+      await new Promise<void>((resolve, reject) => {
+        this.server.close((err) => (err ? reject(err) : resolve()));
+      });
+    }
+
+    // Close HTTPS server if present
+    if (this.serverSecure) {
+      this.serverSecure.removeAllListeners();
+      await new Promise<void>((resolve, reject) => {
+        this.serverSecure.close((err) => (err ? reject(err) : resolve()));
+      });
     }
   }
 
