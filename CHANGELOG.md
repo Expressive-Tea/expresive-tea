@@ -300,6 +300,13 @@ This is a major release with significant architectural improvements, security en
   - Environment validation errors include variable names and expected formats
   - Missing `.env` file errors include full file path
 
+#### HealthCheck Decorator Integration
+* **Auto-register health checks from @HealthCheck decorator** - HealthCheckEngine now integrates with decorator metadata
+  - Engine reads `@HealthCheck` decorator metadata on Boot class during initialization
+  - Checks are automatically registered before route setup
+  - Maintains backward compatibility with manual `registerCheck()` calls
+  - Enables declarative health check configuration using decorators
+
 ---
 
 ### 📦 DEPENDENCIES
