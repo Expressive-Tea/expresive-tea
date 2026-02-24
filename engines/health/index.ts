@@ -1,6 +1,7 @@
 import { injectable, injectFromBase } from 'inversify';
 import { type Request, type Response } from 'express';
 import ExpressiveTeaEngine from '@classes/Engine';
+import { getHealthChecks } from '@decorators/health';
 
 /**
  * Health check status
@@ -133,6 +134,16 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
    */
   async init(): Promise<void> {
     const app = this.context.getApplication();
+
+    // Auto-register checks from @HealthCheck decorator on Boot class
+    try {
+      const decoratorChecks = getHealthChecks(this.context.constructor);
+      decoratorChecks.forEach((check) => {
+        this.registerCheck(check);
+      });
+    } catch {
+      // Silently continue if decorator checks can't be read
+    }
 
     // Detailed health endpoint
     app.get('/health', async (_req: Request, res: Response) => {
