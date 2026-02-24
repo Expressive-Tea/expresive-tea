@@ -18,21 +18,24 @@ export interface HealthCheckOptions {
 
 /**
  * Class decorator to register health checks for monitoring and orchestration.
- * 
+ *
  * Adds standardized health check endpoints:
  * - `/health` - Detailed health status with all checks
  * - `/health/live` - Liveness probe (Kubernetes compatible)
  * - `/health/ready` - Readiness probe (only passes if all critical checks pass)
- * 
+ *
  * Health checks are executed asynchronously and can be marked as critical for readiness.
  * Non-critical checks only affect the detailed `/health` endpoint.
- * 
+ *
  * @decorator {ClassDecorator} HealthCheck - Register health checks
  * @param options - Health check configuration
  * @returns Class decorator function
  * @since 2.0.0
  * @summary Register application health checks for monitoring
- * 
+ * @note Health checks are automatically registered when @HealthCheck is applied
+ *       to the Boot class. The HealthCheckEngine will read this decorator
+ *       metadata during initialization and register all checks.
+ *
  * @example
  * // Basic health check
  * @HealthCheck({
@@ -49,7 +52,7 @@ export interface HealthCheckOptions {
  *   ]
  * })
  * class MyApp extends Boot {}
- * 
+ *
  * @example
  * // Multiple health checks with different priorities
  * @HealthCheck({
@@ -94,7 +97,7 @@ export interface HealthCheckOptions {
  *   ]
  * })
  * class MyApp extends Boot {}
- * 
+ *
  * @example
  * // Kubernetes deployment.yaml example
  * // spec:
