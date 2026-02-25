@@ -1,35 +1,73 @@
-import * as express from 'express';
 import { Metadata } from '@expressive-tea/commons';
 import { Delete, Get, Middleware, Param, Patch, Post, Put, Route, View } from '../../../decorators/router';
 import { ROUTER_ANNOTATIONS_KEY, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons';
 
-const metadataMock = jest.spyOn(Metadata, 'set');
-jest.mock('express', () => ({
-  Router: () => ({
-    get: jest.fn(),
-    post: jest.fn(),
-    put: jest.fn(),
-    patch: jest.fn(),
-    delete: jest.fn(),
-    param: jest.fn(),
-    use: jest.fn()
-  })
-}));
+// Mock express module - factory runs once, but mockReset: true clears implementations
+vi.mock('express', () => {
+  const mockRouter = () => ({
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    param: vi.fn(),
+    use: vi.fn()
+  });
+
+  const mockApp = () => ({
+    use: vi.fn(),
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+    set: vi.fn(),
+  });
+
+  return {
+    default: Object.assign(vi.fn(mockApp), {
+      Router: vi.fn(mockRouter),
+      static: vi.fn(),
+    }),
+    Router: vi.fn(mockRouter),
+    static: vi.fn(),
+  };
+});
+
+import express from 'express';
+
+// Module-level let so beforeEach can re-create the spy each test.
+// restoreMocks: true (global config) restores spies after each test, so
+// a module-level const spy would be stale after the first test.
+let metadataMock: ReturnType<typeof vi.spyOn>;
+beforeEach(() => {
+  metadataMock = vi.spyOn(Metadata, 'set');
+});
 
 describe('Route Decorator', () => {
-  let TestClass;
-  let TestDefault;
+  let TestClass: any;
+  let TestDefault: any;
+
   beforeEach(() => {
+    // Re-setup mock implementations after mockReset: true clears them
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(),
+      post: vi.fn(),
+      put: vi.fn(),
+      patch: vi.fn(),
+      delete: vi.fn(),
+      param: vi.fn(),
+      use: vi.fn()
+    }) as any);
+
     @Route('/test')
     class TestController {
       @Get('/start')
-      start() {
-      }
+      start() {}
     }
 
     @Route()
-    class TestDefaultController {
-    }
+    class TestDefaultController {}
 
     TestClass = TestController;
     TestDefault = TestDefaultController;
@@ -37,25 +75,20 @@ describe('Route Decorator', () => {
 
   test('should instanciate correctly', () => {
     const test = new TestClass();
-
     expect(test.__mount).not.toBeUndefined();
   });
 
   test('should register the module on express route correctly', () => {
     const test = new TestClass();
-    const router = {
-      use: jest.fn()
-    };
+    const router = { use: vi.fn() };
 
     expect(test.__mount).not.toBeUndefined();
-
     test.__mount(router);
 
     expect(router.use.mock.calls[0][0]).toEqual('/test');
   });
 
   test('should assign handlers', () => {
-
     const test = new TestClass();
     const router = express.Router();
 
@@ -63,7 +96,6 @@ describe('Route Decorator', () => {
 
     expect(test.router.get).toHaveBeenCalledWith('/start', expect.anything());
     expect(router.use).toHaveBeenCalledWith('/test', expect.anything());
-
   });
 
   test('should default route', () => {
@@ -76,13 +108,12 @@ describe('Route Decorator', () => {
 });
 
 describe('Middleware Decorator', () => {
-  let TestClass;
+  let TestClass: any;
   beforeEach(() => {
     @Middleware(() => null)
     class TestController {
       @Middleware(() => null)
-      test() {
-      }
+      test() {}
     }
 
     TestClass = TestController;
@@ -94,34 +125,35 @@ describe('Middleware Decorator', () => {
 
   test('should register endpoint middleware correctly', () => {
     const test = new TestClass();
-
     expect(test.test.$middlewares).not.toBeUndefined();
     expect(test.test.$middlewares.length).toEqual(1);
   });
 });
 
 describe('Get Decorator', () => {
-  let Controller;
+  let Controller: any;
 
   beforeEach(() => {
     metadataMock.mockReset();
 
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
+
     @Route('/')
     class TestController {
       @Get('/getTest')
-      test() {
-      }
+      test() {}
 
       @Get()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -132,27 +164,29 @@ describe('Get Decorator', () => {
 });
 
 describe('Post Decorator', () => {
-  let Controller;
+  let Controller: any;
 
   beforeEach(() => {
     metadataMock.mockReset();
 
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
+
     @Route('/')
     class TestController {
       @Post('/post')
-      test() {
-      }
+      test() {}
 
       @Post()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -163,26 +197,28 @@ describe('Post Decorator', () => {
 });
 
 describe('Put Decorator', () => {
-  let Controller;
+  let Controller: any;
   beforeEach(() => {
     metadataMock.mockReset();
+
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
 
     @Route('/')
     class TestController {
       @Put('/put')
-      test() {
-      }
+      test() {}
 
       @Put()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -193,27 +229,29 @@ describe('Put Decorator', () => {
 });
 
 describe('Patch Decorator', () => {
-  let Controller;
+  let Controller: any;
 
   beforeEach(() => {
     metadataMock.mockReset();
 
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
+
     @Route('/')
     class TestController {
       @Patch('/patch')
-      test() {
-      }
+      test() {}
 
       @Patch()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -224,27 +262,29 @@ describe('Patch Decorator', () => {
 });
 
 describe('Param Decorator', () => {
-  let Controller;
+  let Controller: any;
 
   beforeEach(() => {
     metadataMock.mockReset();
 
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
+
     @Route('/')
     class TestController {
       @Param('/param')
-      test() {
-      }
+      test() {}
 
       @Param()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -255,26 +295,28 @@ describe('Param Decorator', () => {
 });
 
 describe('Delete Decorator', () => {
-  let Controller;
+  let Controller: any;
   beforeEach(() => {
     metadataMock.mockReset();
+
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
 
     @Route('/')
     class TestController {
       @Delete('/delete')
-      test() {
-      }
+      test() {}
 
       @Delete()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -285,16 +327,20 @@ describe('Delete Decorator', () => {
 });
 
 describe('View Decorator', () => {
-  let Controller;
+  let Controller: any;
 
   beforeEach(() => {
     metadataMock.mockReset();
 
+    vi.mocked(express.Router).mockImplementation(() => ({
+      get: vi.fn(), post: vi.fn(), put: vi.fn(), patch: vi.fn(),
+      delete: vi.fn(), param: vi.fn(), use: vi.fn()
+    }) as any);
+
     @Route('/')
     class TestController {
       @View('test')
-      test() {
-      }
+      test() {}
     }
 
     Controller = TestController;

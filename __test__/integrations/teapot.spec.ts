@@ -59,7 +59,10 @@ describe('Teapot/Teacup integration', () => {
         const timeout = setTimeout(() => {
           console.warn(`${name} graceful close timeout - forcing termination`);
           const terminator = createHttpTerminator({ server });
-          terminator.terminate().then(() => resolve()).catch(() => resolve());
+          terminator
+            .terminate()
+            .then(() => resolve())
+            .catch(() => resolve());
         }, timeoutMs);
 
         server.close(() => {
@@ -94,57 +97,43 @@ describe('Teapot/Teacup integration', () => {
   });
 
   test('should initialize Teapot Service', async () => {
-    const res = await request.get('/test')
-      .expect('Content-Type', /html/)
-      .expect(200);
+    const res = await request.get('/test').expect('Content-Type', /html/).expect(200);
 
     expect(res.text).toEqual('this is a test');
   });
 
   test('should get first teacup microservice group', async () => {
-    const res = await request.get('/teacup-1/test')
-      .expect('Content-Type', /html/)
-      .expect(200);
+    const res = await request.get('/teacup-1/test').expect('Content-Type', /html/).expect(200);
 
     expect(res.text).toEqual('this is a teacup1');
   });
 
   test('should get second teacup microservice group', async () => {
-    const res = await request.get('/teacup-2/test')
-      .expect('Content-Type', /html/)
-      .expect(200);
+    const res = await request.get('/teacup-2/test').expect('Content-Type', /html/).expect(200);
 
     expect(res.text).toEqual('this is a teacup2');
   });
 
   test('should get teacup post response from first microservice group', async () => {
-    const res = await request.post('/teacup-1/test')
-      .expect('Content-Type', /html/)
-      .expect(200);
+    const res = await request.post('/teacup-1/test').expect('Content-Type', /html/).expect(200);
 
     expect(res.text).toEqual('<h1> Body Test pass teacup1</h1>');
   });
 
   test('should get teacup post response from first microservice group', async () => {
-    const res = await request.post('/teacup-2/test')
-      .expect('Content-Type', /html/)
-      .expect(200);
+    const res = await request.post('/teacup-2/test').expect('Content-Type', /html/).expect(200);
 
     expect(res.text).toEqual('<h1> Body Test pass teacup2</h1>');
   });
 
   test('should get 404 when call a unverified teacup', async () => {
-    await request.post('/teacup-3/test')
-      .expect('Content-Type', /html/)
-      .expect(404);
+    await request.post('/teacup-3/test').expect('Content-Type', /html/).expect(404);
   });
 
   test('should remove a teacup from teapot gateway', async () => {
-    const serverTerminator = createHttpTerminator({ server: extraTeacups[0].server});
+    const serverTerminator = createHttpTerminator({ server: extraTeacups[0].server });
     await serverTerminator.terminate();
     await delay(1500);
-    await request.get('/teacup-2/test')
-      .expect('Content-Type', /html/)
-      .expect(404);
+    await request.get('/teacup-2/test').expect('Content-Type', /html/).expect(404);
   });
 });

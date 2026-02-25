@@ -12,16 +12,14 @@ describe('Module Decorator', () => {
       __mount: mockMountController
     }));
 
-    MockProvider = class Provider {
-    };
+    MockProvider = class Provider {};
 
     @Module({
       controllers: [Controller],
       mountpoint: '/',
       providers: [MockProvider]
     })
-    class TestModule {
-    }
+    class TestModule {}
 
     TestClass = TestModule;
   });

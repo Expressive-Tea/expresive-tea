@@ -10,10 +10,10 @@ export default class RootController {
 
   @Post('/test')
   @Middleware((req, res, next) => {
-    req.body = {test: 'pass teacup1'};
+    req.body = { test: 'pass teacup1' };
     next();
   })
-  async indexBody(@body('test') test: string ): Promise<string> {
+  async indexBody(@body('test') test: string): Promise<string> {
     return `<h1> Body Test ${test}</h1>`;
   }
 }

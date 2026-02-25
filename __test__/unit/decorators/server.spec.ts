@@ -34,8 +34,7 @@ describe('ServerSettings Decorator', () => {
     @ServerSettings({
       port: 8080
     })
-    class Test {
-    }
+    class Test {}
 
     const test = new Test();
 
@@ -47,8 +46,7 @@ describe('ServerSettings Decorator', () => {
     Settings.reset();
 
     @ServerSettings()
-    class Test {
-    }
+    class Test {}
 
     const test = new Test();
 
@@ -66,13 +64,12 @@ describe('Pour Decorator', () => {
 
   afterEach(() => {
     spyMetadataSet.mockRestore();
-    jest.clearAllMocks()
+    jest.clearAllMocks();
   });
 
   test('should attach plug to respective level', () => {
     @Pour(Plugin)
-    class Test {
-    }
+    class Test {}
 
     const testInstance = new Test();
     const args: any[] = last(spyMetadataSet.mock.calls) ?? [];
@@ -91,8 +88,7 @@ describe('Pour Decorator', () => {
 
   test('should attach plug to respective level with arguments', () => {
     @Pour(Plugin, 'a', 1, 2, { x: 'y' })
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
     const args: any[] | unknown = last<any>(spyMetadataSet.mock.calls) ?? [];
@@ -139,28 +135,22 @@ describe('Setting Decorator', () => {
 describe('RegisterModule Decorator', () => {
   test('should fail register a module', () => {
     expect(() => {
-      class Module {
-      }
-
+      class Module {}
 
       class _Test {
         @RegisterModule(Module)
-        async start() {
-        }
+        async start() {}
       }
     }).toThrow();
   });
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {
-      }
-
+      class Module {}
 
       class _Test {
         @RegisterModule(Module)
-        async init() {
-        }
+        async init() {}
       }
     }).toThrow();
   });
@@ -179,8 +169,7 @@ describe('Static Decorator', () => {
 
   test('should register a static server', () => {
     @Static('/public')
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
@@ -199,8 +188,7 @@ describe('Static Decorator', () => {
 
   test('should register a static server with virtual', () => {
     @Static('/public', '/virtual')
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
@@ -221,9 +209,7 @@ describe('Static Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @Static()
-
-      class _Test {
-      }
+      class _Test {}
     }).toThrow();
   });
 });
@@ -240,8 +226,7 @@ describe('Express Directive Decorator', () => {
 
   test('should allow to modify etag', () => {
     @ExpressDirective('etag', true)
-    class Test {
-    }
+    class Test {}
 
     const instance = new Test();
 
@@ -260,9 +245,7 @@ describe('Express Directive Decorator', () => {
   test('should fail if directive is named as invalid ', () => {
     expect(() => {
       @ExpressDirective('invalid', false)
-
-      class _Test {
-      }
+      class _Test {}
     }).toThrow();
   });
 
@@ -270,9 +253,7 @@ describe('Express Directive Decorator', () => {
     expect(() => {
       // @ts-expect-error Probe application error.
       @ExpressDirective()
-
-      class _Test {
-      }
+      class _Test {}
     }).toThrow();
   });
 });
@@ -294,14 +275,12 @@ describe('Modules Decorator', () => {
       readonly router: Express;
       readonly settings: ExpressiveTeaModuleProps;
 
-      __register(_server: Express): void {
-      }
+      __register(_server: Express): void {}
     }
 
     @Modules([ModuleA])
     class Test {
-      async start() {
-      }
+      async start() {}
     }
 
     const testInstance = new Test();
@@ -314,14 +293,11 @@ describe('Modules Decorator', () => {
 
   test('should fail if use different method to register a module', () => {
     expect(() => {
-      class Module {
-      }
-
+      class Module {}
 
       class _Test {
         @RegisterModule(Module)
-        async init() {
-        }
+        async init() {}
       }
     }).toThrow();
   });

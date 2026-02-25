@@ -5,9 +5,13 @@ import { Metadata } from '@expressive-tea/commons';
 import Settings from '@classes/Settings';
 import {
   ASSIGN_TEACUP_KEY,
-  ASSIGN_TEAPOT_KEY, type BOOT_STAGES,
-  BOOT_STAGES_KEY, BOOT_STAGES_LIST, EXPRESS_DIRECTIVES,
-  PLUGINS_KEY, REGISTERED_DIRECTIVES_KEY,
+  ASSIGN_TEAPOT_KEY,
+  type BOOT_STAGES,
+  BOOT_STAGES_KEY,
+  BOOT_STAGES_LIST,
+  EXPRESS_DIRECTIVES,
+  PLUGINS_KEY,
+  REGISTERED_DIRECTIVES_KEY,
   REGISTERED_MODULE_KEY,
   REGISTERED_STATIC_KEY,
   ROUTER_PROXIES_KEY
@@ -16,9 +20,10 @@ import {
   type ExpressiveTeaPotSettings,
   type ExpressiveTeaPluginProps,
   type ExpressiveTeaServerProps,
-  type ExpressiveTeaStaticFileServer, type ExpressiveTeaCupSettings
+  type ExpressiveTeaStaticFileServer,
+  type ExpressiveTeaCupSettings
 } from '@expressive-tea/commons';
-import {Newable } from 'inversify';
+import { Newable } from 'inversify';
 import DependencyInjection from '@services/DependencyInjection';
 
 /**
@@ -66,17 +71,14 @@ import DependencyInjection from '@services/DependencyInjection';
  * @module Decorators/Server
  */
 
- 
 function getStages(target: any) {
   return Metadata.get(BOOT_STAGES_KEY, target) || {};
 }
 
- 
 function getRegisteredPlugins(target: any) {
   return Metadata.get(PLUGINS_KEY, target) || [];
 }
 
- 
 function getStage(stage: BOOT_STAGES, target: any) {
   const stages = getStages(target);
   if (!stages[stage]) {
@@ -86,14 +88,12 @@ function getStage(stage: BOOT_STAGES, target: any) {
   return stages[stage];
 }
 
- 
 function setStage(stage: BOOT_STAGES, value: any, target: any) {
   const stages = getStages(target);
   stages[stage] = value;
   Metadata.set(BOOT_STAGES_KEY, stages, target);
 }
 
- 
 function setPlugins(plugins: ExpressiveTeaPluginProps[], target: any) {
   Metadata.set(PLUGINS_KEY, plugins, target);
 }
@@ -151,7 +151,7 @@ export function Pour(Plugin: Newable<any>, ...pluginArgs: any[]) {
       getRegisteredPlugins(target)
     );
 
-    BOOT_STAGES_LIST.forEach(STAGE => {
+    BOOT_STAGES_LIST.forEach((STAGE) => {
       setStage(STAGE, (stages[STAGE] || []).concat(instance.getRegisteredStage(STAGE)), target);
     });
 
@@ -167,7 +167,6 @@ export function Pour(Plugin: Newable<any>, ...pluginArgs: any[]) {
  * @param {ExpressiveTeaModuleProps} options
  */
 export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
-   
   return (target: any) => {
     Settings.getInstance(target).merge(options);
     return target;
@@ -188,7 +187,6 @@ export function ServerSettings(options: ExpressiveTeaServerProps = {}) {
  * with virtual path if defined.
  */
 export function Static(root: string, virtual: string | null = null, options: ExpressiveTeaStaticFileServer = {}) {
-   
   return (target: any) => {
     if (isNil(root)) {
       throw new Error('Root must be defined');
@@ -208,9 +206,8 @@ export function Static(root: string, virtual: string | null = null, options: Exp
  * @param {*} settings - Setting Arguments
  * @decorator {ClassDecorator} ExpressDirective - Set a Express App Setting.
  */
- 
+
 export function ExpressDirective(name: string, ...settings: any[]) {
-   
   return (target: any) => {
     if (!EXPRESS_DIRECTIVES.includes(name)) {
       throw new Error(`Directive Name ${name} is not valid express behavior setting`);
@@ -243,9 +240,8 @@ export function Setting(): (target: any, propertyName: string) => any {
  * @summary This register the Module Classes created by the user.
  * @param Modules
  */
- 
-export function Modules(Modules: any[]) {
 
+export function Modules(Modules: any[]) {
   return (target: any) => {
     for (const Module of Modules) {
       const registeredModules = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
@@ -255,17 +251,13 @@ export function Modules(Modules: any[]) {
   };
 }
 
- 
 export function Proxies(proxyContainers: any[]) {
-   
   return (target: any) => {
-
     for (const proxyContainer of proxyContainers) {
       const registeredProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, target) || [];
       registeredProxyContainers.unshift(proxyContainer);
       Metadata.set(ROUTER_PROXIES_KEY, registeredProxyContainers, target);
     }
-
   };
 }
 
@@ -279,10 +271,10 @@ export function Proxies(proxyContainers: any[]) {
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function RegisterModule(Module: any) {
-
-   
   return (_: any, __: any) => {
-    throw new Error('RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.');
+    throw new Error(
+      'RegisterModule is deprecated, use the new decorator Modules that allow add modules into registered modules.'
+    );
   };
 }
 

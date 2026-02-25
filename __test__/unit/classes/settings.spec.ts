@@ -6,11 +6,13 @@ import * as path from 'path';
 
 interface SettingsOptionsProps {
   options: Record<string, any>;
-  expected: Record<string, any>
+  expected: Record<string, any>;
 }
 
 describe('Settings Class', () => {
-  beforeEach(() => { Settings.reset(); });
+  beforeEach(() => {
+    Settings.reset();
+  });
   test('should be existed', () => {
     expect(Settings).not.toBeUndefined();
   });
@@ -21,10 +23,13 @@ describe('Settings Class', () => {
     ${{ port: 8080 }}         | ${{ port: 8080, securePort: 4443 }}
     ${{ port: 8080, a: 'b' }} | ${{ port: 8080, a: 'b', securePort: 4443 }}
     ${{ c: 'd' }}             | ${{ port: 3000, c: 'd', securePort: 4443 }}
-  `('should create a new instance with $options and return value correctly', ({ options, expected }: SettingsOptionsProps) => {
-    const settings = new Settings(options);
-    expect(settings.getOptions()).toStrictEqual(expected);
-  });
+  `(
+    'should create a new instance with $options and return value correctly',
+    ({ options, expected }: SettingsOptionsProps) => {
+      const settings = new Settings(options);
+      expect(settings.getOptions()).toStrictEqual(expected);
+    }
+  );
 
   test.each`
     options                   | expected
@@ -69,7 +74,7 @@ describe('Settings Class', () => {
 
     beforeEach(() => {
       Settings.reset();
-      configFiles.forEach(file => {
+      configFiles.forEach((file) => {
         const filePath = path.join(TEST_DIR, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -79,7 +84,7 @@ describe('Settings Class', () => {
 
     afterEach(() => {
       Settings.reset();
-      configFiles.forEach(file => {
+      configFiles.forEach((file) => {
         const filePath = path.join(TEST_DIR, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -121,7 +126,7 @@ describe('Settings Class', () => {
       fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), '');
 
       const settings = new Settings({ customPort: 9000 });
-      
+
       expect(settings.getOptions().port).toBe(3000); // Default
       expect(settings.getOptions().customPort).toBe(9000); // From constructor
     });
@@ -139,7 +144,7 @@ describe('Settings Class', () => {
       fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), '{}');
 
       const settings = new Settings();
-      
+
       expect(settings.get('port')).toBe(3000);
       expect(settings.get('securePort')).toBe(4443);
     });

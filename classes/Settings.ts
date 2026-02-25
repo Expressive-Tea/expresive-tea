@@ -1,9 +1,8 @@
 import { get, set } from '@libs/utilities';
 import { ExpressiveTeaServerProps, nameOfClass } from '@expressive-tea/commons';
 import { injectable } from 'inversify';
-import { fileSettings } from '@helpers/server';
+import { type FileSettingsResult, fileSettings } from '@helpers/server';
 import { getTransformedEnv } from '@decorators/env';
-
 
 /**
  * Declare the properties which the server will save into settings, is a semi dynamic object since is allowed to save
@@ -26,9 +25,8 @@ import { getTransformedEnv } from '@decorators/env';
  */
 @injectable()
 class Settings {
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static isolatedContext:Map<any, Settings> = new Map<any, Settings>();
+  static isolatedContext: Map<any, Settings> = new Map<any, Settings>();
   /**
    * Reset Singleton instance to the default values, all changes will be erased is not recommendable to use it
    * multiple times since all your options will be lost. Unless you have an option how to recover this is not
@@ -92,9 +90,11 @@ class Settings {
     if (Settings.instance && !isIsolated) {
       return Settings.instance;
     }
-    const settingsFile = fileSettings();
+    const settingsFile: FileSettingsResult = fileSettings();
     this.options = {
-      ...this.options, ...settingsFile.config, ...options
+      ...this.options,
+      ...settingsFile.config,
+      ...options
     } as ExpressiveTeaServerProps;
 
     if (!isIsolated) {
@@ -123,7 +123,7 @@ class Settings {
    * @memberof Settings
    * @summary Retrieve an option
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   get(settingName: string): any {
     return get(this.options, settingName, null);
   }
@@ -137,7 +137,7 @@ class Settings {
    * @memberof Settings
    * @summary Initialize an option.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   set(settingName: string, value: any): void {
     set(this.options, settingName, value);
   }
@@ -180,8 +180,8 @@ class Settings {
    * console.log(env.PORT); // Type: number (transformed)
    * console.log(env.DATABASE_URL); // Type: string (validated)
    */
-  getEnv<T = Record<string,string>>(): T {
-    const transformed = getTransformedEnv<T>();
+  getEnv<T = Record<string, string>>(): T {
+    const transformed: T | null = getTransformedEnv<T>();
     if (transformed !== null) {
       return transformed;
     }

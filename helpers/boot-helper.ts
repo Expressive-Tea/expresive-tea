@@ -1,4 +1,3 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import {
   BOOT_STAGES,
@@ -8,7 +7,7 @@ import {
   REGISTERED_STATIC_KEY,
   STAGES_INIT
 } from '@expressive-tea/commons';
-import * as express from 'express';
+import express from 'express';
 import { type Express } from 'express';
 import { Metadata } from '@expressive-tea/commons';
 import { getClass } from '@expressive-tea/commons';
@@ -19,7 +18,12 @@ import { type ModulizedExpressiveTeaModule } from '../types/core';
 import { getInstanceOf } from '@services/DependencyInjection';
 import { Newable } from 'inversify';
 
-export async function resolveStage(stage: BOOT_STAGES, ctx: Boot, server: Express, ...extraArgs: unknown[]): Promise<void> {
+export async function resolveStage(
+  stage: BOOT_STAGES,
+  ctx: Boot,
+  server: Express,
+  ...extraArgs: unknown[]
+): Promise<void> {
   try {
     await bootloaderResolve(stage, server, ctx, ...extraArgs);
     if (stage === BOOT_STAGES.APPLICATION) {
@@ -49,7 +53,6 @@ export function resolveStatic(instance: typeof Boot | Boot, server: Express): vo
     } else {
       server.use(express.static(staticOptions.root, staticOptions.options));
     }
-
   });
 }
 
@@ -63,8 +66,9 @@ function resolveModules(instance: typeof Boot | Boot, server: Express): void {
   // If instance is already a class (typeof === 'function'), use it directly
   // If instance is an object, get its constructor
   const target = typeof instance === 'function' ? instance : instance.constructor;
-  const registeredModules: ModulizedExpressiveTeaModule<any> = Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
-  for ( const Module of registeredModules ) {
+  const registeredModules: ModulizedExpressiveTeaModule<any> =
+    Metadata.get(REGISTERED_MODULE_KEY, target, 'start') || [];
+  for (const Module of registeredModules) {
     const moduleInstance: ModulizedExpressiveTeaModule<typeof Module> = getInstanceOf<typeof Module>(Module as Newable);
     moduleInstance.__register(server);
   }
@@ -74,8 +78,8 @@ async function bootloaderResolve(
   STAGE: BOOT_STAGES,
   server: Express,
   instance: typeof Boot | Boot,
-  ...args: unknown[]): Promise<void> {
-
+  ...args: unknown[]
+): Promise<void> {
   const bootLoader = Metadata.get(BOOT_STAGES_KEY, getClass(instance)) || STAGES_INIT;
 
   for (const loader of bootLoader[STAGE] || []) {
@@ -87,7 +91,6 @@ async function bootloaderResolve(
   }
 }
 
- 
 function selectLoaderType(loader: any, server: Express, ...args: unknown[]) {
   return loader.method(server, ...args);
 }
@@ -96,7 +99,6 @@ function checkIfStageFails(e: BootLoaderRequiredExceptions | BootLoaderSoftExcep
   return !(e instanceof BootLoaderSoftExceptions);
 }
 
- 
 function shouldFailIfRequire(e: BootLoaderRequiredExceptions | BootLoaderSoftExceptions | Error, loader: any) {
   const failMessage = `Failed [${loader.name}]: ${e.message}`;
   if (!loader || loader.required) {

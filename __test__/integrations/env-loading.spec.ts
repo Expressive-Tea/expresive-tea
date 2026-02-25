@@ -11,7 +11,7 @@ describe('Full Environment Loading Integration', () => {
 
   beforeEach(() => {
     Settings.reset();
-    configFiles.forEach(file => {
+    configFiles.forEach((file) => {
       const filePath = path.join(TEST_DIR, file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -27,7 +27,7 @@ describe('Full Environment Loading Integration', () => {
 
   afterEach(() => {
     Settings.reset();
-    configFiles.forEach(file => {
+    configFiles.forEach((file) => {
       const filePath = path.join(TEST_DIR, file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -37,16 +37,22 @@ describe('Full Environment Loading Integration', () => {
 
   test('should boot app with YAML config + transformed env', () => {
     // Create YAML config
-    fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), `port: 3000
+    fs.writeFileSync(
+      path.join(TEST_DIR, '.expressive-tea.yaml'),
+      `port: 3000
 securePort: 4443
 environment: test
-`);
+`
+    );
 
     // Create env file
-    fs.writeFileSync(path.join(TEST_DIR, '.env'), `DATABASE_URL=postgres://localhost:5432/test
+    fs.writeFileSync(
+      path.join(TEST_DIR, '.env'),
+      `DATABASE_URL=postgres://localhost:5432/test
 API_KEY=test-key-12345
 PORT=3000
-`);
+`
+    );
 
     interface Env {
       port: number;
@@ -82,10 +88,13 @@ PORT=3000
   });
 
   test('should handle Zod-like validation (mocked)', () => {
-    fs.writeFileSync(path.join(TEST_DIR, '.env'), `PORT=3000
+    fs.writeFileSync(
+      path.join(TEST_DIR, '.env'),
+      `PORT=3000
 DATABASE_URL=postgres://localhost:5432/db
 API_KEY=valid-key-with-32-characters-here
-`);
+`
+    );
 
     // Mock Zod-like schema
     const mockSchema = {
@@ -125,10 +134,13 @@ API_KEY=valid-key-with-32-characters-here
 
   test('should maintain backward compatibility with v2.0.0', () => {
     // v2.0.0 style: JSON config only
-    fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), JSON.stringify({
-      port: 8080,
-      securePort: 8443
-    }));
+    fs.writeFileSync(
+      path.join(TEST_DIR, '.expressive-tea'),
+      JSON.stringify({
+        port: 8080,
+        securePort: 8443
+      })
+    );
 
     const { config } = fileSettings();
     expect(config.port).toBe(8080);

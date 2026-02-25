@@ -1,6 +1,7 @@
 import { injectable, injectFromBase } from 'inversify';
 import { type Request, type Response } from 'express';
 import ExpressiveTeaEngine from '@classes/Engine';
+import { getHealthChecks } from '@decorators/health';
 
 /**
  * Health check status
@@ -44,19 +45,22 @@ export interface HealthCheck {
 
 /**
  * Health Check Engine
- * 
+ *
  * Provides standardized health check endpoints for monitoring and orchestration:
  * - `/health` - Detailed health status with all checks
  * - `/health/live` - Liveness probe (always 200 if server is running)
  * - `/health/ready` - Readiness probe (200 only if all critical checks pass)
- * 
+ *
+ * Automatically registers health checks from @HealthCheck decorator on Boot class.
+ * Checks can also be registered manually via registerCheck() for dynamic registration.
+ *
  * Compatible with Kubernetes liveness and readiness probes.
- * 
+ *
  * @class HealthCheckEngine
  * @extends ExpressiveTeaEngine
  * @since 2.0.0
  * @summary Standardized health check endpoints for monitoring
- * 
+ *
  * @example
  * // Enable health checks with custom checks
  * @HealthCheck({
@@ -112,14 +116,14 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
         Promise.resolve(check.check()),
         new Promise<HealthCheckResult>((_, reject) =>
           setTimeout(() => reject(new Error('Health check timeout')), timeout)
-        ),
+        )
       ]);
 
       return result;
     } catch (error) {
       return {
         status: 'fail',
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? error.message : String(error)
       };
     }
   }
@@ -130,6 +134,16 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
    */
   async init(): Promise<void> {
     const app = this.context.getApplication();
+
+    // Auto-register checks from @HealthCheck decorator on Boot class
+    try {
+      const decoratorChecks = getHealthChecks(this.context.constructor);
+      decoratorChecks.forEach((check) => {
+        this.registerCheck(check);
+      });
+    } catch {
+      // Silently continue if decorator checks can't be read
+    }
 
     // Detailed health endpoint
     app.get('/health', async (_req: Request, res: Response) => {
@@ -156,7 +170,7 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
       res.status(statusCode).json({
         status: overallStatus,
         timestamp: new Date().toISOString(),
-        checks: results,
+        checks: results
       });
     });
 
@@ -164,7 +178,7 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
     app.get('/health/live', (_req: Request, res: Response) => {
       res.status(200).json({
         status: 'pass',
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
     });
 
@@ -176,7 +190,7 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
         // No critical checks, always ready
         res.status(200).json({
           status: 'pass',
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
         return;
       }
@@ -199,7 +213,7 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
       res.status(isReady ? 200 : 503).json({
         status: isReady ? 'pass' : 'fail',
         timestamp: new Date().toISOString(),
-        checks: results,
+        checks: results
       });
     });
   }
@@ -223,10 +237,10 @@ export default class HealthCheckEngine extends ExpressiveTeaEngine {
 
   /**
    * Determine if this engine should be registered
-   * 
+   *
    * Health checks are enabled by default for all applications.
    * To disable, set `enableHealthChecks: false` in ServerSettings.
-   * 
+   *
    * @returns true if health checks should be enabled
    * @since 2.0.0
    */

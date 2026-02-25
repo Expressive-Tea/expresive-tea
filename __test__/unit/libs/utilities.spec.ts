@@ -1,6 +1,6 @@
 /**
  * Unit tests for libs/utilities.ts
- * 
+ *
  * Tests native TypeScript utility functions that replace lodash
  */
 
@@ -168,7 +168,11 @@ describe('Utility Functions', () => {
     });
 
     test('should find element with multiple properties', () => {
-      const arr = [{ a: 1, b: 2 }, { a: 2, b: 2 }, { a: 2, b: 3 }];
+      const arr = [
+        { a: 1, b: 2 },
+        { a: 2, b: 2 },
+        { a: 2, b: 3 }
+      ];
       expect(find(arr, { a: 2, b: 3 })).toEqual({ a: 2, b: 3 });
     });
 
@@ -325,7 +329,11 @@ describe('Utility Functions', () => {
     });
 
     test('should sort by array of properties', () => {
-      const arr = [{ a: 2, b: 1 }, { a: 1, b: 2 }, { a: 1, b: 1 }];
+      const arr = [
+        { a: 2, b: 1 },
+        { a: 1, b: 2 },
+        { a: 1, b: 1 }
+      ];
       expect(sortBy(arr, ['a', 'b'])).toEqual([
         { a: 1, b: 1 },
         { a: 1, b: 2 },
@@ -482,16 +490,12 @@ describe('Utility Functions', () => {
     });
 
     test('should support size operation', () => {
-      const result = chain([1, 2, 3])
-        .size()
-        .value();
+      const result = chain([1, 2, 3]).size().value();
       expect(result).toBe(3);
     });
 
     test('should support pick operation', () => {
-      const result = chain({ a: 1, b: 2, c: 3 })
-        .pick(['a', 'c'])
-        .value();
+      const result = chain({ a: 1, b: 2, c: 3 }).pick(['a', 'c']).value();
       expect(result).toEqual({ a: 1, c: 3 });
     });
 

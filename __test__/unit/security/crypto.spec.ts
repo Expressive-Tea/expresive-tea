@@ -104,8 +104,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
         authTag: 'test'
       } as unknown as EncryptedMessage;
 
-      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature))
-        .toThrow('Invalid encrypted message format');
+      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature)).toThrow('Invalid encrypted message format');
     });
 
     it('should fail with invalid encrypted message format - missing message', () => {
@@ -114,8 +113,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
         authTag: 'test'
       } as unknown as EncryptedMessage;
 
-      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature))
-        .toThrow('Invalid encrypted message format');
+      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature)).toThrow('Invalid encrypted message format');
     });
 
     it('should fail with invalid encrypted message format - missing authTag', () => {
@@ -124,86 +122,89 @@ describe('TeaGatewayHelper Crypto Security', () => {
         message: 'test'
       } as unknown as EncryptedMessage;
 
-      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature))
-        .toThrow('Invalid encrypted message format');
+      expect(() => TeaGatewayHelper.decrypt(invalidMessage, testSignature)).toThrow('Invalid encrypted message format');
     });
 
     it('should fail with null encrypted message', () => {
-      expect(() => TeaGatewayHelper.decrypt(null as unknown as EncryptedMessage, testSignature))
-        .toThrow('Invalid encrypted message format');
+      expect(() => TeaGatewayHelper.decrypt(null as unknown as EncryptedMessage, testSignature)).toThrow(
+        'Invalid encrypted message format'
+      );
     });
 
     it('should fail with undefined encrypted message', () => {
-      expect(() => TeaGatewayHelper.decrypt(undefined as unknown as EncryptedMessage, testSignature))
-        .toThrow('Invalid encrypted message format');
+      expect(() => TeaGatewayHelper.decrypt(undefined as unknown as EncryptedMessage, testSignature)).toThrow(
+        'Invalid encrypted message format'
+      );
     });
 
     it('should fail with invalid signature - null', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
 
-      expect(() => TeaGatewayHelper.decrypt(encrypted, null as unknown as Buffer))
-        .toThrow('Invalid signature');
+      expect(() => TeaGatewayHelper.decrypt(encrypted, null as unknown as Buffer)).toThrow('Invalid signature');
     });
 
     it('should fail with invalid signature - wrong length', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
       const wrongLengthSignature = crypto.randomBytes(32); // Should be 64 bytes
 
-      expect(() => TeaGatewayHelper.decrypt(encrypted, wrongLengthSignature))
-        .toThrow('Invalid signature');
+      expect(() => TeaGatewayHelper.decrypt(encrypted, wrongLengthSignature)).toThrow('Invalid signature');
     });
 
     it('should fail when decrypting with wrong signature (authentication failure)', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
       const wrongSignature = crypto.randomBytes(64);
 
-      expect(() => TeaGatewayHelper.decrypt(encrypted, wrongSignature))
-        .toThrow('Decryption failed: message tampered or wrong key');
+      expect(() => TeaGatewayHelper.decrypt(encrypted, wrongSignature)).toThrow(
+        'Decryption failed: message tampered or wrong key'
+      );
     });
 
     it('should detect tampered ciphertext', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
-      
+
       // Tamper with the message
       const tamperedMessage = Buffer.from(encrypted.message, 'base64');
-      tamperedMessage[0] ^= 0xFF; // Flip bits in first byte
+      tamperedMessage[0] ^= 0xff; // Flip bits in first byte
       const tamperedEncrypted: EncryptedMessage = {
         ...encrypted,
         message: tamperedMessage.toString('base64')
       };
 
-      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature))
-        .toThrow('Decryption failed: message tampered or wrong key');
+      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature)).toThrow(
+        'Decryption failed: message tampered or wrong key'
+      );
     });
 
     it('should detect tampered IV', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
-      
+
       // Tamper with the IV
       const tamperedIV = Buffer.from(encrypted.iv, 'hex');
-      tamperedIV[0] ^= 0xFF;
+      tamperedIV[0] ^= 0xff;
       const tamperedEncrypted: EncryptedMessage = {
         ...encrypted,
         iv: tamperedIV.toString('hex')
       };
 
-      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature))
-        .toThrow('Decryption failed: message tampered or wrong key');
+      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature)).toThrow(
+        'Decryption failed: message tampered or wrong key'
+      );
     });
 
     it('should detect tampered authTag', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
-      
+
       // Tamper with the auth tag
       const tamperedAuthTag = Buffer.from(encrypted.authTag, 'hex');
-      tamperedAuthTag[0] ^= 0xFF;
+      tamperedAuthTag[0] ^= 0xff;
       const tamperedEncrypted: EncryptedMessage = {
         ...encrypted,
         authTag: tamperedAuthTag.toString('hex')
       };
 
-      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature))
-        .toThrow('Decryption failed: message tampered or wrong key');
+      expect(() => TeaGatewayHelper.decrypt(tamperedEncrypted, testSignature)).toThrow(
+        'Decryption failed: message tampered or wrong key'
+      );
     });
 
     it('should handle malformed base64 message gracefully', () => {
@@ -213,8 +214,9 @@ describe('TeaGatewayHelper Crypto Security', () => {
         message: 'not-valid-base64!!!'
       };
 
-      expect(() => TeaGatewayHelper.decrypt(malformedEncrypted, testSignature))
-        .toThrow('Decryption failed: message tampered or wrong key');
+      expect(() => TeaGatewayHelper.decrypt(malformedEncrypted, testSignature)).toThrow(
+        'Decryption failed: message tampered or wrong key'
+      );
     });
 
     it('should handle malformed hex IV gracefully', () => {
@@ -224,8 +226,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
         iv: 'not-valid-hex-ZZZZ'
       };
 
-      expect(() => TeaGatewayHelper.decrypt(malformedEncrypted, testSignature))
-        .toThrow();
+      expect(() => TeaGatewayHelper.decrypt(malformedEncrypted, testSignature)).toThrow();
     });
   });
 
@@ -245,7 +246,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
       // This test verifies HKDF is used by checking that we can't decrypt
       // using the raw signature as the key
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
-      
+
       // Attempt to decrypt using signature directly (old vulnerable method)
       const iv = Buffer.from(encrypted.iv, 'hex');
       const message = Buffer.from(encrypted.message, 'base64');
@@ -324,7 +325,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
   describe('Security Properties', () => {
     it('should use authenticated encryption (GCM mode)', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
-      
+
       // Verify auth tag exists and is correct length (16 bytes for GCM)
       const authTag = Buffer.from(encrypted.authTag, 'hex');
       expect(authTag.length).toBe(16);
@@ -333,14 +334,14 @@ describe('TeaGatewayHelper Crypto Security', () => {
     it('should use proper IV size (16 bytes for AES)', () => {
       const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
       const iv = Buffer.from(encrypted.iv, 'hex');
-      
+
       expect(iv.length).toBe(16);
     });
 
     it('should generate cryptographically random IVs', () => {
       // Generate multiple IVs and check they're different
       const ivs = new Set<string>();
-      
+
       for (let i = 0; i < 100; i++) {
         const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
         ivs.add(encrypted.iv);
@@ -352,7 +353,7 @@ describe('TeaGatewayHelper Crypto Security', () => {
 
     it('should resist replay attacks (different ciphertexts each time)', () => {
       const ciphertexts = new Set<string>();
-      
+
       for (let i = 0; i < 10; i++) {
         const encrypted = TeaGatewayHelper.encrypt(testData, testSignature);
         ciphertexts.add(encrypted.message);

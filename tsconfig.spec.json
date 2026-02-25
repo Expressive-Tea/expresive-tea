@@ -35,7 +35,5 @@
       "@test-helpers/*": ["__test__/integrations/helpers/*"]
     }
   },
-  "include": [
-    "__test__/**/*"
-  ]
+  "include": ["__test__/**/*"]
 }

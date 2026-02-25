@@ -1,4 +1,4 @@
-import { Container, Newable, ServiceIdentifier  } from 'inversify';
+import { Container, Newable, ServiceIdentifier } from 'inversify';
 import parentContainer from '../inversify.config';
 import getDecorators from 'inversify-inject-decorators';
 import { LazyInversifyDecorator, LazyInversifyNamedDecorator, LazyInversifyTaggedDecorator } from '../types/inversify';
@@ -10,10 +10,9 @@ interface InversifyDecorators {
   lazyMultiInject: LazyInversifyDecorator;
 }
 
-
 const rootContainer: Container = new Container({
   autobind: true,
-  parent: parentContainer,
+  parent: parentContainer
 });
 
 const lazyDecorators: InversifyDecorators = getDecorators(rootContainer);
@@ -130,7 +129,6 @@ class DependencyInjection {
   static destroyScope(scopeName: string): boolean {
     const scopedContainer = DependencyInjection.scopedContainers.get(scopeName);
     if (scopedContainer) {
-       
       scopedContainer.unbindAll();
       DependencyInjection.scopedContainers.delete(scopeName);
       return true;

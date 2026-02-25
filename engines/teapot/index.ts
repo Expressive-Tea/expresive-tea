@@ -1,26 +1,27 @@
-import * as chalk from 'chalk';
- 
+import chalk from 'chalk';
+
 import { Namespace, Socket } from 'socket.io';
- 
+
 import { injectable, injectFromBase } from 'inversify';
- 
+
 import { ExpressiveTeaPotSettings } from '@expressive-tea/commons';
- 
+
 import { Metadata } from '@expressive-tea/commons';
- 
+
 import { ASSIGN_TEAPOT_KEY } from '@expressive-tea/commons';
- 
+
 import ProxyRoute from '@classes/ProxyRoute';
- 
+
 import ExpressiveTeaEngine from '@classes/Engine';
- 
+
 import TeaGatewayHelper, { EncryptedMessage, TeaGatewayMessage } from '@helpers/teapot-helper';
- 
+
 import { SOCKET_IO_INSTANCE_KEY } from '@engines/constants/constants';
- 
+
 import Boot from '@classes/Boot';
- 
+
 import { getClass } from '@expressive-tea/commons';
+import logger from '@helpers/logger';
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 
 interface ClientMetadata {
@@ -31,7 +32,6 @@ interface ClientMetadata {
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
 export default class TeapotEngine extends ExpressiveTeaEngine {
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readonly clients: Map<string | symbol, any> = new Map<string | symbol, ClientMetadata>();
   private readonly registeredRoute: Map<string, ProxyRoute> = new Map<string, ProxyRoute>();
@@ -45,8 +45,8 @@ export default class TeapotEngine extends ExpressiveTeaEngine {
   private isStopped: boolean = false;
 
   private static header(teapotSettings: ExpressiveTeaPotSettings) {
-    console.log(chalk.white.bold('Teapot Engine is initializing...'));
-    console.log(chalk`
+    logger.info(chalk.white.bold('Teapot Engine is initializing...'));
+    logger.info(chalk`
              {white.bold ;,'}
      {green _o_}    {white.bold ;:;'}
  {blue.bold ,-.}{green '---\`}{blue.bold .__} {white.bold ; }
@@ -60,23 +60,56 @@ export default class TeapotEngine extends ExpressiveTeaEngine {
 {yellow.bold NOTICE:}
 All Communication are encrypted to ensure intruder can not connected, however, please does not share any sensitive data like keys or passwords to avoid security issues.
   `);
-
-
   }
 
   private registerTeacup(teacup: Socket) {
-    console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {grey.bold Connected}`);
+    logger.info(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {grey.bold Connected}`);
 
-    teacup.emit('handshake', Buffer.from(this.publicKey as string), this.serverSignature, Boolean(this.serverSecure), this.clientVerification.bind(this, teacup));
+    teacup.emit(
+      'handshake',
+      Buffer.from(this.publicKey as string),
+      this.serverSignature,
+      Boolean(this.serverSecure),
+      this.clientVerification.bind(this, teacup)
+    );
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     teacup.on('disconnect', this.disconnected.bind(this, teacup));
   }
 
+  /**
+   * Validate that a key string is in PEM format.
+   * PEM keys must begin with '-----BEGIN' and end with '-----'.
+   *
+   * @param {string} key - The key string to validate
+   * @returns {boolean} True if the key is in valid PEM format
+   * @private
+   */
+  private static isValidPemKey(key: string): boolean {
+    if (!key || typeof key !== 'string') {
+      return false;
+    }
+    const trimmed = key.trim();
+    return trimmed.startsWith('-----BEGIN ') && trimmed.endsWith('-----');
+  }
+
   private clientVerification(teacup: Socket, userPublicKey: Buffer, userSignature: Buffer) {
-    console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {yellow.bold Client Verification Started}`);
+    logger.info(
+      chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {yellow.bold Client Verification Started}`
+    );
     try {
-      if (!TeaGatewayHelper.verify(this.teapotSettings.clientKey, userPublicKey.toString('ascii'), userSignature)) {
-        console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed to verify and will be disconnected...`);
+      // Validate PEM format before attempting verification to provide clear error messages
+      const publicKeyStr = userPublicKey.toString('ascii');
+      if (!TeapotEngine.isValidPemKey(publicKeyStr)) {
+        logger.info(
+          chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Invalid PEM key format received`
+        );
+        return teacup.disconnect();
+      }
+
+      if (!TeaGatewayHelper.verify(this.teapotSettings.clientKey, publicKeyStr, userSignature)) {
+        logger.info(
+          chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed to verify and will be disconnected...`
+        );
         return teacup.disconnect();
       }
 
@@ -87,11 +120,14 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
       teacup.emit('accepted', this.registered.bind(this, teacup));
 
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {green.bold Client Verified}`);
-
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: {green.bold Client Verified}`
+      );
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed wiht next message: ${error.message}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP} [{magenta.bold ${teacup.id}}]: Failed wiht next message: ${error.message}`
+      );
       teacup.disconnect();
     }
   }
@@ -101,29 +137,37 @@ All Communication are encrypted to ensure intruder can not connected, however, p
       const message: TeaGatewayMessage = TeaGatewayHelper.decrypt(encryptedMessage, this.serverSignature);
 
       const isRegistered = this.registeredRoute.has(message.mountTo as string);
-      const proxyRoute: ProxyRoute | undefined = isRegistered ? this.registeredRoute.get(message.mountTo as string) : new ProxyRoute(message.mountTo as string);
-      
+      const proxyRoute: ProxyRoute | undefined = isRegistered
+        ? this.registeredRoute.get(message.mountTo as string)
+        : new ProxyRoute(message.mountTo as string);
+
       if (!proxyRoute) {
         throw new Error('Failed to create or retrieve proxy route');
       }
-      
+
       proxyRoute.registerServer(message.address as string, teacup.id);
 
       if (!isRegistered) {
         this.registeredRoute.set(message.mountTo as string, proxyRoute);
-         
-        this.context.getApplication().use(message.mountTo as string, TeaGatewayHelper.proxyResponse.bind(this, proxyRoute));
+
+        this.context
+          .getApplication()
+          .use(message.mountTo as string, TeaGatewayHelper.proxyResponse.bind(this, proxyRoute));
       }
 
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}] {blue.bold <${message.address}>} <--> {white.bold ${message.mountTo}}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}] {blue.bold <${message.address}>} <--> {white.bold ${message.mountTo}}`
+      );
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`
+      );
     }
   }
 
   private removeFromRoutes(routes: string[] = [], id: string) {
-    routes.forEach(route => {
+    routes.forEach((route) => {
       const proxyRoute = this.registeredRoute.get(route);
       if (proxyRoute) {
         proxyRoute.unregisterServer(id);
@@ -146,10 +190,14 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     try {
       const routes: string[] = this.findClientInRoutes(teacup.id);
       this.removeFromRoutes(routes, teacup.id);
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: Got disconnected by ${reason}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${teacup.id}}]: Got disconnected by ${reason}`
+      );
     } catch (e) {
       const error = e as Error;
-      console.log(chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {red.bold TEACUP}  {magenta.bold ${teacup.id}}: Failed wiht next message: ${error.message}`
+      );
     }
   }
 
@@ -157,11 +205,31 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     // Metadata is stored on the class by decorators, not on instances
     this.teapotSettings = Metadata.get(ASSIGN_TEAPOT_KEY, getClass(this.context));
 
+    // Validate required keys before proceeding with key generation
+    if (
+      !this.teapotSettings.serverKey ||
+      typeof this.teapotSettings.serverKey !== 'string' ||
+      this.teapotSettings.serverKey.trim().length === 0
+    ) {
+      throw new Error('[TEAPOT] serverKey is required and must be a non-empty string');
+    }
+    if (
+      !this.teapotSettings.clientKey ||
+      typeof this.teapotSettings.clientKey !== 'string' ||
+      this.teapotSettings.clientKey.trim().length === 0
+    ) {
+      throw new Error('[TEAPOT] clientKey is required and must be a non-empty string');
+    }
+
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teapotSettings.serverKey);
     this.publicKey = publicKey;
     this.privateKey = privateKey;
 
-    this.serverSignature = TeaGatewayHelper.sign(this.teapotSettings.clientKey, privateKey as string, this.teapotSettings.serverKey);
+    this.serverSignature = TeaGatewayHelper.sign(
+      this.teapotSettings.clientKey,
+      privateKey as string,
+      this.teapotSettings.serverKey
+    );
   }
 
   async start(): Promise<void> {
@@ -189,7 +257,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
 
     this.isStopped = true;
 
-    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Initiating graceful shutdown...');
+    logger.info(chalk.cyan.bold('[TEAPOT]') + ' - Initiating graceful shutdown...');
 
     // Disconnect all connected clients gracefully
     const connectedSockets = await this.socketServer.fetchSockets();
@@ -197,7 +265,9 @@ All Communication are encrypted to ensure intruder can not connected, however, p
       const routes = this.findClientInRoutes(socket.id);
       this.removeFromRoutes(routes, socket.id);
       socket.disconnect(true);
-      console.log(chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${socket.id}}]: {yellow.bold Disconnected for shutdown}`);
+      logger.info(
+        chalk`{cyan.bold [TEAPOT]} - {blue TEACUP} [{magenta.bold ${socket.id}}]: {yellow.bold Disconnected for shutdown}`
+      );
     }
 
     // Remove all listeners from the namespace
@@ -207,7 +277,7 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.clients.clear();
     this.registeredRoute.clear();
 
-    console.log(chalk.cyan.bold('[TEAPOT]') + ' - Graceful shutdown complete.');
+    logger.info(chalk.cyan.bold('[TEAPOT]') + ' - Graceful shutdown complete.');
   }
 
   static canRegister(ctx?: Boot): boolean {

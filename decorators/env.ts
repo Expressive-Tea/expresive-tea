@@ -1,6 +1,7 @@
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 import * as dotenv from 'dotenv';
+import logger from '@helpers/logger';
 
 /**
  * Environment variable loading options with optional transformation
@@ -36,18 +37,18 @@ export interface EnvOptions<T = Record<string, string>> {
    * Optional transformation function for type-safe environment variables.
    * Receives parsed env vars and returns transformed result.
    * Use with validation libraries like Zod for runtime type safety.
-   * 
+   *
    * @param env - Parsed environment variables
    * @returns Transformed and validated environment variables
    * @since 2.0.1
-   * 
+   *
    * @example
    * import { z } from 'zod';
    * const EnvSchema = z.object({
    *   PORT: z.string().transform(Number),
    *   DATABASE_URL: z.string().url()
    * });
-   * 
+   *
    * @Env({
    *   transform: (env) => EnvSchema.parse(env),
    *   onTransformError: 'throw'
@@ -60,7 +61,7 @@ export interface EnvOptions<T = Record<string, string>> {
    * - 'throw': Re-throw error immediately (fail-fast, recommended for production)
    * - 'warn': Log warning and continue with unvalidated env
    * - 'ignore': Silent failure, continue without transform
-   * 
+   *
    * @default 'throw'
    * @since 2.0.1
    */
@@ -72,12 +73,12 @@ export interface EnvOptions<T = Record<string, string>> {
  * Set by @Env decorator when transform option is provided.
  * @private
  */
-let transformedEnv: any = null;
+let transformedEnv: unknown = null;
 
 /**
  * Store transformed environment variables in global storage.
  * Used internally by @Env decorator.
- * 
+ *
  * @template T - Type of transformed environment variables
  * @param env - Transformed environment variables
  * @private
@@ -90,11 +91,11 @@ function storeTransformedEnv<T>(env: T): void {
 /**
  * Retrieve transformed environment variables from global storage.
  * Returns null if no transform was applied.
- * 
+ *
  * @template T - Type of transformed environment variables
  * @returns Transformed environment variables or null
  * @since 2.0.1
- * 
+ *
  * @example
  * const env = getTransformedEnv<MyEnvType>();
  * if (env) {
@@ -108,7 +109,7 @@ export function getTransformedEnv<T>(): T | null {
 /**
  * Load environment variables from a .env file using dotenv.
  * Supports transformation and validation via optional transform function.
- * 
+ *
  * @template T - Type of transformed environment variables
  * @param options - Environment loading options
  * @throws {Error} If required variables are missing, file is not found (when not silent), or transform fails (when onTransformError='throw')
@@ -156,20 +157,20 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
     try {
       const envVars = result.parsed || {};
       const transformed = transform(envVars);
-      
+
       // Store transformed result globally
       storeTransformedEnv(transformed);
-      
+
       return transformed;
-    } catch (error: any) {
-      const errorMsg = `Environment transformation failed: ${error.message}`;
-      
+    } catch (error: unknown) {
+      const errorMsg = `Environment transformation failed: ${error instanceof Error ? error.message : String(error)}`;
+
       if (onTransformError === 'throw') {
         throw new Error(errorMsg);
       } else if (onTransformError === 'warn') {
-        console.warn(`[Expressive Tea] ${errorMsg}`);
-        if (error.stack) {
-          console.warn(error.stack);
+        logger.warn(`[Expressive Tea] ${errorMsg}`);
+        if (error instanceof Error && error.stack) {
+          logger.warn(error.stack);
         }
       }
       // 'ignore' - do nothing, return undefined
@@ -181,27 +182,27 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
 
 /**
  * Class decorator to load environment variables from .env files before application initialization.
- * 
+ *
  * This decorator can be stacked to load multiple .env files in order, allowing for
  * environment-specific overrides (e.g., .env → .env.local → .env.production).
- * 
+ *
  * Environment variables are loaded BEFORE the Settings singleton is initialized,
  * ensuring they're available during the entire application lifecycle.
- * 
+ *
  * **New in v2.0.1:** Optional type-safe transformation with validation libraries like Zod.
- * 
+ *
  * @decorator {ClassDecorator} Env - Load environment variables from .env file
  * @template T - Type of transformed environment variables
  * @param options - Environment loading options
  * @returns Class decorator function
  * @since 2.0.0
  * @summary Load environment variables from .env files with optional type-safe transformation
- * 
+ *
  * @example
  * // Basic usage - load from .env
  * @Env()
  * class MyApp extends Boot {}
- * 
+ *
  * @example
  * // Load from custom path with required variables
  * @Env({
@@ -209,25 +210,25 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
  *   required: ['DATABASE_URL', 'API_KEY']
  * })
  * class MyApp extends Boot {}
- * 
+ *
  * @example
  * // Stack multiple .env files (loaded in order)
  * @Env({ path: '.env' })
  * @Env({ path: '.env.local', override: true, silent: true })
  * class MyApp extends Boot {}
- * 
+ *
  * @example
  * // Type-safe transformation with Zod
  * import { z } from 'zod';
- * 
+ *
  * const EnvSchema = z.object({
  *   PORT: z.string().transform(Number),
  *   DATABASE_URL: z.string().url(),
  *   API_KEY: z.string().min(32)
  * });
- * 
+ *
  * type Env = z.infer<typeof EnvSchema>;
- * 
+ *
  * @Env<Env>({
  *   path: '.env',
  *   required: ['DATABASE_URL', 'API_KEY'],
@@ -242,7 +243,7 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
  *     console.log(env.PORT); // Type: number
  *   }
  * }
- * 
+ *
  * @example
  * // In your .env file:
  * // DATABASE_URL=postgres://localhost:5432/mydb
@@ -250,7 +251,7 @@ function loadEnvFile<T>(options: EnvOptions<T>): T | undefined {
  * // PORT=3000
  */
 export function Env<T = Record<string, string>>(options: EnvOptions<T> = {}): ClassDecorator {
-  return (target: any) => {
+  return (target) => {
     // Load env file immediately when decorator is applied
     loadEnvFile(options);
     return target;

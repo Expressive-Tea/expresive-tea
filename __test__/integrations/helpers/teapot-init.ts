@@ -1,4 +1,4 @@
-import * as supertest from 'supertest';
+import supertest from 'supertest';
 import Boot from '../../../classes/Boot';
 import { Modules, ServerSettings, Teacup, Teapot } from '../../../decorators/server';
 import TeapotModule from './modules/teapot/RootModule';
@@ -76,11 +76,7 @@ export default async function initTeapot() {
   const appTeapot = await teapot.start();
   const request = supertest(appTeapot.application);
   const appTeacup = await teacup1.start();
-  const extraTeacups = await Promise.all([
-    teacup2.start(),
-    teacup3.start(),
-    teacup4.start()
-  ]);
+  const extraTeacups = await Promise.all([teacup2.start(), teacup3.start(), teacup4.start()]);
 
   await delay(5000);
 
@@ -93,4 +89,3 @@ export default async function initTeapot() {
     teacupInstances: [teacup1, teacup2, teacup3, teacup4]
   };
 }
-

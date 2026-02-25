@@ -13,12 +13,7 @@
     "baseUrl": ".",
     "declaration": true,
     "skipLibCheck": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ]
+    "lib": ["es2017", "dom"]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

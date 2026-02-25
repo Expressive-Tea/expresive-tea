@@ -6,15 +6,14 @@ describe('Dependency Injection Service', () => {
   let containerIsBoundSpy;
   let containerBindToMock;
 
-  class SomeService {
-  }
+  class SomeService {}
 
   beforeEach(() => {
     containerBindSpy = jest.spyOn(Container.prototype, 'bind');
     containerIsBoundSpy = jest.spyOn(Container.prototype, 'isBound');
 
     containerBindToMock = jest.fn();
-    containerBindSpy.mockImplementation(() => ({to: containerBindToMock}));
+    containerBindSpy.mockImplementation(() => ({ to: containerBindToMock }));
     containerIsBoundSpy.mockImplementation(() => false);
   });
 
@@ -22,7 +21,7 @@ describe('Dependency Injection Service', () => {
     containerBindSpy.mockReset();
     // Clean up any scopes created during tests
     const scopes = DependencyInjection.getAllScopeNames();
-    scopes.forEach(scope => DependencyInjection.destroyScope(scope));
+    scopes.forEach((scope) => DependencyInjection.destroyScope(scope));
   });
 
   describe('Basic Provider Management', () => {
@@ -60,8 +59,9 @@ describe('Dependency Injection Service', () => {
       test('should throw error if scope already exists', () => {
         DependencyInjection.createScope('duplicate-scope');
 
-        expect(() => DependencyInjection.createScope('duplicate-scope'))
-          .toThrow('Scope "duplicate-scope" already exists');
+        expect(() => DependencyInjection.createScope('duplicate-scope')).toThrow(
+          'Scope "duplicate-scope" already exists'
+        );
       });
 
       test('should create multiple independent scopes', () => {
@@ -81,7 +81,9 @@ describe('Dependency Injection Service', () => {
 
         @injectable()
         class RootService {
-          getValue() { return 'root'; }
+          getValue() {
+            return 'root';
+          }
         }
 
         // Bind to root container
@@ -136,7 +138,9 @@ describe('Dependency Injection Service', () => {
 
         @injectable()
         class ScopedService {
-          getValue() { return 'scoped'; }
+          getValue() {
+            return 'scoped';
+          }
         }
 
         const scope = DependencyInjection.createScope('unbind-test');
@@ -200,12 +204,16 @@ describe('Dependency Injection Service', () => {
 
         @injectable()
         class ModuleAService {
-          getName() { return 'Module A'; }
+          getName() {
+            return 'Module A';
+          }
         }
 
         @injectable()
         class ModuleBService {
-          getName() { return 'Module B'; }
+          getName() {
+            return 'Module B';
+          }
         }
 
         const scopeA = DependencyInjection.createScope('module-a');
@@ -230,8 +238,12 @@ describe('Dependency Injection Service', () => {
         @injectable()
         class Counter {
           private count = 0;
-          increment() { this.count++; }
-          getCount() { return this.count; }
+          increment() {
+            this.count++;
+          }
+          getCount() {
+            return this.count;
+          }
         }
 
         const scope1 = DependencyInjection.createScope('counter-1');
@@ -252,5 +264,4 @@ describe('Dependency Injection Service', () => {
       });
     });
   });
-
 });

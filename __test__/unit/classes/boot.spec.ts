@@ -9,26 +9,23 @@ import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 const softPluginMock = jest.fn();
 const hardPluginMock = jest.fn();
 
-
 @Plug(BOOT_STAGES.APPLICATION, 'Soft Plugin', softPluginMock)
 @Plug(BOOT_STAGES.BOOT_DEPENDENCIES, 'Hard Plugin', hardPluginMock, true)
 @Modules([Module])
-class Bootstrap extends Boot {
-}
+class Bootstrap extends Boot {}
 
-class DefaultBootstrap extends Boot {
-}
+class DefaultBootstrap extends Boot {}
 
 describe('Boot Class', () => {
   let portCounter = 6000;
   let appInstances: ExpressiveTeaApplication[] = [];
-  
+
   beforeEach(() => {
+    jest.clearAllMocks();
     appInstances = [];
     Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
-    jest.clearAllMocks();
   });
 
   afterEach(async () => {
@@ -48,6 +45,8 @@ describe('Boot Class', () => {
     appInstances = [];
     container.unbindAll();
     Settings.reset();
+    // Wait a moment for OS to fully release the ports
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   test('should start server as default', async () => {
@@ -88,7 +87,7 @@ describe('Boot Class', () => {
     const boot = new Bootstrap();
     const app = await boot.start();
     appInstances.push(app);
-    
+
     expect(app).toBeDefined();
     expect(app.application).toBeDefined();
     expect(app.server).toBeDefined();
@@ -104,5 +103,4 @@ describe('Boot Class', () => {
     const boot = new Bootstrap();
     void expect(boot.start()).rejects.toEqual(new Error('Failed [Hard Plugin]: test'));
   });
-
 });

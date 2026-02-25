@@ -1,23 +1,27 @@
 import WebsocketService from '../../../services/WebsocketService';
-import * as WebSocket from 'ws';
-import * as http from 'http';
-import * as https from 'https';
+import type * as http from 'http';
+import type * as https from 'https';
 
-jest.mock('ws', () => ({
-  Server: jest.fn()
+vi.mock('ws', () => ({
+  default: { Server: vi.fn() },
+  Server: vi.fn()
 }));
+
+// Import after mock is hoisted
+import * as WebSocket from 'ws';
 
 describe('Websocket Service', () => {
   let serverMock: http.Server;
   let serverSecureMock: https.Server;
-  let ws: WebSocket.Server;
-  let wss: WebSocket.Server;
+  let ws: any;
+  let wss: any;
 
   beforeEach(() => {
-    serverMock = http.createServer();
-    serverSecureMock = https.createServer();
-    ws = new WebSocket.Server();
-    wss = new WebSocket.Server();
+    // Use minimal typed mocks to avoid real server creation
+    serverMock = { close: vi.fn() } as http.Server;
+    serverSecureMock = { close: vi.fn() } as https.Server;
+    ws = new (WebSocket.Server as any)();
+    wss = new (WebSocket.Server as any)();
   });
 
   afterEach(() => {

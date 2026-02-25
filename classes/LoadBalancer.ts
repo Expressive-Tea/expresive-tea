@@ -17,7 +17,6 @@ export default class LoadBalancer {
 
     // Accounts for overflow if enough requests go through this balancer.
     if (this.bins[result] === Number.MAX_SAFE_INTEGER) {
-
       // Resets all bins as it assumes they have all received an equal
       // number of requests. Starts again from a blank state.
       for (let i = 0; i < this.bins.length; i++) {

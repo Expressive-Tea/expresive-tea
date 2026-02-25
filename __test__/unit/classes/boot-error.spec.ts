@@ -7,8 +7,6 @@ import { Modules, Pour } from '../../../decorators/server';
 import Module from '../../test-classes/module';
 import container from '../../../inversify.config';
 
-
-
 class SoftPlugin extends Plugin {
   protected name: string = 'Plugin Test';
   protected priority: number = 100;
@@ -33,63 +31,73 @@ class HardPlugin extends Plugin {
 
 describe('Boot Soft Errors Class', () => {
   let portCounter = 7000;
-  
+  let appInstance: any = null;
+
   @Pour(SoftPlugin)
   @Modules([Module])
   class BootstrapSoftError extends Boot {}
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    appInstance = null;
     Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
-    jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    if (appInstance?.server) {
+      await new Promise<void>((resolve) => {
+        appInstance.server.close(() => resolve());
+      });
+    }
     container.unbindAll();
+    Settings.reset();
+    // Wait a moment for OS to fully release the port
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   test('should start server as default', async () => {
     const boot = new BootstrapSoftError();
-    let app: any;
-    try {
-      app = await boot.start();
+    appInstance = await boot.start();
 
-      // Shallow assertions to avoid deep-inspection of express app internals
-      expect(app).toBeDefined();
-      expect(app).toHaveProperty('application');
-      expect(app).toHaveProperty('server');
-      // secureServer may be null/undefined when no TLS configured
-      expect(app.secureServer == null).toBeTruthy();
-    } finally {
-      // Ensure the server is closed even if startup or assertions throw
-      app?.server?.close();
-    }
+    // Shallow assertions to avoid deep-inspection of express app internals
+    expect(appInstance).toBeDefined();
+    expect(appInstance).toHaveProperty('application');
+    expect(appInstance).toHaveProperty('server');
+    // secureServer may be null/undefined when no TLS configured
+    expect(appInstance.secureServer == null).toBeTruthy();
   });
-
 });
 
 describe('Boot Hard Errors Class', () => {
   let portCounter = 7100;
-  
+  let appInstance: any = null;
+
   @Pour(HardPlugin)
   @Modules([Module])
   class BootstrapHardError extends Boot {}
 
   beforeEach(() => {
+    jest.clearAllMocks();
+    appInstance = null;
     Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
-    jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    if (appInstance?.server) {
+      await new Promise<void>((resolve) => {
+        appInstance.server.close(() => resolve());
+      });
+    }
     container.unbindAll();
+    Settings.reset();
   });
 
   test('should fail server as plugin is required', async () => {
     const boot = new BootstrapHardError();
     void expect(boot.start()).rejects.toEqual(new Error('Failed [HardPlugin:test]: test'));
   });
-
 });
