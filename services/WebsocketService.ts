@@ -5,8 +5,8 @@ import * as https from 'https';
 export default class WebsocketService {
   static instance: WebsocketService | undefined;
 
-  private  ws!: WebSocket.Server;
-  private  wss!: WebSocket.Server;
+  private ws!: WebSocket.Server;
+  private wss!: WebSocket.Server;
   httpServer!: http.Server;
   httpsServer!: https.Server;
 
@@ -21,7 +21,13 @@ export default class WebsocketService {
   }
 
   getWebsocket(httpServer: http.Server | https.Server): WebSocket.Server {
-    return (httpServer instanceof https.Server) ? this.wss : this.ws;
+    const server = httpServer instanceof https.Server ? this.wss : this.ws;
+    if (!server) {
+      throw new Error(
+        'WebSocket server not initialized. Ensure WebsocketEngine is properly initialized before calling getWebsocket()'
+      );
+    }
+    return server;
   }
 
   setHttpServer(httpServer: http.Server | https.Server): void {
@@ -48,7 +54,7 @@ export default class WebsocketService {
     return WebsocketService.instance;
   }
 
-  static init(ws?: WebSocket.Server, wss?: WebSocket.Server):void {
+  static init(ws?: WebSocket.Server, wss?: WebSocket.Server): void {
     if (!WebsocketService.instance) {
       WebsocketService.instance = new WebsocketService(ws, wss);
     }

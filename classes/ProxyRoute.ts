@@ -14,8 +14,9 @@ export default class ProxyRoute {
   private readonly clients: string[] = [];
   private lastServerSelected: number = 0;
 
-   
-  constructor(public readonly registeredOn: string) {}
+  constructor(public readonly registeredOn: string) {
+    this.balancer = new LoadBalancer(0);
+  }
 
   hasClients(): boolean {
     return size(this.clients) > 0;
@@ -40,12 +41,15 @@ export default class ProxyRoute {
   }
 
   registerRoute(): RequestHandler {
-    return proxy(() =>{
-      this.lastServerSelected = this.balancer.pick();
-      const server = this.servers[this.lastServerSelected];
-      return server.address;
-    }, {
-      memoizeHost: false
-    }) as unknown as RequestHandler;
+    return proxy(
+      () => {
+        this.lastServerSelected = this.balancer.pick();
+        const server = this.servers[this.lastServerSelected];
+        return server.address;
+      },
+      {
+        memoizeHost: false
+      }
+    ) as unknown as RequestHandler;
   }
 }
