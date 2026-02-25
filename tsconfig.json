@@ -13,10 +13,7 @@
     "baseUrl": ".",
     "declaration": true,
     "skipLibCheck": true,
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "paths": {
       "@classes": ["classes"],
       "@classes/*": ["classes/*"],
@@ -42,9 +39,5 @@
       "@config/*": ["config/*"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "__test__",
-    "benchmark"
-  ]
+  "exclude": ["node_modules", "__test__", "benchmark", "examples"]
 }
