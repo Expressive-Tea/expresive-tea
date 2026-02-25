@@ -1,4 +1,4 @@
-import * as proxy from 'express-http-proxy';
+import proxy from 'express-http-proxy';
 import LoadBalancer from './LoadBalancer';
 import { indexOf, includes, size } from '../libs/utilities';
 import { type RequestHandler } from 'express';

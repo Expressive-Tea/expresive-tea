@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { URL } from 'url';
 import { io, Socket } from 'socket.io-client';
 import { injectable, injectFromBase } from 'inversify';

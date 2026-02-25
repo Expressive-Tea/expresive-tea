@@ -6,12 +6,11 @@ import Settings from '../../classes/Settings';
 describe('Webserver integration', () => {
   let app: ExpressiveTeaApplication;
   let request;
-  let portCounter = 5000;
+  let portCounter = 6000;
 
   beforeEach(async () => {
     Settings.reset();
-    Settings.getInstance().set('port', portCounter++);
-    const testInit = await initServer();
+    const testInit = await initServer(portCounter++);
     app = testInit.app;
     request = testInit.request;
   });

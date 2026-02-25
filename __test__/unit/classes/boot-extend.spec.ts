@@ -4,7 +4,29 @@ import { ExpressDirective, Static } from '../../../decorators/server';
 import container from '../../../inversify.config';
 import Settings from '../../../classes/Settings';
 
-jest.mock('express', () => require('jest-express'));
+// Provide a proper Vitest mock for express that works without jest-express.
+// The mock factory must NOT use require('jest-express') because jest-express
+// uses jest.fn() internally and jest is not available when mock factories run
+// (before vitest.setup.ts sets globalThis.jest = vi).
+vi.mock('express', () => {
+  const staticFn = vi.fn().mockReturnValue(vi.fn());
+  const mockApp = () => ({
+    use: vi.fn(),
+    get: vi.fn(),
+    set: vi.fn(),
+    listen: vi.fn(),
+    disable: vi.fn(),
+    enable: vi.fn(),
+    engine: vi.fn(),
+  });
+  const express = Object.assign(vi.fn(mockApp), {
+    static: staticFn,
+    Router: vi.fn(() => ({ get: vi.fn(), post: vi.fn(), use: vi.fn() })),
+    json: vi.fn(),
+    urlencoded: vi.fn(),
+  });
+  return { default: express, static: staticFn, Router: express.Router };
+});
 
 describe('Boot Class Extends', () => {
   let portCounter = 4000;

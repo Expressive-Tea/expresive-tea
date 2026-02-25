@@ -1,5 +1,5 @@
 import WebsocketService from '@services/WebsocketService';
-import * as WebSocket from 'ws';
+import WebSocket from 'ws';
 import { injectable, injectFromBase } from 'inversify';
 import ExpressiveTeaEngine from '@classes/Engine';
 import Boot from '@classes/Boot';

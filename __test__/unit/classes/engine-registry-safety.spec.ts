@@ -11,6 +11,7 @@ import ExpressiveTeaEngine from '../../../classes/Engine';
 import Boot from '../../../classes/Boot';
 import Settings from '../../../classes/Settings';
 import { injectable } from 'inversify';
+import logger from '../../../helpers/logger';
 
 describe('EngineRegistry Type Safety - HIGH-007', () => {
   beforeEach(() => {
@@ -44,7 +45,7 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
     });
 
     test('should log warning when canRegister() throws', () => {
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const loggerWarnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => logger as any);
 
       @injectable()
       class ThrowingEngine extends ExpressiveTeaEngine {
@@ -63,9 +64,9 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       EngineRegistry.getRegisteredEngines();
 
-      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('[EngineRegistry]'), expect.any(Error));
+      expect(loggerWarnSpy).toHaveBeenCalledWith(expect.stringContaining('[EngineRegistry]'));
 
-      consoleWarnSpy.mockRestore();
+      loggerWarnSpy.mockRestore();
     });
 
     test('should handle TypeError in canRegister()', () => {
@@ -378,7 +379,7 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
     });
 
     test('should handle all engines throwing during canRegister()', () => {
-      const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
+      const loggerWarnSpy = vi.spyOn(logger, 'warn').mockImplementation(() => logger as any);
 
       @injectable()
       class ThrowingEngine1 extends ExpressiveTeaEngine {
@@ -412,9 +413,9 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       const engines = EngineRegistry.getRegisteredEngines();
       expect(engines).toHaveLength(0);
-      expect(consoleWarnSpy).toHaveBeenCalledTimes(2);
+      expect(loggerWarnSpy).toHaveBeenCalledTimes(2);
 
-      consoleWarnSpy.mockRestore();
+      loggerWarnSpy.mockRestore();
     });
 
     test('should handle engine throwing after successful canRegister() calls', () => {
@@ -455,11 +456,13 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
   });
 
   describe('Edge Cases', () => {
-    test('should handle canRegister() returning non-boolean after error', () => {
+    test('should handle canRegister() returning non-boolean truthy value', () => {
       @injectable()
       class WeirdEngine extends ExpressiveTeaEngine {
         static canRegister(): boolean {
-          // This will throw during boolean coercion
+          // Returns an object — JS ToBoolean on an object is always true
+          // (Array.filter does not invoke valueOf/toString), so the engine
+          // IS registered even though canRegister() doesn't return a real boolean.
           return {
             valueOf: () => {
               throw new Error('valueOf failed');
@@ -477,7 +480,8 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
       });
 
       const engines = EngineRegistry.getRegisteredEngines();
-      expect(engines).toHaveLength(0);
+      // Object is truthy → engine is included (ToBoolean never calls valueOf on plain objects)
+      expect(engines).toHaveLength(1);
     });
 
     test('should handle async errors in canRegister()', () => {

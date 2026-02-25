@@ -8,8 +8,8 @@ import HTTPEngine from '../../../engines/http';
 import { BOOT_STAGES } from '@expressive-tea/commons';
 import * as bootHelper from '../../../helpers/boot-helper';
 
-// Mock the boot-helper module
-jest.mock('../../../helpers/boot-helper');
+// Mock the boot-helper module (vi.mock is hoisted before imports, jest.mock is not)
+vi.mock('../../../helpers/boot-helper');
 
 describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () => {
   let engine: HTTPEngine;

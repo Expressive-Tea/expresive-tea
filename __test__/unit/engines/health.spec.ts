@@ -1,5 +1,5 @@
-import * as express from 'express';
-import * as supertest from 'supertest';
+import express from 'express';
+import supertest from 'supertest';
 import HealthCheckEngine, { type HealthCheckResult } from '../../../engines/health';
 import { HealthCheck } from '../../../decorators/health';
 
@@ -14,7 +14,7 @@ import { HealthCheck } from '../../../decorators/health';
 })
 class DecoratedBootClass {
   private readonly app;
-  constructor(app: express.Express) {
+  constructor(app: ReturnType<typeof express>) {
     this.app = app;
   }
   getApplication() {

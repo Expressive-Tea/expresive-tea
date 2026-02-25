@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import container from '../inversify.config';
-import * as express from 'express';
+import express from 'express';
 import { type Express } from 'express';
 import { type ExpressiveTeaApplication } from '@expressive-tea/commons';
 import ExpressiveTeaEngine from '@classes/Engine';

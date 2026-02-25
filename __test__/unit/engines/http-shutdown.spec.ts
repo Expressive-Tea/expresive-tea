@@ -13,12 +13,14 @@ import container from '../../../inversify.config';
 import * as _http from 'node:http';
 import * as _https from 'node:https';
 
-@ServerSettings({ port: 8200 })
 class HTTPBoot extends Boot {}
 
 describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
+  let portCounter = 8200;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    Settings.getInstance(HTTPBoot).set('port', portCounter++);
   });
 
   afterEach(async () => {
@@ -53,6 +55,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
       server.close = jest.fn((callback?: (err?: Error) => void) => {
         setTimeout(() => {
           closeCallbackInvoked = true;
+          _originalClose();  // Actually close the server to release the port
           if (callback) callback();
         }, 10);
         return server;
@@ -180,6 +183,7 @@ describe('HTTPEngine Graceful Shutdown - HIGH-003', () => {
       // Mock close to reject with error
       const _originalClose = server.close.bind(server);
       server.close = jest.fn((callback?: (err?: Error) => void) => {
+        _originalClose();  // Actually close the server to release the port
         if (callback) callback(new Error('Close error'));
         return server;
       }) as any;
