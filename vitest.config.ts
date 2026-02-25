@@ -1,9 +1,8 @@
 import { defineConfig } from 'vitest/config';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import type { Plugin } from 'vite';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = process.cwd();
 
 /**
  * Vite plugin to fix the CJS interop issue for `import * as express from 'express'`.
@@ -32,15 +31,14 @@ function expressInteropPlugin(): Plugin {
         return null;
       }
       if (code.includes("import * as express from 'express'")) {
-        const transformed = code
-          .replace(
-            /import \* as express from 'express';/g,
-            "import __expressDefault from 'express'; const express = __expressDefault;"
-          );
+        const transformed = code.replace(
+          /import \* as express from 'express';/g,
+          "import __expressDefault from 'express'; const express = __expressDefault;"
+        );
         return { code: transformed, map: null };
       }
       return null;
-    },
+    }
   };
 }
 
@@ -54,14 +52,7 @@ export default defineConfig({
 
     // Test discovery
     include: ['**/__test__/**/*.spec.ts', '**/__tests__/**/*.spec.ts'],
-    exclude: [
-      'node_modules',
-      '.opencode',
-      'dist',
-      'build',
-      'examples',
-      '**/__test__/benchmarks/**',
-    ],
+    exclude: ['node_modules', '.opencode', 'dist', 'build', 'examples', '**/__test__/benchmarks/**'],
 
     // Timeout and retries
     testTimeout: 30000,
@@ -81,12 +72,12 @@ export default defineConfig({
         '**/*.spec.ts',
         '**/*.test.ts',
         '**/*.d.ts',
-        '**/*.js',
+        '**/*.js'
       ]
     },
 
     // Output and reporting
-    reporter: ['default', 'junit'],
+    reporters: ['default', 'junit'],
     outputFile: {
       junit: './reports/junit.xml'
     },
@@ -94,15 +85,13 @@ export default defineConfig({
     // CJS/ESM interop - needed for express and other CJS modules
     // interopDefault: true makes `import X from 'cjs-module'` give the CJS export
     deps: {
-      interopDefault: true,
+      interopDefault: true
     },
 
     // Isolation and performance
     isolate: true,
-    threads: true,
-    singleThread: false,
-    maxThreads: 4,
-    minThreads: 1,
+    pool: 'threads',
+    maxWorkers: 4,
 
     // File handling
     fileParallelism: false,
@@ -110,26 +99,26 @@ export default defineConfig({
     // Mock configuration
     mockReset: true,
     restoreMocks: true,
-    clearMocks: true,
+    clearMocks: true
   },
 
   resolve: {
     // Prefer .ts source files over compiled .js files
     extensions: ['.mts', '.ts', '.tsx', '.js', '.jsx', '.mjs', '.json'],
     alias: {
-      '@classes': path.resolve(__dirname, './classes'),
-      '@decorators': path.resolve(__dirname, './decorators'),
-      '@engines': path.resolve(__dirname, './engines'),
-      '@exceptions': path.resolve(__dirname, './exceptions'),
-      '@helpers': path.resolve(__dirname, './helpers'),
-      '@interfaces': path.resolve(__dirname, './interfaces'),
-      '@libs': path.resolve(__dirname, './libs'),
-      '@services': path.resolve(__dirname, './services'),
-      '@types': path.resolve(__dirname, './types'),
-      '@mixins': path.resolve(__dirname, './mixins'),
-      '@config': path.resolve(__dirname, './config'),
-      '@test-mocks': path.resolve(__dirname, './__test__/__mocks__'),
-      '@test-classes': path.resolve(__dirname, './__test__/test-classes'),
+      '@classes': path.resolve(ROOT_DIR, './classes'),
+      '@decorators': path.resolve(ROOT_DIR, './decorators'),
+      '@engines': path.resolve(ROOT_DIR, './engines'),
+      '@exceptions': path.resolve(ROOT_DIR, './exceptions'),
+      '@helpers': path.resolve(ROOT_DIR, './helpers'),
+      '@interfaces': path.resolve(ROOT_DIR, './interfaces'),
+      '@libs': path.resolve(ROOT_DIR, './libs'),
+      '@services': path.resolve(ROOT_DIR, './services'),
+      '@types': path.resolve(ROOT_DIR, './types'),
+      '@mixins': path.resolve(ROOT_DIR, './mixins'),
+      '@config': path.resolve(ROOT_DIR, './config'),
+      '@test-mocks': path.resolve(ROOT_DIR, './__test__/__mocks__'),
+      '@test-classes': path.resolve(ROOT_DIR, './__test__/test-classes')
     }
   }
 });
