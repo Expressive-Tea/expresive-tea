@@ -1,7 +1,5 @@
 module.exports = {
-  roots: [
-    '<rootDir>/'
-  ],
+  roots: ['<rootDir>/'],
   preset: 'ts-jest',
   testEnvironment: 'node',
   globals: {
@@ -21,29 +19,30 @@ module.exports = {
   moduleDirectories: ['node_modules', '<rootDir>'],
   extensionsToTreatAsEsm: [],
   testEnvironmentOptions: {
-    customExportConditions: ['node', 'node-addons'],
+    customExportConditions: ['node', 'node-addons']
   },
   verbose: false,
   displayName: 'EXP-TEA:CORE',
   testTimeout: 30000,
   collectCoverage: true,
   coverageDirectory: './coverage',
-  coveragePathIgnorePatterns: [
-    '__test__/integrations/helpers',
-    '__test__/test-classes'
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/examples/'],
+  coveragePathIgnorePatterns: ['__test__/integrations/helpers', '__test__/test-classes'],
   reporters: [
     'default',
-    ['jest-junit', {
-      suiteName: 'Expressive Tea Tests',
-      outputDirectory: './reports',
-      outputName: 'junit.xml',
-      uniqueOutputName: false,
-      classNameTemplate: '{classname}-{title}',
-      titleTemplate: '{classname}-{title}',
-      ancestorSeparator: ' › ',
-      usePathForSuiteName: 'true'
-    }]
+    [
+      'jest-junit',
+      {
+        suiteName: 'Expressive Tea Tests',
+        outputDirectory: './reports',
+        outputName: 'junit.xml',
+        uniqueOutputName: false,
+        classNameTemplate: '{classname}-{title}',
+        titleTemplate: '{classname}-{title}',
+        ancestorSeparator: ' › ',
+        usePathForSuiteName: 'true'
+      }
+    ]
   ],
   moduleNameMapper: {
     '^@classes$': '<rootDir>/classes',
