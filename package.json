@@ -7,7 +7,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "test": "yarn linter && jest --maxWorkers=4 --coverage --detectOpenHandles --forceExit --silent",
+    "test": "yarn linter && jest --maxWorkers=1 --coverage --detectOpenHandles --forceExit --silent",
     "test:clear": "jest --clearCache",
     "test:ci": "yarn linter:ci && yarn test:clear && jest --coverage  --ci --detectOpenHandles --forceExit --silent",
     "test:dev": "yarn linter && yarn test:clear && jest --detectOpenHandles --forceExit",
