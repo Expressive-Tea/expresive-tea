@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /**
  * Winston Logger Helper Tests
  *
@@ -8,6 +9,7 @@
  */
 
 describe('Winston Logger', () => {
+  // eslint-disable-next-line no-undef
   let originalEnv: NodeJS.ProcessEnv;
   let consoleTransportLog: jest.SpyInstance;
 
@@ -124,9 +126,8 @@ describe('Winston Logger', () => {
       const outputs: string[] = [];
 
       // Mock console transport log to capture output
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any) => {
         outputs.push(JSON.stringify(info));
-        if (callback) callback();
       });
 
       logger.info('Test message');
@@ -149,7 +150,7 @@ describe('Winston Logger', () => {
       const outputs: string[] = [];
 
       // Mock console transport write to capture output
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info[Symbol.for('message')] || '');
       });
 
@@ -169,7 +170,7 @@ describe('Winston Logger', () => {
       const outputs: string[] = [];
 
       // Mock console transport write to capture output
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info[Symbol.for('message')] || '');
       });
 
@@ -189,7 +190,7 @@ describe('Winston Logger', () => {
       const outputs: string[] = [];
 
       // Mock console transport write to capture output
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info[Symbol.for('message')] || '');
       });
 
@@ -320,7 +321,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -338,7 +339,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -356,7 +357,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -374,7 +375,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -392,7 +393,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -413,7 +414,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: string[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info[Symbol.for('message')] || '');
       });
 
@@ -433,7 +434,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: string[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info[Symbol.for('message')] || '');
       });
 
@@ -478,9 +479,8 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any) => {
         outputs.push({ level: info.level, message: info.message });
-        if (callback) callback();
       });
 
       logger.debug('First message');
@@ -514,7 +514,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -531,7 +531,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -548,7 +548,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -565,7 +565,7 @@ describe('Winston Logger', () => {
       const logger = require('../../../helpers/logger').default;
       const outputs: any[] = [];
 
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, _callback?: any) => {
         outputs.push(info);
       });
 
@@ -605,9 +605,8 @@ describe('Winston Logger', () => {
 
       // Verify format by capturing actual output
       const outputs: any[] = [];
-      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any, callback?: any) => {
+      consoleTransportLog = jest.spyOn(logger.transports[0], 'log').mockImplementation((info: any) => {
         outputs.push(info);
-        if (callback) callback();
       });
 
       // These should be filtered out by Winston before reaching transport
@@ -621,7 +620,7 @@ describe('Winston Logger', () => {
       // Winston filters at logger level, so only filtered messages reach transport
       // However, our mock captures all writes including filtered ones
       // We verify the logger level checking instead
-      const warnAndErrorOnly = outputs.filter(o => o.level === 'warn' || o.level === 'error');
+      const warnAndErrorOnly = outputs.filter((o) => o.level === 'warn' || o.level === 'error');
       expect(warnAndErrorOnly).toHaveLength(2);
       expect(warnAndErrorOnly[0].level).toBe('warn');
       expect(warnAndErrorOnly[1].level).toBe('error');
