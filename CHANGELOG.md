@@ -1,20 +1,37 @@
 <a name="unreleased"></a>
+
 ## [Unreleased]
+
+### 🐛 Bug Fixes
+
+- Fixed Vitest module factory interop for `express-http-proxy` by aligning proxy mixin import and test mock export shape.
+- Fixed proxy mixin unit test metadata mocking to prevent host descriptor binding errors during `__register` scenarios.
+
+### ✅ Tests
+
+- Added comprehensive unit coverage for `mixins/proxy.ts`, including class transformation, proxy handler wiring, DI binding behavior, and host metadata resolution.
+
+### 🔧 Tooling
+
+- Updated ESLint test-file overrides for Vitest globals and test-only rules to prevent false-positive lint failures in test suites.
 
 ---
 
 <a name="2.0.1"></a>
+
 ## [2.0.1] - 2026-02-24
 
 **Type:** Patch Release (Bug Fixes + Critical Enhancements)
 
 ### ⚠️ Breaking Changes
+
 None - Drop-in replacement for v2.0.0
 
 ### ⚠️ BREAKING CHANGES
 
 #### Package Rename
-* **📦 PACKAGE RENAMED: `@expressive-tea/core`**
+
+- **📦 PACKAGE RENAMED: `@expressive-tea/core`**
   - Starting with v2.0.0, install using:
     ```bash
     npm install @expressive-tea/core
@@ -24,14 +41,16 @@ None - Drop-in replacement for v2.0.0
   - See migration guide for details: [MIGRATION_GUIDE_v2.md](docs/MIGRATION_GUIDE_v2.md)
 
 #### Node.js Version Requirements
-* **Dropped Node.js 18 Support** - Minimum version is now Node.js 20.0.0
+
+- **Dropped Node.js 18 Support** - Minimum version is now Node.js 20.0.0
   - **Reason:** Node.js 18 reached End-of-Life in April 2025
   - **Reason:** ESLint 9.x requires regex features (unicodeSets flag) from Node.js 20+
   - **Impact:** Applications using Node.js 18 must upgrade to Node.js 20 LTS or Node.js 22
   - **Recommendation:** Use Node.js 20 LTS for best stability or Node.js 22 for latest features
 
 #### All Versions Before 2.0.0 Are Now Deprecated
-* **⚠️ ALL VERSIONS BEFORE 2.0.0 ARE NOW DEPRECATED**
+
+- **⚠️ ALL VERSIONS BEFORE 2.0.0 ARE NOW DEPRECATED**
   - As of January 27, 2026, all versions 1.x and earlier are officially **deprecated** and **no longer supported**.
   - **Reasons for deprecation:**
     - InversifyJS 6.x (used in v1.x) is now deprecated
@@ -48,19 +67,22 @@ None - Drop-in replacement for v2.0.0
     - Plan your migration as v1.x has critical security issues
 
 #### TypeScript Requirements
-* **Strict Mode Enabled** - Consuming projects may need type adjustments
-* Generic types now required for proper type inference
-* Null checks now enforced at compile time
+
+- **Strict Mode Enabled** - Consuming projects may need type adjustments
+- Generic types now required for proper type inference
+- Null checks now enforced at compile time
 
 #### Cryptography Changes
-* AES-256-GCM now uses HKDF for key derivation (incompatible with old encrypted data)
-* Encryption/decryption format changed (authentication tag handling)
-* PBKDF2 replaces MD5 for password hashing
+
+- AES-256-GCM now uses HKDF for key derivation (incompatible with old encrypted data)
+- Encryption/decryption format changed (authentication tag handling)
+- PBKDF2 replaces MD5 for password hashing
 
 #### Internal API Changes
-* Lodash removed from internal code (external plugins unaffected)
-* Engine initialization order now determined by EngineRegistry
-* DI service methods renamed for clarity (old methods deprecated)
+
+- Lodash removed from internal code (external plugins unaffected)
+- Engine initialization order now determined by EngineRegistry
+- DI service methods renamed for clarity (old methods deprecated)
 
 ---
 
@@ -73,7 +95,8 @@ This is a major release with significant architectural improvements, security en
 ### 🔒 SECURITY FIXES
 
 #### Critical Cryptography Improvements
-* **Fixed AES-256-GCM Implementation** - Corrected encryption/decryption with proper authentication tags and HKDF key derivation
+
+- **Fixed AES-256-GCM Implementation** - Corrected encryption/decryption with proper authentication tags and HKDF key derivation
   - Added HKDF (HMAC-based Key Derivation Function) for cryptographically secure key derivation
   - Fixed authentication tag handling in AES-256-GCM encryption/decryption
   - Replaced insecure MD5 password hashing with PBKDF2
@@ -81,12 +104,13 @@ This is a major release with significant architectural improvements, security en
   - Implemented comprehensive encryption test suite
 
 #### Security Best Practices
-* **Removed Credential Logging** - Eliminated sensitive data exposure in logs
+
+- **Removed Credential Logging** - Eliminated sensitive data exposure in logs
   - Removed plaintext credential logging from Settings class
   - Added security warnings for exposed credential properties
   - Improved error messages without exposing sensitive data
 
-* **Fixed HTTPS Server Initialization** - Corrected secure server startup
+- **Fixed HTTPS Server Initialization** - Corrected secure server startup
   - Fixed certificate and private key loading for HTTPS
   - Improved error handling for missing or invalid certificates
   - Added proper validation for secure server configuration
@@ -96,15 +120,17 @@ This is a major release with significant architectural improvements, security en
 ### 🏗️ ARCHITECTURE
 
 #### Phase 1: Dependency Injection Enhancement
-* **Enhanced DI Service** - Added comprehensive scoping methods
+
+- **Enhanced DI Service** - Added comprehensive scoping methods
   - `registerSingleton()` - Register singleton-scoped services
-  - `registerTransient()` - Register transient-scoped services  
+  - `registerTransient()` - Register transient-scoped services
   - `registerScoped()` - Register request-scoped services
   - Improved DI container integration with Boot class
   - Added 38 new comprehensive DI tests
 
-#### Phase 2: Engine System Refactoring  
-* **Created EngineRegistry** - Centralized engine management system
+#### Phase 2: Engine System Refactoring
+
+- **Created EngineRegistry** - Centralized engine management system
   - Automatic engine dependency resolution
   - Dynamic engine loading and initialization
   - Proper lifecycle management (init → start → stop)
@@ -112,20 +138,22 @@ This is a major release with significant architectural improvements, security en
   - Added 21 comprehensive engine registry tests
 
 #### Phase 3: Type System Improvements
-* **Generic Type Support for Mixins** - Enhanced type safety across framework
+
+- **Generic Type Support for Mixins** - Enhanced type safety across framework
   - `ModulizedClass<TBase>` - Type-safe module mixin
-  - `RouterizedClass<TBase>` - Type-safe router mixin  
+  - `RouterizedClass<TBase>` - Type-safe router mixin
   - `ProxifiedClass<TBase>` - Type-safe proxy mixin
   - Improved IDE autocomplete and IntelliSense
   - Better compile-time error detection
 
-* **Type-Safe Decorators** - All decorators now properly typed
+- **Type-Safe Decorators** - All decorators now properly typed
   - Route decorators with generic support
   - Module decorators with dependency injection
   - Server decorators with settings validation
 
 #### Phase 4: Lodash Removal & Native Utilities
-* **Created Native Utility Library** - Zero lodash dependencies for internal code
+
+- **Created Native Utility Library** - Zero lodash dependencies for internal code
   - Implemented 18 native utility functions in `libs/utilities.ts`
   - Functions: `get`, `set`, `has`, `pick`, `omit`, `chain`, `find`, `filter`, `map`, `size`, `isEqual`, `isEmpty`, `isNumber`, `isString`, `merge`, `cloneDeep`, `sortBy`, `uniq`
   - Added 89 comprehensive utility tests (100% coverage)
@@ -134,7 +162,8 @@ This is a major release with significant architectural improvements, security en
   - Reduced bundle size and improved performance
 
 #### Phase 5: TypeScript Strict Mode
-* **Enabled Strict Mode** - Highest level of TypeScript type safety
+
+- **Enabled Strict Mode** - Highest level of TypeScript type safety
   - Enabled `strict: true` in production code
   - Enabled `noImplicitAny: true` for explicit typing
   - Enabled `strictNullChecks: true` for null safety
@@ -142,7 +171,7 @@ This is a major release with significant architectural improvements, security en
   - Created separate `tsconfig.spec.json` for test files
   - Added `benchmark/` to tsconfig exclude list
 
-* **Fixed Type Issues** - Comprehensive type safety improvements
+- **Fixed Type Issues** - Comprehensive type safety improvements
   - Fixed class property initialization (7 files)
   - Fixed implicit `any` types (5 files)
   - Fixed null/undefined handling (5 files)
@@ -155,7 +184,8 @@ This is a major release with significant architectural improvements, security en
 ### ✨ FEATURES
 
 #### Health Check System
-* **Built-in Health Endpoints** - Production-ready health monitoring
+
+- **Built-in Health Endpoints** - Production-ready health monitoring
   - `/health` - Detailed health status with all checks
   - `/health/live` - Liveness probe (Kubernetes compatible)
   - `/health/ready` - Readiness probe with critical check validation
@@ -165,21 +195,23 @@ This is a major release with significant architectural improvements, security en
   - Compatible with Kubernetes, Docker, AWS ELB, and monitoring systems
 
 #### Configuration Files Enhancement
-* **YAML Support for `.expressive-tea` Files** - Added support for YAML configuration format
+
+- **YAML Support for `.expressive-tea` Files** - Added support for YAML configuration format
   - Support for `.expressive-tea.yaml` and `.expressive-tea.yml` extensions
   - File priority system: `.expressive-tea.yaml` > `.expressive-tea.yml` > `.expressive-tea` (JSON)
   - Cleaner syntax with comments, multiline strings, and better readability
   - Debug logging shows which configuration file was loaded
   - Enhanced error messages for invalid YAML/JSON with file path and line numbers
 
-* **Enhanced `fileSettings()` Function**
+- **Enhanced `fileSettings()` Function**
   - Now returns `{ config, source }` object with loaded file path for debugging
   - Better error messages for parse failures (includes file path and error details)
   - Support for three file formats with priority-based loading
   - Debug logging for configuration file loading process
 
 #### Environment Variable Support
-* **`.env` File Loading** - First-class environment variable management
+
+- **`.env` File Loading** - First-class environment variable management
   - `@Env` decorator for loading .env files
   - Support for multiple .env files with override control
   - Required variable validation
@@ -188,7 +220,7 @@ This is a major release with significant architectural improvements, security en
   - Silent mode for optional files
   - Loads before Settings initialization
 
-* **Type-Safe Environment Variables** - Added optional transformation and validation support
+- **Type-Safe Environment Variables** - Added optional transformation and validation support
   - Generic type parameter support: `@Env<T>(options)`
   - New `transform` option for validating and type-casting environment variables
   - Integration with validation libraries (Zod, Yup, etc.)
@@ -196,7 +228,7 @@ This is a major release with significant architectural improvements, security en
   - `Settings.getEnv<T>()` method for type-safe environment variable access
   - Fail-fast error handling on invalid environment configuration
 
-* **Replaced Custom Parser with `dotenv`**
+- **Replaced Custom Parser with `dotenv`**
   - Removed 213 lines of custom `.env` parsing logic
   - Using battle-tested `dotenv` package (v16.4.5) for robust env file parsing
   - Maintains all existing features: multiline values, comments, quoted strings, stacking
@@ -204,7 +236,8 @@ This is a major release with significant architectural improvements, security en
   - Improved error messages for missing or invalid `.env` files
 
 #### ESLint v9 Migration
-* **Modern Linting Configuration** - Upgraded to ESLint v9 flat config
+
+- **Modern Linting Configuration** - Upgraded to ESLint v9 flat config
   - Migrated from `.eslintrc.js` to `eslint.config.mjs`
   - Better TypeScript integration
   - Improved performance
@@ -213,40 +246,45 @@ This is a major release with significant architectural improvements, security en
   - Reduced from 1480 to 445 linting issues
 
 #### Dependency Injection Improvements
-* Added scoped service registration methods
-* Enhanced container lifecycle management
-* Improved provider resolution and binding
+
+- Added scoped service registration methods
+- Enhanced container lifecycle management
+- Improved provider resolution and binding
 
 #### Engine Registry System
-* Automatic dependency resolution for engines
-* Dynamic engine loading at runtime
-* Proper engine lifecycle hooks (init, start, stop)
-* Built-in engine ordering
+
+- Automatic dependency resolution for engines
+- Dynamic engine loading at runtime
+- Proper engine lifecycle hooks (init, start, stop)
+- Built-in engine ordering
 
 #### Type Safety Enhancements
-* Generic types for all mixins
-* Full TypeScript strict mode support
-* Enhanced decorator type definitions
-* Better error messages at compile time
+
+- Generic types for all mixins
+- Full TypeScript strict mode support
+- Enhanced decorator type definitions
+- Better error messages at compile time
 
 #### Native Utility Library
-* 18 high-performance native utility functions
-* Zero external dependencies for core operations
-* Comprehensive test coverage (89 tests)
-* Drop-in replacements for lodash functions
+
+- 18 high-performance native utility functions
+- Zero external dependencies for core operations
+- Comprehensive test coverage (89 tests)
+- Drop-in replacements for lodash functions
 
 ---
 
 ### 🔧 IMPROVEMENTS
 
 #### CI/CD Infrastructure
-* **Fixed CircleCI Configuration** - Updated to use Node.js 22 and Yarn 4.x
+
+- **Fixed CircleCI Configuration** - Updated to use Node.js 22 and Yarn 4.x
   - Upgraded Node.js from 16.14 to 22.14
   - Enabled Corepack for Yarn modern (Berry) support
   - Switched from npm to yarn with proper caching strategy
   - Added comprehensive CI pipeline: lint, type-check, build, test
 
-* **Fixed GitHub Actions Workflows** - All CI checks now passing
+- **Fixed GitHub Actions Workflows** - All CI checks now passing
   - Added `corepack enable` step for Yarn 4.11.0 support
   - Fixed ESLint configuration for Node.js 20+ compatibility
   - Replaced `import.meta.dirname` with `__dirname` pattern for broader compatibility
@@ -254,22 +292,22 @@ This is a major release with significant architectural improvements, security en
   - Removed Node.js 18 from test matrix (now testing on Node.js 20 and 22)
 
 #### Dependency Management
-* **Updated ESLint Configuration** - Node.js 20+ compatible
+
+- **Updated ESLint Configuration** - Node.js 20+ compatible
   - Replaced `import.meta.dirname` with manual `__dirname` calculation
   - Ensures compatibility with Node.js 20.x (where import.meta.dirname was added in 20.11.0)
-  
-* **Fixed Yarn Lock Checksums** - Resolved package integrity errors
+- **Fixed Yarn Lock Checksums** - Resolved package integrity errors
   - Updated checksums for `@expressive-tea/commons@2026.1.1`
   - Updated checksums for `@expressive-tea/metadata@2026.1.1`
   - Updated checksums for `@expressive-tea/plugin@2026.1.1`
-  
-* **Added Missing Dependencies**
+- **Added Missing Dependencies**
   - Added `prettier@3.8.1` as devDependency for code formatting
   - Aligned all `@typescript-eslint` packages to version 8.46.4
   - Removed `eslint-config-love` (unused, causing peer conflicts)
 
 #### Code Quality
-* **Linting Improvements**
+
+- **Linting Improvements**
   - Fixed 5 unused variable errors in production code
   - Configured ESLint to suppress warnings in test files
   - Removed unused eslint-disable directives from test mocks
@@ -280,36 +318,41 @@ This is a major release with significant architectural improvements, security en
 ### 🐛 BUG FIXES
 
 #### Cryptography Fixes
-* Fixed AES-256-GCM authentication tag handling
-* Fixed key derivation using proper HKDF
-* Fixed encryption/decryption buffer concatenation
-* Fixed password hashing with PBKDF2
 
-#### Server Fixes  
-* Fixed HTTPS server initialization with proper certificate loading
-* Fixed credential exposure in logging
-* Fixed server startup error handling
+- Fixed AES-256-GCM authentication tag handling
+- Fixed key derivation using proper HKDF
+- Fixed encryption/decryption buffer concatenation
+- Fixed password hashing with PBKDF2
+
+#### Server Fixes
+
+- Fixed HTTPS server initialization with proper certificate loading
+- Fixed credential exposure in logging
+- Fixed server startup error handling
 
 #### Type System Fixes
-* Fixed middleware type spreading in route registration
-* Fixed ExecuteRequestContext type definition
-* Fixed extractParameters null handling
-* Fixed 85+ TypeScript strict mode violations
+
+- Fixed middleware type spreading in route registration
+- Fixed ExecuteRequestContext type definition
+- Fixed extractParameters null handling
+- Fixed 85+ TypeScript strict mode violations
 
 #### Configuration System Fixes
-* **Fixed `.expressive-tea` Configuration Loading** - Configuration files now load correctly
+
+- **Fixed `.expressive-tea` Configuration Loading** - Configuration files now load correctly
   - Previously failing silently when file was invalid
   - Now throws clear errors with file path and line numbers
   - Debug logging shows which file was loaded
 
-* **Improved Error Messages**
+- **Improved Error Messages**
   - JSON parse errors now include file path and position
   - YAML parse errors include file path and line number
   - Environment validation errors include variable names and expected formats
   - Missing `.env` file errors include full file path
 
 #### HealthCheck Decorator Integration
-* **Auto-register health checks from @HealthCheck decorator** - HealthCheckEngine now integrates with decorator metadata
+
+- **Auto-register health checks from @HealthCheck decorator** - HealthCheckEngine now integrates with decorator metadata
   - Engine reads `@HealthCheck` decorator metadata on Boot class during initialization
   - Checks are automatically registered before route setup
   - Maintains backward compatibility with manual `registerCheck()` calls
@@ -320,49 +363,54 @@ This is a major release with significant architectural improvements, security en
 ### 📦 DEPENDENCIES
 
 #### Added Dependencies
-* **`dotenv@^16.4.5`** - Robust `.env` file parsing (replaces custom parser)
-* **`js-yaml@^4.1.0`** - YAML configuration file support
-* **`@types/js-yaml@^4.0.9`** (dev) - TypeScript type definitions for js-yaml
+
+- **`dotenv@^16.4.5`** - Robust `.env` file parsing (replaces custom parser)
+- **`js-yaml@^4.1.0`** - YAML configuration file support
+- **`@types/js-yaml@^4.0.9`** (dev) - TypeScript type definitions for js-yaml
 
 #### Updated Dependencies
-* Maintained lodash `4.17.23` for external plugin compatibility
-* Updated TypeScript to `5.9.3`
-* Updated Jest to `30.2.0`
-* Updated ts-jest to `29.4.5`
+
+- Maintained lodash `4.17.23` for external plugin compatibility
+- Updated TypeScript to `5.9.3`
+- Updated Jest to `30.2.0`
+- Updated ts-jest to `29.4.5`
 
 #### Removed Internal Dependencies
-* Removed `@types/lodash` from dependencies
-* Eliminated internal lodash usage in 6 files
+
+- Removed `@types/lodash` from dependencies
+- Eliminated internal lodash usage in 6 files
 
 #### Notes
-* `zod` is **NOT** a required dependency - users install it optionally for validation
-* All new dependencies are production-ready with active maintenance
+
+- `zod` is **NOT** a required dependency - users install it optionally for validation
+- All new dependencies are production-ready with active maintenance
 
 ---
 
 ### 📝 DOCUMENTATION
 
-* **Updated Node.js Requirements Across All Documentation**
+- **Updated Node.js Requirements Across All Documentation**
   - README.md: Added Node.js 18 EOL notice in breaking changes and prerequisites
   - CLAUDE.md, AGENTS.md: Updated engine requirements to Node.js 20+
   - PR and issue templates: Updated version examples (18.x → 20.x, 22.x)
   - Migration guides: Updated all version references to Node.js 20+
   - Release notes: Updated compatibility tables
 
-* **Added EOL Context**
+- **Added EOL Context**
   - Explained Node.js 18 End-of-Life (April 2025)
   - Recommended Node.js 20 LTS or Node.js 22 for best experience
   - Clarified ESLint 9.x compatibility requirements
 
 #### New Documentation
-* **[Configuration Files Guide](docs/configuration-files.md)** - Comprehensive guide to `.expressive-tea` YAML/JSON support
+
+- **[Configuration Files Guide](docs/configuration-files.md)** - Comprehensive guide to `.expressive-tea` YAML/JSON support
   - File format examples (YAML and JSON)
   - Priority order explanation
   - Error handling and troubleshooting
   - Migration from JSON to YAML
   - Best practices for configuration management
 
-* **[Environment Variables Guide](docs/env-decorator.md)** - Complete guide to `@Env` decorator
+- **[Environment Variables Guide](docs/env-decorator.md)** - Complete guide to `@Env` decorator
   - Basic and advanced usage examples
   - Type-safe transformation with Zod integration
   - Error handling strategies (`onTransformError` options)
@@ -370,12 +418,12 @@ This is a major release with significant architectural improvements, security en
   - Migration guide
 
 #### Updated Documentation
-* **README.md** - Added sections for new features
+
+- **README.md** - Added sections for new features
   - Type-safe environment variables example
   - YAML configuration example
   - Links to new documentation guides
-  
-* **JSDoc Comments** - Enhanced documentation for all modified functions
+- **JSDoc Comments** - Enhanced documentation for all modified functions
   - `fileSettings()` - Complete JSDoc with examples
   - `Env()` decorator - Updated with new options and examples
   - `EnvOptions` interface - Documented new properties
@@ -387,6 +435,7 @@ This is a major release with significant architectural improvements, security en
 #### Node.js Upgrade Required
 
 **Before:**
+
 ```json
 {
   "engines": {
@@ -396,6 +445,7 @@ This is a major release with significant architectural improvements, security en
 ```
 
 **After:**
+
 ```json
 {
   "engines": {
@@ -405,12 +455,14 @@ This is a major release with significant architectural improvements, security en
 ```
 
 **Action Required:**
+
 1. Upgrade to Node.js 20 LTS or Node.js 22
+
    ```bash
    # Using nvm
    nvm install 20
    nvm use 20
-   
+
    # Or using nvm for Node.js 22
    nvm install 22
    nvm use 22
@@ -423,11 +475,13 @@ This is a major release with significant architectural improvements, security en
 **No Code Changes Required** - This is purely a runtime environment upgrade.
 
 #### For Plugin Developers
+
 1. **No changes required** - Lodash still available as dependency
 2. Test plugins against v2.0.0 for compatibility
 3. Consider adopting TypeScript strict mode
 
 #### For Application Developers
+
 1. **Update TypeScript configuration** if using strict mode
 2. **Re-encrypt sensitive data** if using crypto module (format changed)
 3. **Update type imports** to use generic mixin types
@@ -436,6 +490,7 @@ This is a major release with significant architectural improvements, security en
 #### Optional Enhancements
 
 **1. Migrate to YAML Configuration**
+
 ```bash
 # Before: .expressive-tea (JSON)
 {
@@ -457,6 +512,7 @@ database:
 ```
 
 **2. Add Type-Safe Environment Validation**
+
 ```typescript
 // Before (v1.x)
 @Env({ path: '.env' })
@@ -491,6 +547,7 @@ class MyApp extends Boot {
 ```
 
 #### Recommended Steps
+
 ```bash
 # Update to v2.0.0
 npm install @expressive-tea/core@2.0.0
@@ -513,7 +570,7 @@ npm test
 
 ### ✅ TESTING
 
-* **All CI Checks Passing**
+- **All CI Checks Passing**
   - ✅ Lint (ESLint 9.x)
   - ✅ Type Check (TypeScript strict mode)
   - ✅ Build (TypeScript compilation)
@@ -522,43 +579,48 @@ npm test
   - ✅ CircleCI build and test
   - ✅ Snyk Security scan
 
-* **Coverage Maintained**
+- **Coverage Maintained**
   - 95.9% statement coverage
   - 88.56% branch coverage
   - 97.26% function coverage
 
 #### Test Coverage Improvements
-* **Phase 0:** 168 → 199 tests (Security fixes)
-* **Phase 1:** 199 → 220 tests (DI enhancements - 38 new tests)
-* **Phase 2:** 220 tests (Engine registry - 21 new tests)  
-* **Phase 3:** 220 tests (Type improvements)
-* **Phase 4:** 220 → 309 tests (Utilities - 89 new tests)
-* **Phase 5:** 309 → 286 passing tests (Strict mode enabled)
+
+- **Phase 0:** 168 → 199 tests (Security fixes)
+- **Phase 1:** 199 → 220 tests (DI enhancements - 38 new tests)
+- **Phase 2:** 220 tests (Engine registry - 21 new tests)
+- **Phase 3:** 220 tests (Type improvements)
+- **Phase 4:** 220 → 309 tests (Utilities - 89 new tests)
+- **Phase 5:** 309 → 286 passing tests (Strict mode enabled)
 
 #### Coverage Metrics
-* Overall coverage: **92.75%** (exceeds >90% target)
-* Utility library: **100%** coverage
-* Security module: Comprehensive test suite
-* Engine registry: 21 comprehensive tests
-* DI service: 38 comprehensive tests
+
+- Overall coverage: **92.75%** (exceeds >90% target)
+- Utility library: **100%** coverage
+- Security module: Comprehensive test suite
+- Engine registry: 21 comprehensive tests
+- DI service: 38 comprehensive tests
 
 ---
 
 ### 🎯 HIGHLIGHTS
 
 **For New Projects:**
+
 - Start with `.expressive-tea.yaml` for clean, readable configuration
 - Use Zod validation for type-safe environment variables from day one
 - Leverage `onTransformError: 'throw'` to catch config errors at startup
 - Use Node.js 20 LTS or Node.js 22
 
 **For Existing Projects:**
+
 - Upgrade to Node.js 20 or 22 (Node.js 18 is EOL)
 - Optionally convert JSON config to YAML when convenient
 - Add type-safe env validation gradually as needed
 - Re-encrypt data if using crypto module
 
 **For Production:**
+
 - Use `onTransformError: 'throw'` for fail-fast startup on invalid configuration
 - YAML files are more readable for DevOps teams
 - Clear error messages make debugging configuration issues faster
@@ -568,37 +630,37 @@ npm test
 
 ### 📊 STATISTICS
 
-* **CI/CD Improvements:** Both CircleCI and GitHub Actions now fully operational
-* **Node.js Support:** Node.js 20 and 22 (dropped 18)
-* **Linting:** 0 errors (down from previous failures)
-* **Build Success Rate:** 100% across all platforms
-* **Documentation Updates:** 10 files updated with Node.js 20+ requirements
-* **Files Modified:** 45+ production files
-* **Tests Added:** 148 new tests (168 → 316 total)
-* **Test Coverage:** 92.75%+ overall (↑ from ~80%)
-* **TypeScript Errors Fixed:** 85 strict mode violations
-* **Security Vulnerabilities Fixed:** 3 critical issues
-* **Performance:** Reduced bundle size with native utilities
-* **Files Created:** 2 comprehensive documentation guides
-* **Dependencies Added:** 3 (dotenv, js-yaml, @types/js-yaml)
-* **Lines of Code Removed:** ~100 (custom env parser replaced with dotenv)
-* **Documentation:** 2,500+ lines of new comprehensive guides
-* **Backward Compatibility:** Breaking changes documented with migration path
+- **CI/CD Improvements:** Both CircleCI and GitHub Actions now fully operational
+- **Node.js Support:** Node.js 20 and 22 (dropped 18)
+- **Linting:** 0 errors (down from previous failures)
+- **Build Success Rate:** 100% across all platforms
+- **Documentation Updates:** 10 files updated with Node.js 20+ requirements
+- **Files Modified:** 45+ production files
+- **Tests Added:** 148 new tests (168 → 316 total)
+- **Test Coverage:** 92.75%+ overall (↑ from ~80%)
+- **TypeScript Errors Fixed:** 85 strict mode violations
+- **Security Vulnerabilities Fixed:** 3 critical issues
+- **Performance:** Reduced bundle size with native utilities
+- **Files Created:** 2 comprehensive documentation guides
+- **Dependencies Added:** 3 (dotenv, js-yaml, @types/js-yaml)
+- **Lines of Code Removed:** ~100 (custom env parser replaced with dotenv)
+- **Documentation:** 2,500+ lines of new comprehensive guides
+- **Backward Compatibility:** Breaking changes documented with migration path
 
 ---
 
 ### 👥 CONTRIBUTORS
 
-* **Backend Specialist AI** - Complete v2.0.0 refactoring
+- **Backend Specialist AI** - Complete v2.0.0 refactoring
   - Security fixes and cryptography improvements
-  - Dependency injection enhancements  
+  - Dependency injection enhancements
   - Engine registry system
   - Type system improvements
   - Lodash removal and native utilities
   - TypeScript strict mode enablement
   - Comprehensive test coverage
 
-* **Documentito (Documentation Specialist AI)** - Comprehensive documentation
+- **Documentito (Documentation Specialist AI)** - Comprehensive documentation
   - Created Configuration Files Guide (1,200+ lines)
   - Created Environment Variables Guide (1,300+ lines)
   - Updated README.md with new features
@@ -613,257 +675,257 @@ Special thanks to the Expressive Tea community for their patience during this ma
 ---
 
 <a name="v1.2.0"></a>
+
 ## [v1.2.0](https://github.com/Expressive-Tea/expresive-tea/compare/v1.1.4...v1.2.0)
 
 > 2020-07-11
 
 ### ARCHITECTURE
 
-* [e5389c8](https://github.com/Expressive-Tea/expresive-tea/commit/e5389c814e17711bc098b24a4989c3901cfc462a) Test, Documentation Improvement
+- [e5389c8](https://github.com/Expressive-Tea/expresive-tea/commit/e5389c814e17711bc098b24a4989c3901cfc462a) Test, Documentation Improvement
 
 ### FEATURES
 
-* [4e52465](https://github.com/Expressive-Tea/expresive-tea/commit/4e524656a5c4091e52e63ffbdf138147fc505f29) View and Parameter Decorators.
-* [f629a1b](https://github.com/Expressive-Tea/expresive-tea/commit/f629a1b371b92e24c4936f90ae4a77b30bed606c) View and Parameter Decorators.
-* [a6b21a1](https://github.com/Expressive-Tea/expresive-tea/commit/a6b21a172184af268c8d90738fd295a4b26c71d0) View and Parameter Decorators.
-* [791e037](https://github.com/Expressive-Tea/expresive-tea/commit/791e03786c62f59688c52729bfc563ee59e67916) View and Parameter Decorators.
+- [4e52465](https://github.com/Expressive-Tea/expresive-tea/commit/4e524656a5c4091e52e63ffbdf138147fc505f29) View and Parameter Decorators.
+- [f629a1b](https://github.com/Expressive-Tea/expresive-tea/commit/f629a1b371b92e24c4936f90ae4a77b30bed606c) View and Parameter Decorators.
+- [a6b21a1](https://github.com/Expressive-Tea/expresive-tea/commit/a6b21a172184af268c8d90738fd295a4b26c71d0) View and Parameter Decorators.
+- [791e037](https://github.com/Expressive-Tea/expresive-tea/commit/791e03786c62f59688c52729bfc563ee59e67916) View and Parameter Decorators.
 
 ### Release Work
 
-* [ee3fec0](https://github.com/Expressive-Tea/expresive-tea/commit/ee3fec0b838690a348ea00f9ff0c2df10fe9d7c6) 1.2.0 Release
-
+- [ee3fec0](https://github.com/Expressive-Tea/expresive-tea/commit/ee3fec0b838690a348ea00f9ff0c2df10fe9d7c6) 1.2.0 Release
 
 <a name="v1.1.4"></a>
+
 ## [v1.1.4](https://github.com/Expressive-Tea/expresive-tea/compare/v1.1.3...v1.1.4)
 
 > 2020-03-22
 
 ### Architecture
 
-* [a35395d](https://github.com/Expressive-Tea/expresive-tea/commit/a35395dae88bfa2a3adade67dc382c2374beb9ee) Added Notification and Deploy
-* [e8b4b9b](https://github.com/Expressive-Tea/expresive-tea/commit/e8b4b9be73529b734181de6bedb4dae741bfa2fc) Added Notification and Deploy
+- [a35395d](https://github.com/Expressive-Tea/expresive-tea/commit/a35395dae88bfa2a3adade67dc382c2374beb9ee) Added Notification and Deploy
+- [e8b4b9b](https://github.com/Expressive-Tea/expresive-tea/commit/e8b4b9be73529b734181de6bedb4dae741bfa2fc) Added Notification and Deploy
 
 ### Plugin Engine
 
-* [1815cda](https://github.com/Expressive-Tea/expresive-tea/commit/1815cdaf51c1a27bc7e4160035deb9b13950594c) Refactoring Metadata
-* [991e6d5](https://github.com/Expressive-Tea/expresive-tea/commit/991e6d53098f14b6f10576ab75bf10081c160b3f) Refactoring Metadata
-* [975cfa6](https://github.com/Expressive-Tea/expresive-tea/commit/975cfa6d37d808cb27fde4539f269aec1f008d8e) Refactoring Metadata
-
+- [1815cda](https://github.com/Expressive-Tea/expresive-tea/commit/1815cdaf51c1a27bc7e4160035deb9b13950594c) Refactoring Metadata
+- [991e6d5](https://github.com/Expressive-Tea/expresive-tea/commit/991e6d53098f14b6f10576ab75bf10081c160b3f) Refactoring Metadata
+- [975cfa6](https://github.com/Expressive-Tea/expresive-tea/commit/975cfa6d37d808cb27fde4539f269aec1f008d8e) Refactoring Metadata
 
 <a name="v1.1.3"></a>
+
 ## [v1.1.3](https://github.com/Expressive-Tea/expresive-tea/compare/v1.1.2...v1.1.3)
 
 > 2020-03-18
 
 ### Bug Fixing
 
-* [56ead3e](https://github.com/Expressive-Tea/expresive-tea/commit/56ead3e153ccf2369ccdbab2aadde4300a744cfc) Reflect Metadata is getting incorrect instance.
-* [c97e2cd](https://github.com/Expressive-Tea/expresive-tea/commit/c97e2cd3036a1c84cff68404ee74cd556c18a384) Reflect Metadata is getting incorrect instance.
+- [56ead3e](https://github.com/Expressive-Tea/expresive-tea/commit/56ead3e153ccf2369ccdbab2aadde4300a744cfc) Reflect Metadata is getting incorrect instance.
+- [c97e2cd](https://github.com/Expressive-Tea/expresive-tea/commit/c97e2cd3036a1c84cff68404ee74cd556c18a384) Reflect Metadata is getting incorrect instance.
 
 ### Hot Fixes
 
-* [f7bd252](https://github.com/Expressive-Tea/expresive-tea/commit/f7bd2529539d2c7bd67fcf0ca9a96d9babc3d39b) Plugin Issues
-* [596926c](https://github.com/Expressive-Tea/expresive-tea/commit/596926c2c833e43cf6e7881f23880fd3142e7dd3) Plugin Issues
+- [f7bd252](https://github.com/Expressive-Tea/expresive-tea/commit/f7bd2529539d2c7bd67fcf0ca9a96d9babc3d39b) Plugin Issues
+- [596926c](https://github.com/Expressive-Tea/expresive-tea/commit/596926c2c833e43cf6e7881f23880fd3142e7dd3) Plugin Issues
 
 ### Maintenance
 
-* [a7db6b1](https://github.com/Expressive-Tea/expresive-tea/commit/a7db6b13556bb7aafe798f1eebaa4483d747b172) Fixes Small Issues and Documentation
-
+- [a7db6b1](https://github.com/Expressive-Tea/expresive-tea/commit/a7db6b13556bb7aafe798f1eebaa4483d747b172) Fixes Small Issues and Documentation
 
 <a name="v1.1.2"></a>
+
 ## [v1.1.2](https://github.com/Expressive-Tea/expresive-tea/compare/v1.1.1...v1.1.2)
 
 > 2020-03-16
 
 ### Hot Fixes
 
-* [d5cfd64](https://github.com/Expressive-Tea/expresive-tea/commit/d5cfd64edb826d30fb25b8418c562bfc91beeffa) Plugin Issues
-* [a3c0e01](https://github.com/Expressive-Tea/expresive-tea/commit/a3c0e01d4a8f7f09a516340b3d36ed116d02c619) Plugin Issues
-
+- [d5cfd64](https://github.com/Expressive-Tea/expresive-tea/commit/d5cfd64edb826d30fb25b8418c562bfc91beeffa) Plugin Issues
+- [a3c0e01](https://github.com/Expressive-Tea/expresive-tea/commit/a3c0e01d4a8f7f09a516340b3d36ed116d02c619) Plugin Issues
 
 <a name="v1.1.1"></a>
+
 ## [v1.1.1](https://github.com/Expressive-Tea/expresive-tea/compare/v1.1.0...v1.1.1)
 
 > 2020-02-25
 
 ### Maintenance
 
-* [93ec93f](https://github.com/Expressive-Tea/expresive-tea/commit/93ec93fb875022fc502023b969f1b5aaed3a77ca) Fixes Small Issues and Documentation
-* [45c6f7e](https://github.com/Expressive-Tea/expresive-tea/commit/45c6f7eaaf392daffecaf3fa1443ae5bc1d9ea3c) Fixes Small Issues and Documentation
-* [cc44044](https://github.com/Expressive-Tea/expresive-tea/commit/cc44044b85dd5f9b2bf9b6e5f3bb1ecba498aedd) Fixes Small Issues and Documentation
-* [5662633](https://github.com/Expressive-Tea/expresive-tea/commit/56626336b84b3030897c5ece4b9debe1b8f13cbb) Fixes Small Issues and Documentation
-* [e46a599](https://github.com/Expressive-Tea/expresive-tea/commit/e46a5993702048a9f0e8bf4af2644837bc93a75c) Fixes Small Issues and Documentation
-* [131c7b7](https://github.com/Expressive-Tea/expresive-tea/commit/131c7b7f61dab81964283657ce0b0934754c5f23) Small issues and refactoring
-* [ec51c34](https://github.com/Expressive-Tea/expresive-tea/commit/ec51c340c999e0a18349e0e1a5f78667fa05e4f2) Fixes Small Issues and Documentation
-* [945e336](https://github.com/Expressive-Tea/expresive-tea/commit/945e336013c2155f42cd0301d784ad021f26e75a) Fixes Small Issues and Documentation
+- [93ec93f](https://github.com/Expressive-Tea/expresive-tea/commit/93ec93fb875022fc502023b969f1b5aaed3a77ca) Fixes Small Issues and Documentation
+- [45c6f7e](https://github.com/Expressive-Tea/expresive-tea/commit/45c6f7eaaf392daffecaf3fa1443ae5bc1d9ea3c) Fixes Small Issues and Documentation
+- [cc44044](https://github.com/Expressive-Tea/expresive-tea/commit/cc44044b85dd5f9b2bf9b6e5f3bb1ecba498aedd) Fixes Small Issues and Documentation
+- [5662633](https://github.com/Expressive-Tea/expresive-tea/commit/56626336b84b3030897c5ece4b9debe1b8f13cbb) Fixes Small Issues and Documentation
+- [e46a599](https://github.com/Expressive-Tea/expresive-tea/commit/e46a5993702048a9f0e8bf4af2644837bc93a75c) Fixes Small Issues and Documentation
+- [131c7b7](https://github.com/Expressive-Tea/expresive-tea/commit/131c7b7f61dab81964283657ce0b0934754c5f23) Small issues and refactoring
+- [ec51c34](https://github.com/Expressive-Tea/expresive-tea/commit/ec51c340c999e0a18349e0e1a5f78667fa05e4f2) Fixes Small Issues and Documentation
+- [945e336](https://github.com/Expressive-Tea/expresive-tea/commit/945e336013c2155f42cd0301d784ad021f26e75a) Fixes Small Issues and Documentation
 
 ### Release Work
 
-* [c921154](https://github.com/Expressive-Tea/expresive-tea/commit/c921154d5da8963ceb12eb6b8a0d5cd2c6bb0e8e) Finished Release 1.1.1
-* [1cbfe8c](https://github.com/Expressive-Tea/expresive-tea/commit/1cbfe8cd78c778160c131460af0a9f6b1616e824) v1.1.0 - Plugin Engine
-
+- [c921154](https://github.com/Expressive-Tea/expresive-tea/commit/c921154d5da8963ceb12eb6b8a0d5cd2c6bb0e8e) Finished Release 1.1.1
+- [1cbfe8c](https://github.com/Expressive-Tea/expresive-tea/commit/1cbfe8cd78c778160c131460af0a9f6b1616e824) v1.1.0 - Plugin Engine
 
 <a name="v1.1.0"></a>
+
 ## [v1.1.0](https://github.com/Expressive-Tea/expresive-tea/compare/v1.0.0...v1.1.0)
 
 > 2019-10-19
 
 ### Documentation
 
-* [817810e](https://github.com/Expressive-Tea/expresive-tea/commit/817810e5fb1b982cb56fc6cd58bd8f99871a92e5) Added Logo
-* [fe69be9](https://github.com/Expressive-Tea/expresive-tea/commit/fe69be9a6e9ba0d2047ccb6fc65841e13c559725) Added Logo
-* [871f06c](https://github.com/Expressive-Tea/expresive-tea/commit/871f06cccd5337af4b08a6d6fdea8122e1aa4d62) Added Logo
-* [502f1c6](https://github.com/Expressive-Tea/expresive-tea/commit/502f1c6b2d4ab4483b62bcb87faf31c9ab165fa5) Added Plugin Decorator
+- [817810e](https://github.com/Expressive-Tea/expresive-tea/commit/817810e5fb1b982cb56fc6cd58bd8f99871a92e5) Added Logo
+- [fe69be9](https://github.com/Expressive-Tea/expresive-tea/commit/fe69be9a6e9ba0d2047ccb6fc65841e13c559725) Added Logo
+- [871f06c](https://github.com/Expressive-Tea/expresive-tea/commit/871f06cccd5337af4b08a6d6fdea8122e1aa4d62) Added Logo
+- [502f1c6](https://github.com/Expressive-Tea/expresive-tea/commit/502f1c6b2d4ab4483b62bcb87faf31c9ab165fa5) Added Plugin Decorator
 
 ### Engines Work
 
-* [6050a69](https://github.com/Expressive-Tea/expresive-tea/commit/6050a69165c24e5fa4e50502ab48268ccaeffb6a) Adding Plugin Engine
+- [6050a69](https://github.com/Expressive-Tea/expresive-tea/commit/6050a69165c24e5fa4e50502ab48268ccaeffb6a) Adding Plugin Engine
 
 ### Framework Core
 
-* [a050c84](https://github.com/Expressive-Tea/expresive-tea/commit/a050c84379e8a07bd8b5f3d309c7499b72fd323f) Publish Tooling
-* [ae56fc1](https://github.com/Expressive-Tea/expresive-tea/commit/ae56fc1a62849f89c4526f53338ad4fa5dc84a31) Publish Tooling
-* [40d2528](https://github.com/Expressive-Tea/expresive-tea/commit/40d25282d458e1105f808b71f5756474145e6bad) Publish Tooling
-* [60d3804](https://github.com/Expressive-Tea/expresive-tea/commit/60d38048225bea4df47bb2534d9e33db55eed82c) Publish Tooling
-* [a92d774](https://github.com/Expressive-Tea/expresive-tea/commit/a92d7741dfb147d3f71f1d53b30dc031bbc9b4ac) Publish Tooling
-* [7e7700c](https://github.com/Expressive-Tea/expresive-tea/commit/7e7700cb68bf977a751d94cda8963609064e1fa9) Publish Tooling
+- [a050c84](https://github.com/Expressive-Tea/expresive-tea/commit/a050c84379e8a07bd8b5f3d309c7499b72fd323f) Publish Tooling
+- [ae56fc1](https://github.com/Expressive-Tea/expresive-tea/commit/ae56fc1a62849f89c4526f53338ad4fa5dc84a31) Publish Tooling
+- [40d2528](https://github.com/Expressive-Tea/expresive-tea/commit/40d25282d458e1105f808b71f5756474145e6bad) Publish Tooling
+- [60d3804](https://github.com/Expressive-Tea/expresive-tea/commit/60d38048225bea4df47bb2534d9e33db55eed82c) Publish Tooling
+- [a92d774](https://github.com/Expressive-Tea/expresive-tea/commit/a92d7741dfb147d3f71f1d53b30dc031bbc9b4ac) Publish Tooling
+- [7e7700c](https://github.com/Expressive-Tea/expresive-tea/commit/7e7700cb68bf977a751d94cda8963609064e1fa9) Publish Tooling
 
 ### Release Work
 
-* [d0c56c5](https://github.com/Expressive-Tea/expresive-tea/commit/d0c56c5ac1902dcbeedcca84ba21bb0a1b94f961) v1.1.0 Release
-* [4b9ab65](https://github.com/Expressive-Tea/expresive-tea/commit/4b9ab65fe54b7cbdc0e83ce05fe23e6e3d54f519) Production Release
-
+- [d0c56c5](https://github.com/Expressive-Tea/expresive-tea/commit/d0c56c5ac1902dcbeedcca84ba21bb0a1b94f961) v1.1.0 Release
+- [4b9ab65](https://github.com/Expressive-Tea/expresive-tea/commit/4b9ab65fe54b7cbdc0e83ce05fe23e6e3d54f519) Production Release
 
 <a name="v1.0.0"></a>
+
 ## [v1.0.0](https://github.com/Expressive-Tea/expresive-tea/compare/v0.1.1...v1.0.0)
 
 > 2019-09-10
 
 ### Badges
 
-* [8b8cd95](https://github.com/Expressive-Tea/expresive-tea/commit/8b8cd959f089376f6867721c01eb86993c1ef362) Added Test Coverage on Code Climate
+- [8b8cd95](https://github.com/Expressive-Tea/expresive-tea/commit/8b8cd959f089376f6867721c01eb86993c1ef362) Added Test Coverage on Code Climate
 
 ### Documentation
 
-* [5943334](https://github.com/Expressive-Tea/expresive-tea/commit/59433346f19fd44fa003d5a118d671573b639d79) Update Badges
+- [5943334](https://github.com/Expressive-Tea/expresive-tea/commit/59433346f19fd44fa003d5a118d671573b639d79) Update Badges
 
 ### Features
 
-* [7244473](https://github.com/Expressive-Tea/expresive-tea/commit/7244473e158e14b5a2f0217ed8aedcc69c0d310c) Adding Plugin Structure
-* [997700f](https://github.com/Expressive-Tea/expresive-tea/commit/997700f8492c31d53e95f97d22f12e11351e949a) Adding Plugin Structure
+- [7244473](https://github.com/Expressive-Tea/expresive-tea/commit/7244473e158e14b5a2f0217ed8aedcc69c0d310c) Adding Plugin Structure
+- [997700f](https://github.com/Expressive-Tea/expresive-tea/commit/997700f8492c31d53e95f97d22f12e11351e949a) Adding Plugin Structure
 
 ### Refactored Code
 
-* [a2f08a1](https://github.com/Expressive-Tea/expresive-tea/commit/a2f08a12489a4032096cfd9f0fa034b56918993d) Improve Code
-* [ce043f5](https://github.com/Expressive-Tea/expresive-tea/commit/ce043f53db0df0d7408e264bf63e1b519a1f2987) Improve Code
-* [8372d66](https://github.com/Expressive-Tea/expresive-tea/commit/8372d66455b571a8c514d1e51b162cc2112e3b30) Improve Code
-* [9e9dab7](https://github.com/Expressive-Tea/expresive-tea/commit/9e9dab7874181c6866a5ad451fc5d37aad34e3ba) Improve Code
-* [156e2b0](https://github.com/Expressive-Tea/expresive-tea/commit/156e2b024d65a5e553f41a9e41cf0e9d3e07578a) Improve Code
+- [a2f08a1](https://github.com/Expressive-Tea/expresive-tea/commit/a2f08a12489a4032096cfd9f0fa034b56918993d) Improve Code
+- [ce043f5](https://github.com/Expressive-Tea/expresive-tea/commit/ce043f53db0df0d7408e264bf63e1b519a1f2987) Improve Code
+- [8372d66](https://github.com/Expressive-Tea/expresive-tea/commit/8372d66455b571a8c514d1e51b162cc2112e3b30) Improve Code
+- [9e9dab7](https://github.com/Expressive-Tea/expresive-tea/commit/9e9dab7874181c6866a5ad451fc5d37aad34e3ba) Improve Code
+- [156e2b0](https://github.com/Expressive-Tea/expresive-tea/commit/156e2b024d65a5e553f41a9e41cf0e9d3e07578a) Improve Code
 
 ### Release Work
 
-* [1aa9cfb](https://github.com/Expressive-Tea/expresive-tea/commit/1aa9cfbf51d150df1184859362417677b25e5c72) Production Release 1.0.0
-* [a542f15](https://github.com/Expressive-Tea/expresive-tea/commit/a542f1540c286a165ccad72f3aa28a6d772b6f5b) Production Stable Version
+- [1aa9cfb](https://github.com/Expressive-Tea/expresive-tea/commit/1aa9cfbf51d150df1184859362417677b25e5c72) Production Release 1.0.0
+- [a542f15](https://github.com/Expressive-Tea/expresive-tea/commit/a542f1540c286a165ccad72f3aa28a6d772b6f5b) Production Stable Version
 
 ### Test Engine
 
-* [e704314](https://github.com/Expressive-Tea/expresive-tea/commit/e704314f62cb8504a4bdd9445d2f3cb5925b9d4f) Benchmark Test
-
+- [e704314](https://github.com/Expressive-Tea/expresive-tea/commit/e704314f62cb8504a4bdd9445d2f3cb5925b9d4f) Benchmark Test
 
 <a name="v0.1.1"></a>
+
 ## [v0.1.1](https://github.com/Expressive-Tea/expresive-tea/compare/v0.1.0...v0.1.1)
 
 > 2019-08-05
 
 ### Code Improvement
 
-* [c7039b9](https://github.com/Expressive-Tea/expresive-tea/commit/c7039b97bb72a5ef257527d74ffad7d84229d37a) Improve Code
-* [b59fcbf](https://github.com/Expressive-Tea/expresive-tea/commit/b59fcbf0fddc1ee3eb911e6adcfb9d4eb0428d10) Improve Code
-* [fbb179a](https://github.com/Expressive-Tea/expresive-tea/commit/fbb179ae1e90f3814edcb0fe6c055c822ae708dd) Improve Code
+- [c7039b9](https://github.com/Expressive-Tea/expresive-tea/commit/c7039b97bb72a5ef257527d74ffad7d84229d37a) Improve Code
+- [b59fcbf](https://github.com/Expressive-Tea/expresive-tea/commit/b59fcbf0fddc1ee3eb911e6adcfb9d4eb0428d10) Improve Code
+- [fbb179a](https://github.com/Expressive-Tea/expresive-tea/commit/fbb179ae1e90f3814edcb0fe6c055c822ae708dd) Improve Code
 
 ### Release Work
 
-* [685ecc7](https://github.com/Expressive-Tea/expresive-tea/commit/685ecc7fc00260d83c7e740710e57c0b2151f528) Production Release to 0.1.1
-* [e73992e](https://github.com/Expressive-Tea/expresive-tea/commit/e73992e27618e919c19d5d39e04c15e4fe821e0c) Version bump
-
+- [685ecc7](https://github.com/Expressive-Tea/expresive-tea/commit/685ecc7fc00260d83c7e740710e57c0b2151f528) Production Release to 0.1.1
+- [e73992e](https://github.com/Expressive-Tea/expresive-tea/commit/e73992e27618e919c19d5d39e04c15e4fe821e0c) Version bump
 
 <a name="v0.1.0"></a>
+
 ## [v0.1.0](https://github.com/Expressive-Tea/expresive-tea/compare/v0.0.7-RC...v0.1.0)
 
 > 2019-08-04
 
 ### Documentation
 
-* [9076aa4](https://github.com/Expressive-Tea/expresive-tea/commit/9076aa469fe93bd6c6c58faad16f3ae982da1682) Added Correct Path to documentation
-* [2060f5b](https://github.com/Expressive-Tea/expresive-tea/commit/2060f5b9acae0cae6e072442d38e35528b9b3331) Added Correct Path to documentation
-* [03ecdaa](https://github.com/Expressive-Tea/expresive-tea/commit/03ecdaaa9050b2fbea479bf62369d17f6eafb198) Added Project Documentation
+- [9076aa4](https://github.com/Expressive-Tea/expresive-tea/commit/9076aa469fe93bd6c6c58faad16f3ae982da1682) Added Correct Path to documentation
+- [2060f5b](https://github.com/Expressive-Tea/expresive-tea/commit/2060f5b9acae0cae6e072442d38e35528b9b3331) Added Correct Path to documentation
+- [03ecdaa](https://github.com/Expressive-Tea/expresive-tea/commit/03ecdaaa9050b2fbea479bf62369d17f6eafb198) Added Project Documentation
 
 ### Documentation
 
-* [e75374d](https://github.com/Expressive-Tea/expresive-tea/commit/e75374da6f9663d2b2cbe36ffecc29f7f798d97b) JSDocs Tags and Documentation
+- [e75374d](https://github.com/Expressive-Tea/expresive-tea/commit/e75374da6f9663d2b2cbe36ffecc29f7f798d97b) JSDocs Tags and Documentation
 
 ### Test Engine
 
-* [5c945bd](https://github.com/Expressive-Tea/expresive-tea/commit/5c945bd986ceb0daae7e49208e9e0012563f3cac) Remove Cache from Travis
-* [04924ea](https://github.com/Expressive-Tea/expresive-tea/commit/04924eafb9048cb3c6d3f5a7018b74fd843ca432) Test Framework - Adding jest as test framework. - Adding tests
-
+- [5c945bd](https://github.com/Expressive-Tea/expresive-tea/commit/5c945bd986ceb0daae7e49208e9e0012563f3cac) Remove Cache from Travis
+- [04924ea](https://github.com/Expressive-Tea/expresive-tea/commit/04924eafb9048cb3c6d3f5a7018b74fd843ca432) Test Framework - Adding jest as test framework. - Adding tests
 
 <a name="v0.0.7-RC"></a>
+
 ## [v0.0.7-RC](https://github.com/Expressive-Tea/expresive-tea/compare/0.0.6-RC1...v0.0.7-RC)
 
 > 2019-07-31
 
 ### Bug Fixing
 
-* [61868c5](https://github.com/Expressive-Tea/expresive-tea/commit/61868c57c6bbdaae1cc7692fb14d8d1961475c68) Plug Inverse order and Typings.
-* [f1cf891](https://github.com/Expressive-Tea/expresive-tea/commit/f1cf891a438cff86944063008d7e6258715037ce) Fixing Types and Plugin order.
-* [4caab3f](https://github.com/Expressive-Tea/expresive-tea/commit/4caab3ff98a669413263765dd40580822b959bdc) Fixing Types and Plugin order.
+- [61868c5](https://github.com/Expressive-Tea/expresive-tea/commit/61868c57c6bbdaae1cc7692fb14d8d1961475c68) Plug Inverse order and Typings.
+- [f1cf891](https://github.com/Expressive-Tea/expresive-tea/commit/f1cf891a438cff86944063008d7e6258715037ce) Fixing Types and Plugin order.
+- [4caab3f](https://github.com/Expressive-Tea/expresive-tea/commit/4caab3ff98a669413263765dd40580822b959bdc) Fixing Types and Plugin order.
 
 ### Refactored Code
 
-* [5f509e0](https://github.com/Expressive-Tea/expresive-tea/commit/5f509e0947724077a5562c9c05625729081f0d08) Inverse plugin order and types.
+- [5f509e0](https://github.com/Expressive-Tea/expresive-tea/commit/5f509e0947724077a5562c9c05625729081f0d08) Inverse plugin order and types.
 
 ### Release Work
 
-* [97c08a1](https://github.com/Expressive-Tea/expresive-tea/commit/97c08a16cb5c0f0fd5f89132d8337f3958354bdb) Moving Release
-
+- [97c08a1](https://github.com/Expressive-Tea/expresive-tea/commit/97c08a16cb5c0f0fd5f89132d8337f3958354bdb) Moving Release
 
 <a name="0.0.6-RC1"></a>
+
 ## [0.0.6-RC1](https://github.com/Expressive-Tea/expresive-tea/compare/0.0.1-pre...0.0.6-RC1)
 
 > 2019-06-19
 
 ### Release Work
 
-* [694bd30](https://github.com/Expressive-Tea/expresive-tea/commit/694bd3020035c6fd86f8cb7a4d3a314955cdf927) Adding New Release Candidate Version
-* [0a2ce1f](https://github.com/Expressive-Tea/expresive-tea/commit/0a2ce1f78d3156fa5813ce2d8ad811a629957223) Adding New Release Candidate Version
-
+- [694bd30](https://github.com/Expressive-Tea/expresive-tea/commit/694bd3020035c6fd86f8cb7a4d3a314955cdf927) Adding New Release Candidate Version
+- [0a2ce1f](https://github.com/Expressive-Tea/expresive-tea/commit/0a2ce1f78d3156fa5813ce2d8ad811a629957223) Adding New Release Candidate Version
 
 <a name="0.0.1-pre"></a>
+
 ## 0.0.1-pre
 
 > 2019-05-04
 
 ### INITIAL
 
-* [753f328](https://github.com/Expressive-Tea/expresive-tea/commit/753f328e617a8e9e8f7f4b297a4d7f4350785bda) Added Test Configuration and Code Improvements - Added Test Coverage and Framework. - Added Request Exceptions - Include Docker Implementation - Remove Controllers Decorators since is an abstract class. - Added JWT Service (need to be fixed) - Added Helpers model to add models as name. - Divide Webpack Configuration. - TSConfig should allow execute external debuggers and generate sourcemap - Change constants data. - Allow Error Handling to response to status code.
-* [63f64d1](https://github.com/Expressive-Tea/expresive-tea/commit/63f64d11646451bd9b5d92d5a12ff625a9ab42c2) Initialize Commit
+- [753f328](https://github.com/Expressive-Tea/expresive-tea/commit/753f328e617a8e9e8f7f4b297a4d7f4350785bda) Added Test Configuration and Code Improvements - Added Test Coverage and Framework. - Added Request Exceptions - Include Docker Implementation - Remove Controllers Decorators since is an abstract class. - Added JWT Service (need to be fixed) - Added Helpers model to add models as name. - Divide Webpack Configuration. - TSConfig should allow execute external debuggers and generate sourcemap - Change constants data. - Allow Error Handling to response to status code.
+- [63f64d1](https://github.com/Expressive-Tea/expresive-tea/commit/63f64d11646451bd9b5d92d5a12ff625a9ab42c2) Initialize Commit
 
 ### Refactored Code
 
-* [f6f2433](https://github.com/Expressive-Tea/expresive-tea/commit/f6f2433903bbd276fb833727fd3fb58a537bfa21) Move to Beta Version
-* [f8b5b69](https://github.com/Expressive-Tea/expresive-tea/commit/f8b5b690a04d0d457d833532522b93ca27388a8e) Move to Beta Version
-* [822b58e](https://github.com/Expressive-Tea/expresive-tea/commit/822b58e50f4181d5bab2c38835f8813e9d5811d7) Move to Beta Version
+- [f6f2433](https://github.com/Expressive-Tea/expresive-tea/commit/f6f2433903bbd276fb833727fd3fb58a537bfa21) Move to Beta Version
+- [f8b5b69](https://github.com/Expressive-Tea/expresive-tea/commit/f8b5b690a04d0d457d833532522b93ca27388a8e) Move to Beta Version
+- [822b58e](https://github.com/Expressive-Tea/expresive-tea/commit/822b58e50f4181d5bab2c38835f8813e9d5811d7) Move to Beta Version
 
 ### Refactored Code
 
-* [e141c45](https://github.com/Expressive-Tea/expresive-tea/commit/e141c450858ad80d2dbb5eb4b51be89c9fa6b1c1) Remove Packages
-* [88583c1](https://github.com/Expressive-Tea/expresive-tea/commit/88583c1f0e0b1a09b94c7e5018c534dd62aae1cc) Remove Packages
-* [86df5af](https://github.com/Expressive-Tea/expresive-tea/commit/86df5af191d5b387b4225b1ed85d8e18a57dab03) Remove Packages
-* [544c088](https://github.com/Expressive-Tea/expresive-tea/commit/544c088e79a96d108104bafd5b7ba61910296a0a) Change Paths to Relative
-* [bd63528](https://github.com/Expressive-Tea/expresive-tea/commit/bd63528a105c8d5c4bf1630da225ff46a8dce051) Change Paths to Relative
-* [8e3b5b7](https://github.com/Expressive-Tea/expresive-tea/commit/8e3b5b7696a1e3b57aa884fc7a7e21a3f2928e20) Change to be package
-* [cc2f8df](https://github.com/Expressive-Tea/expresive-tea/commit/cc2f8df37610e815b4777fa4dde875514663f050) Change to be package
-* [540e276](https://github.com/Expressive-Tea/expresive-tea/commit/540e276b06a3aa5d6bc437547fcfcf02b8e7403a) Change to be package
-* [bfa71a6](https://github.com/Expressive-Tea/expresive-tea/commit/bfa71a6a421fdeee0b345a047189c0a6b8d4e4d3) Change to be package
-
+- [e141c45](https://github.com/Expressive-Tea/expresive-tea/commit/e141c450858ad80d2dbb5eb4b51be89c9fa6b1c1) Remove Packages
+- [88583c1](https://github.com/Expressive-Tea/expresive-tea/commit/88583c1f0e0b1a09b94c7e5018c534dd62aae1cc) Remove Packages
+- [86df5af](https://github.com/Expressive-Tea/expresive-tea/commit/86df5af191d5b387b4225b1ed85d8e18a57dab03) Remove Packages
+- [544c088](https://github.com/Expressive-Tea/expresive-tea/commit/544c088e79a96d108104bafd5b7ba61910296a0a) Change Paths to Relative
+- [bd63528](https://github.com/Expressive-Tea/expresive-tea/commit/bd63528a105c8d5c4bf1630da225ff46a8dce051) Change Paths to Relative
+- [8e3b5b7](https://github.com/Expressive-Tea/expresive-tea/commit/8e3b5b7696a1e3b57aa884fc7a7e21a3f2928e20) Change to be package
+- [cc2f8df](https://github.com/Expressive-Tea/expresive-tea/commit/cc2f8df37610e815b4777fa4dde875514663f050) Change to be package
+- [540e276](https://github.com/Expressive-Tea/expresive-tea/commit/540e276b06a3aa5d6bc437547fcfcf02b8e7403a) Change to be package
+- [bfa71a6](https://github.com/Expressive-Tea/expresive-tea/commit/bfa71a6a421fdeee0b345a047189c0a6b8d4e4d3) Change to be package
