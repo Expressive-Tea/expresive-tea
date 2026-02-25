@@ -41,7 +41,7 @@ function percentile(arr: number[], p: number): number {
  * Calculate standard deviation
  */
 function standardDeviation(values: number[], mean: number): number {
-  const squareDiffs = values.map(value => Math.pow(value - mean, 2));
+  const squareDiffs = values.map((value) => Math.pow(value - mean, 2));
   const avgSquareDiff = squareDiffs.reduce((a, b) => a + b, 0) / values.length;
   return Math.sqrt(avgSquareDiff);
 }
@@ -121,7 +121,7 @@ export function formatMemory(mem: MemoryMeasurement): string {
  * Sleep utility
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**

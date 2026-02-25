@@ -1,5 +1,3 @@
- 
-
 export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
   registeredPlugins.push({
     name: 'Mocked',
@@ -10,9 +8,7 @@ export const mockRegister = jest.fn(function (appSettings, registeredPlugins) {
 export const mockGetRegisteredStage = jest.fn(() => []);
 export let mockPluginArguments: unknown[] = [];
 
-const PluginMock = jest.fn()
-  .mockName('Plugin');
-
+const PluginMock = jest.fn().mockName('Plugin');
 
 const Plugin = PluginMock.mockImplementation(function (...pluginArgs) {
   this.priority = 999;

@@ -10,14 +10,14 @@ export function initWebsocket(server: http.Server, secureServer: https.Server) {
   const isDetached = settings.get('detachWebsocket');
 
   if (settings.get('startWebsocket')) {
-
     WebsocketService.init();
-    WebsocketService.getInstance().setWebSocket(new WebSocket.Server(isDetached ? {noServer: true} : {server}));
+    WebsocketService.getInstance().setWebSocket(new WebSocket.Server(isDetached ? { noServer: true } : { server }));
 
     if (secureServer) {
-      WebsocketService.getInstance().setSecureWebsocket(new WebSocket.Server(isDetached ? {noServer: true} : {server: secureServer}));
+      WebsocketService.getInstance().setSecureWebsocket(
+        new WebSocket.Server(isDetached ? { noServer: true } : { server: secureServer })
+      );
     }
-
 
     WebsocketService.getInstance().setHttpServer(server);
     WebsocketService.getInstance().setHttpServer(secureServer);

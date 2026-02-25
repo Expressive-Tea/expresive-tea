@@ -10,12 +10,7 @@ import * as supertest from 'supertest';
 import Settings from '../../classes/Settings';
 import container from '../../inversify.config';
 import { createBenchmarkApp } from './utils/test-app';
-import {
-  measureMemory,
-  formatBytes,
-  sleep,
-  type MemoryMeasurement
-} from './utils/benchmark-helpers';
+import { measureMemory, formatBytes, sleep, type MemoryMeasurement } from './utils/benchmark-helpers';
 
 describe('Memory Usage Benchmark', () => {
   const PORT = 8000;
@@ -232,7 +227,7 @@ describe('Memory Usage Benchmark', () => {
     }
 
     // Analyze trend
-    const heapUsages = measurements.map(m => m.heapUsed);
+    const heapUsages = measurements.map((m) => m.heapUsed);
     const firstThree = heapUsages.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
     const lastThree = heapUsages.slice(-3).reduce((a, b) => a + b, 0) / 3;
     const growthPct = ((lastThree - firstThree) / firstThree) * 100;
@@ -264,7 +259,7 @@ describe('Memory Usage Benchmark', () => {
       timestamp: new Date().toISOString(),
       cycles: CYCLES,
       requests_per_cycle: REQUESTS_PER_CYCLE,
-      measurements: heapUsages.map(h => memoryToMB(h)),
+      measurements: heapUsages.map((h) => memoryToMB(h)),
       growth_pct: growthPct,
       leak_detected: growthPct > 20
     };

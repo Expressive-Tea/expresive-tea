@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  GenericRequestException,
-  UnauthorizedException } from '@exceptions/RequestExceptions';
+import { BadRequestException, GenericRequestException, UnauthorizedException } from '@exceptions/RequestExceptions';
 
 describe('Bootloader Exceptions', () => {
   test('should instance required exception', () => {
@@ -51,5 +48,4 @@ describe('Bootloader Exceptions', () => {
     expect(exception.statusCode).toEqual(401);
     expect(exception).toBeInstanceOf(UnauthorizedException);
   });
-
 });

@@ -2,13 +2,8 @@ import { Metadata } from '@expressive-tea/commons';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import { addAnnotation } from '@helpers/decorators';
 import { generateRoute, router } from '@helpers/server';
-import {
-  ROUTER_MIDDLEWARES_KEY
-} from '@expressive-tea/commons';
-import {
-  type ClassDecorator,
-  type MethodDecorator
-} from '@expressive-tea/commons';
+import { ROUTER_MIDDLEWARES_KEY } from '@expressive-tea/commons';
+import { type ClassDecorator, type MethodDecorator } from '@expressive-tea/commons';
 import { Routerize, type RouterizedClass } from '@mixins/route';
 import { type Constructor, TFunction } from '../types/core';
 import { type RequestHandler } from 'express';
@@ -27,14 +22,14 @@ import { type RequestHandler } from 'express';
  * @param {string} mountpoint - Register the url part to mount the Controller (default: '/')
  * @returns {(target: TBase) => RouterizedClass<TBase>} Decorator function that returns a routerized class
  * @summary Generate a Placeholder endpoint root for controller routes.
- * 
+ *
  * @example
  * {REPLACE-AT}Route('/users')
  * class UserController {
  *   {REPLACE-AT}Get('/')
  *   getUsers() { return ['user1', 'user2']; }
  * }
- * 
+ *
  * @since 1.0.0
  */
 export function Route<TBase extends Constructor = Constructor>(mountpoint = '/') {

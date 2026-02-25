@@ -16,7 +16,7 @@ describe('Server Helper', () => {
 
     beforeEach(() => {
       // Clean up any existing config files
-      configFiles.forEach(file => {
+      configFiles.forEach((file) => {
         const filePath = path.join(TEST_DIR, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -26,7 +26,7 @@ describe('Server Helper', () => {
 
     afterEach(() => {
       // Clean up test files
-      configFiles.forEach(file => {
+      configFiles.forEach((file) => {
         const filePath = path.join(TEST_DIR, file);
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -78,12 +78,15 @@ describe('Server Helper', () => {
 
     describe('YAML Parsing', () => {
       test('should parse valid YAML correctly', () => {
-        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), `port: 3000
+        fs.writeFileSync(
+          path.join(TEST_DIR, '.expressive-tea.yaml'),
+          `port: 3000
 securePort: 4443
 database:
   host: localhost
   port: 5432
-`);
+`
+        );
 
         const { config } = fileSettings();
 
@@ -93,10 +96,13 @@ database:
       });
 
       test('should throw clear error on invalid YAML', () => {
-        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea.yaml'), `port: 3000
+        fs.writeFileSync(
+          path.join(TEST_DIR, '.expressive-tea.yaml'),
+          `port: 3000
   invalid: yaml
 syntax here
-`);
+`
+        );
 
         expect(() => fileSettings()).toThrow(/Invalid YAML in \.expressive-tea\.yaml/);
       });
@@ -104,11 +110,14 @@ syntax here
 
     describe('JSON Parsing', () => {
       test('should parse valid JSON correctly', () => {
-        fs.writeFileSync(path.join(TEST_DIR, '.expressive-tea'), JSON.stringify({
-          port: 3000,
-          securePort: 4443,
-          database: { host: 'localhost', port: 5432 }
-        }));
+        fs.writeFileSync(
+          path.join(TEST_DIR, '.expressive-tea'),
+          JSON.stringify({
+            port: 3000,
+            securePort: 4443,
+            database: { host: 'localhost', port: 5432 }
+          })
+        );
 
         const { config } = fileSettings();
 
@@ -271,7 +280,6 @@ syntax here
     });
   });
 
-
   describe('Extract Parameters', () => {
     let currentTarget;
 
@@ -304,7 +312,6 @@ syntax here
       const result = extractParameters(currentTarget, ['user', 'password']);
       expect(result).toEqual({ user: 'a', password: 'b' });
     });
-
   });
 
   describe('Map Arguments', () => {
@@ -315,8 +322,7 @@ syntax here
     beforeEach(() => {
       request = new jestRequest.Request('/');
       response = new jestResponse.Response();
-      next = () => {
-      };
+      next = () => {};
     });
 
     afterEach(() => {
@@ -327,11 +333,7 @@ syntax here
     test('should get the normal express arguments', async () => {
       const decoratedArguments: ExpressiveTeaArgumentOptions[] = [];
 
-      const result = mapArguments(
-        decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual([request, response, next]);
     });
@@ -345,10 +347,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual([undefined]);
     });
@@ -362,10 +361,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual([request]);
     });
@@ -379,10 +375,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual([response]);
     });
@@ -396,10 +389,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual([next]);
     });
@@ -418,10 +408,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual(['queryParam']);
     });
@@ -441,15 +428,14 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        queryParam: 'queryParam',
-        thirdQuery: 'thirdQuery'
-      }]);
+      expect(result).toEqual([
+        {
+          queryParam: 'queryParam',
+          thirdQuery: 'thirdQuery'
+        }
+      ]);
     });
 
     test('should get all query object', async () => {
@@ -465,15 +451,14 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        firstParam: 'firstParam',
-        queryParam: 'queryParam'
-      }]);
+      expect(result).toEqual([
+        {
+          firstParam: 'firstParam',
+          queryParam: 'queryParam'
+        }
+      ]);
     });
 
     test('should get one parameter from body object', async () => {
@@ -490,10 +475,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual(['queryParam']);
     });
@@ -513,15 +495,14 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        queryParam: 'queryParam',
-        thirdQuery: 'thirdQuery'
-      }]);
+      expect(result).toEqual([
+        {
+          queryParam: 'queryParam',
+          thirdQuery: 'thirdQuery'
+        }
+      ]);
     });
 
     test('should get all body object', async () => {
@@ -537,15 +518,14 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        firstParam: 'firstParam',
-        queryParam: 'queryParam'
-      }]);
+      expect(result).toEqual([
+        {
+          firstParam: 'firstParam',
+          queryParam: 'queryParam'
+        }
+      ]);
     });
 
     test('should get one parameter from params object', async () => {
@@ -562,10 +542,7 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
       expect(result).toEqual(['queryParam']);
     });
@@ -585,15 +562,14 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        queryParam: 'queryParam',
-        thirdQuery: 'thirdQuery'
-      }]);
+      expect(result).toEqual([
+        {
+          queryParam: 'queryParam',
+          thirdQuery: 'thirdQuery'
+        }
+      ]);
     });
 
     test('should get all query params', async () => {
@@ -609,17 +585,15 @@ syntax here
         }
       ];
 
-      const result = mapArguments(decoratedArguments,
-        request as Request,
-        response as Response,
-        next);
+      const result = mapArguments(decoratedArguments, request as Request, response as Response, next);
 
-      expect(result).toEqual([{
-        firstParam: 'firstParam',
-        queryParam: 'queryParam'
-      }]);
+      expect(result).toEqual([
+        {
+          firstParam: 'firstParam',
+          queryParam: 'queryParam'
+        }
+      ]);
     });
-
   });
 
   describe('Auto Response', () => {
@@ -637,20 +611,19 @@ syntax here
     });
 
     test.each`
-      result              | annotations     | expected     | title
-      ${'text'}           | ${null}         | ${['text']}  | ${' send text'}
-      ${'<h1>Title</h1>'} | ${null}         | ${['<h1>Title</h1>']} | ${' send html'}
-      ${{ a: 'a' }}         | ${null}       | ${[{ a: 'a' }]} | ${' send object'}
-      ${['text']}         | ${null}         | ${[['text']]} | ${' send array'}
-      ${{ a: 'a' }}         | ${[{ type: 'view', arguments: ['test'] }]} | ${['test', { a: 'a' }]} | ${' render a view'}
+      result              | annotations                                | expected                | title
+      ${'text'}           | ${null}                                    | ${['text']}             | ${' send text'}
+      ${'<h1>Title</h1>'} | ${null}                                    | ${['<h1>Title</h1>']}   | ${' send html'}
+      ${{ a: 'a' }}       | ${null}                                    | ${[{ a: 'a' }]}         | ${' send object'}
+      ${['text']}         | ${null}                                    | ${[['text']]}           | ${' send array'}
+      ${{ a: 'a' }}       | ${[{ type: 'view', arguments: ['test'] }]} | ${['test', { a: 'a' }]} | ${' render a view'}
     `('should response', ({ result, annotations, expected }) => {
-       
       autoResponse(request as any, response as any, annotations, result);
 
       if (annotations) {
-        expect(response.render).toHaveBeenLastCalledWith(...expected as []);
+        expect(response.render).toHaveBeenLastCalledWith(...(expected as []));
       } else {
-        expect(response.send).toHaveBeenLastCalledWith(...expected as []);
+        expect(response.send).toHaveBeenLastCalledWith(...(expected as []));
       }
     });
   });

@@ -13,7 +13,8 @@ function addToArguments(
   propertyKey: string | symbol,
   parameterIndex: number,
   type: symbol,
-  args?: string | string[]) {
+  args?: string | string[]
+) {
   const decoratedParameters: ExpressiveTeaArgumentOptions[] = Metadata.get(ARGUMENTS_KEY, target, propertyKey) || [];
   decoratedParameters.unshift({
     arguments: args,

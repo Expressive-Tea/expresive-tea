@@ -4,7 +4,7 @@ import { type Constructor } from '../types/core';
 import type {
   ExpressiveTeaAnnotations,
   ExpressiveTeaArgumentOptions,
-  ExpressiveTeaHandlerOptions,
+  ExpressiveTeaHandlerOptions
 } from '@expressive-tea/commons';
 import type { ExpressiveTeaHandlerOptionsWithInstrospectedArgs } from '@interfaces';
 import { type RequestHandler, Router } from 'express';
@@ -26,32 +26,33 @@ import DependencyInjection from '@services/DependencyInjection';
  * @template TBase - The base constructor type being extended
  * @since 2.0.0
  */
-export type RouterizedClass<TBase extends Constructor> = TBase & (new (...args: any[]) => {
-  /** Express router for this route controller */
-  readonly router: Router;
-  /** Mountpoint path for this controller */
-  readonly mountpoint: string;
-  /** Mount this controller's router on a parent router */
-  __mount(parent: Router): any;
-  /** Register a route handler with proper middleware and argument injection */
-  __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler;
-});
+export type RouterizedClass<TBase extends Constructor> = TBase &
+  (new (...args: any[]) => {
+    /** Express router for this route controller */
+    readonly router: Router;
+    /** Mountpoint path for this controller */
+    readonly mountpoint: string;
+    /** Mount this controller's router on a parent router */
+    __mount(parent: Router): any;
+    /** Register a route handler with proper middleware and argument injection */
+    __registerHandler(options: ExpressiveTeaHandlerOptions): ExpressMiddlewareHandler;
+  });
 
 /**
  * Routerize mixin - Adds Expressive Tea route capabilities to a controller class
- * 
+ *
  * Transforms a regular class into an Expressive Tea route controller with:
  * - Express router management
  * - Route handler registration
  * - Middleware support
  * - Automatic argument injection from decorators
  * - Annotation processing
- * 
+ *
  * @template TBase - The base constructor type to extend
  * @param {TBase} Route - The base controller class to extend
  * @param {string} mountpoint - The path where this controller should be mounted
  * @returns {RouterizedClass<TBase>} The enhanced class with route capabilities
- * 
+ *
  * @example
  * ```typescript
  * @Route('/users')
@@ -71,10 +72,9 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
     readonly router: Router;
     readonly mountpoint: string;
 
-
     constructor(...args: any[]) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      super(...args)
+      super(...args);
       // Metadata is stored on the original class prototype by decorators
       // Route is the base class, so Route.prototype is where metadata is stored
       const handlers: ExpressiveTeaHandlerOptions[] = Metadata.get(ROUTER_HANDLERS_KEY, Route.prototype) ?? [];
@@ -112,7 +112,8 @@ export function Routerize<TBase extends Constructor>(Route: TBase, mountpoint: s
         options.propertyKey
       );
 
-      const optionsWithArgs: ExpressiveTeaHandlerOptionsWithInstrospectedArgs = options as ExpressiveTeaHandlerOptionsWithInstrospectedArgs;
+      const optionsWithArgs: ExpressiveTeaHandlerOptionsWithInstrospectedArgs =
+        options as ExpressiveTeaHandlerOptionsWithInstrospectedArgs;
 
       return executeRequest.bind({
         options: optionsWithArgs,

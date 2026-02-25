@@ -15,8 +15,7 @@ function middlewares(application) {
 
 @ServerSettings({ port: 8888 })
 @Plug(BOOT_STAGES.APPLICATION, 'Benchmark Hello World', middlewares, true)
-class Test extends Boot {
-}
+class Test extends Boot {}
 
 const server = new Test();
 export default server.start();

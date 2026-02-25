@@ -59,14 +59,14 @@ async function runAllBenchmarks(): Promise<void> {
   console.log('BENCHMARK SUITE SUMMARY');
   console.log('='.repeat(80));
 
-  const passed = results.filter(r => r.status === 'pass').length;
-  const failed = results.filter(r => r.status === 'fail').length;
+  const passed = results.filter((r) => r.status === 'pass').length;
+  const failed = results.filter((r) => r.status === 'fail').length;
 
   console.log(`\nTotal Benchmarks: ${results.length}`);
   console.log(`Passed: ${passed}`);
   console.log(`Failed: ${failed}`);
 
-  results.forEach(result => {
+  results.forEach((result) => {
     const icon = result.status === 'pass' ? '✓' : '✗';
     console.log(`  ${icon} ${result.name} (${(result.duration / 1000).toFixed(2)}s)`);
   });
@@ -80,7 +80,7 @@ if (require.main === module) {
       console.log('\nBenchmark suite completed');
       process.exit(0);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Benchmark suite failed:', error);
       process.exit(1);
     });

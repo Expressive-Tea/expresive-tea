@@ -1,5 +1,3 @@
- 
-
 export const httpServerMock: any = {
   listen: jest.fn().mockImplementation((_port?: number) => {}),
   close: jest.fn().mockImplementation((callback?: () => void) => {

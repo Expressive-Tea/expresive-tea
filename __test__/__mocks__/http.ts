@@ -1,5 +1,3 @@
- 
-
 export const httpServerMock: any = {
   listen: jest.fn(),
   listeners: jest.fn().mockImplementation(() => []),
@@ -20,7 +18,7 @@ export const httpServerMock: any = {
 
 export const createServer = jest.fn().mockImplementation(() => {
   // keep a lightweight console for debugging test runs
-   
+
   console.log('Mocking HTTP Server');
   return httpServerMock;
 });

@@ -30,11 +30,11 @@ describe('Boot DI Integration (Phase 1)', () => {
   @injectable()
   class CacheService {
     private data = new Map<string, any>();
-    
+
     set(key: string, value: any) {
       this.data.set(key, value);
     }
-    
+
     get(key: string) {
       return this.data.get(key);
     }
@@ -47,7 +47,7 @@ describe('Boot DI Integration (Phase 1)', () => {
   describe('getContainer()', () => {
     test('should return the DI container', () => {
       class TestApp extends Boot {}
-      
+
       const app = new TestApp();
       const appContainer = app.getContainer();
 
@@ -113,7 +113,7 @@ describe('Boot DI Integration (Phase 1)', () => {
 
       const app = new TestApp();
       const appContainer = app.getContainer();
-      
+
       expect(appContainer.isBound(UserService)).toBe(true);
     });
 
@@ -275,11 +275,11 @@ describe('Boot DI Integration (Phase 1)', () => {
       // Each has its own APP_NAME
       expect(container1.get('APP_NAME')).toBe('App 1');
       expect(container2.get('APP_NAME')).toBe('App 2');
-      
+
       // Verify services are bound in their respective containers
       const userService = container1.get(UserService);
       const dbService = container2.get(DatabaseService);
-      
+
       expect(userService).toBeInstanceOf(UserService);
       expect(dbService).toBeInstanceOf(DatabaseService);
     });
@@ -301,10 +301,12 @@ describe('Boot DI Integration (Phase 1)', () => {
     test('should access parent bindings', () => {
       // Bind something to the global container first
       const globalContainer = container;
-      
+
       @injectable()
       class GlobalService {
-        getValue() { return 'global'; }
+        getValue() {
+          return 'global';
+        }
       }
 
       globalContainer.bind(GlobalService).toSelf();

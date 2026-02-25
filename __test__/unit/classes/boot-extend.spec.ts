@@ -8,87 +8,96 @@ jest.mock('express', () => require('jest-express'));
 
 describe('Boot Class Extends', () => {
   let portCounter = 4000;
+  let appInstances: any[] = [];
 
   beforeEach(() => {
-    Settings.reset();
+    jest.clearAllMocks();
+    appInstances = [];
     Settings.getInstance().set('port', portCounter++);
     Settings.getInstance().set('certificate', undefined);
     Settings.getInstance().set('privateKey', undefined);
-    jest.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    for (const app of appInstances) {
+      if (app?.server) {
+        await new Promise<void>((resolve) => {
+          app.server.close(() => resolve());
+        });
+      }
+      if (app?.secureServer) {
+        await new Promise<void>((resolve) => {
+          app.secureServer.close(() => resolve());
+        });
+      }
+    }
+    appInstances = [];
     container.unbindAll();
     Settings.reset();
+    // Wait a moment for OS to fully release the ports
+    await new Promise((resolve) => setTimeout(resolve, 100));
   });
 
   test('should register a new static', async () => {
     @Static('/public')
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
     const app = await instance.start();
+    appInstances.push(app);
 
     expect(app.application.use).toHaveBeenCalledWith(undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
-    if (app?.server) app.server.close();
   });
 
   test('should register a new static with virtual', async () => {
     @Static('/public', '/virtual')
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
     const app = await instance.start();
+    appInstances.push(app);
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', {});
-    if (app?.server) app.server.close();
   });
 
   test('should register a new static with virtual and change options', async () => {
     @Static('/public', '/virtual', { etag: false })
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
     const app = await instance.start();
+    appInstances.push(app);
 
     expect(app.application.use).toHaveBeenCalledWith('/virtual', undefined);
     expect(express.static).toHaveBeenCalledWith('/public', { etag: false });
-    if (app?.server) app.server.close();
   });
 
   test('should set a new directive setting value', async () => {
     @ExpressDirective('etag', true)
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
     const app = await instance.start();
+    appInstances.push(app);
 
-     
     expect(app.application.set).toHaveBeenCalledWith('etag', true);
-    if (app?.server) app.server.close();
   });
 
   test('should set a new directive setting value and pass multiple arguments', async () => {
     @ExpressDirective('trust proxy', 'loopback', '123.123.123.123')
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
     const app = await instance.start();
+    appInstances.push(app);
 
-     
     expect(app.application.set).toHaveBeenCalledWith('trust proxy', 'loopback', '123.123.123.123');
-    if (app?.server) app.server.close();
   });
 });

@@ -27,12 +27,12 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
     mockApp = {
       use: jest.fn(),
       get: jest.fn(),
-      set: jest.fn(),
+      set: jest.fn()
     };
 
     // Mock context
     mockContext = {
-      getApplication: jest.fn().mockReturnValue(mockApp),
+      getApplication: jest.fn().mockReturnValue(mockApp)
     };
 
     // Create engine instance with mocked context
@@ -59,19 +59,15 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
         resolveStageCallOrder.push({
           stage,
           timestamp: startTime,
-          order,
+          order
         });
 
         // Simulate async work (50ms delay)
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 50));
       });
 
       // Execute resolveStages with multiple stages
-      const stages = [
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
-      ];
+      const stages = [BOOT_STAGES.BOOT_DEPENDENCIES, BOOT_STAGES.INITIALIZE_MIDDLEWARES, BOOT_STAGES.APPLICATION];
 
       await engine.resolveStages(stages);
 
@@ -102,7 +98,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
       mockedResolveStage.mockImplementation(async (stage: BOOT_STAGES) => {
         if (stage === BOOT_STAGES.BOOT_DEPENDENCIES) {
           // Simulate async work
-          await new Promise(resolve => setTimeout(resolve, 30));
+          await new Promise((resolve) => setTimeout(resolve, 30));
           bootDependenciesCompleted = true;
         }
 
@@ -132,18 +128,14 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
         const delays: Record<number, number> = {
           [BOOT_STAGES.BOOT_DEPENDENCIES]: 40,
           [BOOT_STAGES.INITIALIZE_MIDDLEWARES]: 20,
-          [BOOT_STAGES.APPLICATION]: 30,
+          [BOOT_STAGES.APPLICATION]: 30
         };
 
-        await new Promise(resolve => setTimeout(resolve, delays[stage] || 10));
+        await new Promise((resolve) => setTimeout(resolve, delays[stage] || 10));
         executionLog.push(`end-${stage}`);
       });
 
-      const stages = [
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
-      ];
+      const stages = [BOOT_STAGES.BOOT_DEPENDENCIES, BOOT_STAGES.INITIALIZE_MIDDLEWARES, BOOT_STAGES.APPLICATION];
 
       await engine.resolveStages(stages);
 
@@ -154,7 +146,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
         'start-1', // INITIALIZE_MIDDLEWARES
         'end-1',
         'start-2', // APPLICATION
-        'end-2',
+        'end-2'
       ]);
     });
 
@@ -196,7 +188,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
 
       mockedResolveStage.mockImplementation(async (stage: BOOT_STAGES) => {
         if (stage === BOOT_STAGES.BOOT_DEPENDENCIES) {
-          await new Promise(resolve => setTimeout(resolve, 50));
+          await new Promise((resolve) => setTimeout(resolve, 50));
           sharedState.value = 100;
         }
 
@@ -225,14 +217,10 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
           throw new Error('Stage error');
         }
 
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
       });
 
-      const stages = [
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
-      ];
+      const stages = [BOOT_STAGES.BOOT_DEPENDENCIES, BOOT_STAGES.INITIALIZE_MIDDLEWARES, BOOT_STAGES.APPLICATION];
 
       // Expect error to be thrown
       await expect(engine.resolveStages(stages)).rejects.toThrow('Stage error');
@@ -240,7 +228,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
       // Only stages up to the error should have executed
       expect(executionLog).toEqual([
         'stage-0', // BOOT_DEPENDENCIES
-        'stage-1', // INITIALIZE_MIDDLEWARES (throws error)
+        'stage-1' // INITIALIZE_MIDDLEWARES (throws error)
       ]);
 
       // Stage 2 should NOT have executed
@@ -256,7 +244,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
       mockedResolveStage.mockImplementation(async (stage: BOOT_STAGES) => {
         if (stage === BOOT_STAGES.BOOT_DEPENDENCIES) {
           // Simulate dependency setup taking time
-          await new Promise(resolve => setTimeout(resolve, 60));
+          await new Promise((resolve) => setTimeout(resolve, 60));
           dependencySetupComplete = true;
         }
 
@@ -291,11 +279,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
       await engine.resolveStages([BOOT_STAGES.APPLICATION]);
 
       expect(mockedResolveStage).toHaveBeenCalledTimes(1);
-      expect(mockedResolveStage).toHaveBeenCalledWith(
-        BOOT_STAGES.APPLICATION,
-        mockContext,
-        mockApp
-      );
+      expect(mockedResolveStage).toHaveBeenCalledWith(BOOT_STAGES.APPLICATION, mockContext, mockApp);
     });
 
     test('should handle stages with no extra arguments', async () => {
@@ -303,11 +287,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
 
       await engine.resolveStages([BOOT_STAGES.BOOT_DEPENDENCIES]);
 
-      expect(mockedResolveStage).toHaveBeenCalledWith(
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        mockContext,
-        mockApp
-      );
+      expect(mockedResolveStage).toHaveBeenCalledWith(BOOT_STAGES.BOOT_DEPENDENCIES, mockContext, mockApp);
     });
 
     test('should execute all stages even with fast completion', async () => {
@@ -319,11 +299,7 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
         // Immediate completion (no delay)
       });
 
-      const stages = [
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
-      ];
+      const stages = [BOOT_STAGES.BOOT_DEPENDENCIES, BOOT_STAGES.INITIALIZE_MIDDLEWARES, BOOT_STAGES.APPLICATION];
 
       await engine.resolveStages(stages);
 
@@ -339,23 +315,15 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
 
       mockedResolveStage.mockImplementation(async (stage: BOOT_STAGES) => {
         bootFlow.push(`stage-${BOOT_STAGES[stage]}`);
-        await new Promise(resolve => setTimeout(resolve, 15));
+        await new Promise((resolve) => setTimeout(resolve, 15));
       });
 
       // Simulate the typical init() call pattern
-      const initStages = [
-        BOOT_STAGES.BOOT_DEPENDENCIES,
-        BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
-      ];
+      const initStages = [BOOT_STAGES.BOOT_DEPENDENCIES, BOOT_STAGES.INITIALIZE_MIDDLEWARES, BOOT_STAGES.APPLICATION];
 
       await engine.resolveStages(initStages);
 
-      expect(bootFlow).toEqual([
-        'stage-BOOT_DEPENDENCIES',
-        'stage-INITIALIZE_MIDDLEWARES',
-        'stage-APPLICATION',
-      ]);
+      expect(bootFlow).toEqual(['stage-BOOT_DEPENDENCIES', 'stage-INITIALIZE_MIDDLEWARES', 'stage-APPLICATION']);
 
       // Verify sequential execution
       expect(mockedResolveStage).toHaveBeenCalledTimes(3);
@@ -367,24 +335,21 @@ describe('HTTPEngine.resolveStages() - Sequential Execution (Issue #247)', () =>
 
       mockedResolveStage.mockImplementation(async () => {
         callCount++;
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise((resolve) => setTimeout(resolve, 10));
       });
 
       // First call (like init() does)
       await engine.resolveStages([
         BOOT_STAGES.BOOT_DEPENDENCIES,
         BOOT_STAGES.INITIALIZE_MIDDLEWARES,
-        BOOT_STAGES.APPLICATION,
+        BOOT_STAGES.APPLICATION
       ]);
 
       const firstCallCount = callCount;
       expect(firstCallCount).toBe(3);
 
       // Second call (like init() does for additional stages)
-      await engine.resolveStages([
-        BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES,
-        BOOT_STAGES.ON_HTTP_CREATION,
-      ]);
+      await engine.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION]);
 
       expect(callCount).toBe(5);
     });

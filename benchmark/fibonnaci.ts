@@ -10,7 +10,7 @@ function middlewares(application) {
     application.use((req, res, next) => next());
   }
 
-  application.use((req, res) => res.json({ data: fibonacci(100000)}));
+  application.use((req, res) => res.json({ data: fibonacci(100000) }));
 }
 
 function fibonacci(num) {
@@ -29,8 +29,7 @@ function fibonacci(num) {
 
 @ServerSettings({ port: 8888 })
 @Plug(BOOT_STAGES.APPLICATION, 'Benchmark Fibonnaci', middlewares, true)
-class Test extends Boot {
-}
+class Test extends Boot {}
 
 const server = new Test();
 export default server.start();

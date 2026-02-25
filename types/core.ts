@@ -1,8 +1,4 @@
-import {
-  type IExpressiveTeaModule,
-  IExpressiveTeaProxy,
-  type IExpressiveTeaRoute
-} from '@expressive-tea/commons';
+import { type IExpressiveTeaModule, IExpressiveTeaProxy, type IExpressiveTeaRoute } from '@expressive-tea/commons';
 
 // Generic utility types - any is required for maximum flexibility
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -22,4 +18,3 @@ export type ExpressiveTeaProxy = MixinConstructor<IExpressiveTeaProxy>;
 export type ModulizedExpressiveTeaModule<TBase> = IExpressiveTeaModule & TBase;
 export type RouterizedExpressiveTeaRoute<TBase> = IExpressiveTeaRoute & TBase;
 export type ProxifyExpressiveTeaRoute<TBase> = IExpressiveTeaProxy & TBase;
-

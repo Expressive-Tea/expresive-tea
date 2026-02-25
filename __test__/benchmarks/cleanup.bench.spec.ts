@@ -9,13 +9,7 @@ import 'reflect-metadata';
 import Settings from '../../classes/Settings';
 import container from '../../inversify.config';
 import { createBenchmarkApp } from './utils/test-app';
-import {
-  measureExecution,
-  formatTime,
-  sleep,
-  measureMemory,
-  formatBytes
-} from './utils/benchmark-helpers';
+import { measureExecution, formatTime, sleep, measureMemory, formatBytes } from './utils/benchmark-helpers';
 
 describe('Resource Cleanup Benchmark', () => {
   const TARGET_CLEANUP_MS = 5000; // 5 seconds target
@@ -320,12 +314,7 @@ describe('Resource Cleanup Benchmark', () => {
       benchmark: 'resource-cleanup',
       timestamp: new Date().toISOString(),
       target_cleanup_time_ms: TARGET_CLEANUP_MS,
-      tests: [
-        'shutdown-time',
-        'memory-cleanup',
-        'repeated-cycles',
-        'hanging-resources'
-      ],
+      tests: ['shutdown-time', 'memory-cleanup', 'repeated-cycles', 'hanging-resources'],
       result: 'All cleanup tests completed successfully'
     };
 

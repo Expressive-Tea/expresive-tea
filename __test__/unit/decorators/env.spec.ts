@@ -10,7 +10,7 @@ describe('@Env Decorator', () => {
 
   beforeEach(() => {
     // Clean env files
-    envFiles.forEach(file => {
+    envFiles.forEach((file) => {
       const filePath = path.join(TEST_DIR, file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -32,7 +32,7 @@ describe('@Env Decorator', () => {
 
   afterEach(() => {
     // Clean up
-    envFiles.forEach(file => {
+    envFiles.forEach((file) => {
       const filePath = path.join(TEST_DIR, file);
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -108,9 +108,7 @@ describe('@Env Decorator', () => {
       @Env({ transform: transformSpy })
       class _TestApp {}
 
-      expect(transformSpy).toHaveBeenCalledWith(
-        expect.objectContaining({ PORT: '3000', HOST: 'localhost' })
-      );
+      expect(transformSpy).toHaveBeenCalledWith(expect.objectContaining({ PORT: '3000', HOST: 'localhost' }));
     });
 
     test('should store transformed result', () => {
@@ -165,9 +163,7 @@ describe('@Env Decorator', () => {
         class _TestApp {}
       }).not.toThrow();
 
-      expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Environment transformation failed')
-      );
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Environment transformation failed'));
 
       warnSpy.mockRestore();
     });

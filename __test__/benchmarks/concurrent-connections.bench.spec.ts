@@ -10,12 +10,7 @@ import * as supertest from 'supertest';
 import Settings from '../../classes/Settings';
 import container from '../../inversify.config';
 import { createBenchmarkApp } from './utils/test-app';
-import {
-  calculateStats,
-  printStats,
-  formatTime,
-  sleep
-} from './utils/benchmark-helpers';
+import { calculateStats, printStats, formatTime, sleep } from './utils/benchmark-helpers';
 
 describe('Concurrent Connections Benchmark', () => {
   let app: any;
@@ -74,10 +69,10 @@ describe('Concurrent Connections Benchmark', () => {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
-    const successCount = results.filter(r => r.success).length;
-    const errorCount = results.filter(r => !r.success).length;
+    const successCount = results.filter((r) => r.success).length;
+    const errorCount = results.filter((r) => !r.success).length;
     const successRate = (successCount / connections) * 100;
-    const latencies = results.filter(r => r.success).map(r => r.latency);
+    const latencies = results.filter((r) => r.success).map((r) => r.latency);
 
     console.log(`  Duration: ${formatTime(duration)}`);
     console.log(`  Success: ${successCount}/${connections} (${successRate.toFixed(2)}%)`);
@@ -150,7 +145,9 @@ describe('Concurrent Connections Benchmark', () => {
     console.log('\nTarget: Handle 1000+ concurrent connections');
 
     if (result.successRate > 85) {
-      console.log(`✓ PASS: Successfully handled 1000 concurrent connections (${result.successRate.toFixed(2)}% success)`);
+      console.log(
+        `✓ PASS: Successfully handled 1000 concurrent connections (${result.successRate.toFixed(2)}% success)`
+      );
     } else {
       console.log(`✗ FAIL: Poor performance with 1000 connections (${result.successRate.toFixed(2)}% success)`);
     }

@@ -8,7 +8,6 @@ import Module, { registerMock } from '../../test-classes/module';
 import container from '../../../inversify.config';
 import { Modules } from '../../../decorators/server';
 
-
 const originalCreateServer = http.createServer;
 const originalCreateSecureServer = https.createServer;
 const originalFsReadFileSync = fs.readFileSync;
@@ -20,12 +19,11 @@ describe('Boot Class Secure Server', () => {
   @Modules([Module])
   class Bootstrap extends Boot {}
 
-  class DefaultBootstrap extends Boot {
-  }
+  class DefaultBootstrap extends Boot {}
 
   beforeEach(() => {
     jest.clearAllMocks();
-     
+
     jest.spyOn(http, 'createServer').mockImplementation((...args: any[]) => originalCreateServer(...args));
     jest.spyOn(https, 'createServer').mockImplementation((options: any, requestListener?: any) => {
       // Handle both signatures: (options) and (options, requestListener)
@@ -44,7 +42,9 @@ describe('Boot Class Secure Server', () => {
         res.end();
       });
     });
-    jest.spyOn(fs, 'readFileSync').mockImplementation((fileName: fs.PathOrFileDescriptor) => fileName === 'certificate.pem' ? cert : key);
+    jest
+      .spyOn(fs, 'readFileSync')
+      .mockImplementation((fileName: fs.PathOrFileDescriptor) => (fileName === 'certificate.pem' ? cert : key));
   });
 
   afterEach(() => {
@@ -105,5 +105,4 @@ describe('Boot Class Secure Server', () => {
       new Promise<void>((resolve) => app.secureServer?.close(() => resolve()))
     ]);
   });
-
 });

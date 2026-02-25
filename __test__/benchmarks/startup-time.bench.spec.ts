@@ -9,12 +9,7 @@ import 'reflect-metadata';
 import Settings from '../../classes/Settings';
 import container from '../../inversify.config';
 import { createBenchmarkApp } from './utils/test-app';
-import {
-  calculateStats,
-  printStats,
-  formatTime,
-  calculateVariance
-} from './utils/benchmark-helpers';
+import { calculateStats, printStats, formatTime, calculateVariance } from './utils/benchmark-helpers';
 
 describe('Startup Time Benchmark', () => {
   const ITERATIONS = 10;

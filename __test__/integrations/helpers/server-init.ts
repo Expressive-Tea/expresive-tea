@@ -5,8 +5,7 @@ import RootModule from './modules/root/RootModule';
 import { ExpressiveTeaApplication } from '@expressive-tea/commons';
 
 @Modules([RootModule])
-class Bootstrap extends Boot {
-}
+class Bootstrap extends Boot {}
 
 export default async function initServer() {
   const bootstrap = new Bootstrap();

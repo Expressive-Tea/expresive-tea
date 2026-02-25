@@ -28,27 +28,31 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
 
   afterEach(async () => {
     // Stop all Boot instances first
-    await Promise.all(activeBoots.map(async (boot) => {
-      try {
-        await boot.stop();
-      } catch {
-        // Ignore errors during cleanup
-      }
-    }));
+    await Promise.all(
+      activeBoots.map(async (boot) => {
+        try {
+          await boot.stop();
+        } catch {
+          // Ignore errors during cleanup
+        }
+      })
+    );
 
     // Close all servers
-    await Promise.all(activeApps.map(async (app) => {
-      if (app.server) {
-        await new Promise<void>((resolve) => {
-          app.server.close(() => resolve());
-        });
-      }
-      if (app.secureServer) {
-        await new Promise<void>((resolve) => {
-          app.secureServer.close(() => resolve());
-        });
-      }
-    }));
+    await Promise.all(
+      activeApps.map(async (app) => {
+        if (app.server) {
+          await new Promise<void>((resolve) => {
+            app.server.close(() => resolve());
+          });
+        }
+        if (app.secureServer) {
+          await new Promise<void>((resolve) => {
+            app.secureServer.close(() => resolve());
+          });
+        }
+      })
+    );
 
     // Clear arrays
     activeApps = [];
@@ -58,8 +62,8 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
     container.unbindAll();
     Settings.reset();
 
-    // Wait a bit for async cleanup
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Wait for OS to fully release the ports
+    await new Promise((resolve) => setTimeout(resolve, 200));
   });
 
   describe('CRITICAL-002: DI Container Memory Leak Fix', () => {
@@ -203,10 +207,7 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
       const initialEngineCount = EngineRegistry.getAllEngines().length;
 
       // Start both boots concurrently
-      const [app1, app2] = await Promise.all([
-        boot1.start(),
-        boot2.start()
-      ]);
+      const [app1, app2] = await Promise.all([boot1.start(), boot2.start()]);
       activeApps.push(app1, app2);
 
       // Engines should be loaded (count should be same or greater)
@@ -251,19 +252,15 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
       @ServerSettings({ port: portCounter++ })
       class TestBootC extends Boot {}
 
-      const boots = [
-        new TestBootA(),
-        new TestBootB(),
-        new TestBootC()
-      ];
+      const boots = [new TestBootA(), new TestBootB(), new TestBootC()];
       activeBoots.push(...boots);
 
-      const apps = await Promise.all(boots.map(boot => boot.start()));
+      const apps = await Promise.all(boots.map((boot) => boot.start()));
       activeApps.push(...apps);
 
       // All boots should have successfully started
       expect(apps.length).toBe(3);
-      apps.forEach(app => {
+      apps.forEach((app) => {
         expect(app.application).toBeDefined();
         expect(app.server).toBeDefined();
       });
@@ -317,25 +314,27 @@ describe('Boot Lifecycle - Phase 1 Fixes', () => {
 
         const boots = [new TestBootIntegration1(), new TestBootIntegration2()];
 
-        const apps = await Promise.all(boots.map(boot => boot.start()));
-        await Promise.all(boots.map(boot => boot.stop()));
+        const apps = await Promise.all(boots.map((boot) => boot.start()));
+        await Promise.all(boots.map((boot) => boot.stop()));
 
         // Cleanup servers immediately after each iteration
-        await Promise.all(apps.map(async (app) => {
-          if (app.server) {
-            await new Promise<void>((resolve) => {
-              app.server.close(() => resolve());
-            });
-          }
-          if (app.secureServer) {
-            await new Promise<void>((resolve) => {
-              app.secureServer.close(() => resolve());
-            });
-          }
-        }));
+        await Promise.all(
+          apps.map(async (app) => {
+            if (app.server) {
+              await new Promise<void>((resolve) => {
+                app.server.close(() => resolve());
+              });
+            }
+            if (app.secureServer) {
+              await new Promise<void>((resolve) => {
+                app.secureServer.close(() => resolve());
+              });
+            }
+          })
+        );
 
         // Wait a bit between iterations
-        await new Promise(resolve => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 50));
       }
 
       // If leaks or race conditions existed, this test would fail or hang

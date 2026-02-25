@@ -115,4 +115,3 @@ export async function createBenchmarkApp(port?: number) {
 
   return instance;
 }
-

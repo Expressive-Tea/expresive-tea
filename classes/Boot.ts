@@ -57,7 +57,7 @@ abstract class Boot {
    */
   private readonly server: Express = express();
 
-  private readonly containerDI: Container = new Container({ parent: container});
+  private readonly containerDI: Container = new Container({ parent: container });
 
   /**
    * Engine instances for cleanup during shutdown
@@ -170,19 +170,21 @@ abstract class Boot {
     // are created concurrently (e.g., in parallel tests or microservice setups).
     if (EngineRegistry.getAllEngines().length === 0) {
       if (!Boot.engineLoadPromise) {
-        Boot.engineLoadPromise = import('../engines').then(() => { /* loaded */ });
+        Boot.engineLoadPromise = import('../engines').then(() => {
+          /* loaded */
+        });
       }
       await Boot.engineLoadPromise;
       Boot.engineLoadPromise = null;
     }
 
     // Get registered engines from EngineRegistry (automatically filtered and sorted by dependencies)
-    const registeredEngines: typeof ExpressiveTeaEngine[] = EngineRegistry.getRegisteredEngines(this, this.settings);
+    const registeredEngines: (typeof ExpressiveTeaEngine)[] = EngineRegistry.getRegisteredEngines(this, this.settings);
 
     this.initializeEngines(registeredEngines);
 
     // Resolve Engines
-    const readyEngines: ExpressiveTeaEngine[] = registeredEngines.map(Engine => {
+    const readyEngines: ExpressiveTeaEngine[] = registeredEngines.map((Engine) => {
       const instance = this.containerDI.get<ExpressiveTeaEngine>(Engine);
       return instance;
     });
@@ -195,7 +197,7 @@ abstract class Boot {
       await ExpressiveTeaEngine.exec(readyEngines.reverse(), 'init');
       await ExpressiveTeaEngine.exec(readyEngines, 'start');
 
-      return ({ application: this.server, server, secureServer });
+      return { application: this.server, server, secureServer };
     } catch (e) {
       // If anything failed during engine initialization or start, ensure servers are closed to avoid leaking
       server?.close();
@@ -206,19 +208,19 @@ abstract class Boot {
 
   /**
    * Gracefully stop the application and all engines
-   * 
+   *
    * Calls the stop() lifecycle method on all registered engines in reverse order
    * (opposite of initialization order) to ensure proper cleanup.
-   * 
+   *
    * @returns {Promise<void>} Promise that resolves when all engines have stopped
    * @since 2.0.0
    * @summary Graceful shutdown
-   * 
+   *
    * @example
    * ```typescript
    * const app = new MyApp();
    * await app.start();
-   * 
+   *
    * // Later, during shutdown
    * await app.stop();
    * ```
@@ -240,7 +242,7 @@ abstract class Boot {
     this.containerDI.unbindAll();
   }
 
-  private initializeEngines(registeredEngines: typeof ExpressiveTeaEngine[]): void {
+  private initializeEngines(registeredEngines: (typeof ExpressiveTeaEngine)[]): void {
     for (const Engine of registeredEngines) {
       this.containerDI.bind<ExpressiveTeaEngine>(Engine).to(Engine);
     }
@@ -253,12 +255,14 @@ abstract class Boot {
     const certificate: fs.PathOrFileDescriptor = this.settings.get('certificate');
     const server: http.Server = http.createServer(this.server);
     const secureServer: https.Server | undefined =
-      privateKey &&
-      certificate
-        ? https.createServer({
-            cert: fs.readFileSync(certificate).toString('utf-8'),
-            key: fs.readFileSync(privateKey).toString('utf-8')
-          }, this.server)
+      privateKey && certificate
+        ? https.createServer(
+            {
+              cert: fs.readFileSync(certificate).toString('utf-8'),
+              key: fs.readFileSync(privateKey).toString('utf-8')
+            },
+            this.server
+          )
         : undefined;
 
     return [server, secureServer];

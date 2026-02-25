@@ -8,9 +8,9 @@ import { HealthCheck } from '../../../decorators/health';
     {
       name: 'database',
       check: async () => ({ status: 'pass' }),
-      critical: true,
-    },
-  ],
+      critical: true
+    }
+  ]
 })
 class DecoratedBootClass {
   private readonly app;

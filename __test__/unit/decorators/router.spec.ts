@@ -23,13 +23,11 @@ describe('Route Decorator', () => {
     @Route('/test')
     class TestController {
       @Get('/start')
-      start() {
-      }
+      start() {}
     }
 
     @Route()
-    class TestDefaultController {
-    }
+    class TestDefaultController {}
 
     TestClass = TestController;
     TestDefault = TestDefaultController;
@@ -55,7 +53,6 @@ describe('Route Decorator', () => {
   });
 
   test('should assign handlers', () => {
-
     const test = new TestClass();
     const router = express.Router();
 
@@ -63,7 +60,6 @@ describe('Route Decorator', () => {
 
     expect(test.router.get).toHaveBeenCalledWith('/start', expect.anything());
     expect(router.use).toHaveBeenCalledWith('/test', expect.anything());
-
   });
 
   test('should default route', () => {
@@ -81,8 +77,7 @@ describe('Middleware Decorator', () => {
     @Middleware(() => null)
     class TestController {
       @Middleware(() => null)
-      test() {
-      }
+      test() {}
     }
 
     TestClass = TestController;
@@ -109,19 +104,16 @@ describe('Get Decorator', () => {
     @Route('/')
     class TestController {
       @Get('/getTest')
-      test() {
-      }
+      test() {}
 
       @Get()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -140,19 +132,16 @@ describe('Post Decorator', () => {
     @Route('/')
     class TestController {
       @Post('/post')
-      test() {
-      }
+      test() {}
 
       @Post()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -170,19 +159,16 @@ describe('Put Decorator', () => {
     @Route('/')
     class TestController {
       @Put('/put')
-      test() {
-      }
+      test() {}
 
       @Put()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -201,19 +187,16 @@ describe('Patch Decorator', () => {
     @Route('/')
     class TestController {
       @Patch('/patch')
-      test() {
-      }
+      test() {}
 
       @Patch()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -232,19 +215,16 @@ describe('Param Decorator', () => {
     @Route('/')
     class TestController {
       @Param('/param')
-      test() {
-      }
+      test() {}
 
       @Param()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -262,19 +242,16 @@ describe('Delete Decorator', () => {
     @Route('/')
     class TestController {
       @Delete('/delete')
-      test() {
-      }
+      test() {}
 
       @Delete()
-      default() {
-      }
+      default() {}
     }
 
     Controller = TestController;
   });
 
   test('should call correctly the decorator', () => {
-     
     const _controller = new Controller();
     expect(metadataMock).toHaveBeenCalled();
     expect(metadataMock.mock.calls[0][0]).toEqual(ROUTER_HANDLERS_KEY);
@@ -293,8 +270,7 @@ describe('View Decorator', () => {
     @Route('/')
     class TestController {
       @View('test')
-      test() {
-      }
+      test() {}
     }
 
     Controller = TestController;

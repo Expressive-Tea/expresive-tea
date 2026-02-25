@@ -1,23 +1,23 @@
 /**
  * Core Engine Registration
- * 
+ *
  * Automatically registers all core Expressive Tea engines with the EngineRegistry.
  * Import this file to enable all core engines with proper dependency order.
- * 
+ *
  * Engine Priority Order:
  * - 0: HTTPEngine (base engine, no dependencies)
  * - 5: HealthCheckEngine (health endpoints, depends on http)
  * - 10: SocketIOEngine, WebsocketEngine (depend on http)
  * - 20: TeapotEngine, TeacupEngine (depend on http, socketio)
- * 
+ *
  * @example
  * ```typescript
  * import '@expressive-tea/core/engines'; // Registers all core engines
  * import Boot from '@expressive-tea/core';
- * 
+ *
  * class MyApp extends Boot {}
  * ```
- * 
+ *
  * @module engines
  * @since 2.0.0
  */
@@ -109,13 +109,6 @@ EngineRegistry.register({
 });
 
 // Export engines for direct imports if needed
-export {
-  HTTPEngine,
-  HealthCheckEngine,
-  SocketIOEngine,
-  WebsocketEngine,
-  TeapotEngine,
-  TeacupEngine
-};
+export { HTTPEngine, HealthCheckEngine, SocketIOEngine, WebsocketEngine, TeapotEngine, TeacupEngine };
 
 export default EngineRegistry;

@@ -109,7 +109,7 @@ describe('EngineRegistry (Phase 2)', () => {
 
       const engines = EngineRegistry.getAllEngines();
       expect(engines).toHaveLength(2);
-      expect(engines.map(e => e.name)).toEqual(expect.arrayContaining(['test-a', 'test-b']));
+      expect(engines.map((e) => e.name)).toEqual(expect.arrayContaining(['test-a', 'test-b']));
     });
   });
 
@@ -284,7 +284,7 @@ describe('EngineRegistry (Phase 2)', () => {
       // A must be first, D must be last
       expect(engines[0]).toBe(TestEngineA);
       expect(engines[3]).toBe(TestEngineD);
-      
+
       // B and C must be after A and before D
       const indexB = engines.indexOf(TestEngineB);
       const indexC = engines.indexOf(TestEngineC);
@@ -523,7 +523,7 @@ describe('EngineRegistry (Phase 2)', () => {
 
       const allEngines = EngineRegistry.getAllEngines();
       expect(allEngines).toHaveLength(2);
-      
+
       // getAllEngines returns all, getRegisteredEngines filters by canRegister
       const registeredEngines = EngineRegistry.getRegisteredEngines();
       expect(registeredEngines).toHaveLength(1);

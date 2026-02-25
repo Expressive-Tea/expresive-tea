@@ -5,42 +5,39 @@ import { ExpressiveTeaApplication } from '@expressive-tea/commons';
 import container from '../../inversify.config';
 import Settings from '../../classes/Settings';
 
-
 describe('Websocket integration', () => {
   let app: ExpressiveTeaApplication;
 
   afterEach(async () => {
     container.unbindAll();
     Settings.reset();
-    
+
     // Properly close servers with promises
     if (app?.server) {
       await new Promise<void>((resolve) => {
         app.server.close(() => resolve());
       });
     }
-    
+
     if (app?.secureServer) {
       await new Promise<void>((resolve) => {
         app.secureServer.close(() => resolve());
       });
     }
   });
- test('should initialize websockets', async () => {
+  test('should initialize websockets', async () => {
+    @ServerSettings({
+      port: 3100,
+      startWebsocket: true
+    })
+    class Bootstrap extends Boot {}
 
-   @ServerSettings({
-     port: 3100,
-     startWebsocket: true
-   })
-   class Bootstrap extends Boot {
-   }
+    const instance = new Bootstrap();
 
-   const instance = new Bootstrap();
+    app = await instance.start();
 
-   app = await instance.start();
-
-   expect(instance).toBeDefined();
- });
+    expect(instance).toBeDefined();
+  });
 
   test('should initialize websockets as secure protocol', async () => {
     @ServerSettings({
@@ -50,8 +47,7 @@ describe('Websocket integration', () => {
       privateKey: path.resolve(__dirname, '../certs/key.pem'),
       certificate: path.resolve(__dirname, '../certs/cert.pem')
     })
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 
@@ -69,8 +65,7 @@ describe('Websocket integration', () => {
       privateKey: path.resolve(__dirname, '../certs/key.pem'),
       certificate: path.resolve(__dirname, '../certs/cert.pem')
     })
-    class Bootstrap extends Boot {
-    }
+    class Bootstrap extends Boot {}
 
     const instance = new Bootstrap();
 

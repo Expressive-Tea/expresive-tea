@@ -3,18 +3,13 @@ import { type NextFunction, type Request, type Response } from 'express';
 import { chain, find, get, has, isNumber, pick, size } from '@libs/utilities';
 import { Metadata } from '@expressive-tea/commons';
 import { ARGUMENT_TYPES, ROUTER_HANDLERS_KEY } from '@expressive-tea/commons';
-import {
-  type ExpressiveTeaAnnotations,
-  type ExpressiveTeaArgumentOptions
-} from '@expressive-tea/commons';
+import { type ExpressiveTeaAnnotations, type ExpressiveTeaArgumentOptions } from '@expressive-tea/commons';
 import { getOwnArgumentNames } from '@expressive-tea/commons';
 import * as fs from 'node:fs';
 import * as yaml from 'js-yaml';
 import * as path from 'node:path';
 import logger from '@helpers/logger';
-import {
-  type ExpressiveTeaHandlerOptionsWithInstrospectedArgs
-} from '@interfaces';
+import { type ExpressiveTeaHandlerOptionsWithInstrospectedArgs } from '@interfaces';
 import { TFunction } from '../types/core';
 import { type ExpressiveTeaServerProps } from '@expressive-tea/commons';
 
@@ -45,7 +40,12 @@ export function autoResponse(
   response.send(isNumber(responseResult) ? responseResult.toString() : responseResult);
 }
 
-export async function executeRequest(this: ExecuteRequestContext, request: Request, response: Response, next: NextFunction): Promise<void> {
+export async function executeRequest(
+  this: ExecuteRequestContext,
+  request: Request,
+  response: Response,
+  next: NextFunction
+): Promise<void> {
   let isNextUsed = false;
   const nextWrapper = (error?: unknown) => {
     if (error) {
@@ -58,13 +58,7 @@ export async function executeRequest(this: ExecuteRequestContext, request: Reque
 
   const result = await this.options.handler.apply(
     this.self,
-    mapArguments(
-      this.decoratedArguments,
-      request,
-      response,
-      nextWrapper,
-      this.options.introspectedArgs
-    )
+    mapArguments(this.decoratedArguments, request, response, nextWrapper, this.options.introspectedArgs)
   );
 
   if (!response.headersSent && !isNextUsed) {
@@ -75,7 +69,9 @@ export async function executeRequest(this: ExecuteRequestContext, request: Reque
 
 export function mapArguments(
   decoratedArguments: ExpressiveTeaArgumentOptions[],
-  request: Request, response: Response, next: NextFunction,
+  request: Request,
+  response: Response,
+  next: NextFunction,
   introspectedArgs: string[] = []
 ): any[] {
   return chain(decoratedArguments)
@@ -98,7 +94,7 @@ export function mapArguments(
           return undefined;
       }
     })
-    .thru((args: unknown[]) => size(args) ? args : [request, response, next])
+    .thru((args: unknown[]) => (size(args) ? args : [request, response, next]))
     .value();
 }
 
@@ -108,7 +104,6 @@ export function extractParameters(target: unknown, args?: string | string[], pro
   }
 
   if (args && size(args)) {
-
     if (Array.isArray(args)) {
       return pick(target, args);
     }
@@ -123,10 +118,11 @@ export function extractParameters(target: unknown, args?: string | string[], pro
   return target;
 }
 
-export function generateRoute(route: string, verb: string, ...settings: any): (
-  target: object,
-  propertyKey: string | symbol,
-  descriptor: PropertyDescriptor) => void {
+export function generateRoute(
+  route: string,
+  verb: string,
+  ...settings: any
+): (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => void {
   return (target, propertyKey, descriptor) => {
     router(verb, route, target, descriptor.value as (...args: any[]) => any, propertyKey, settings);
   };
@@ -141,7 +137,8 @@ export function router(
   settings?: any
 ) {
   const introspectedArgs = getOwnArgumentNames(handler);
-  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] = Metadata.get(ROUTER_HANDLERS_KEY, target) || [];
+  const existedRoutesHandlers: ExpressiveTeaHandlerOptionsWithInstrospectedArgs[] =
+    Metadata.get(ROUTER_HANDLERS_KEY, target) || [];
   existedRoutesHandlers.unshift({ verb, route, handler, target, propertyKey, settings, introspectedArgs });
   Metadata.set(ROUTER_HANDLERS_KEY, existedRoutesHandlers, target);
 }
@@ -190,9 +187,10 @@ export function fileSettings(): FileSettingsResult {
 
         return { config, source: file.path };
       } catch (error: any) {
-        const errorMsg = file.type === 'yaml'
-          ? `Invalid YAML in ${file.path}: ${error.message}`
-          : `Invalid JSON in ${file.path}: ${error.message}`;
+        const errorMsg =
+          file.type === 'yaml'
+            ? `Invalid YAML in ${file.path}: ${error.message}`
+            : `Invalid JSON in ${file.path}: ${error.message}`;
 
         throw new Error(errorMsg);
       }

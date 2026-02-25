@@ -10,12 +10,7 @@ import * as supertest from 'supertest';
 import Settings from '../../classes/Settings';
 import container from '../../inversify.config';
 import { createBenchmarkApp } from './utils/test-app';
-import {
-  calculateStats,
-  printStats,
-  formatTime,
-  type BenchmarkStats
-} from './utils/benchmark-helpers';
+import { calculateStats, printStats, formatTime, type BenchmarkStats } from './utils/benchmark-helpers';
 
 describe('HTTP Throughput Benchmark', () => {
   let app: any;
@@ -61,13 +56,12 @@ describe('HTTP Throughput Benchmark', () => {
 
       for (let i = 0; i < actualBatchSize; i++) {
         const reqStart = performance.now();
-        const promise = (method === 'get'
-          ? request.get(endpoint)
-          : request.post(endpoint).send(body || {})
-        ).then(() => {
-          const reqEnd = performance.now();
-          latencies.push(reqEnd - reqStart);
-        });
+        const promise = (method === 'get' ? request.get(endpoint) : request.post(endpoint).send(body || {})).then(
+          () => {
+            const reqEnd = performance.now();
+            latencies.push(reqEnd - reqStart);
+          }
+        );
 
         batchRequests.push(promise);
       }

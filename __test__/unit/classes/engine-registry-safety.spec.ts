@@ -63,10 +63,7 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
 
       EngineRegistry.getRegisteredEngines();
 
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        expect.stringContaining('[EngineRegistry]'),
-        expect.any(Error)
-      );
+      expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('[EngineRegistry]'), expect.any(Error));
 
       consoleWarnSpy.mockRestore();
     });
@@ -463,7 +460,11 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
       class WeirdEngine extends ExpressiveTeaEngine {
         static canRegister(): boolean {
           // This will throw during boolean coercion
-          return { valueOf: () => { throw new Error('valueOf failed'); } } as any;
+          return {
+            valueOf: () => {
+              throw new Error('valueOf failed');
+            }
+          } as any;
         }
       }
 
@@ -483,8 +484,10 @@ describe('EngineRegistry Type Safety - HIGH-007', () => {
       @injectable()
       class AsyncErrorEngine extends ExpressiveTeaEngine {
         static canRegister(): boolean {
-          // Synchronous throw in async context
-          Promise.reject(new Error('Async error'));
+          // Synchronous throw in async context - attach catch to prevent process crash
+          Promise.reject(new Error('Async error')).catch(() => {
+            // Intentionally swallow the error - testing error handling
+          });
           return true;
         }
       }

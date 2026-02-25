@@ -3,7 +3,7 @@
 function extraColumnInfo(params) {
   const result = {
     showAttributes: false,
-    showDefaultValue: false,
+    showDefaultValue: false
   };
 
   params.forEach((param) => {
@@ -16,7 +16,9 @@ function extraColumnInfo(params) {
 
 function buildTableEntry(param, columnInfo) {
   const attributeCell = columnInfo.showAttributes ? `<td class="attributes">${param.optional}</td>` : '';
-  const defaultCell = columnInfo.showDefaultValue ? `<td class="default">${param.defaultvalue === undefined ? '' : param.defaultvalue}</td>` : '';
+  const defaultCell = columnInfo.showDefaultValue
+    ? `<td class="default">${param.defaultvalue === undefined ? '' : param.defaultvalue}</td>`
+    : '';
 
   return `<tr>
             <td class="name">${param.name}</td>
@@ -41,7 +43,7 @@ function buildTableHeader(columnInfo) {
             </thead>`;
 }
 
-exports.build = function(title, params){
+exports.build = function (title, params) {
   const columnInfo = extraColumnInfo(params);
   const paramTableEntries = [];
 
