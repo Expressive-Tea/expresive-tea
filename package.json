@@ -1,6 +1,6 @@
 {
   "name": "@expressive-tea/core",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A modern TypeScript-first framework for building scalable Node.js applications with clean architecture, dependency injection, and decorator-driven development",
   "main": "classes/Boot.js",
   "engines": {

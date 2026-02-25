@@ -1,7 +1,15 @@
 <a name="unreleased"></a>
 ## [Unreleased]
 
-> Target release: v2.0.0
+---
+
+<a name="2.0.1"></a>
+## [2.0.1] - 2026-02-24
+
+**Type:** Patch Release (Bug Fixes + Critical Enhancements)
+
+### ⚠️ Breaking Changes
+None - Drop-in replacement for v2.0.0
 
 ### ⚠️ BREAKING CHANGES
 
