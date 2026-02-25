@@ -10,15 +10,15 @@ export default class SocketIOEngine extends ExpressiveTeaEngine {
   private io!: Server;
   private ioSecure!: Server;
 
-  init(): void {
+  async init(): Promise<void> {
     const commonConfig = {
       path: '/exp-tea/',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       transports: ['websocket', 'polling'] as any[]
     };
 
-    this.io = this.server ? new Server(this.server, { ...commonConfig }) : undefined as any;
-    this.ioSecure = this.serverSecure ? new Server(this.serverSecure, { ...commonConfig }) : undefined as any;
+    this.io = this.server ? new Server(this.server, { ...commonConfig }) : (undefined as any);
+    this.ioSecure = this.serverSecure ? new Server(this.serverSecure, { ...commonConfig }) : (undefined as any);
 
     Metadata.set(SOCKET_IO_INSTANCE_KEY, this.io, this.context);
     Metadata.set(SOCKET_IO_SECURE_INSTANCE_KEY, this.ioSecure, this.context);

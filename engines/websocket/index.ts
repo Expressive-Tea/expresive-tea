@@ -8,23 +8,24 @@ import Settings from '@classes/Settings';
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
 export default class WebsocketEngine extends ExpressiveTeaEngine {
-
   canStart: boolean = false;
   isDetached: boolean = false;
 
-  init(): void {
-     
+  async init(): Promise<void> {
     this.canStart = Boolean(this.settings.get('startWebsocket'));
-     
+
     this.isDetached = Boolean(this.settings.get('detachWebsocket'));
-    if(this.canStart) {
+    if (this.canStart) {
       WebsocketService.init();
-      WebsocketService.getInstance().setWebSocket(new WebSocket.Server(this.isDetached ? {noServer: true} : {server: this.server}));
+      WebsocketService.getInstance().setWebSocket(
+        new WebSocket.Server(this.isDetached ? { noServer: true } : { server: this.server })
+      );
 
       if (this.serverSecure) {
-        WebsocketService.getInstance().setSecureWebsocket(new WebSocket.Server(this.isDetached ? {noServer: true} : {server: this.serverSecure}));
+        WebsocketService.getInstance().setSecureWebsocket(
+          new WebSocket.Server(this.isDetached ? { noServer: true } : { server: this.serverSecure })
+        );
       }
-
 
       WebsocketService.getInstance().setHttpServer(this.server);
       WebsocketService.getInstance().setHttpServer(this.serverSecure);
@@ -70,7 +71,6 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
   }
 
   static canRegister(ctx?: Boot, settings?: Settings): boolean {
-     
     return Boolean(settings?.get('startWebsocket'));
   }
 }

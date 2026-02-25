@@ -10,13 +10,12 @@ import logger from '@helpers/logger';
 
 @injectable()
 @injectFromBase({ extendConstructorArguments: true })
-export default class HTTPEngine extends ExpressiveTeaEngine{
-
+export default class HTTPEngine extends ExpressiveTeaEngine {
   private async listen(server: http.Server | https.Server, port: number): Promise<http.Server | https.Server> {
     return new Promise((resolve, reject) => {
       server.listen(port);
 
-      server.on('error', error => {
+      server.on('error', (error) => {
         reject(error);
       });
 
@@ -31,9 +30,11 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
     const servers: (http.Server | https.Server | null)[] = [
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.listen(this.server, this.settings.get('port')),
-      (this.serverSecure) ? await this.listen(this.serverSecure, this.settings.get('securePort') as number) as https.Server : null
+      this.serverSecure
+        ? ((await this.listen(this.serverSecure, this.settings.get('securePort') as number)) as https.Server)
+        : null
     ];
-    
+
     const listenerServers = servers.filter((server): server is http.Server | https.Server => server !== null);
 
     await this.resolveStages([BOOT_STAGES.START], ...listenerServers);
@@ -46,19 +47,40 @@ export default class HTTPEngine extends ExpressiveTeaEngine{
     // HTTP Engine Resolve Stages
     this.resolveProxyContainers();
     await this.resolveStages(BOOT_ORDER);
-    await this.resolveStages([BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION], this.server, this.serverSecure);
+    await this.resolveStages(
+      [BOOT_STAGES.AFTER_APPLICATION_MIDDLEWARES, BOOT_STAGES.ON_HTTP_CREATION],
+      this.server,
+      this.serverSecure
+    );
   }
 
+  /**
+   * Iterates through boot stages and resolves each one sequentially.
+   *
+   * @param {BOOT_STAGES[]} stages - Ordered list of boot stages to resolve
+   * @param {...unknown} extraArgs - Additional arguments forwarded to each stage resolver (e.g., HTTP servers)
+   * @returns {Promise<void>} Promise that resolves when all stages complete
+   * @since 2.0.0
+   */
   async resolveStages(stages: BOOT_STAGES[], ...extraArgs: unknown[]): Promise<void> {
     for (const stage of stages) {
       await resolveStage(stage, this.context, this.context.getApplication(), ...extraArgs);
     }
   }
 
+  /**
+   * Registers all proxy route containers declared via the @Proxy decorator on the boot context.
+   *
+   * Reads proxy container metadata from the boot context class and mounts each container's
+   * routes onto the Express application, enabling Teapot gateway forwarding.
+   *
+   * @returns {void}
+   * @since 2.0.0
+   */
   resolveProxyContainers(): void {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const ProxyContainers = Metadata.get(ROUTER_PROXIES_KEY, getClass(this.context)) || [];
-     
+
     for (const Container of ProxyContainers) {
       resolveProxy(Container, this.context.getApplication());
     }

@@ -92,12 +92,9 @@ describe('WebsocketEngine Graceful Shutdown - HIGH-001', () => {
 
       await boot.stop();
 
-      // Service should be cleared
-      // Note: WebsocketService.getInstance() will create new instance if cleared
-      // So we check by trying to get websocket which should be undefined
+      // Service should be cleared - getWebsocket() now throws when service has no initialized server
       const wsServiceAfter = WebsocketService.getInstance();
-      const ws = wsServiceAfter.getWebsocket(app.server);
-      expect(ws).toBeUndefined();
+      expect(() => wsServiceAfter.getWebsocket(app.server)).toThrow('WebSocket server not initialized');
 
       // Cleanup
       app.server.close();
@@ -140,11 +137,9 @@ describe('WebsocketEngine Graceful Shutdown - HIGH-001', () => {
 
       await boot.stop();
 
+      // WebSocket should be closed - getWebsocket() now throws when service has no initialized server
       const wsService = WebsocketService.getInstance();
-      const ws = wsService.getWebsocket(app.server);
-
-      // WebSocket should be closed and unable to accept connections
-      expect(ws).toBeUndefined();
+      expect(() => wsService.getWebsocket(app.server)).toThrow('WebSocket server not initialized');
 
       // Cleanup
       app.server.close();
@@ -165,10 +160,9 @@ describe('WebsocketEngine Graceful Shutdown - HIGH-001', () => {
 
       await boot.stop();
 
-      // After stop, no WebSocket should be retrievable
+      // After stop, no WebSocket should be retrievable - getWebsocket() throws when service is cleared
       const wsServiceAfter = WebsocketService.getInstance();
-      const wsAfter = wsServiceAfter.getWebsocket(app.server);
-      expect(wsAfter).toBeUndefined();
+      expect(() => wsServiceAfter.getWebsocket(app.server)).toThrow('WebSocket server not initialized');
 
       // Cleanup
       app.server.close();

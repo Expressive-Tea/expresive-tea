@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return */
 import * as chalk from 'chalk';
-import {URL} from 'url';
+import { URL } from 'url';
 import { io, Socket } from 'socket.io-client';
 import { injectable, injectFromBase } from 'inversify';
 import { ExpressiveTeaCupSettings } from '@expressive-tea/commons';
@@ -42,38 +42,48 @@ All Communication are encrypted to ensure intruder can not connected, however, p
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handshaked(key: Buffer, signature: Buffer, isSecure: boolean, cb: any) {
     try {
-      logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Server Verification Started}`);
+      logger.info(
+        chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {yellow.bold Server Verification Started}`
+      );
       if (!TeaGatewayHelper.verify(this.teacupSettings.clientKey, key.toString('ascii'), signature)) {
         throw new Error('Fail to Verify Client on Teapod.');
       }
 
-      logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Server Has Been Verified}`);
+      logger.info(
+        chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Server Has Been Verified}`
+      );
       this.publicServerKey = key;
       this.serverSignature = signature;
 
       cb(Buffer.from(this.publicKey), this.clientSignature);
     } catch (e) {
       const error = e as Error;
-      logger.error(chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${error.message}`);
+      logger.error(
+        chalk`{cyan.bold [TEACUP]} - {red.bold TEAPOD}  {magenta.bold ${this.client.id}}: Failed with next message: ${error.message}`
+      );
       this.client.disconnect();
     }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private accepted(cb: any) {
-    logger.info(chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Registered} - {blue.bold <${this.teacupSettings.serverUrl}>} <-> {white.bold ${this.teacupSettings.mountTo}}`);
+    logger.info(
+      chalk`{cyan.bold [TEACUP]} - [{magenta.bold ${this.client.id}}]: {green.bold Registered} - {blue.bold <${this.teacupSettings.serverUrl}>} <-> {white.bold ${this.teacupSettings.mountTo}}`
+    );
 
-    const encryptedMessage = TeaGatewayHelper.encrypt({
-      mountTo: this.teacupSettings.mountTo,
-      address: this.teacupSettings.address
-    }, this.serverSignature);
+    const encryptedMessage = TeaGatewayHelper.encrypt(
+      {
+        mountTo: this.teacupSettings.mountTo,
+        address: this.teacupSettings.address
+      },
+      this.serverSignature
+    );
 
     cb(encryptedMessage);
 
     const onClose = () => {
       try {
         this.client.close();
-       
       } catch {
         // Intentionally empty - ignore close errors
       }
@@ -83,21 +93,27 @@ All Communication are encrypted to ensure intruder can not connected, however, p
     this.serverSecure?.on('close', onClose);
   }
 
-  async start(): Promise<void> {
+  async init(): Promise<void> {
     this.teacupSettings = Metadata.get(ASSIGN_TEACUP_KEY, getClass(this.context));
     const scheme = new URL(this.teacupSettings.serverUrl);
     const { publicKey, privateKey } = TeaGatewayHelper.generateKeys(this.teacupSettings.clientKey);
     const protocol = TeaGatewayHelper.httpSchema(scheme.protocol);
     this.publicKey = publicKey;
     this.privateKey = privateKey;
-    this.clientSignature = TeaGatewayHelper.sign(this.teacupSettings.clientKey, this.privateKey, this.teacupSettings.clientKey);
+    this.clientSignature = TeaGatewayHelper.sign(
+      this.teacupSettings.clientKey,
+      this.privateKey,
+      this.teacupSettings.clientKey
+    );
 
     this.client = io(`${protocol}//${scheme.host}/teapot`, {
       path: '/exp-tea/',
       reconnection: true,
       autoConnect: false
     });
+  }
 
+  async start(): Promise<void> {
     this.header();
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
