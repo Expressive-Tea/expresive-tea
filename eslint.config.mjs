@@ -26,13 +26,13 @@ export default [
       '**/*.d.ts.map',
       '!eslint.config.js',
       '!jest.config.js',
-      '!gulpfile.js',
-    ],
+      '!gulpfile.js'
+    ]
   },
-  
+
   // Base ESLint recommended rules
   eslint.configs.recommended,
-  
+
   // Main configuration for TypeScript files
   {
     files: ['**/*.ts'],
@@ -40,99 +40,107 @@ export default [
       parser: tsparser,
       parserOptions: {
         project: './tsconfig.linter.json',
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: __dirname
       },
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2021,
-      },
+        ...globals.es2021
+      }
     },
     plugins: {
       '@typescript-eslint': tseslintPlugin,
-      jsdoc,
+      jsdoc
     },
     rules: {
       // Apply TypeScript recommended rules
       ...tseslintPlugin.configs.recommended.rules,
-      
+
       // Disable semicolon requirements
-      'semi': 'off',
+      semi: 'off',
       '@typescript-eslint/semi': 'off',
-      
+
       // Array type preferences
       '@typescript-eslint/array-type': ['error', { default: 'array' }],
-      
+
       // Return await handling
       '@typescript-eslint/return-await': 'off',
-      
+
       // Boolean expression strictness
       '@typescript-eslint/strict-boolean-expressions': 'off',
-      
+
       // Function return type requirements
       '@typescript-eslint/explicit-function-return-type': 'off',
-      
+
       // Allow classes with only static members
       '@typescript-eslint/no-extraneous-class': 'off',
-      
+
       // Unsafe argument warnings
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/no-unsafe-assignment': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
       '@typescript-eslint/no-unsafe-call': 'warn',
       '@typescript-eslint/no-unsafe-return': 'warn',
-      
+
       // Unused variables with ignore patterns
-      '@typescript-eslint/no-unused-vars': ['error', { 
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      }],
-      
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_'
+        }
+      ],
+
       // Allow explicit any where needed (warn instead of error)
       '@typescript-eslint/no-explicit-any': 'warn',
-      
+
       // Allow non-null assertions (used in tests)
       '@typescript-eslint/no-non-null-assertion': 'off',
-      
+
       // Allow require imports (used in some configs)
       '@typescript-eslint/no-require-imports': 'off',
-      
+
       // General rules
       'no-duplicate-imports': 'off',
-      'no-unused-vars': 'off', // Use TypeScript version instead
-    },
+      'no-unused-vars': 'off' // Use TypeScript version instead
+    }
   },
-  
+
   // Configuration for test files
   {
     files: ['__test__/**/*.ts', '**/*.spec.ts', '**/*.test.ts'],
     languageOptions: {
       globals: {
         ...globals.jest,
-      },
+        ...globals.vitest,
+        ...globals.node
+      }
     },
     rules: {
+      'no-undef': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unsafe-function-type': 'off',
       // Relax TypeScript strict rules for test files
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-return': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-    },
+      '@typescript-eslint/no-explicit-any': 'off'
+    }
   },
-  
+
   // Configuration for JavaScript config files
   {
     files: ['*.js', '*.mjs', '*.cjs'],
     languageOptions: {
       globals: {
-        ...globals.node,
-      },
+        ...globals.node
+      }
     },
     rules: {
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-  },
+      '@typescript-eslint/no-require-imports': 'off'
+    }
+  }
 ];
-

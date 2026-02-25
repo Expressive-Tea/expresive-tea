@@ -2,7 +2,7 @@
 import { Constructor } from '../types/core';
 import type { IExpressiveTeaProxySettings } from '@expressive-tea/commons';
 import type { Express, RequestHandler } from 'express';
-import * as httpProxy from 'express-http-proxy';
+import httpProxy from 'express-http-proxy';
 import { Metadata } from '@expressive-tea/commons';
 import { PROXY_METHODS, PROXY_PROPERTIES, PROXY_SETTING_KEY } from '@expressive-tea/commons';
 import { isUndefined } from '@libs/utilities';
