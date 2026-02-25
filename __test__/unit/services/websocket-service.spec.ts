@@ -17,9 +17,9 @@ describe('Websocket Service', () => {
   let wss: any;
 
   beforeEach(() => {
-    // Use plain objects to avoid actual server creation
-    serverMock = {} as http.Server;
-    serverSecureMock = {} as https.Server;
+    // Use minimal typed mocks to avoid real server creation
+    serverMock = { close: vi.fn() } as http.Server;
+    serverSecureMock = { close: vi.fn() } as https.Server;
     ws = new (WebSocket.Server as any)();
     wss = new (WebSocket.Server as any)();
   });
