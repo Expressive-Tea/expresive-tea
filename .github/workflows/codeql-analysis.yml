@@ -4,13 +4,13 @@
 # Learn more about CodeQL:
 # https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/about-code-scanning-with-codeql
 
-name: "CodeQL Security Scan"
+name: 'CodeQL Security Scan'
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: [develop, main]
   pull_request:
-    branches: [ develop, main ]
+    branches: [develop, main]
   schedule:
     # Run weekly on Saturdays at 10:26 PM UTC
     - cron: '26 22 * * 6'
@@ -29,19 +29,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript' ]
+        language: ['javascript']
         # CodeQL supports: 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'swift'
         # Learn more: https://aka.ms/codeql-docs/language-support
 
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔧 Enable Corepack
         run: corepack enable
 
       - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'yarn'
@@ -51,7 +51,7 @@ jobs:
 
       # Initializes the CodeQL tools for scanning
       - name: 🔍 Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
           # Use default CodeQL query suite
@@ -62,6 +62,6 @@ jobs:
         run: yarn build
 
       - name: 🔬 Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
         with:
-          category: "/language:${{ matrix.language }}"
+          category: '/language:${{ matrix.language }}'
