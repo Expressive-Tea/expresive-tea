@@ -3,6 +3,7 @@
  * Initializes global dependencies and test environment
  */
 import 'reflect-metadata';
+import { vi } from 'vitest';
 
 // Alias jest to vi for compatibility with packages that use jest.fn() internally (e.g. jest-express)
 (globalThis as any).jest = vi;
