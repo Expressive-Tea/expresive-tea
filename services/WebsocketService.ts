@@ -1,16 +1,16 @@
-import type WebSocket from 'ws';
+import type { WebSocketServer } from 'ws';
 import type * as http from 'http';
 import * as https from 'https';
 
 export default class WebsocketService {
   static instance: WebsocketService | undefined;
 
-  private ws!: WebSocket.Server;
-  private wss!: WebSocket.Server;
+  private ws!: WebSocketServer;
+  private wss!: WebSocketServer;
   httpServer!: http.Server;
   httpsServer!: https.Server;
 
-  constructor(ws?: WebSocket.Server, wss?: WebSocket.Server) {
+  constructor(ws?: WebSocketServer, wss?: WebSocketServer) {
     if (WebsocketService.instance) {
       return WebsocketService.instance;
     }
@@ -20,7 +20,7 @@ export default class WebsocketService {
     WebsocketService.instance = this;
   }
 
-  getWebsocket(httpServer: http.Server | https.Server): WebSocket.Server {
+  getWebsocket(httpServer: http.Server | https.Server): WebSocketServer {
     const server = httpServer instanceof https.Server ? this.wss : this.ws;
     if (!server) {
       throw new Error(
@@ -38,15 +38,15 @@ export default class WebsocketService {
     }
   }
 
-  setWebSocket(ws: WebSocket.Server): void {
+  setWebSocket(ws: WebSocketServer): void {
     this.ws = ws;
   }
 
-  setSecureWebsocket(wss: WebSocket.Server): void {
+  setSecureWebsocket(wss: WebSocketServer): void {
     this.wss = wss;
   }
 
-  static getInstance(ws?: WebSocket.Server, wss?: WebSocket.Server): WebsocketService {
+  static getInstance(ws?: WebSocketServer, wss?: WebSocketServer): WebsocketService {
     if (!WebsocketService.instance) {
       WebsocketService.instance = new WebsocketService(ws, wss);
     }
@@ -54,7 +54,7 @@ export default class WebsocketService {
     return WebsocketService.instance;
   }
 
-  static init(ws?: WebSocket.Server, wss?: WebSocket.Server): void {
+  static init(ws?: WebSocketServer, wss?: WebSocketServer): void {
     if (!WebsocketService.instance) {
       WebsocketService.instance = new WebsocketService(ws, wss);
     }
