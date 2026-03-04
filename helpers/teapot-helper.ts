@@ -1,6 +1,6 @@
 import * as crypto from 'node:crypto';
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return */
-import { type KeyPairSyncResult, generateKeyPairSync } from 'node:crypto';
+import { generateKeyPairSync } from 'node:crypto';
 import { type NextFunction, type Request, type Response } from 'express';
 import type ProxyRoute from '@classes/ProxyRoute';
 
@@ -132,9 +132,9 @@ export default class TeaGatewayHelper {
    * high security with compact key sizes.
    *
    * @param {string} passphrase - Passphrase to encrypt the private key
-   * @returns {KeyPairSyncResult} Generated public and private key pair in PEM format
+   * @returns {{ privateKey: string; publicKey: string }} Generated public and private key pair in PEM format
    */
-  static generateKeys(passphrase: string): KeyPairSyncResult<string, string> {
+  static generateKeys(passphrase: string): { privateKey: string; publicKey: string } {
     return generateKeyPairSync('ed25519', {
       publicKeyEncoding: {
         type: 'spki',
