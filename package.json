@@ -46,7 +46,7 @@
     "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jsdoc": "61.1.12",
+    "eslint-plugin-jsdoc": "62.7.1",
     "eslint-plugin-n": "17.23.1",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-promise": "7.2.1",
