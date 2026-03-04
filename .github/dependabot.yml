@@ -24,7 +24,10 @@ updates:
       - "automated"
     reviewers:
       - "Expressive-Tea/maintainers"
-    # Group minor and patch updates together to reduce PR noise
+    # Group updates to reduce PR noise:
+    # - dev: all minor+patch together
+    # - prod: all minor+patch together
+    # - major: all ecosystems' major bumps in one PR for manual review
     groups:
       development-dependencies:
         dependency-type: "development"
@@ -34,10 +37,10 @@ updates:
       production-dependencies:
         dependency-type: "production"
         update-types:
+          - "minor"
           - "patch"
-    # Ignore specific packages if needed (add as necessary)
+    # Ignore major version updates for critical runtime dependencies (review manually)
     ignore:
-      # Ignore major version updates for critical dependencies (review manually)
       - dependency-name: "express"
         update-types: ["version-update:semver-major"]
       - dependency-name: "inversify"
@@ -61,3 +64,12 @@ updates:
       - "automated"
     reviewers:
       - "Expressive-Tea/maintainers"
+    # Group all action updates (major+minor+patch) into a single PR
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
+          - "minor"
+          - "patch"
