@@ -13,8 +13,8 @@ import Settings from '../../../classes/Settings';
 // ---------------------------------------------------------------------------
 // Mock 'ws' module.
 //
-// WebsocketEngine imports:  import * as WebSocket from 'ws'
-// And uses:                 new WebSocket.Server({ ... })
+// WebsocketEngine imports:  import { WebSocketServer } from 'ws'
+// And uses:                 new WebSocketServer({ ... })
 //
 // We provide a minimal constructable Server class.
 // ---------------------------------------------------------------------------
@@ -27,9 +27,9 @@ vi.mock('ws', () => {
 
   return {
     // Default export is the ws class (also callable)
-    default: Object.assign(vi.fn(), { Server: MockWsServer }),
-    // Named export used as WebSocket.Server
-    Server: MockWsServer
+    default: vi.fn(),
+    // Named export matching ws ESM wrapper
+    WebSocketServer: MockWsServer
   };
 });
 

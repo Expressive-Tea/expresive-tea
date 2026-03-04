@@ -12,7 +12,7 @@ import { ServerSettings } from '../../../decorators/server';
 import container from '../../../inversify.config';
 import WebsocketService from '../../../services/WebsocketService';
 
-// Mock 'ws' so new WebSocket.Server(...) is constructable in Vitest's ESM context
+// Mock 'ws' so new WebSocketServer(...) is constructable in Vitest's ESM context
 vi.mock('ws', () => {
   class MockWsServer {
     close = vi.fn((cb?: () => void) => cb?.());
@@ -20,8 +20,8 @@ vi.mock('ws', () => {
   }
 
   return {
-    default: Object.assign(vi.fn(), { Server: MockWsServer }),
-    Server: MockWsServer
+    default: vi.fn(),
+    WebSocketServer: MockWsServer
   };
 });
 

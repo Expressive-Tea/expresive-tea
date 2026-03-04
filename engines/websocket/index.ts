@@ -1,5 +1,5 @@
 import WebsocketService from '@services/WebsocketService';
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import { injectable, injectFromBase } from 'inversify';
 import ExpressiveTeaEngine from '@classes/Engine';
 import Boot from '@classes/Boot';
@@ -18,12 +18,12 @@ export default class WebsocketEngine extends ExpressiveTeaEngine {
     if (this.canStart) {
       WebsocketService.init();
       WebsocketService.getInstance().setWebSocket(
-        new WebSocket.Server(this.isDetached ? { noServer: true } : { server: this.server })
+        new WebSocketServer(this.isDetached ? { noServer: true } : { server: this.server })
       );
 
       if (this.serverSecure) {
         WebsocketService.getInstance().setSecureWebsocket(
-          new WebSocket.Server(this.isDetached ? { noServer: true } : { server: this.serverSecure })
+          new WebSocketServer(this.isDetached ? { noServer: true } : { server: this.serverSecure })
         );
       }
 
