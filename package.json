@@ -37,7 +37,7 @@
     "@types/express-http-proxy": "1.6.7",
     "@types/express-serve-static-core": "5.1.1",
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "20.19.24",
+    "@types/node": "25.3.3",
     "@types/supertest": "7.2.0",
     "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "8.56.1",
