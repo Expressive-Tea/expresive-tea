@@ -23,6 +23,16 @@
 </p>
 
 <br />
+
+> ### Expressive Tea is in maintenance. Its successor is [green-tea](https://github.com/Expressive-Tea/green-tea).
+>
+> green-tea keeps the ideas from this project — decorators, dependency injection, structure — and drops the foundation: no Express, no InversifyJS, and a **dependency graph** as the core instead of a middleware chain. It runs on Node, Deno, Bun and Cloudflare Workers from one codebase.
+>
+> **This was a ceiling, not an abandonment.** Issues [#266](https://github.com/Expressive-Tea/expresive-tea/issues/266), [#267](https://github.com/Expressive-Tea/expresive-tea/issues/267), [#268](https://github.com/Expressive-Tea/expresive-tea/issues/268) and [#269](https://github.com/Expressive-Tea/expresive-tea/issues/269) in this repo are the list that made it obvious: type-safe DI, module-scoped providers, a boot-stage redesign and a type-safety overhaul — four breaking XL changes filed on the same day. That is not a v3. Building on someone else's chain means inheriting their model, and every one of those items ended in *"…but Express won't let me."*
+>
+> Expressive Tea still works, is still published as [`@expressive-tea/core`](https://www.npmjs.com/package/@expressive-tea/core), and still receives security fixes. **For new projects, start with green-tea.**
+
+<br />
 <p align="center">
   <a href="https://github.com/Expressive-Tea/expresive-tea">
     <img src="images/logo.png" alt="Logo" width="160" />
