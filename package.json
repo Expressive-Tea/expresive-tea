@@ -43,7 +43,7 @@
     "@typescript-eslint/eslint-plugin": "8.56.1",
     "@typescript-eslint/parser": "8.56.1",
     "@vitest/coverage-v8": "^1.6.0",
-    "eslint": "9.39.1",
+    "eslint": "10.0.3",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jsdoc": "62.7.1",
@@ -125,7 +125,7 @@
     "engine.io": "6.4.2",
     "@typescript-eslint/eslint-plugin": "8.56.1",
     "@typescript-eslint/parser": "8.56.1",
-    "eslint": "9.39.1",
+    "eslint": "10.0.3",
     "eslint-plugin-n": "17.24.0",
     "eslint-plugin-promise": "7.2.1"
   },
